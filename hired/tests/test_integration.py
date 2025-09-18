@@ -29,6 +29,7 @@ def test_file_sources():
     """Test loading from file paths."""
     # Use test fixtures
     import os
+
     here = os.path.dirname(__file__)
     candidate_path = os.path.join(here, 'fixtures', 'candidate.json')
     job_path = os.path.join(here, 'fixtures', 'job.yaml')

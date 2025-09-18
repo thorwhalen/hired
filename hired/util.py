@@ -5,6 +5,11 @@ All imports here are external to the hired package.
 
 import json
 from typing import Any
+from importlib.resources import files
+import os
+
+
+proj_files = files('hired')
 
 
 def _load_json_file(path: str) -> dict:

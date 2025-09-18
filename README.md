@@ -4,73 +4,100 @@ Streamline the job application process for job seekers
 
 ## Overview
 
-The `hired` project is a Python package designed to streamline the job application process for job seekers. It uses a modern, engineering-driven approach, powered by AI agents, to help users customize their application materials, with a primary focus on resumes.
+The `hired` package is a Python library designed to simplify the process of creating professional resumes tailored to specific job applications. It leverages AI-driven content generation, schema validation, and customizable rendering pipelines to produce high-quality resumes in various formats.
 
-Unlike a comprehensive curriculum vitae (CV), a resume should be concise, ideally fitting on a single page. This requires careful selection of relevant work experiences, projects, and publications from a candidate's full professional history. The `hired` package leverages AI models to automate this traditionally manual and difficult process.
+## Features
 
-The core functionality of `hired` revolves around two main phases:
+### 1. Content Generation
+- **AI-Driven Content**: Automatically generate resume content by analyzing candidate profiles and job descriptions.
+- **Flexible Sources**: Supports JSON, YAML, and Python dictionaries as input sources.
 
-1.  **Content Generation**: An AI agent analyzes a candidate's full profile and a target job description to extract and distill the most relevant information. This information is then used to produce a structured content specification for the resume.
-2.  **Rendering**: This structured content is then used to render the resume in various formats and styles. The rendering process is fully customizable, allowing a user to specify the output format (e.g., PDF, HTML, LaTeX) and a detailed rendering configuration (e.g., fonts, layouts, styles). To minimize boilerplate, the package will provide a system of conventions and templates for smart defaults.
+### 2. Validation
+- **JSON Resume Schema**: Ensures compliance with the [JSON Resume schema](https://jsonresume.org/schema/).
+- **Strict and Permissive Modes**: Validate content strictly or allow flexibility for missing fields.
+- **Pruning**: Automatically removes `None` values to ensure schema compliance.
 
-The central component that connects these two phases is the **JSON Resume schema**, which serves as our standardized data middleware.
+### 3. Rendering
+- **HTML and PDF**: Render resumes as HTML or PDF.
+- **Template-Based Themes**: Use Jinja2 templates for customizable themes (e.g., `default`, `minimal`).
+- **Optional WeasyPrint Integration**: Generate professional PDFs with WeasyPrint if installed.
+- **Fallback PDF Builder**: Minimal PDF generation without external dependencies.
+- **Empty Section Omission**: Automatically skips rendering empty sections.
 
-The final code will look something like this:
+## Installation
 
-    from hired import mk_content_for_resume, mk_resume
+Install the package using pip:
 
-    content = mk_content_for_resume(candidate_info_src, job_info_src)
-    pdf_path = mk_resume(
-        content,
-        rendering
-    )
+```bash
+pip install hired
+```
 
-## Project Components & Resources
+To enable PDF generation with WeasyPrint, install the optional dependency:
 
-### 1. The Data Standard: JSON Resume
+```bash
+pip install weasyprint
+```
 
-The foundation of the `hired` package is the [JSON Resume schema](https://jsonresume.org/schema/). This open-source standard provides a well-defined structure for resume content, ensuring that your data is machine-readable and portable.
+## Usage
 
-Key sections of the schema to focus on include:
-* `basics`: Personal and contact information.
-* `work`: An array of objects for work experience.
-* `education`: An array of objects for academic history.
-* `projects`: A list of projects with descriptions and highlights.
-* `skills`: Categorized lists of skills and keywords.
+### Generating Resume Content
 
-### 2. The Rendering Engine & Pipeline
+```python
+from hired.tools import mk_content_for_resume
 
-The rendering process will be separate from the content generation, allowing for a high degree of customization. There is no single standard for resume rendering; instead, rendering is handled by **themes**, which are a combination of a template and a stylesheet.
+candidate_info = {
+    "basics": {"name": "Alice", "email": "alice@example.com"},
+    "work": [{"company": "Acme Corp", "position": "Engineer"}]
+}
+job_info = {"title": "Software Engineer", "skills": ["Python", "Django"]}
 
-The main rendering pipeline will involve:
-1.  **Templating**: Using a Python templating engine like [Jinja2](https://pypi.org/project/Jinja2/). This library will take the structured JSON data and populate a template (e.g., an HTML or LaTeX file) with the resume content.
-2.  **Rendering**: The templated file is then converted into the final output format.
-    * **PDF**: For generating professional PDF documents from HTML and CSS, [WeasyPrint](https://pypi.org/project/WeasyPrint/) is an excellent choice. It provides precise control over layout and typography.
-    * **LaTeX**: To produce high-quality, typeset documents, you can use packages like [RenderCV](https://github.com/nelson-gomes/rendercv) or [cvcreator](https://pypi.org/project/cvcreator/). These tools use LaTeX as their backend for a more polished look.
-    * **Word (.docx)**: For specific needs, packages like `jsonresume-docx` can be used to generate Word documents from the JSON data.
+content = mk_content_for_resume(candidate_info, job_info)
+```
 
-### 3. Python Packages & Tools
+### Rendering a Resume
 
-* **For Content Validation**: Ensure the input JSON data adheres to the schema.
-    * [Pydantic](https://pypi.org/project/pydantic/): Define Python classes that match the JSON schema for robust validation.
-    * [`jsonschema`](https://pypi.org/project/jsonschema/): A direct library for validating JSON files against a schema.
-* **For Resume Generation**:
-    * [Jinja2](https://pypi.org/project/Jinja2/): For rendering templates.
-    * [WeasyPrint](https://pypi.org/project/WeasyPrint/): For HTML-to-PDF conversion.
-    * [RenderCV](https://github.com/nelson-gomes/rendercv): A Python tool for LaTeX-based resume generation.
-* **For Inspiration**: The [JSON Resume themes](https://jsonresume.org/themes/) provide many examples of how a single JSON file can be rendered in countless different styles.
+```python
+from hired.tools import mk_resume
 
-### 4. References
+# Render to HTML
+html = mk_resume(content, {"format": "html"})
 
-* [JSON Resume Schema](https://jsonresume.org/schema/)
-* [Python Tutorial: Generate a Web Portfolio and Resume from One JSON File](https://www.youtube.com/watch?v=ECt0TAl41Zk)
-* [Jinja2](https://pypi.org/project/Jinja2/)
-* [WeasyPrint](https://pypi.org/project/WeasyPrint/)
-* [ReportLab](https://www.reportlab.com/)
-* [Fpdf2](https://pypi.org/project/fpdf2/)
-* [Pydantic](https://pypi.org/project/pydantic/)
-* [`jsonschema`](https://pypi.org/project/jsonschema/)
-* [RenderCV](https://github.com/nelson-gomes/rendercv)
-* [cvcreator](https://pypi.org/project/cvcreator/)
-* [JSON Resume Themes](https://jsonresume.org/themes/)
+# Render to PDF
+pdf = mk_resume(content, {"format": "pdf"}, output_path="resume.pdf")
+```
+
+### Validating Resume Content
+
+```python
+from hired.validators import validate_resume_content
+
+is_valid = validate_resume_content(content.model_dump(), strict=True)
+print("Valid Resume" if is_valid else "Invalid Resume")
+```
+
+## Themes
+
+Themes are stored in the `hired/themes` directory. You can customize or add new themes by modifying the Jinja2 templates.
+
+### Default Theme
+- A structured layout with sections for work, education, and extra content.
+
+### Minimal Theme
+- A concise layout with essential details.
+
+## Tests
+
+Run the test suite to ensure everything is working:
+
+```bash
+pytest
+```
+
+## Contributing
+
+Contributions are welcome! Feel free to open issues or submit pull requests.
+
+## License
+
+This project is licensed under the MIT License.
 

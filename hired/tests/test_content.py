@@ -17,6 +17,7 @@ def test_dict_content_source():
 def test_file_content_source_json():
     d = {'foo': 'bar'}
     import os
+
     with tempfile.NamedTemporaryFile('w+', suffix='.json', delete=False) as f:
         json.dump(d, f)
         f.close()

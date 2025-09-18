@@ -6,9 +6,20 @@ the entire pipeline.
 """
 
 from typing import Any, Mapping
-from hired.base import ResumeContent, RenderingConfig, ContentSource, ResumeBasics, ResumeWork, ResumeEducation
+from hired.base import (
+    ResumeContent,
+    RenderingConfig,
+    ContentSource,
+    ResumeBasics,
+    ResumeWork,
+    ResumeEducation,
+)
 from hired.content import FileContentSource, DictContentSource, DefaultAIAgent
-from hired.validators import validate_resume_content
+from hired.validators import (
+    validate_resume_content,
+    validate_and_normalize,
+    validate_with_models,
+)
 from hired.render import _get_renderer_for_format
 from hired.config import ConfigStore
 
@@ -18,7 +29,8 @@ def mk_content_for_resume(
     job_info_src: ContentSource | str | dict,
     *,
     agent: Any | None = None,
-    validate: bool = True
+    validate: bool = True,
+    strict: bool = False
 ) -> ResumeContent:
     """
     Generate resume content from candidate and job information.
@@ -36,7 +48,9 @@ def mk_content_for_resume(
     agent = agent or DefaultAIAgent()
     content = agent.generate_content(candidate, job)
     if validate:
-        assert validate_resume_content(content.model_dump()), "Validation failed"
+        assert validate_resume_content(
+            content.model_dump(), strict=strict
+        ), "Validation failed"
     return content
 
 
@@ -44,16 +58,15 @@ def mk_resume(
     content: ResumeContent | dict,
     rendering: RenderingConfig | dict | None = None,
     *,
-    output_path: str | None = None
+    output_path: str | None = None,
+    strict: bool = False
 ) -> bytes:
     """
     Render resume content to final format.
     """
     if isinstance(content, dict):
-        basics = ResumeBasics(**content.get('basics', {}))
-        work = [ResumeWork(**w) for w in content.get('work', [])]
-        education = [ResumeEducation(**e) for e in content.get('education', [])]
-        content = ResumeContent(basics=basics, work=work, education=education)
+        # Use validator pipeline to normalize and optionally enforce schema
+        content = validate_and_normalize(content, strict=strict)
     if rendering is None:
         rendering = RenderingConfig()
     elif isinstance(rendering, dict):

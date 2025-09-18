@@ -11,7 +11,7 @@ Define:
 
 from typing import Protocol, Any, Mapping, List
 from dataclasses import dataclass
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator, ConfigDict
 
 
 class ContentSource(Protocol):
@@ -42,9 +42,25 @@ class ResumeBasics(BaseModel):
 
 
 class ResumeWork(BaseModel):
-    company: str
-    position: str
-    # ... add more fields as needed
+    # JSON Resume allows either 'name' (organization name) or 'company' in some ecosystems
+    company: str | None = None
+    name: str | None = None
+    position: str | None = None
+    summary: str | None = None
+    highlights: list[str] | None = None
+    startDate: str | None = None
+    endDate: str | None = None
+
+    @field_validator('company', mode='before')
+    @classmethod
+    def ensure_company(cls, v, info):  # type: ignore[override]
+        # If company missing but 'name' present in raw data, pydantic will populate 'name'; we mirror it into company
+        if v is None:
+            raw = info.data  # remaining raw values
+            name_val = raw.get('name') if isinstance(raw, dict) else None
+            if name_val:
+                return name_val
+        return v
 
 
 class ResumeEducation(BaseModel):
@@ -54,12 +70,17 @@ class ResumeEducation(BaseModel):
 
 
 class ResumeContent(BaseModel):
-    """Complete resume content following JSON Resume schema."""
+    """Complete resume content following JSON Resume schema with support for extra/freeform sections.
+
+    Unknown top-level keys (non core) can be captured in extra_sections mapping when desired.
+    """
 
     basics: ResumeBasics
     work: List[ResumeWork] = []
     education: List[ResumeEducation] = []
-    # ... other fields as needed
+    extra_sections: dict[str, Any] = {}
+
+    model_config = ConfigDict(extra='allow')
 
 
 @dataclass

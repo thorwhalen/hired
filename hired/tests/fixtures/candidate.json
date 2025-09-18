@@ -1,1 +1,12 @@
-{"basics": {"name": "Fixture User", "email": "fixture@example.com"}, "work": [{"company": "Fixture Co", "position": "Fixture Engineer"}]}
+{
+    "basics": {
+        "name": "Fixture User",
+        "email": "fixture@example.com"
+    },
+    "work": [
+        {
+            "company": "Fixture Co",
+            "position": "Fixture Engineer"
+        }
+    ]
+}

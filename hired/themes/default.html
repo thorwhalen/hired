@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>{{ basics.name or '' }} - Resume</title>
+<style>{{ css|default('') }}</style>
+</head>
+<body>
+  <header>
+    <h1>{{ basics.name }}</h1>
+    {% if basics.email %}<p>{{ basics.email }}</p>{% endif %}
+  </header>
+  {% if work %}
+  <section id="work">
+    <h2>Work</h2>
+    <ul>
+    {% for w in work %}
+      <li><strong>{{ w.company }}</strong> {{ w.position or '' }}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if education %}
+  <section id="education">
+    <h2>Education</h2>
+    <ul>
+    {% for e in education %}
+      <li><strong>{{ e.institution }}</strong> {{ e.area or '' }}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% for section in extra_sections %}
+    <section id="{{ section.id }}">
+      <h2>{{ section.title }}</h2>
+      {{ section.html|safe }}
+    </section>
+  {% endfor %}
+</body>
+</html>
