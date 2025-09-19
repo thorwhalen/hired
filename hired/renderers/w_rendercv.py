@@ -301,12 +301,17 @@ def sanitize_rendercv_data(data: Dict[str, Any]) -> Dict[str, Any]:
         container[section_name] = new_items
 
     _prune_empty_one_line_section(cleaned, 'technologies')
-    if isinstance(cleaned.get('cv'), dict) and isinstance(cleaned['cv'].get('sections'), dict):
+    if isinstance(cleaned.get('cv'), dict) and isinstance(
+        cleaned['cv'].get('sections'), dict
+    ):
         _prune_empty_one_line_section(cleaned['cv']['sections'], 'technologies')
 
     # If technologies section is now empty, remove it entirely so RenderCV
     # doesn't attempt to validate an empty section.
-    if isinstance(cleaned.get('technologies'), list) and len(cleaned['technologies']) == 0:
+    if (
+        isinstance(cleaned.get('technologies'), list)
+        and len(cleaned['technologies']) == 0
+    ):
         del cleaned['technologies']
 
     if (
@@ -341,7 +346,9 @@ def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
     # If the caller already passed a renderCV dict (or a dict with a
     # 'design'/'cv'/'sections' top-level key), don't try to run the
     # jsonresume-to-rendercv converter which expects JSON Resume format.
-    if isinstance(resumejson_dict, dict) and any(k in resumejson_dict for k in ('cv', 'design', 'sections')):
+    if isinstance(resumejson_dict, dict) and any(
+        k in resumejson_dict for k in ('cv', 'design', 'sections')
+    ):
         rendercv_candidate = sanitize_rendercv_data(resumejson_dict)
         if 'design' not in rendercv_candidate:
             rendercv_candidate = dict(rendercv_candidate)
