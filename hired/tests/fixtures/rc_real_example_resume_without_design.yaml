@@ -1,0 +1,125 @@
+cv:
+  name: Thor Whalen
+  location: Palo Alto, US
+  email: thorwhalen@gmail.com
+  phone: +1-929-422-1134
+  website: https://www.linkedin.com/in/thorwhalen
+  social_networks:
+  - network: GitHub
+    username: thorwhalen
+  sections:
+    summary:
+    - AI & Data Leader with 20+ years of experience transforming raw data into automation,
+      insight, and action. Co-founder of OtoSense (acquired by Analog Devices) and
+      former Director of Machine Learning at ADI. Expert Python developer with 150+
+      open-source packages. Hands-on builder with deep expertise in marketplace optimization,
+      predictive maintenance & IoT, and high-volume services.
+    education:
+    - institution: Emory University
+      area: Mathematics
+      degree: Ph.D.
+      start_date: 2000-01
+      end_date: present
+      highlights: []
+    - institution: Emory University
+      area: Computer Science
+      degree: M.S.
+      start_date: 2000-01
+      end_date: present
+      highlights: []
+    - institution: "Universit\xE9 de Nice Sophia Antipolis"
+      area: Math/Physics
+      degree: Licence & DEUG
+      start_date: 2000-01
+      end_date: present
+      highlights: []
+    - institution: "Technische Universit\xE4t Berlin"
+      area: Graduate Studies
+      degree: Non-degree
+      start_date: 2000-01
+      end_date: present
+      highlights: []
+    experience:
+    - company: Figiri
+      position: Co-founder
+      location: ''
+      start_date: '2023-01-01'
+      end_date: present
+      highlights:
+      - Built data visualization tools for exploring LLM semantic spaces and customer
+        journeys.
+      - Designed agent-driven analytics pipelines for real-time decision support.
+    - company: Addix Group
+      position: AI Integration Consultant
+      location: ''
+      start_date: '2023-01-01'
+      end_date: '2023-12-31'
+      highlights:
+      - Delivered AI agent prototypes (resume-matching, no-code apps, contextual assistants).
+      - Guided leadership on LLM adoption to reduce costs and accelerate insight-to-action
+        cycles.
+    - company: Analog Devices
+      position: Director of Machine Learning
+      location: ''
+      start_date: '2018-01-01'
+      end_date: '2023-01-01'
+      highlights:
+      - Scaled predictive maintenance workflows from IoT data ingestion to device-level
+        deployment.
+      - Built reusable pipelines tied to ROI and efficiency improvements.
+      - Translated technical results into business impact for senior leadership.
+    - company: OtoSense
+      position: Co-founder & CTO
+      location: ''
+      start_date: '2016-01-01'
+      end_date: '2018-12-31'
+      highlights:
+      - Created IoT recognition systems for logistics and industrial use cases.
+      - "Introduced fa\xE7ade/adapters to unify heterogeneous edge deployments."
+      - Reframed ML metrics into business-aligned KPIs (dollarized trade-offs of FP/FN).
+    - company: TagCommander (Commanders Act)
+      position: Lead Data Scientist
+      location: ''
+      start_date: '2014-01-01'
+      end_date: '2016-12-31'
+      highlights:
+      - Built attribution models, real-time KPIs, and automated pipelines.
+      - Delivered decision-support reporting that improved campaign efficiency.
+    - company: Expedia
+      position: Senior Data Scientist
+      location: ''
+      start_date: '2011-01-01'
+      end_date: '2014-12-31'
+      highlights:
+      - Aligned structured hotel/destination data with unstructured ad copy.
+      - Optimized bids to balance ROI with revenue and nights sold; boosted KPIs and
+        marketer productivity.
+    - company: Independent Consultant (Methodic Solutions)
+      position: Consultant
+      location: ''
+      start_date: '2000-01-01'
+      end_date: '2011-12-31'
+      highlights:
+      - Unified messy, siloed data into clean ecosystems.
+      - Built reusable frameworks and taxonomies to accelerate data-to-value workflows.
+    publications:
+    - title: Scientific Publications
+      authors: []
+      date: 2000-01
+      url: https://www.linkedin.com/in/thorwhalen/details/publications/
+    - title: Other Publications
+      authors: []
+      date: 2000-01
+      url: https://medium.com/
+      journal: 'https://medium.com/@thorwhalen'
+    projects:
+    - name: Key Open-Source Projects
+      date: 2000-01
+      highlights:
+      - Creator of 150+ Python packages, including data infrastructure, AI agent frameworks,
+        and visualization tools.
+    technologies:
+    - label: Languages
+      details: ''
+    - label: Software
+      details: ''

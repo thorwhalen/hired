@@ -1,8 +1,8 @@
 
 #import "@preview/fontawesome:0.5.0": fa-icon
 
-#let name = "John Doe"
-#let locale-catalog-page-numbering-style = context { "John Doe - Page " + str(here().page()) + " of " + str(counter(page).final().first()) + "" }
+#let name = "Thor Whalen"
+#let locale-catalog-page-numbering-style = context { "Thor Whalen - Page " + str(here().page()) + " of " + str(counter(page).final().first()) + "" }
 #let locale-catalog-last-updated-date-style = "Last updated in Sept 2025"
 #let locale-catalog-language = "en"
 #let design-page-size = "us-letter"
@@ -447,29 +447,27 @@
   )
 ]
 
-= John Doe
+= Thor Whalen
 
 // Print connections:
 #let connections-list = (
-  [#fa-icon("location-dot", size: 0.9em) #h(0.05cm)Location],
-  [#box(original-link("mailto:john.doe@example.com")[#fa-icon("envelope", size: 0.9em) #h(0.05cm)john.doe\@example.com])],
-  [#box(original-link("tel:+1-609-999-9995")[#fa-icon("phone", size: 0.9em) #h(0.05cm)\(609\) 999-9995])],
-  [#box(original-link("https://linkedin.com/in/john.doe")[#fa-icon("linkedin", size: 0.9em) #h(0.05cm)john.doe])],
-  [#box(original-link("https://github.com/john.doe")[#fa-icon("github", size: 0.9em) #h(0.05cm)john.doe])],
+  [#fa-icon("location-dot", size: 0.9em) #h(0.05cm)Palo Alto, US],
+  [#box(original-link("mailto:thorwhalen@gmail.com")[#fa-icon("envelope", size: 0.9em) #h(0.05cm)thorwhalen\@gmail.com])],
+  [#box(original-link("tel:+1-929-422-1134")[#fa-icon("phone", size: 0.9em) #h(0.05cm)\(929\) 422-1134])],
+  [#box(original-link("https://www.linkedin.com/in/thorwhalen")[#fa-icon("link", size: 0.9em) #h(0.05cm)www.linkedin.com\/in\/thorwhalen])],
+  [#box(original-link("https://github.com/thorwhalen")[#fa-icon("github", size: 0.9em) #h(0.05cm)thorwhalen])],
+  [#box(original-link("https://github.com/thorwhalen")[#fa-icon("github", size: 0.9em) #h(0.05cm)thorwhalen])],
+  [#box(original-link("https://github.com/thorwhalen1")[#fa-icon("github", size: 0.9em) #h(0.05cm)thorwhalen1])],
 )
 #connections(connections-list)
 
 
 
-== Welcome to RenderCV!
+== Summary
 
 
 #one-col-entry(
-  content: [#link("https://rendercv.com")[RenderCV] is a Typst-based CV framework designed for academics and engineers, with Markdown syntax support.]
-)
-#v(design-entries-vertical-space-between-entries)
-#one-col-entry(
-  content: [Each section title is arbitrary. Each section contains a list of entries, and there are 7 different entry types to choose from.]
+  content: [AI & Data Leader with 20+ years of experience transforming raw data into automation, insight, and action. Co-founder of OtoSense \(acquired by Analog Devices\) and former Director of Machine Learning at ADI. Expert Python developer with 150+ open-source packages. Hands-on builder with deep expertise in marketplace optimization, predictive maintenance & IoT, and high-volume services.]
 )
 
 
@@ -479,17 +477,12 @@
 // YES DATE, YES DEGREE
 #three-col-entry(
   left-column-width: 1cm,
-  left-content: [#strong[PhD]],
+  left-content: [#strong[Ph.D.]],
   middle-content: [
-    #strong[Stanford University], Computer Science
-    #v(-design-text-leading)
-
-    #v(design-highlights-top-margin);#highlights([Working on the optimization of autonomous vehicles in urban environments],)
+    #strong[Emory University], Mathematics
   ],
   right-content: [
-    Stanford, CA, USA
-
-Sept 2023 – present
+    Jan 2000 – present
   ],
 )
 
@@ -497,17 +490,38 @@ Sept 2023 – present
 // YES DATE, YES DEGREE
 #three-col-entry(
   left-column-width: 1cm,
-  left-content: [#strong[BS]],
+  left-content: [#strong[M.S.]],
   middle-content: [
-    #strong[Boğaziçi University], Computer Engineering
-    #v(-design-text-leading)
-
-    #v(design-highlights-top-margin);#highlights([GPA: 3.9\/4.0, ranked 1st out of 100 students],[Awards: Best Senior Project, High Honor],)
+    #strong[Emory University], Computer Science
   ],
   right-content: [
-    Istanbul, Türkiye
+    Jan 2000 – present
+  ],
+)
 
-Sept 2018 – June 2022
+#v(design-entries-vertical-space-between-entries)
+// YES DATE, YES DEGREE
+#three-col-entry(
+  left-column-width: 1cm,
+  left-content: [#strong[Licence & DEUG]],
+  middle-content: [
+    #strong[Université de Nice Sophia Antipolis], Math\/Physics
+  ],
+  right-content: [
+    Jan 2000 – present
+  ],
+)
+
+#v(design-entries-vertical-space-between-entries)
+// YES DATE, YES DEGREE
+#three-col-entry(
+  left-column-width: 1cm,
+  left-content: [#strong[Non-degree]],
+  middle-content: [
+    #strong[Technische Universität Berlin], Graduate Studies
+  ],
+  right-content: [
+    Jan 2000 – present
   ],
 )
 
@@ -518,47 +532,141 @@ Sept 2018 – June 2022
 
 #two-col-entry(
   left-content: [
-    #strong[Company C], Summer Intern
-    #v(-design-text-leading)
-
-    #v(design-highlights-top-margin);#highlights([Developed deep learning models for the detection of gravitational waves in LIGO data],[Published #link("https://example.com")[3 peer-reviewed research papers] about the project and results],)
+    #strong[Figiri], Co-founder
   ],
   right-content: [
-    Livingston, LA, USA
-
-June 2024 – Sept 2024
+    Jan 2023 – present
+  ],
+)
+#one-col-entry(
+  content: [
+    #v(design-highlights-top-margin);#highlights([Built data visualization tools for exploring LLM semantic spaces and customer journeys.],[Designed agent-driven analytics pipelines for real-time decision support.],)
   ],
 )
 
 #v(design-entries-vertical-space-between-entries)
 #two-col-entry(
   left-content: [
-    #strong[Company B], Summer Intern
-    #v(-design-text-leading)
-
-    #v(design-highlights-top-margin);#highlights([Optimized the production line by 15\% by implementing a new scheduling algorithm],)
+    #strong[Addix Group], AI Integration Consultant
   ],
   right-content: [
-    Ankara, Türkiye
-
-June 2023 – Sept 2023
+    Jan 2023 – Dec 2023
+  ],
+)
+#one-col-entry(
+  content: [
+    #v(design-highlights-top-margin);#highlights([Delivered AI agent prototypes \(resume-matching, no-code apps, contextual assistants\).],[Guided leadership on LLM adoption to reduce costs and accelerate insight-to-action cycles.],)
   ],
 )
 
 #v(design-entries-vertical-space-between-entries)
 #two-col-entry(
   left-content: [
-    #strong[Company A], Summer Intern
-    #v(-design-text-leading)
-
-    #v(design-highlights-top-margin);#highlights([Designed an inventory management web application for a warehouse],)
+    #strong[Analog Devices], Director of Machine Learning
   ],
   right-content: [
-    Istanbul, Türkiye
-
-June 2022 – Sept 2022
+    Jan 2018 – Jan 2023
   ],
 )
+#one-col-entry(
+  content: [
+    #v(design-highlights-top-margin);#highlights([Scaled predictive maintenance workflows from IoT data ingestion to device-level deployment.],[Built reusable pipelines tied to ROI and efficiency improvements.],[Translated technical results into business impact for senior leadership.],)
+  ],
+)
+
+#v(design-entries-vertical-space-between-entries)
+#two-col-entry(
+  left-content: [
+    #strong[OtoSense], Co-founder & CTO
+  ],
+  right-content: [
+    Jan 2016 – Dec 2018
+  ],
+)
+#one-col-entry(
+  content: [
+    #v(design-highlights-top-margin);#highlights([Created IoT recognition systems for logistics and industrial use cases.],[Introduced façade\/adapters to unify heterogeneous edge deployments.],[Reframed ML metrics into business-aligned KPIs \(dollarized trade-offs of FP\/FN\).],)
+  ],
+)
+
+#v(design-entries-vertical-space-between-entries)
+#two-col-entry(
+  left-content: [
+    #strong[TagCommander \(Commanders Act\)], Lead Data Scientist
+  ],
+  right-content: [
+    Jan 2014 – Dec 2016
+  ],
+)
+#one-col-entry(
+  content: [
+    #v(design-highlights-top-margin);#highlights([Built attribution models, real-time KPIs, and automated pipelines.],[Delivered decision-support reporting that improved campaign efficiency.],)
+  ],
+)
+
+#v(design-entries-vertical-space-between-entries)
+#two-col-entry(
+  left-content: [
+    #strong[Expedia], Senior Data Scientist
+  ],
+  right-content: [
+    Jan 2011 – Dec 2014
+  ],
+)
+#one-col-entry(
+  content: [
+    #v(design-highlights-top-margin);#highlights([Aligned structured hotel\/destination data with unstructured ad copy.],[Optimized bids to balance ROI with revenue and nights sold; boosted KPIs and marketer productivity.],)
+  ],
+)
+
+#v(design-entries-vertical-space-between-entries)
+#two-col-entry(
+  left-content: [
+    #strong[Independent Consultant \(Methodic Solutions\)], Consultant
+  ],
+  right-content: [
+    Jan 2000 – Dec 2011
+  ],
+)
+#one-col-entry(
+  content: [
+    #v(design-highlights-top-margin);#highlights([Unified messy, siloed data into clean ecosystems.],[Built reusable frameworks and taxonomies to accelerate data-to-value workflows.],)
+  ],
+)
+
+
+
+== Publications
+
+
+#two-col-entry(
+  left-content: [
+    #strong[Scientific Publications]
+
+  ],
+  right-content: [
+    Jan 2000
+  ],
+)
+#one-col-entry(content:[
+#v(design-highlights-top-margin);
+
+#v(design-highlights-top-margin - design-text-leading)#link("https://www.linkedin.com/in/thorwhalen/details/publications/")[www.linkedin.com/in/thorwhalen/details/publications]])
+
+#v(design-entries-vertical-space-between-entries)
+#two-col-entry(
+  left-content: [
+    #strong[Other Publications]
+
+  ],
+  right-content: [
+    Jan 2000
+  ],
+)
+#one-col-entry(content:[
+#v(design-highlights-top-margin);
+
+#v(design-highlights-top-margin - design-text-leading)#link("https://medium.com/@thorwhalen1")[medium.com/@thorwhalen1]])
 
 
 
@@ -567,111 +675,29 @@ June 2022 – Sept 2022
 
 #two-col-entry(
   left-content: [
-    #link("https://example.com")[#strong[Example Project]]
+    #strong[Key Open-Source Projects]
   ],
   right-content: [
-    May 2024 – present
+    Jan 2000
   ],
 )
 #one-col-entry(
   content: [
-    #two-col(left-column-width: design-highlights-summary-left-margin, right-column-width: 1fr, left-content: [], right-content: [#v(design-highlights-top-margin);#align(left, [A web application for writing essays])], column-gutter: 0cm)
-
-#v(-design-text-leading)  #v(design-highlights-top-margin);#highlights([Launched an #link("https://example.com")[iOS app] in 09\/2024 that currently has 10k+ monthly active users],[The app is made open-source \(3,000+ stars #link("https://github.com")[on GitHub]\)],)
-  ],
-)
-
-#v(design-entries-vertical-space-between-entries)
-#two-col-entry(
-  left-content: [
-    #link("https://example.com")[#strong[Teaching on Udemy]]
-  ],
-  right-content: [
-    Fall 2023
-  ],
-)
-#one-col-entry(
-  content: [
-    #v(design-highlights-top-margin);#highlights([Instructed the \"Statics\" course on Udemy \(60,000+ students, 200,000+ hours watched\)],)
+    #v(design-highlights-top-margin);#highlights([Creator of 150+ Python packages, including data infrastructure, AI agent frameworks, and visualization tools.],)
   ],
 )
 
 
 
-== Skills
+== Technologies
 
 
 #one-col-entry(
-  content: [#strong[Programming:] Proficient with Python, C++, and Git; good understanding of Web, app development, and DevOps]
+  content: [#strong[Languages:]]
 )
 #v(design-entries-vertical-space-between-entries)
 #one-col-entry(
-  content: [#strong[Mathematics:] Good understanding of differential equations, calculus, and linear algebra]
-)
-#v(design-entries-vertical-space-between-entries)
-#one-col-entry(
-  content: [#strong[Languages:] English \(fluent, TOEFL: 118\/120\), Turkish \(native\)]
+  content: [#strong[Software:]]
 )
 
-
-== Publications
-
-
-#two-col-entry(
-  left-content: [
-    #strong[3D Finite Element Analysis of No-Insulation Coils]
-
-  ],
-  right-content: [
-    Jan 2004
-  ],
-)
-#one-col-entry(content:[
-#v(design-highlights-top-margin);Frodo Baggins, #strong[#emph[John Doe]], Samwise Gamgee
-
-#v(design-highlights-top-margin - design-text-leading)#link("https://doi.org/10.1109/TASC.2023.3340648")[10.1109/TASC.2023.3340648]])
-
-
-
-== Extracurricular Activities
-
-
-#one-col-entry(
-  content: [- There are 7 unique entry types in RenderCV: #emph[BulletEntry], #emph[TextEntry], #emph[EducationEntry], #emph[ExperienceEntry], #emph[NormalEntry], #emph[PublicationEntry], and #emph[OneLineEntry].],
-)
-#v(design-entries-vertical-space-between-entries)
-#one-col-entry(
-  content: [- Each entry type has a different structure and layout. This document demonstrates all of them.],
-)
-
-
-== Numbered Entries
-#one-col-entry(
-  content: [
-
-
-+ This is a numbered entry.
-+ This is another numbered entry.
-+ This is the third numbered entry.
-
-  ],
-)
-
-== Reversed Numbered Entries
-#one-col-entry(
-  content: [
-    #let rev-enum-items = (
-
-
-[This is a reversed numbered entry.],
-[This is another reversed numbered entry.],
-[This is the third reversed numbered entry.],
-
-  )
-  #enum(
-    numbering: n => [#{rev-enum-items.len() + 1 - n}.],
-    ..rev-enum-items,
-  )
-  ],
-)
 

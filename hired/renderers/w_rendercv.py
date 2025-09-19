@@ -27,6 +27,8 @@ import subprocess
 import yaml
 from pathlib import Path
 from typing import Dict, Any, Optional, Union, Literal
+import logging
+import urllib.parse
 
 try:
     # Try to import the third-party packages
@@ -212,6 +214,114 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
     return normalized
 
 
+def sanitize_rendercv_data(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Sanitize a renderCV-like dict (or JSON Resume normalized dict) so that
+    - empty-string values are removed to avoid jsonschema minLength failures,
+    - URLs containing '@' are preserved as visible text in a 'journal' field
+      while reducing the clickable 'url' to an origin-only target to avoid
+      Typst label tokenization problems.
+
+    This function is intentionally conservative: it removes only empty strings
+    and rewrites urls that contain '@'. It returns a deep-copied sanitized
+    structure.
+    """
+    from typing import Any
+    import copy
+
+    def _clean(obj: Any) -> Any:
+        if isinstance(obj, dict):
+            out: Dict[str, Any] = {}
+            for k, v in obj.items():
+                if v == "":
+                    continue
+                cleaned = _clean(v)
+                out[k] = cleaned
+            return out
+        elif isinstance(obj, list):
+            out_list = []
+            for item in obj:
+                if item == "":
+                    continue
+                cleaned_item = _clean(item)
+                out_list.append(cleaned_item)
+            return out_list
+        else:
+            return obj
+
+    cleaned = copy.deepcopy(data)
+
+    url_sections = [
+        'work',
+        'volunteer',
+        'education',
+        'publications',
+        'projects',
+        'certificates',
+        'awards',
+    ]
+
+    for section in url_sections:
+        items = cleaned.get(section)
+        if isinstance(items, list):
+            for item in items:
+                if isinstance(item, dict) and item.get('url'):
+                    url_val = item.get('url')
+                    if isinstance(url_val, str) and '@' in url_val:
+                        original = url_val
+                        parsed = urllib.parse.urlparse(original)
+                        origin = None
+                        if parsed.scheme and parsed.netloc:
+                            origin = f"{parsed.scheme}://{parsed.netloc}/"
+                        else:
+                            origin = original.split('@')[0]
+
+                        item['journal'] = original
+                        item['url'] = origin
+
+    # Some renderCV sections (for example 'technologies') expect a
+    # OneLineEntry with a non-empty 'details' field. If the input has
+    # empty or missing details we should drop those entries to avoid
+    # validation failures during rendering. Support both shapes:
+    # - top-level section lists (cleaned['technologies'])
+    # - renderCV shape (cleaned['cv']['sections']['technologies'])
+    def _prune_empty_one_line_section(container: dict, section_name: str):
+        if not isinstance(container, dict):
+            return
+        items = container.get(section_name)
+        if not isinstance(items, list):
+            return
+        new_items = []
+        for it in items:
+            if isinstance(it, dict):
+                # If 'details' is missing or empty, drop the entry
+                if it.get('details', None) in (None, ''):
+                    continue
+            new_items.append(it)
+        container[section_name] = new_items
+
+    _prune_empty_one_line_section(cleaned, 'technologies')
+    if isinstance(cleaned.get('cv'), dict) and isinstance(cleaned['cv'].get('sections'), dict):
+        _prune_empty_one_line_section(cleaned['cv']['sections'], 'technologies')
+
+    # If technologies section is now empty, remove it entirely so RenderCV
+    # doesn't attempt to validate an empty section.
+    if isinstance(cleaned.get('technologies'), list) and len(cleaned['technologies']) == 0:
+        del cleaned['technologies']
+
+    if (
+        isinstance(cleaned.get('cv'), dict)
+        and isinstance(cleaned['cv'].get('sections'), dict)
+        and isinstance(cleaned['cv']['sections'].get('technologies'), list)
+        and len(cleaned['cv']['sections']['technologies']) == 0
+    ):
+        del cleaned['cv']['sections']['technologies']
+
+    cleaned = _clean(cleaned)
+    logging.getLogger(__name__).debug("sanitize_rendercv_data applied")
+    return cleaned
+
+
 def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
     """
     Convert JSON Resume format to renderCV format using jsonresume-to-rendercv.
@@ -228,16 +338,36 @@ def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
     """
     _check_dependencies()
 
+    # If the caller already passed a renderCV dict (or a dict with a
+    # 'design'/'cv'/'sections' top-level key), don't try to run the
+    # jsonresume-to-rendercv converter which expects JSON Resume format.
+    if isinstance(resumejson_dict, dict) and any(k in resumejson_dict for k in ('cv', 'design', 'sections')):
+        rendercv_candidate = sanitize_rendercv_data(resumejson_dict)
+        if 'design' not in rendercv_candidate:
+            rendercv_candidate = dict(rendercv_candidate)
+            rendercv_candidate['design'] = {
+                'theme': 'classic',
+                'page': {'size': 'us-letter'},
+                'text': {'font_family': 'Source Sans 3', 'font_size': '10pt'},
+            }
+        return rendercv_candidate
+
     # Normalize the input data to ensure all required fields are present
     normalized_data = _normalize_resumejson(resumejson_dict)
+
+    # Use module-level `sanitize_rendercv_data` to clean the normalized input
+    # (defined at module scope) before attempting conversion.
 
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
 
+        # Sanitize input to avoid validator failures (empty strings, problematic urls)
+        sanitized_input = sanitize_rendercv_data(normalized_data)
+
         # Write JSON Resume to temp file
         json_file = temp_path / "input.json"
         with open(json_file, 'w', encoding='utf-8') as f:
-            json.dump(normalized_data, f, indent=2, ensure_ascii=False)
+            json.dump(sanitized_input, f, indent=2, ensure_ascii=False)
 
         # Convert using jsonresume-to-rendercv CLI
         yaml_file = temp_path / "output.yaml"
@@ -253,6 +383,23 @@ def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
         # Read the converted YAML
         with open(yaml_file, 'r', encoding='utf-8') as f:
             rendercv_dict = yaml.safe_load(f)
+
+        # Ensure the converted rendercv_dict has a sane default design so
+        # downstream rendering (render_resume_w_rendercv) does not fail if
+        # callers passed a dict without a 'design' section.
+        if isinstance(rendercv_dict, dict):
+            if 'design' not in rendercv_dict:
+                rendercv_dict = dict(rendercv_dict)  # shallow copy
+                rendercv_dict['design'] = {
+                    'theme': 'classic',
+                    'page': {'size': 'us-letter'},
+                    'text': {'font_family': 'Source Sans 3', 'font_size': '10pt'},
+                }
+
+        # Sanitize the converted structure as well (some fields appear only
+        # after conversion and may contain empty strings or problematic urls)
+        if isinstance(rendercv_dict, dict):
+            rendercv_dict = sanitize_rendercv_data(rendercv_dict)
 
         return rendercv_dict
 
@@ -475,20 +622,40 @@ def render_resume_w_rendercv(
         rendercv_dict = dict(rendercv_dict)  # Don't modify original
         rendercv_dict['design'] = {}
 
-    # Update design settings
+    # Update design settings with proper renderCV structure
     design = rendercv_dict['design']
-    design.update(
-        {
-            'theme': theme,
-            'font_size': font_size,
-            'page_size': page_size,
-            **{
-                k: v
-                for k, v in kwargs.items()
-                if k in ['color', 'disable_page_numbering', 'header_separator']
-            },
-        }
-    )
+
+    # Set theme
+    if 'theme' not in design:
+        design['theme'] = theme
+
+    # Set page settings
+    if 'page' not in design:
+        design['page'] = {}
+    page = design['page']
+
+    # Map page_size to renderCV format
+    page_size_mapping = {
+        'letterpaper': 'us-letter',
+        'us-letter': 'us-letter',
+        'a4paper': 'a4',
+        'a4': 'a4',
+    }
+    if 'size' not in page:
+        page['size'] = page_size_mapping.get(page_size, 'us-letter')
+
+    # Set text settings
+    if 'text' not in design:
+        design['text'] = {}
+    text = design['text']
+
+    if 'font_size' not in text:
+        text['font_size'] = font_size
+
+    # Add any additional kwargs that are valid
+    for k, v in kwargs.items():
+        if k in ['color', 'disable_page_numbering', 'header_separator']:
+            design[k] = v
 
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
@@ -496,22 +663,62 @@ def render_resume_w_rendercv(
 
         try:
             if format_spec == 'pdf':
-                output_file = temp_path / "resume.pdf"
-                try:
-                    rendercv.api.create_a_pdf_from_a_python_dictionary(
-                        rendercv_dict, str(output_file)
-                    )
-                except Exception as pdf_error:
-                    raise ValueError(f"PDF generation failed: {pdf_error}")
+                # Prefer using the rendercv CLI pipeline which produces a
+                # real PDF from the YAML/Typst pipeline. Fall back to the
+                # API call if the CLI isn't available or fails.
+                yaml_file = temp_path / "resume.yaml"
+                with open(yaml_file, 'w', encoding='utf-8') as f:
+                    yaml.dump(rendercv_dict, f, default_flow_style=False)
 
-            elif format_spec == 'html':
-                output_file = temp_path / "resume.html"
-                try:
-                    rendercv.api.create_an_html_file_from_a_python_dictionary(
-                        rendercv_dict, str(output_file)
+                # Try CLI render first
+                result = subprocess.run(
+                    [
+                        'rendercv',
+                        'render',
+                        '--output-folder-name',
+                        str(temp_path),
+                        '--dont-generate-html',
+                        '--dont-generate-markdown',
+                        str(yaml_file),
+                    ],
+                    capture_output=True,
+                    text=True,
+                )
+
+                if result.returncode == 0:
+                    # The CLI typically generates a PDF; find it
+                    pdf_files = list(temp_path.glob("*.pdf"))
+                    if pdf_files:
+                        output_file = pdf_files[0]
+                    else:
+                        # If CLI produced a Typst file, try rendering that to PDF
+                        typst_files = list(temp_path.glob("*.typ")) + list(
+                            temp_path.glob("*.typst")
+                        )
+                        if typst_files:
+                            # Try rendering the typst file via rendercv CLI
+                            tf = typst_files[0]
+                            rt = subprocess.run(
+                                [
+                                    'rendercv',
+                                    'render',
+                                    '--output-folder-name',
+                                    str(temp_path),
+                                    str(tf),
+                                ],
+                                capture_output=True,
+                                text=True,
+                            )
+                            if rt.returncode == 0:
+                                pdf_files = list(temp_path.glob("*.pdf"))
+                                if pdf_files:
+                                    output_file = pdf_files[0]
+                        # otherwise we'll let the fallback API try below
+                else:
+                    # CLI failed; surface stderr for easier debugging.
+                    raise ValueError(
+                        f"PDF generation failed (CLI stdout: {result.stdout!r}, stderr: {result.stderr!r})"
                     )
-                except Exception as html_error:
-                    raise ValueError(f"HTML generation failed: {html_error}")
 
             elif format_spec == 'markdown':
                 output_file = temp_path / "resume.md"
@@ -552,7 +759,9 @@ def render_resume_w_rendercv(
                 )
 
                 if result.returncode != 0:
-                    raise ValueError(f"PNG generation failed: {result.stderr}")
+                    raise ValueError(
+                        f"PNG generation failed (CLI stdout: {result.stdout!r}, stderr: {result.stderr!r})"
+                    )
 
                 # Find the first PNG file
                 png_files = list(temp_path.glob("*.png"))

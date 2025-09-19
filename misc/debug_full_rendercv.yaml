@@ -1,0 +1,143 @@
+cv:
+  email: thorwhalen@gmail.com
+  location: Palo Alto, US
+  name: Thor Whalen
+  phone: +1-929-422-1134
+  sections:
+    education:
+    - area: Mathematics
+      degree: Ph.D.
+      end_date: present
+      highlights: []
+      institution: Emory University
+      start_date: 2000-01
+    - area: Computer Science
+      degree: M.S.
+      end_date: present
+      highlights: []
+      institution: Emory University
+      start_date: 2000-01
+    - area: Math/Physics
+      degree: Licence & DEUG
+      end_date: present
+      highlights: []
+      institution: "Universit\xE9 de Nice Sophia Antipolis"
+      start_date: 2000-01
+    - area: Graduate Studies
+      degree: Non-degree
+      end_date: present
+      highlights: []
+      institution: "Technische Universit\xE4t Berlin"
+      start_date: 2000-01
+    experience:
+    - company: Figiri
+      end_date: present
+      highlights:
+      - Built data visualization tools for exploring LLM semantic spaces and customer
+        journeys.
+      - Designed agent-driven analytics pipelines for real-time decision support.
+      location: ''
+      position: Co-founder
+      start_date: '2023-01-01'
+    - company: Addix Group
+      end_date: '2023-12-31'
+      highlights:
+      - Delivered AI agent prototypes (resume-matching, no-code apps, contextual assistants).
+      - Guided leadership on LLM adoption to reduce costs and accelerate insight-to-action
+        cycles.
+      location: ''
+      position: AI Integration Consultant
+      start_date: '2023-01-01'
+    - company: Analog Devices
+      end_date: '2023-01-01'
+      highlights:
+      - Scaled predictive maintenance workflows from IoT data ingestion to device-level
+        deployment.
+      - Built reusable pipelines tied to ROI and efficiency improvements.
+      - Translated technical results into business impact for senior leadership.
+      location: ''
+      position: Director of Machine Learning
+      start_date: '2018-01-01'
+    - company: OtoSense
+      end_date: '2018-12-31'
+      highlights:
+      - Created IoT recognition systems for logistics and industrial use cases.
+      - "Introduced fa\xE7ade/adapters to unify heterogeneous edge deployments."
+      - Reframed ML metrics into business-aligned KPIs (dollarized trade-offs of FP/FN).
+      location: ''
+      position: Co-founder & CTO
+      start_date: '2016-01-01'
+    - company: TagCommander (Commanders Act)
+      end_date: '2016-12-31'
+      highlights:
+      - Built attribution models, real-time KPIs, and automated pipelines.
+      - Delivered decision-support reporting that improved campaign efficiency.
+      location: ''
+      position: Lead Data Scientist
+      start_date: '2014-01-01'
+    - company: Expedia
+      end_date: '2014-12-31'
+      highlights:
+      - Aligned structured hotel/destination data with unstructured ad copy.
+      - Optimized bids to balance ROI with revenue and nights sold; boosted KPIs and
+        marketer productivity.
+      location: ''
+      position: Senior Data Scientist
+      start_date: '2011-01-01'
+    - company: Independent Consultant (Methodic Solutions)
+      end_date: '2011-12-31'
+      highlights:
+      - Unified messy, siloed data into clean ecosystems.
+      - Built reusable frameworks and taxonomies to accelerate data-to-value workflows.
+      location: ''
+      position: Consultant
+      start_date: '2000-01-01'
+    projects:
+    - date: 2000-01
+      highlights:
+      - Creator of 150+ Python packages, including data infrastructure, AI agent frameworks,
+        and visualization tools.
+      name: Key Open-Source Projects
+    publications:
+    - authors: []
+      date: 2000-01
+      title: Scientific Publications
+      url: https://www.linkedin.com/in/thorwhalen/details/publications/
+    - authors: []
+      date: 2000-01
+      title: Other Publications
+      url: https://medium.com/@thorwhalen1
+    summary:
+    - AI & Data Leader with 20+ years of experience transforming raw data into automation,
+      insight, and action. Co-founder of OtoSense (acquired by Analog Devices) and
+      former Director of Machine Learning at ADI. Expert Python developer with 150+
+      open-source packages. Hands-on builder with deep expertise in marketplace optimization,
+      predictive maintenance & IoT, and high-volume services.
+    technologies:
+    - details: ''
+      label: Languages
+    - details: ''
+      label: Software
+  social_networks:
+  - network: GitHub
+    username: thorwhalen
+  - network: GitHub
+    username: thorwhalen
+  - network: GitHub
+    username: thorwhalen1
+  website: https://www.linkedin.com/in/thorwhalen
+design:
+  font_size: 10pt
+  page:
+    bottom_margin: 2cm
+    left_margin: 2cm
+    right_margin: 2cm
+    size: us-letter
+    top_margin: 2cm
+  page_size: letterpaper
+  text:
+    font_family: Source Sans 3
+    font_size: 10pt
+  theme: classic
+rendercv_settings:
+  date: '2025-09-19'

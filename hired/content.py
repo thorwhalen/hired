@@ -16,7 +16,7 @@ from hired.base import (
     ResumeWork,
     ResumeEducation,
 )
-from hired.util import _load_json_file, _load_yaml_file
+from hired.util import _load_json_file, load_yaml
 
 
 class FileContentSource:
@@ -29,7 +29,7 @@ class FileContentSource:
         if self._path.endswith('.json'):
             return _load_json_file(self._path)
         elif self._path.endswith('.yaml') or self._path.endswith('.yml'):
-            return _load_yaml_file(self._path)
+            return load_yaml(self._path)
         else:
             raise ValueError(f'Unsupported file type: {self._path}')
 
