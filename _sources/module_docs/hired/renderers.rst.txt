@@ -1,0 +1,4 @@
+hired.renderers
+===============
+.. automodule:: hired.renderers
+   :members:

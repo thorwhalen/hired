@@ -1,0 +1,4 @@
+hired.renderers.html
+====================
+.. automodule:: hired.renderers.html
+   :members:

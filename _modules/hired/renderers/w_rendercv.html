@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.renderers.w_rendercv &mdash; hired 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/validators.html">hired.validators</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.renderers.w_rendercv</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.renderers.w_rendercv</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Resume Facade Library</span>
+
+<span class="sd">A clean Python facade over third-party resume tools:</span>
+<span class="sd">- Uses jsonresume-to-rendercv for JSON Resume &lt;-&gt; renderCV conversion</span>
+<span class="sd">- Uses rendercv API for rendering resumes to various formats</span>
+
+<span class="sd">Installation:</span>
+<span class="sd">    pip install jsonresume-to-rendercv rendercv[full] pydantic</span>
+
+<span class="sd">Usage:</span>
+<span class="sd">    from resume_facade import resumejson_to_rendercv, rendercv_to_resumejson, render_resume_w_rendercv</span>
+
+<span class="sd">    # Convert between formats</span>
+<span class="sd">    rendercv_dict = resumejson_to_rendercv(resumejson_dict)</span>
+<span class="sd">    resumejson_dict = rendercv_to_resumejson(rendercv_dict)</span>
+
+<span class="sd">    # Render resume to various formats</span>
+<span class="sd">    pdf_bytes = render_resume_w_rendercv(rendercv_dict, &#39;pdf&#39;, theme=&#39;classic&#39;)</span>
+<span class="sd">    html_bytes = render_resume_w_rendercv(rendercv_dict, &#39;html&#39;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># Try to import the third-party packages</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">rendercv.api</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">rendercv.data</span>
+
+    <span class="n">RENDERCV_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">RENDERCV_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">rendercv</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># For the conversion tool, we&#39;ll use subprocess since it&#39;s primarily a CLI tool</span>
+<span class="n">JSONRESUME_TO_RENDERCV_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># We&#39;ll check this at runtime</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_dependencies</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if required dependencies are available.&quot;&quot;&quot;</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">RENDERCV_AVAILABLE</span><span class="p">:</span>
+        <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;rendercv[full] - pip install &#39;rendercv[full]&#39;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check if jsonresume-to-rendercv CLI is available</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># This tool doesn&#39;t support --help, so we just check if it runs without args</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;jsonresume_to_rendercv&#39;</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="c1"># If it runs (even with error code 1 for missing args), it&#39;s available</span>
+        <span class="c1"># FileNotFoundError would be raised if the command doesn&#39;t exist</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;jsonresume-to-rendercv - pip install jsonresume-to-rendercv&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing dependencies: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_normalize_resumejson</span><span class="p">(</span><span class="n">resumejson_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalize JSON Resume data to ensure all required fields are present.</span>
+
+<span class="sd">    The jsonresume-to-rendercv tool is strict about required fields, so we&#39;ll</span>
+<span class="sd">    add missing fields with appropriate defaults to make the conversion robust.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        resumejson_dict: Original resume data</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Normalized resume data with all required fields</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+
+    <span class="c1"># Create a deep copy to avoid modifying the original</span>
+    <span class="n">normalized</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">resumejson_dict</span><span class="p">)</span>
+
+    <span class="c1"># Define required fields for each section with their default values</span>
+    <span class="n">SECTION_DEFAULTS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;basics&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;phone&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;location&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;address&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;postalCode&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;countryCode&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;profiles&#39;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;work&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2000-01&#39;</span><span class="p">,</span>  <span class="c1"># Default to a valid date format</span>
+                <span class="c1"># &#39;endDate&#39; intentionally omitted - empty string fails validation</span>
+                <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;highlights&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;location&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;volunteer&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;organization&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2000-01&#39;</span><span class="p">,</span>
+                <span class="c1"># &#39;endDate&#39; intentionally omitted - empty string fails validation</span>
+                <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;highlights&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;institution&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;area&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;studyType&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2000-01&#39;</span><span class="p">,</span>  <span class="c1"># Required by jsonresume-to-rendercv</span>
+                <span class="c1"># &#39;endDate&#39; intentionally omitted - empty string fails validation</span>
+                <span class="s1">&#39;score&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;courses&#39;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;awards&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;2000-01&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;awarder&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;certificates&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;2000-01&#39;</span><span class="p">,</span> <span class="s1">&#39;issuer&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;publications&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;publisher&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;releaseDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2000-01&#39;</span><span class="p">,</span>  <span class="c1"># Required by jsonresume-to-rendercv</span>
+                <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;skills&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="p">[]}},</span>
+        <span class="s1">&#39;languages&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;fluency&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">}},</span>
+        <span class="s1">&#39;interests&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="p">[]}},</span>
+        <span class="s1">&#39;references&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;reference&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">}},</span>
+        <span class="s1">&#39;projects&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;_item_defaults&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;highlights&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2000-01&#39;</span><span class="p">,</span>
+                <span class="c1"># &#39;endDate&#39; intentionally omitted - empty string fails validation</span>
+                <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;roles&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Normalize top-level sections</span>
+    <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">defaults</span> <span class="ow">in</span> <span class="n">SECTION_DEFAULTS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">section_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">normalized</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;_item_defaults&#39;</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+                <span class="n">normalized</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">normalized</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">section_data</span> <span class="o">=</span> <span class="n">normalized</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;_item_defaults&#39;</span> <span class="ow">in</span> <span class="n">defaults</span><span class="p">:</span>
+            <span class="c1"># This is an array section (work, education, etc.)</span>
+            <span class="n">item_defaults</span> <span class="o">=</span> <span class="n">defaults</span><span class="p">[</span><span class="s1">&#39;_item_defaults&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">section_data</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="c1"># First, remove empty date fields that would fail validation</span>
+                        <span class="n">date_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;endDate&#39;</span><span class="p">,</span> <span class="s1">&#39;date&#39;</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">date_field</span> <span class="ow">in</span> <span class="n">date_fields</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">date_field</span> <span class="ow">in</span> <span class="n">item</span> <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="n">date_field</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                                <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="n">date_field</span><span class="p">]</span>
+
+                        <span class="c1"># Then add missing required fields</span>
+                        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="n">item_defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+                                <span class="n">item</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># This is an object section (basics)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">section_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="n">defaults</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">section_data</span><span class="p">:</span>
+                        <span class="n">section_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
+
+    <span class="k">return</span> <span class="n">normalized</span>
+
+
+<div class="viewcode-block" id="resumejson_to_rendercv">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.resumejson_to_rendercv">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resumejson_to_rendercv</span><span class="p">(</span><span class="n">resumejson_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert JSON Resume format to renderCV format using jsonresume-to-rendercv.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        resumejson_dict: Resume data in JSON Resume format</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Resume data in renderCV format</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If required dependencies are not available</span>
+<span class="sd">        ValueError: If conversion fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check_dependencies</span><span class="p">()</span>
+
+    <span class="c1"># Normalize the input data to ensure all required fields are present</span>
+    <span class="n">normalized_data</span> <span class="o">=</span> <span class="n">_normalize_resumejson</span><span class="p">(</span><span class="n">resumejson_dict</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+        <span class="n">temp_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+
+        <span class="c1"># Write JSON Resume to temp file</span>
+        <span class="n">json_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;input.json&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">normalized_data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Convert using jsonresume-to-rendercv CLI</span>
+        <span class="n">yaml_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;output.yaml&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span><span class="s1">&#39;jsonresume_to_rendercv&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">json_file</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)],</span>
+            <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Conversion failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Read the converted YAML</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">rendercv_dict</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rendercv_dict</span></div>
+
+
+
+<div class="viewcode-block" id="rendercv_to_resumejson">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.rendercv_to_resumejson">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">rendercv_to_resumejson</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert renderCV format to JSON Resume format.</span>
+
+<span class="sd">    Note: This is a reverse conversion. Since jsonresume-to-rendercv only goes</span>
+<span class="sd">    one direction, this implements the reverse mapping.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rendercv_dict: Resume data in renderCV format</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Resume data in JSON Resume format</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract CV data</span>
+    <span class="n">cv_data</span> <span class="o">=</span> <span class="n">rendercv_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="c1"># Build JSON Resume structure</span>
+    <span class="n">resumejson</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json&quot;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Convert basics</span>
+    <span class="n">basics</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
+        <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">):</span>
+        <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">):</span>
+        <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;phone&#39;</span><span class="p">):</span>
+        <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;phone&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;phone&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;website&#39;</span><span class="p">):</span>
+        <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;website&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;summary&#39;</span><span class="p">):</span>
+        <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Convert location</span>
+    <span class="k">if</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">):</span>
+        <span class="n">location_str</span> <span class="o">=</span> <span class="n">cv_data</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">part</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">location_str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s1">&#39;countryCode&#39;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span>
+
+    <span class="c1"># Convert social networks</span>
+    <span class="n">social_networks</span> <span class="o">=</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;social_networks&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">social_networks</span><span class="p">:</span>
+        <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;profiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">social</span> <span class="ow">in</span> <span class="n">social_networks</span><span class="p">:</span>
+            <span class="n">profile</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;network&#39;</span><span class="p">:</span> <span class="n">social</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;network&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="n">social</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;username&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">social</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+                <span class="n">profile</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">social</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
+            <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;profiles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">profile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">basics</span><span class="p">:</span>
+        <span class="n">resumejson</span><span class="p">[</span><span class="s1">&#39;basics&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">basics</span>
+
+    <span class="c1"># Convert sections</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="n">cv_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sections&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+    <span class="c1"># Convert work experience</span>
+    <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">sections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">section_lower</span> <span class="o">=</span> <span class="n">section_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">keyword</span> <span class="ow">in</span> <span class="n">section_lower</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="s1">&#39;experience&#39;</span><span class="p">,</span> <span class="s1">&#39;employment&#39;</span><span class="p">]</span>
+        <span class="p">):</span>
+            <span class="n">work_entries</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">work_entry</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;location&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;start_date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;endDate&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;end_date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;summary&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;highlights&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;highlights&#39;</span><span class="p">,</span> <span class="p">[]),</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+                        <span class="n">work_entry</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
+                    <span class="c1"># Remove empty values</span>
+                    <span class="n">work_entry</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">work_entry</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span>
+                    <span class="n">work_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">work_entry</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">work_entries</span><span class="p">:</span>
+                <span class="n">resumejson</span><span class="p">[</span><span class="s1">&#39;work&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">work_entries</span>
+
+        <span class="k">elif</span> <span class="s1">&#39;education&#39;</span> <span class="ow">in</span> <span class="n">section_lower</span><span class="p">:</span>
+            <span class="n">education_entries</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">edu_entry</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;institution&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;institution&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;area&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;area&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;studyType&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;degree&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;start_date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;endDate&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;end_date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+                        <span class="n">edu_entry</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gpa&#39;</span><span class="p">):</span>
+                        <span class="n">edu_entry</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;gpa&#39;</span><span class="p">]</span>
+                    <span class="c1"># Remove empty values</span>
+                    <span class="n">edu_entry</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">edu_entry</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span>
+                    <span class="n">education_entries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edu_entry</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">education_entries</span><span class="p">:</span>
+                <span class="n">resumejson</span><span class="p">[</span><span class="s1">&#39;education&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">education_entries</span>
+
+        <span class="k">elif</span> <span class="s1">&#39;skill&#39;</span> <span class="ow">in</span> <span class="n">section_lower</span><span class="p">:</span>
+            <span class="n">skills</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="c1"># Parse skill strings like &quot;**Name**: keyword1, keyword2&quot;</span>
+                    <span class="k">if</span> <span class="s1">&#39;**&#39;</span> <span class="ow">in</span> <span class="n">entry</span> <span class="ow">and</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+                        <span class="n">parts</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="n">name</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;**&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="n">keywords</span> <span class="o">=</span> <span class="p">[</span><span class="n">kw</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+                        <span class="n">skills</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="n">keywords</span><span class="p">})</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">skills</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="p">,</span> <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="p">[]})</span>
+
+            <span class="k">if</span> <span class="n">skills</span><span class="p">:</span>
+                <span class="n">resumejson</span><span class="p">[</span><span class="s1">&#39;skills&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">skills</span>
+
+        <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">keyword</span> <span class="ow">in</span> <span class="n">section_lower</span> <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="s1">&#39;portfolio&#39;</span><span class="p">]):</span>
+            <span class="n">projects</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">project</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;summary&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;highlights&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;highlights&#39;</span><span class="p">,</span> <span class="p">[]),</span>
+                        <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;start_date&#39;</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)),</span>
+                        <span class="s1">&#39;endDate&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;end_date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+                        <span class="n">project</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
+                    <span class="c1"># Remove empty values</span>
+                    <span class="n">project</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">project</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span>
+                    <span class="n">projects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">projects</span><span class="p">:</span>
+                <span class="n">resumejson</span><span class="p">[</span><span class="s1">&#39;projects&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">projects</span>
+
+        <span class="k">elif</span> <span class="s1">&#39;publication&#39;</span> <span class="ow">in</span> <span class="n">section_lower</span><span class="p">:</span>
+            <span class="n">publications</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">pub</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;releaseDate&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                        <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;summary&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+                    <span class="p">}</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;journal&#39;</span><span class="p">):</span>
+                        <span class="n">pub</span><span class="p">[</span><span class="s1">&#39;publisher&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;journal&#39;</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;authors&#39;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                            <span class="n">pub</span><span class="p">[</span><span class="s1">&#39;publisher&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">pub</span><span class="p">[</span><span class="s1">&#39;publisher&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;authors&#39;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+                        <span class="n">pub</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
+                    <span class="c1"># Remove empty values</span>
+                    <span class="n">pub</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pub</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="p">}</span>
+                    <span class="n">publications</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pub</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">publications</span><span class="p">:</span>
+                <span class="n">resumejson</span><span class="p">[</span><span class="s1">&#39;publications&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">publications</span>
+
+    <span class="k">return</span> <span class="n">resumejson</span></div>
+
+
+
+<div class="viewcode-block" id="render_resume_w_rendercv">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.render_resume_w_rendercv">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render_resume_w_rendercv</span><span class="p">(</span>
+    <span class="n">rendercv_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">format_spec</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;markdown&#39;</span><span class="p">,</span> <span class="s1">&#39;typst&#39;</span><span class="p">,</span> <span class="s1">&#39;png&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;pdf&#39;</span><span class="p">,</span>
+    <span class="n">theme</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;classic&#39;</span><span class="p">,</span>
+    <span class="n">font_size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;10pt&#39;</span><span class="p">,</span>
+    <span class="n">page_size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;letterpaper&#39;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render resume using renderCV to the specified format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rendercv_dict: Resume data in renderCV format</span>
+<span class="sd">        format_spec: Output format (&#39;pdf&#39;, &#39;html&#39;, &#39;markdown&#39;, &#39;typst&#39;, &#39;png&#39;)</span>
+<span class="sd">        theme: renderCV theme (&#39;classic&#39;, &#39;sb2nov&#39;, &#39;engineeringresumes&#39;, &#39;moderncv&#39;)</span>
+<span class="sd">        font_size: Font size (e.g., &#39;10pt&#39;, &#39;11pt&#39;, &#39;12pt&#39;)</span>
+<span class="sd">        page_size: Page size (&#39;letterpaper&#39;, &#39;a4paper&#39;, etc.)</span>
+<span class="sd">        **kwargs: Additional options passed to renderCV</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Rendered resume as bytes</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ImportError: If renderCV is not available</span>
+<span class="sd">        ValueError: If rendering fails</span>
+<span class="sd">        NotImplementedError: If format is not supported</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_check_dependencies</span><span class="p">()</span>
+
+    <span class="c1"># Ensure we have design settings</span>
+    <span class="k">if</span> <span class="s1">&#39;design&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rendercv_dict</span><span class="p">:</span>
+        <span class="n">rendercv_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">)</span>  <span class="c1"># Don&#39;t modify original</span>
+        <span class="n">rendercv_dict</span><span class="p">[</span><span class="s1">&#39;design&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Update design settings</span>
+    <span class="n">design</span> <span class="o">=</span> <span class="n">rendercv_dict</span><span class="p">[</span><span class="s1">&#39;design&#39;</span><span class="p">]</span>
+    <span class="n">design</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;theme&#39;</span><span class="p">:</span> <span class="n">theme</span><span class="p">,</span>
+            <span class="s1">&#39;font_size&#39;</span><span class="p">:</span> <span class="n">font_size</span><span class="p">,</span>
+            <span class="s1">&#39;page_size&#39;</span><span class="p">:</span> <span class="n">page_size</span><span class="p">,</span>
+            <span class="o">**</span><span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;disable_page_numbering&#39;</span><span class="p">,</span> <span class="s1">&#39;header_separator&#39;</span><span class="p">]</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+        <span class="n">temp_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">format_spec</span> <span class="o">==</span> <span class="s1">&#39;pdf&#39;</span><span class="p">:</span>
+                <span class="n">output_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.pdf&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">rendercv</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">create_a_pdf_from_a_python_dictionary</span><span class="p">(</span>
+                        <span class="n">rendercv_dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">pdf_error</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PDF generation failed: </span><span class="si">{</span><span class="n">pdf_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">format_spec</span> <span class="o">==</span> <span class="s1">&#39;html&#39;</span><span class="p">:</span>
+                <span class="n">output_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.html&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">rendercv</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">create_an_html_file_from_a_python_dictionary</span><span class="p">(</span>
+                        <span class="n">rendercv_dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">html_error</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTML generation failed: </span><span class="si">{</span><span class="n">html_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">format_spec</span> <span class="o">==</span> <span class="s1">&#39;markdown&#39;</span><span class="p">:</span>
+                <span class="n">output_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.md&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">rendercv</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">create_a_markdown_file_from_a_python_dictionary</span><span class="p">(</span>
+                        <span class="n">rendercv_dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">md_error</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Markdown generation failed: </span><span class="si">{</span><span class="n">md_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">format_spec</span> <span class="o">==</span> <span class="s1">&#39;typst&#39;</span><span class="p">:</span>
+                <span class="n">output_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.typ&quot;</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">rendercv</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">create_a_typst_file_from_a_python_dictionary</span><span class="p">(</span>
+                        <span class="n">rendercv_dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">typst_error</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Typst generation failed: </span><span class="si">{</span><span class="n">typst_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">format_spec</span> <span class="o">==</span> <span class="s1">&#39;png&#39;</span><span class="p">:</span>
+                <span class="c1"># Generate PDF first, then PNG via renderCV CLI</span>
+                <span class="n">yaml_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.yaml&quot;</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+                <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="s1">&#39;rendercv&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;render&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;--output-folder-name&#39;</span><span class="p">,</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">temp_path</span><span class="p">),</span>
+                        <span class="s1">&#39;--dont-generate-html&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;--dont-generate-markdown&#39;</span><span class="p">,</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">),</span>
+                    <span class="p">],</span>
+                    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PNG generation failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Find the first PNG file</span>
+                <span class="n">png_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">temp_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.png&quot;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">png_files</span><span class="p">:</span>
+                    <span class="n">output_file</span> <span class="o">=</span> <span class="n">png_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;PNG file was not generated&quot;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Format &#39;</span><span class="si">{</span><span class="n">format_spec</span><span class="si">}</span><span class="s2">&#39; not supported&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Read the generated file</span>
+            <span class="k">if</span> <span class="n">output_file</span> <span class="ow">and</span> <span class="n">output_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Output file was not created: </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;not found&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;renderCV command not found. Install with: pip install &#39;rendercv[full]&#39;&quot;</span>
+                <span class="p">)</span>
+            <span class="k">raise</span></div>
+
+
+
+<span class="c1"># Convenience functions for common use cases</span>
+<div class="viewcode-block" id="render_pdf">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.render_pdf">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render_pdf</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render resume as PDF.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_resume_w_rendercv</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">,</span> <span class="s1">&#39;pdf&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="render_html">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.render_html">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render_html</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render resume as HTML.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_resume_w_rendercv</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="render_markdown">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.render_markdown">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render_markdown</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render resume as Markdown.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_resume_w_rendercv</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">,</span> <span class="s1">&#39;markdown&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Example usage</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># Example JSON Resume data</span>
+    <span class="n">sample_resumejson</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;John Doe&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Software Engineer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;john@example.com&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;phone&quot;</span><span class="p">:</span> <span class="s2">&quot;+1-555-123-4567&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://johndoe.dev&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Experienced software engineer with expertise in Python and web development.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="s2">&quot;San Francisco&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;countryCode&quot;</span><span class="p">:</span> <span class="s2">&quot;US&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;profiles&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;LinkedIn&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;johndoe&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://linkedin.com/in/johndoe&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;network&quot;</span><span class="p">:</span> <span class="s2">&quot;GitHub&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;johndoe&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;https://github.com/johndoe&quot;</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">],</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;work&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Tech Corp&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="s2">&quot;Senior Software Engineer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;San Francisco, CA&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;startDate&quot;</span><span class="p">:</span> <span class="s2">&quot;2020-01&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;summary&quot;</span><span class="p">:</span> <span class="s2">&quot;Lead backend development for web applications.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;highlights&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;Built scalable APIs serving 1M+ requests/day&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Mentored junior developers&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Improved system performance by 40%&quot;</span><span class="p">,</span>
+                <span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Converting JSON Resume to renderCV...&quot;</span><span class="p">)</span>
+        <span class="n">rendercv_dict</span> <span class="o">=</span> <span class="n">resumejson_to_rendercv</span><span class="p">(</span><span class="n">sample_resumejson</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Conversion successful!&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rendering PDF...&quot;</span><span class="p">)</span>
+        <span class="n">pdf_bytes</span> <span class="o">=</span> <span class="n">render_pdf</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ PDF rendered: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pdf_bytes</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Converting back to JSON Resume...&quot;</span><span class="p">)</span>
+        <span class="n">resumejson_restored</span> <span class="o">=</span> <span class="n">rendercv_to_resumejson</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Reverse conversion successful!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save files for inspection</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;sample_resume.pdf&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pdf_bytes</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;rendercv_format.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;restored_jsonresume.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">resumejson_restored</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ All operations completed successfully!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;Files saved: sample_resume.pdf, rendercv_format.yaml, restored_jsonresume.json&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;Make sure to install: pip install jsonresume-to-rendercv &#39;rendercv[full]&#39;&quot;</span>
+        <span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

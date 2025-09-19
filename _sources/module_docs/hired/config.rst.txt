@@ -1,0 +1,4 @@
+hired.config
+============
+.. automodule:: hired.config
+   :members:

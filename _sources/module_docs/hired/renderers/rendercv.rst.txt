@@ -1,0 +1,4 @@
+hired.renderers.rendercv
+========================
+.. automodule:: hired.renderers.rendercv
+   :members:

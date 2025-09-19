@@ -1,0 +1,168 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.renderers &mdash; hired 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="hired.renderers.html" href="renderers/html.html" />
+    <link rel="prev" title="hired.render" href="render.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">hired.render</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.renderers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.HTMLRenderer"><code class="docutils literal notranslate"><span class="pre">HTMLRenderer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.RenderCVRenderer"><code class="docutils literal notranslate"><span class="pre">RenderCVRenderer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.renderers.RenderCVRenderer.render"><code class="docutils literal notranslate"><span class="pre">RenderCVRenderer.render()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">hired.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="validators.html">hired.validators</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.renderers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/hired/renderers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.renderers">
+<span id="hired-renderers"></span><h1>hired.renderers<a class="headerlink" href="#module-hired.renderers" title="Link to this heading"></a></h1>
+<p>Renderer implementations package.
+Contains various renderer backends for different output formats.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.renderers.HTMLRenderer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hired.renderers.</span></span><span class="sig-name descname"><span class="pre">HTMLRenderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme_registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="renderers/html.html#hired.renderers.html.ThemeRegistry" title="hired.renderers.html.ThemeRegistry"><span class="pre">ThemeRegistry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/renderers/html.html#HTMLRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.HTMLRenderer" title="Link to this definition"></a></dt>
+<dd><p>Renders resume to HTML or PDF.</p>
+<dl class="simple">
+<dt>Process:</dt><dd><ul class="simple">
+<li><p>Build a sanitized context (omit empty sections).</p></li>
+<li><p>Render via Jinja2 template.</p></li>
+<li><p>If PDF: use WeasyPrint if available, else fallback minimal PDF builder.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.renderers.RenderCVRenderer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hired.renderers.</span></span><span class="sig-name descname"><span class="pre">RenderCVRenderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strict_validation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/renderers/rendercv.html#RenderCVRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.RenderCVRenderer" title="Link to this definition"></a></dt>
+<dd><p>Renderer that uses RenderCV for high-quality PDF generation.</p>
+<p>This renderer:
+1. Converts JSON Resume format to RenderCV YAML format
+2. Uses RenderCV to generate PDF with LaTeX/Typst backend
+3. Returns the rendered PDF bytes</p>
+<p>Features robust data handling:
+- Fills in missing required fields with sensible defaults
+- Issues warnings about missing or incomplete data
+- Gracefully handles schema validation issues</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.renderers.RenderCVRenderer.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.base.ResumeContent" title="hired.base.ResumeContent"><span class="pre">ResumeContent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.base.RenderingConfig" title="hired.base.RenderingConfig"><span class="pre">RenderingConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../_modules/hired/renderers/rendercv.html#RenderCVRenderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.RenderCVRenderer.render" title="Link to this definition"></a></dt>
+<dd><p>Render resume content using RenderCV backend.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="render.html" class="btn btn-neutral float-left" title="hired.render" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="renderers/html.html" class="btn btn-neutral float-right" title="hired.renderers.html" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

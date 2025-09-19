@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired &mdash; hired 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hired.base" href="hired/base.html" />
+    <link rel="prev" title="Welcome to hired’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.RenderingConfig"><code class="docutils literal notranslate"><span class="pre">RenderingConfig</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.ResumeContent"><code class="docutils literal notranslate"><span class="pre">ResumeContent</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.ResumeContent.model_config"><code class="docutils literal notranslate"><span class="pre">ResumeContent.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.mk_content_for_resume"><code class="docutils literal notranslate"><span class="pre">mk_content_for_resume()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.mk_resume"><code class="docutils literal notranslate"><span class="pre">mk_resume()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/util.html">hired.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/validators.html">hired.validators</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/module_docs/hired.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired">
+<span id="hired"></span><h1>hired<a class="headerlink" href="#module-hired" title="Link to this heading"></a></h1>
+<p>Public API for the hired package.
+Import the main user-facing functions and classes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.RenderingConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hired.</span></span><span class="sig-name descname"><span class="pre">RenderingConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_css</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/base.html#RenderingConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.RenderingConfig" title="Link to this definition"></a></dt>
+<dd><p>Configuration for resume rendering.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.ResumeContent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hired.</span></span><span class="sig-name descname"><span class="pre">ResumeContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/base.html#hired.base.ResumeBasics" title="hired.base.ResumeBasics"><span class="pre">ResumeBasics</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">work</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hired/base.html#hired.base.ResumeWork" title="hired.base.ResumeWork"><span class="pre">ResumeWork</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">education</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hired/base.html#hired.base.ResumeEducation" title="hired.base.ResumeEducation"><span class="pre">ResumeEducation</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_sections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">extra_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/base.html#ResumeContent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.ResumeContent" title="Link to this definition"></a></dt>
+<dd><p>Complete resume content following JSON Resume schema with support for extra/freeform sections.</p>
+<p>Unknown top-level keys (non core) can be captured in extra_sections mapping when desired.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hired.ResumeContent.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'extra':</span> <span class="pre">'allow'}</span></em><a class="headerlink" href="#hired.ResumeContent.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.mk_content_for_resume">
+<span class="sig-prename descclassname"><span class="pre">hired.</span></span><span class="sig-name descname"><span class="pre">mk_content_for_resume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_info_src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/base.html#hired.base.ContentSource" title="hired.base.ContentSource"><span class="pre">ContentSource</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_info_src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/base.html#hired.base.ContentSource" title="hired.base.ContentSource"><span class="pre">ContentSource</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="hired/base.html#hired.base.ResumeContent" title="hired.base.ResumeContent"><span class="pre">ResumeContent</span></a></span></span><a class="reference internal" href="../_modules/hired/tools.html#mk_content_for_resume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.mk_content_for_resume" title="Link to this definition"></a></dt>
+<dd><p>Generate resume content from candidate and job information.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.mk_resume">
+<span class="sig-prename descclassname"><span class="pre">hired.</span></span><span class="sig-name descname"><span class="pre">mk_resume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/base.html#hired.base.ResumeContent" title="hired.base.ResumeContent"><span class="pre">ResumeContent</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rendering</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/base.html#hired.base.RenderingConfig" title="hired.base.RenderingConfig"><span class="pre">RenderingConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../_modules/hired/tools.html#mk_resume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.mk_resume" title="Link to this definition"></a></dt>
+<dd><p>Render resume content to final format.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to hired’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hired/base.html" class="btn btn-neutral float-right" title="hired.base" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

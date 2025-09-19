@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.renderers.html &mdash; hired 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/validators.html">hired.validators</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.renderers.html</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.renderers.html</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;HTML renderer implementation using Jinja2 templates.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">html</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">html_mod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span> <span class="k">as</span> <span class="n">ABCMapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span><span class="p">,</span> <span class="n">ResumeContent</span><span class="p">,</span> <span class="n">RenderingConfig</span>
+
+<span class="k">try</span><span class="p">:</span>  <span class="c1"># Optional dependency</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">weasyprint</span>  <span class="c1"># type: ignore</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># pragma: no cover - absence path</span>
+    <span class="n">weasyprint</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">jinja2</span><span class="w"> </span><span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">FileSystemLoader</span><span class="p">,</span> <span class="n">select_autoescape</span>
+<span class="k">except</span> <span class="p">(</span>
+    <span class="ne">ImportError</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - jinja2 should be present or this errors clearly</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Jinja2 is required for rendering; please install jinja2&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+
+<span class="c1"># Minimal theme registry</span>
+<div class="viewcode-block" id="ThemeRegistry">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/html.html#hired.renderers.ThemeRegistry">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ThemeRegistry</span><span class="p">(</span><span class="n">ABCMapping</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Registry for available themes.</span>
+
+<span class="sd">    Each theme is a mapping with keys:</span>
+<span class="sd">        name: str</span>
+<span class="sd">        template: str (filename relative to themes directory)</span>
+<span class="sd">        css: str (raw CSS text, optional)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">themes_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">themes_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Derive path relative to hired package</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">hired</span>
+
+            <span class="n">themes_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">hired</span><span class="o">.</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;themes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_themes_path</span> <span class="o">=</span> <span class="n">themes_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_themes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;template&#39;</span><span class="p">:</span> <span class="s1">&#39;default.html&#39;</span><span class="p">,</span> <span class="s1">&#39;css&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">},</span>
+            <span class="s1">&#39;minimal&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;template&#39;</span><span class="p">:</span> <span class="s1">&#39;minimal.html&#39;</span><span class="p">,</span> <span class="s1">&#39;css&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">},</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theme_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_themes</span><span class="p">[</span><span class="n">theme_name</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_themes</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_themes</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">themes_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_themes_path</span></div>
+
+
+
+<div class="viewcode-block" id="HTMLRenderer">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/html.html#hired.renderers.HTMLRenderer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HTMLRenderer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renders resume to HTML or PDF.</span>
+
+<span class="sd">    Process:</span>
+<span class="sd">        * Build a sanitized context (omit empty sections).</span>
+<span class="sd">        * Render via Jinja2 template.</span>
+<span class="sd">        * If PDF: use WeasyPrint if available, else fallback minimal PDF builder.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">theme_registry</span><span class="p">:</span> <span class="n">ThemeRegistry</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_themes</span> <span class="o">=</span> <span class="n">theme_registry</span> <span class="ow">or</span> <span class="n">ThemeRegistry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span>
+            <span class="n">loader</span><span class="o">=</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_themes</span><span class="o">.</span><span class="n">themes_path</span><span class="p">),</span>
+            <span class="n">autoescape</span><span class="o">=</span><span class="n">select_autoescape</span><span class="p">([</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;xml&#39;</span><span class="p">]),</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ------------------ Public API ------------------ #</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">RenderingConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="n">theme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_themes</span><span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">theme</span><span class="p">]</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_render_to_html</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">theme</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s1">&#39;pdf&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_html_to_pdf</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;css&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+    <span class="c1"># ------------------ HTML rendering ------------------ #</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_render_to_html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">,</span> <span class="n">theme</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">ctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_context</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">theme</span><span class="p">[</span><span class="s1">&#39;template&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">ctx</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_build_context</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">basics</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">work</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">w</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">work</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_empty_section</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+        <span class="p">]</span>
+        <span class="n">education</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">e</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">education</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_empty_section</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+        <span class="p">]</span>
+        <span class="n">extra_sections</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="n">_iter_extra_sections</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="s1">&#39;extra_sections&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;basics&#39;</span><span class="p">:</span> <span class="n">basics</span><span class="p">,</span>
+            <span class="s1">&#39;work&#39;</span><span class="p">:</span> <span class="n">work</span><span class="p">,</span>
+            <span class="s1">&#39;education&#39;</span><span class="p">:</span> <span class="n">education</span><span class="p">,</span>
+            <span class="s1">&#39;extra_sections&#39;</span><span class="p">:</span> <span class="n">extra_sections</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="c1"># ------------------ PDF conversion ------------------ #</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_html_to_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">css</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">weasyprint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>  <span class="c1"># pragma: no cover (WeasyPrint path typically optional in tests)</span>
+                <span class="k">return</span> <span class="n">weasyprint</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">html</span><span class="p">)</span><span class="o">.</span><span class="n">write_pdf</span><span class="p">(</span>
+                    <span class="n">stylesheets</span><span class="o">=</span><span class="p">[</span><span class="n">weasyprint</span><span class="o">.</span><span class="n">CSS</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="n">css</span><span class="p">)]</span> <span class="k">if</span> <span class="n">css</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="c1"># Fallback to minimal builder if WeasyPrint fails for some reason</span>
+                <span class="k">pass</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">_extract_text_from_html</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_build_minimal_pdf</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------- helpers ---------------------------- #</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_empty_section</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Heuristic to determine if a section value is &#39;empty&#39;.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">_is_empty_section</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">_is_empty_section</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_iter_extra_sections</span><span class="p">(</span><span class="n">extra</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">extra</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">_is_empty_section</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">section_id</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+        <span class="c1"># Normalize to HTML snippet</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">html_fragment</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;p&gt;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&lt;/p&gt;&quot;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_empty_section</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">html_fragment</span> <span class="o">=</span> <span class="s1">&#39;&lt;ul&gt;&#39;</span> <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;li&gt;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&lt;/li&gt;&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/ul&gt;&#39;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">kv_pairs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_empty_section</span><span class="p">(</span><span class="n">v</span><span class="p">)}</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">kv_pairs</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">html_fragment</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s1">&#39;&lt;dl&gt;&#39;</span>
+                <span class="o">+</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&lt;dt&gt;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&lt;/dt&gt;&lt;dd&gt;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&lt;/dd&gt;&#39;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kv_pairs</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+                <span class="o">+</span> <span class="s1">&#39;&lt;/dl&gt;&#39;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">html_fragment</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;pre&gt;</span><span class="si">{</span><span class="n">html_mod</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="si">}</span><span class="s2">&lt;/pre&gt;&quot;</span>
+        <span class="k">yield</span> <span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">section_id</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">:</span> <span class="n">html_fragment</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_extract_text_from_html</span><span class="p">(</span><span class="n">html</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># Remove tags</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;[^&gt;]+&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">html</span><span class="p">)</span>
+    <span class="c1"># Unescape entities</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">html_mod</span><span class="o">.</span><span class="n">unescape</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+    <span class="c1"># Collapse whitespace</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">txt</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">txt</span><span class="p">[:</span><span class="mi">4000</span><span class="p">]</span>  <span class="c1"># keep it bounded</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_build_minimal_pdf</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a minimal, valid single-page PDF containing the given text.</span>
+
+<span class="sd">    Not layout-aware; wraps at ~90 chars manually.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Escape parentheses and backslashes</span>
+    <span class="n">safe</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\(&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\)&#39;</span><span class="p">)</span>
+    <span class="c1"># Wrap lines</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="mi">90</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">safe</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">width</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">safe</span><span class="p">),</span> <span class="n">width</span><span class="p">)]</span> <span class="ow">or</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
+    <span class="c1"># PDF content stream commands: start text, move for each line</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">720</span>
+    <span class="n">line_gap</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BT /F1 12 Tf 72 </span><span class="si">{}</span><span class="s2"> Td (</span><span class="si">{}</span><span class="s2"> ) Tj&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>  <span class="c1"># first line</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">y</span> <span class="o">-=</span> <span class="n">line_gap</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>  <span class="c1"># simple overflow guard</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;(… truncated …) Tj&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;T* (</span><span class="si">{}</span><span class="s2"> ) Tj&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;ET&quot;</span><span class="p">)</span>
+    <span class="n">stream_text</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+    <span class="n">stream_bytes</span> <span class="o">=</span> <span class="n">stream_text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+    <span class="n">objects</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># (number, bytes)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">obj</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">body</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> 0 obj</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span> <span class="o">+</span> <span class="n">body</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">endobj</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="c1"># 1 Catalog, 2 Pages, 3 Page, 4 Font, 5 Contents</span>
+    <span class="n">objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt; /Type /Catalog /Pages 2 0 R &gt;&gt;&quot;</span><span class="p">))</span>
+    <span class="n">objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt; /Type /Pages /Count 1 /Kids [3 0 R] &gt;&gt;&quot;</span><span class="p">))</span>
+    <span class="n">objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">obj</span><span class="p">(</span>
+            <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">&quot;&lt;&lt; /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources &lt;&lt; /Font &lt;&lt; /F1 4 0 R &gt;&gt; &gt;&gt; /Contents 5 0 R &gt;&gt;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;&lt;&lt; /Type /Font /Subtype /Type1 /BaseFont /Helvetica &gt;&gt;&quot;</span><span class="p">))</span>
+    <span class="n">objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">obj</span><span class="p">(</span>
+            <span class="mi">5</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;&lt; /Length </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">stream_bytes</span><span class="p">)</span><span class="si">}</span><span class="s2"> &gt;&gt;</span><span class="se">\n</span><span class="s2">stream</span><span class="se">\n</span><span class="si">{</span><span class="n">stream_text</span><span class="si">}</span><span class="se">\n</span><span class="s2">endstream&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">pdf</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;%PDF-1.4</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">offsets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># object 0</span>
+    <span class="k">for</span> <span class="n">ob</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+        <span class="n">offsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pdf</span><span class="p">))</span>
+        <span class="n">pdf</span> <span class="o">+=</span> <span class="n">ob</span>
+    <span class="c1"># xref</span>
+    <span class="n">xref_offset</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">xref_lines</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;xref&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;0 </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;0000000000 65535 f &quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">off</span> <span class="ow">in</span> <span class="n">offsets</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">xref_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">off</span><span class="si">:</span><span class="s2">010d</span><span class="si">}</span><span class="s2"> 00000 n &quot;</span><span class="p">)</span>
+    <span class="n">pdf</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">xref_lines</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+    <span class="n">pdf</span> <span class="o">+=</span> <span class="s2">&quot;trailer</span><span class="se">\n</span><span class="s2">&lt;&lt; /Size </span><span class="si">{size}</span><span class="s2"> /Root 1 0 R &gt;&gt;</span><span class="se">\n</span><span class="s2">startxref</span><span class="se">\n</span><span class="si">{start}</span><span class="se">\n</span><span class="si">%%</span><span class="s2">EOF&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">size</span><span class="o">=</span><span class="n">count</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">xref_offset</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pdf</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

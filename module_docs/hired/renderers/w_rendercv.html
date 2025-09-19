@@ -1,0 +1,231 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.renderers.w_rendercv &mdash; hired 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="hired.tools" href="../tools.html" />
+    <link rel="prev" title="hired.renderers.rendercv" href="rendercv.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.renderers.w_rendercv</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.render_html"><code class="docutils literal notranslate"><span class="pre">render_html()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.render_markdown"><code class="docutils literal notranslate"><span class="pre">render_markdown()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.render_pdf"><code class="docutils literal notranslate"><span class="pre">render_pdf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.render_resume_w_rendercv"><code class="docutils literal notranslate"><span class="pre">render_resume_w_rendercv()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.rendercv_to_resumejson"><code class="docutils literal notranslate"><span class="pre">rendercv_to_resumejson()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.resumejson_to_rendercv"><code class="docutils literal notranslate"><span class="pre">resumejson_to_rendercv()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">hired.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../validators.html">hired.validators</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.renderers.w_rendercv</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/hired/renderers/w_rendercv.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.renderers.w_rendercv">
+<span id="hired-renderers-w-rendercv"></span><h1>hired.renderers.w_rendercv<a class="headerlink" href="#module-hired.renderers.w_rendercv" title="Link to this heading"></a></h1>
+<p>Resume Facade Library</p>
+<p>A clean Python facade over third-party resume tools:
+- Uses jsonresume-to-rendercv for JSON Resume &lt;-&gt; renderCV conversion
+- Uses rendercv API for rendering resumes to various formats</p>
+<dl>
+<dt>Installation:</dt><dd><p>pip install jsonresume-to-rendercv rendercv[full] pydantic</p>
+</dd>
+<dt>Usage:</dt><dd><p>from resume_facade import resumejson_to_rendercv, rendercv_to_resumejson, render_resume_w_rendercv</p>
+<p># Convert between formats
+rendercv_dict = resumejson_to_rendercv(resumejson_dict)
+resumejson_dict = rendercv_to_resumejson(rendercv_dict)</p>
+<p># Render resume to various formats
+pdf_bytes = render_resume_w_rendercv(rendercv_dict, ‘pdf’, theme=’classic’)
+html_bytes = render_resume_w_rendercv(rendercv_dict, ‘html’)</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.renderers.w_rendercv.render_html">
+<span class="sig-prename descclassname"><span class="pre">hired.renderers.w_rendercv.</span></span><span class="sig-name descname"><span class="pre">render_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rendercv_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/w_rendercv.html#render_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.w_rendercv.render_html" title="Link to this definition"></a></dt>
+<dd><p>Render resume as HTML.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.renderers.w_rendercv.render_markdown">
+<span class="sig-prename descclassname"><span class="pre">hired.renderers.w_rendercv.</span></span><span class="sig-name descname"><span class="pre">render_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rendercv_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/w_rendercv.html#render_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.w_rendercv.render_markdown" title="Link to this definition"></a></dt>
+<dd><p>Render resume as Markdown.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.renderers.w_rendercv.render_pdf">
+<span class="sig-prename descclassname"><span class="pre">hired.renderers.w_rendercv.</span></span><span class="sig-name descname"><span class="pre">render_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rendercv_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/w_rendercv.html#render_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.w_rendercv.render_pdf" title="Link to this definition"></a></dt>
+<dd><p>Render resume as PDF.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.renderers.w_rendercv.render_resume_w_rendercv">
+<span class="sig-prename descclassname"><span class="pre">hired.renderers.w_rendercv.</span></span><span class="sig-name descname"><span class="pre">render_resume_w_rendercv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rendercv_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'pdf'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'html'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'markdown'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'typst'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'png'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'classic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'10pt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'letterpaper'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/w_rendercv.html#render_resume_w_rendercv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.w_rendercv.render_resume_w_rendercv" title="Link to this definition"></a></dt>
+<dd><p>Render resume using renderCV to the specified format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rendercv_dict</strong> – Resume data in renderCV format</p></li>
+<li><p><strong>format_spec</strong> – Output format (‘pdf’, ‘html’, ‘markdown’, ‘typst’, ‘png’)</p></li>
+<li><p><strong>theme</strong> – renderCV theme (‘classic’, ‘sb2nov’, ‘engineeringresumes’, ‘moderncv’)</p></li>
+<li><p><strong>font_size</strong> – Font size (e.g., ‘10pt’, ‘11pt’, ‘12pt’)</p></li>
+<li><p><strong>page_size</strong> – Page size (‘letterpaper’, ‘a4paper’, etc.)</p></li>
+<li><p><strong>**kwargs</strong> – Additional options passed to renderCV</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Rendered resume as bytes</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ImportError</strong> – If renderCV is not available</p></li>
+<li><p><strong>ValueError</strong> – If rendering fails</p></li>
+<li><p><strong>NotImplementedError</strong> – If format is not supported</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.renderers.w_rendercv.rendercv_to_resumejson">
+<span class="sig-prename descclassname"><span class="pre">hired.renderers.w_rendercv.</span></span><span class="sig-name descname"><span class="pre">rendercv_to_resumejson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rendercv_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/w_rendercv.html#rendercv_to_resumejson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.w_rendercv.rendercv_to_resumejson" title="Link to this definition"></a></dt>
+<dd><p>Convert renderCV format to JSON Resume format.</p>
+<p>Note: This is a reverse conversion. Since jsonresume-to-rendercv only goes
+one direction, this implements the reverse mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rendercv_dict</strong> – Resume data in renderCV format</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Resume data in JSON Resume format</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.renderers.w_rendercv.resumejson_to_rendercv">
+<span class="sig-prename descclassname"><span class="pre">hired.renderers.w_rendercv.</span></span><span class="sig-name descname"><span class="pre">resumejson_to_rendercv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resumejson_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/w_rendercv.html#resumejson_to_rendercv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.w_rendercv.resumejson_to_rendercv" title="Link to this definition"></a></dt>
+<dd><p>Convert JSON Resume format to renderCV format using jsonresume-to-rendercv.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>resumejson_dict</strong> – Resume data in JSON Resume format</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Resume data in renderCV format</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ImportError</strong> – If required dependencies are not available</p></li>
+<li><p><strong>ValueError</strong> – If conversion fails</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="rendercv.html" class="btn btn-neutral float-left" title="hired.renderers.rendercv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tools.html" class="btn btn-neutral float-right" title="hired.tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

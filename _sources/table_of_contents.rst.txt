@@ -1,0 +1,16 @@
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   module_docs/hired
+   module_docs/hired/base
+   module_docs/hired/config
+   module_docs/hired/content
+   module_docs/hired/render
+   module_docs/hired/renderers
+   module_docs/hired/renderers/html
+   module_docs/hired/renderers/rendercv
+   module_docs/hired/renderers/w_rendercv
+   module_docs/hired/tools
+   module_docs/hired/util
+   module_docs/hired/validators

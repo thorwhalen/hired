@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.base &mdash; hired 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/util.html">hired.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/validators.html">hired.validators</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Core data models and protocols for the hired package.</span>
+
+<span class="sd">Define:</span>
+<span class="sd">- ResumeContent: Pydantic model matching JSON Resume schema</span>
+<span class="sd">- RenderingConfig: Configuration for rendering pipeline</span>
+<span class="sd">- ContentSource: Protocol for data sources (candidate/job info)</span>
+<span class="sd">- AIAgent: Protocol for content generation agents</span>
+<span class="sd">- Renderer: Protocol for resume renderers</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">field_validator</span><span class="p">,</span> <span class="n">ConfigDict</span>
+
+
+<div class="viewcode-block" id="ContentSource">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.ContentSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ContentSource</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Protocol for sources that provide candidate or job information.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="AIAgent">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.AIAgent">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AIAgent</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Protocol for AI agents that generate resume content.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_content</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">candidate_info</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">job_info</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ResumeContent&#39;</span><span class="p">:</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="Renderer">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.Renderer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Renderer</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Protocol for resume renderers.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="s1">&#39;ResumeContent&#39;</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s1">&#39;RenderingConfig&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span> <span class="o">...</span></div>
+
+
+
+<div class="viewcode-block" id="RendererRegistry">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.RendererRegistry">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RendererRegistry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Registry for managing multiple renderer implementations.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_renderers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="n">Renderer</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Renderer</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="RendererRegistry.register">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.RendererRegistry.register">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">renderer_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Renderer</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a renderer class for a specific format.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_renderers</span><span class="p">[</span><span class="n">format_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">renderer_class</span></div>
+
+
+<div class="viewcode-block" id="RendererRegistry.get_renderer">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.RendererRegistry.get_renderer">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_renderer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Renderer</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a renderer instance for the specified format.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">format_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No renderer registered for format: </span><span class="si">{</span><span class="n">format_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Cache instances for reuse</span>
+        <span class="k">if</span> <span class="n">format_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">format_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderers</span><span class="p">[</span><span class="n">format_name</span><span class="p">]()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">format_name</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="RendererRegistry.list_formats">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.RendererRegistry.list_formats">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_formats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List all registered format names.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_renderers</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="RendererRegistry.is_registered">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.RendererRegistry.is_registered">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_registered</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if a format is registered.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">format_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderers</span></div>
+</div>
+
+
+
+<span class="c1"># Global renderer registry instance</span>
+<span class="n">_renderer_registry</span> <span class="o">=</span> <span class="n">RendererRegistry</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="register_renderer">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.register_renderer">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_renderer</span><span class="p">(</span><span class="n">format_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator for registering renderer classes.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">renderer_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">Renderer</span><span class="p">]):</span>
+        <span class="n">_renderer_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">format_name</span><span class="p">,</span> <span class="n">renderer_class</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">renderer_class</span>
+
+    <span class="k">return</span> <span class="n">decorator</span></div>
+
+
+
+<div class="viewcode-block" id="get_renderer_registry">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.get_renderer_registry">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_renderer_registry</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">RendererRegistry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the global renderer registry.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_renderer_registry</span></div>
+
+
+
+<span class="c1"># Pydantic models for JSON Resume schema sections</span>
+<div class="viewcode-block" id="ResumeBasics">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.ResumeBasics">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResumeBasics</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">phone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">location</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">profiles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">image</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="ResumeWork">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.ResumeWork">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResumeWork</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="c1"># JSON Resume allows either &#39;name&#39; (organization name) or &#39;company&#39; in some ecosystems</span>
+    <span class="n">company</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">highlights</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">startDate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">endDate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ensure_company</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="c1"># If company missing but &#39;name&#39; present in raw data, pydantic will populate &#39;name&#39;; we mirror it into company</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">raw</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">data</span>  <span class="c1"># remaining raw values</span>
+            <span class="n">name_val</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">name_val</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">name_val</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+
+<div class="viewcode-block" id="ResumeEducation">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.ResumeEducation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResumeEducation</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">institution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">area</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">studyType</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">startDate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">endDate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">gpa</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">courses</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="ResumeContent">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.ResumeContent">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResumeContent</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Complete resume content following JSON Resume schema with support for extra/freeform sections.</span>
+
+<span class="sd">    Unknown top-level keys (non core) can be captured in extra_sections mapping when desired.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">basics</span><span class="p">:</span> <span class="n">ResumeBasics</span>
+    <span class="n">work</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ResumeWork</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">education</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ResumeEducation</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">extra_sections</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="RenderingConfig">
+<a class="viewcode-back" href="../../module_docs/hired/base.html#hired.RenderingConfig">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RenderingConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for resume rendering.&quot;&quot;&quot;</span>
+
+    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pdf&#39;</span>  <span class="c1"># pdf, html, latex, docx</span>
+    <span class="n">theme</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>
+    <span class="n">custom_css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">custom_template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

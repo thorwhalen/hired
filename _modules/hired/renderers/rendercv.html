@@ -1,0 +1,543 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.renderers.rendercv &mdash; hired 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/validators.html">hired.validators</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.renderers.rendercv</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.renderers.rendercv</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;RenderCV renderer implementation using the RenderCV backend.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span><span class="p">,</span> <span class="n">ResumeContent</span><span class="p">,</span> <span class="n">RenderingConfig</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">jsonresume_to_rendercv.converter</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">rendercv</span><span class="w"> </span><span class="kn">import</span> <span class="n">api</span> <span class="k">as</span> <span class="n">rendercv_api</span>
+
+    <span class="n">RENDERCV_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">RENDERCV_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="RenderCVRenderer">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/rendercv.html#hired.renderers.RenderCVRenderer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RenderCVRenderer</span><span class="p">(</span><span class="n">Renderer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Renderer that uses RenderCV for high-quality PDF generation.</span>
+
+<span class="sd">    This renderer:</span>
+<span class="sd">    1. Converts JSON Resume format to RenderCV YAML format</span>
+<span class="sd">    2. Uses RenderCV to generate PDF with LaTeX/Typst backend</span>
+<span class="sd">    3. Returns the rendered PDF bytes</span>
+
+<span class="sd">    Features robust data handling:</span>
+<span class="sd">    - Fills in missing required fields with sensible defaults</span>
+<span class="sd">    - Issues warnings about missing or incomplete data</span>
+<span class="sd">    - Gracefully handles schema validation issues</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strict_validation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize RenderCV renderer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            strict_validation: If True, fail on missing data. If False (default),</span>
+<span class="sd">                            fill missing data with defaults and warn.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">RENDERCV_AVAILABLE</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;RenderCV renderer requires &#39;rendercv&#39; and &#39;jsonresume-to-rendercv&#39; packages. &quot;</span>
+                <span class="s2">&quot;Install with: pip install hired[rendercv]&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span> <span class="o">=</span> <span class="n">strict_validation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="RenderCVRenderer.render">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/rendercv.html#hired.renderers.RenderCVRenderer.render">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">RenderingConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render resume content using RenderCV backend.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Reset warnings for each render</span>
+
+        <span class="c1"># Convert ResumeContent to JSON Resume dict with robust handling</span>
+        <span class="n">json_resume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_to_json_resume_robust</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+        <span class="c1"># Print warnings if any</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  RenderCV Data Warnings:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   • </span><span class="si">{</span><span class="n">warning</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">()</span>
+
+        <span class="c1"># Convert JSON Resume to RenderCV format</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
+            <span class="n">temp_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
+
+            <span class="c1"># Create temporary JSON file for input</span>
+            <span class="n">json_resume_path</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.json&quot;</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_resume_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_resume</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Create temporary YAML file for RenderCV</span>
+            <span class="n">rendercv_yaml_path</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.yaml&quot;</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Convert using jsonresume-to-rendercv</span>
+                <span class="n">convert</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">json_resume_path</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">rendercv_yaml_path</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;JSON Resume to RenderCV conversion failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Try to fix common issues and retry</span>
+                    <span class="n">json_resume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fix_common_conversion_issues</span><span class="p">(</span><span class="n">json_resume</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_resume_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+                        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_resume</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="n">convert</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">json_resume_path</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">rendercv_yaml_path</span><span class="p">))</span>
+
+            <span class="c1"># Generate PDF using RenderCV</span>
+            <span class="n">pdf_path</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.pdf&quot;</span>
+
+            <span class="c1"># Use RenderCV API to create PDF</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rendercv_yaml_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">yaml_content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">rendercv_api</span><span class="o">.</span><span class="n">create_a_pdf_from_a_yaml_string</span><span class="p">(</span>
+                    <span class="n">yaml_file_as_string</span><span class="o">=</span><span class="n">yaml_content</span><span class="p">,</span> <span class="n">output_file_path</span><span class="o">=</span><span class="n">pdf_path</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Debug: show YAML content and detailed error</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RenderCV PDF generation failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;YAML content preview:&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="n">yaml_content</span><span class="p">[:</span><span class="mi">500</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">yaml_content</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span>
+                    <span class="k">else</span> <span class="n">yaml_content</span>
+                <span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RenderCV PDF generation failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Read and return PDF bytes</span>
+            <span class="k">if</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">pdf_path</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;RenderCV failed to generate PDF - no output file created&quot;</span>
+                <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_content_to_json_resume_robust</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert ResumeContent to JSON Resume dictionary format with robust error handling.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Convert Pydantic models to dict</span>
+        <span class="n">basics</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Robust handling of basics section</span>
+        <span class="n">basics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_basics_complete</span><span class="p">(</span><span class="n">basics</span><span class="p">)</span>
+
+        <span class="c1"># Build JSON Resume structure</span>
+        <span class="n">json_resume</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="n">basics</span><span class="p">,</span>
+            <span class="s2">&quot;work&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_work_complete</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">work</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_education_complete</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">education</span><span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Add extra sections if present</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="s1">&#39;extra_sections&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">content</span><span class="o">.</span><span class="n">extra_sections</span><span class="p">:</span>
+            <span class="c1"># Handle common optional sections with robust validation</span>
+            <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">section_data</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">extra_sections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">section_name</span> <span class="o">==</span> <span class="s1">&#39;publications&#39;</span><span class="p">:</span>
+                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_publications_complete</span><span class="p">(</span>
+                        <span class="n">section_data</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">section_name</span> <span class="o">==</span> <span class="s1">&#39;projects&#39;</span><span class="p">:</span>
+                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_projects_complete</span><span class="p">(</span>
+                        <span class="n">section_data</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">section_name</span> <span class="o">==</span> <span class="s1">&#39;skills&#39;</span><span class="p">:</span>
+                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_skills_complete</span><span class="p">(</span>
+                        <span class="n">section_data</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">section_name</span> <span class="o">==</span> <span class="s1">&#39;awards&#39;</span><span class="p">:</span>
+                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_awards_complete</span><span class="p">(</span>
+                        <span class="n">section_data</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">section_name</span> <span class="ow">in</span> <span class="p">[</span>
+                    <span class="s1">&#39;languages&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;interests&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;certificates&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;volunteer&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;references&#39;</span><span class="p">,</span>
+                <span class="p">]:</span>
+                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">section_data</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">section_data</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Unknown section &#39;</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2">&#39; may not render correctly&quot;</span>
+                    <span class="p">)</span>
+
+        <span class="c1"># Ensure all required top-level sections exist (even if empty)</span>
+        <span class="n">required_sections</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;skills&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;projects&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;publications&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;awards&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;languages&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;interests&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;certificates&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;volunteer&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;references&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">required_sections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">section</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_resume</span><span class="p">:</span>
+                <span class="n">json_resume</span><span class="p">[</span><span class="n">section</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">return</span> <span class="n">json_resume</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_basics_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basics</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure basics section has all required fields.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Required fields with defaults</span>
+        <span class="n">required_fields</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Professional Name&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="s1">&#39;professional@email.com&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;phone&#39;</span><span class="p">:</span> <span class="s1">&#39;+1-555-000-0000&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="s1">&#39;Professional summary to be filled in.&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">basics</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">basics</span><span class="p">[</span><span class="n">field</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required field in basics: </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">basics</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Missing &#39;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&#39; in basics section, using default: &#39;</span><span class="si">{</span><span class="n">default_value</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                    <span class="p">)</span>
+
+        <span class="c1"># Ensure location exists</span>
+        <span class="k">if</span> <span class="s1">&#39;location&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">basics</span><span class="p">:</span>
+            <span class="n">basics</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="s1">&#39;City&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;countryCode&#39;</span><span class="p">:</span> <span class="s1">&#39;US&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="s1">&#39;State&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Missing location in basics, using default location&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">basics</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_work_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">work_entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure work entries have required fields.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">work</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">work_entries</span><span class="p">):</span>
+            <span class="c1"># Required fields for work entries</span>
+            <span class="k">if</span> <span class="s1">&#39;name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">work</span> <span class="ow">and</span> <span class="s1">&#39;company&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">work</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Work entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing company/name field&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">work</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">work</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;Company Name&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Work entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing company name, using default&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;position&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">work</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Work entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing position field&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">work</span><span class="p">[</span><span class="s1">&#39;position&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Position Title&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Work entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing position, using default&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;startDate&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">work</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Work entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing startDate field&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">work</span><span class="p">[</span><span class="s1">&#39;startDate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2020-01-01&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Work entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing startDate, using default&quot;</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">work_entries</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_education_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">education_entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure education entries have required fields.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">edu</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">education_entries</span><span class="p">):</span>
+            <span class="c1"># Required fields for education entries</span>
+            <span class="n">required_fields</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;institution&#39;</span><span class="p">:</span> <span class="s1">&#39;Educational Institution&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;area&#39;</span><span class="p">:</span> <span class="s1">&#39;Field of Study&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;studyType&#39;</span><span class="p">:</span> <span class="s1">&#39;Degree Type&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2020-01-01&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;endDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-12-31&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">edu</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Education entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> field&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">edu</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Education entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing &#39;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&#39;, using default: &#39;</span><span class="si">{</span><span class="n">default_value</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">education_entries</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fix_common_conversion_issues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">json_resume</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fix common issues that cause conversion failures.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Make a copy to avoid modifying original</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+        <span class="n">fixed_resume</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">json_resume</span><span class="p">)</span>
+
+        <span class="c1"># Fix empty arrays that cause issues</span>
+        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;skills&#39;</span><span class="p">,</span> <span class="s1">&#39;projects&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">fixed_resume</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">fixed_resume</span><span class="p">[</span><span class="n">section</span><span class="p">]:</span>
+                <span class="c1"># Add a minimal entry to prevent conversion errors</span>
+                <span class="k">if</span> <span class="n">section</span> <span class="o">==</span> <span class="s1">&#39;work&#39;</span><span class="p">:</span>
+                    <span class="n">fixed_resume</span><span class="p">[</span><span class="n">section</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Example Company&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="s1">&#39;Position Title&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2020-01-01&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;endDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2023-12-31&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;summary&#39;</span><span class="p">:</span> <span class="s1">&#39;Professional experience to be filled in.&#39;</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="s2">&quot;Added example work entry to prevent conversion errors&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">section</span> <span class="o">==</span> <span class="s1">&#39;education&#39;</span><span class="p">:</span>
+                    <span class="n">fixed_resume</span><span class="p">[</span><span class="n">section</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s1">&#39;institution&#39;</span><span class="p">:</span> <span class="s1">&#39;Educational Institution&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;area&#39;</span><span class="p">:</span> <span class="s1">&#39;Field of Study&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;studyType&#39;</span><span class="p">:</span> <span class="s1">&#39;Degree&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2020-01-01&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;endDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2024-12-31&#39;</span><span class="p">,</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="s2">&quot;Added example education entry to prevent conversion errors&quot;</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fixed_resume</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_publications_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">publications</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure publications entries have required fields.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pub</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">publications</span><span class="p">):</span>
+            <span class="c1"># Required fields for publications</span>
+            <span class="n">required_fields</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Publication Title&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;publisher&#39;</span><span class="p">:</span> <span class="s1">&#39;Publisher Name&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;releaseDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2023-01-01&#39;</span><span class="p">,</span>  <span class="c1"># This is what was missing!</span>
+                <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://example.com&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pub</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Publication entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> field&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">pub</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Publication entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing &#39;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&#39;, using default: &#39;</span><span class="si">{</span><span class="n">default_value</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">publications</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_projects_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure projects entries have required fields.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">proj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">projects</span><span class="p">):</span>
+            <span class="c1"># Required fields for projects</span>
+            <span class="n">required_fields</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Project Name&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;Project description to be filled in.&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;startDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2023-01-01&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;endDate&#39;</span><span class="p">:</span> <span class="s1">&#39;2023-12-31&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">proj</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Project entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> field&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">proj</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Project entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing &#39;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&#39;, using default: &#39;</span><span class="si">{</span><span class="n">default_value</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">projects</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_skills_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure skills entries have required fields.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">skill</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">skills</span><span class="p">):</span>
+            <span class="c1"># Required fields for skills</span>
+            <span class="k">if</span> <span class="s1">&#39;name&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skill</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skill entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing name field&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">skill</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Skill Category&#39;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Skill entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing &#39;name&#39;, using default: &#39;Skill Category&#39;&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;keywords&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skill</span><span class="p">:</span>
+                <span class="n">skill</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Empty list is acceptable for keywords</span>
+
+        <span class="k">return</span> <span class="n">skills</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_awards_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">awards</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure awards entries have required fields.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">award</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">awards</span><span class="p">):</span>
+            <span class="c1"># Required fields for awards</span>
+            <span class="n">required_fields</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Award Title&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="s1">&#39;2023-01-01&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;awarder&#39;</span><span class="p">:</span> <span class="s1">&#39;Awarding Organization&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">award</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">strict_validation</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Award entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> field&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">award</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Award entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> missing &#39;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&#39;, using default: &#39;</span><span class="si">{</span><span class="n">default_value</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">awards</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_content_to_json_resume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Legacy method - kept for backward compatibility.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_to_json_resume_robust</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

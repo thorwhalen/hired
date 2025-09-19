@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.validators &mdash; hired 0.0.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=47de8214"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/util.html">hired.util</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/validators.html">hired.validators</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.validators</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.validators</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">JSON Resume schema validation utilities.</span>
+
+<span class="sd">Implement:</span>
+<span class="sd">- Schema loading and caching</span>
+<span class="sd">- Validation functions</span>
+<span class="sd">- Error reporting utilities</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResumeContent</span><span class="p">,</span> <span class="n">ResumeBasics</span><span class="p">,</span> <span class="n">ResumeWork</span><span class="p">,</span> <span class="n">ResumeEducation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">_load_json_file</span><span class="p">,</span> <span class="n">_get_package_data_path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span> <span class="k">as</span> <span class="n">ABCMapping</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_prune_none</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Recursively remove keys or list items that are None so schema validation doesn&#39;t see explicit nulls for optional fields.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">_prune_none</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_prune_none</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">obj</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">jsonschema</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">jsonschema</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_schema</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the JSON Resume schema from package data.&quot;&quot;&quot;</span>
+    <span class="n">schema_path</span> <span class="o">=</span> <span class="n">_get_package_data_path</span><span class="p">(</span><span class="s1">&#39;schemas/resume.json&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_load_json_file</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+
+<span class="n">_schema_cache</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="validate_resume_content">
+<a class="viewcode-back" href="../../module_docs/hired/validators.html#hired.validators.validate_resume_content">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_resume_content</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate resume content against the JSON Resume schema.</span>
+
+<span class="sd">    If strict=False and schema fails, returns True (permissive mode).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_schema_cache</span>
+    <span class="k">if</span> <span class="n">_schema_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_schema_cache</span> <span class="o">=</span> <span class="n">_load_schema</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">jsonschema</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;jsonschema is required for validation&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">jsonschema</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">_prune_none</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">content</span><span class="p">)),</span> <span class="n">schema</span><span class="o">=</span><span class="n">_schema_cache</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="n">jsonschema</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">strict</span> <span class="k">else</span> <span class="kc">True</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_validation_errors</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list of validation error messages.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_schema_cache</span>
+    <span class="k">if</span> <span class="n">_schema_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_schema_cache</span> <span class="o">=</span> <span class="n">_load_schema</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">jsonschema</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;jsonschema is required for validation&#39;</span><span class="p">)</span>
+    <span class="n">validator</span> <span class="o">=</span> <span class="n">jsonschema</span><span class="o">.</span><span class="n">Draft7Validator</span><span class="p">(</span><span class="n">_schema_cache</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">validator</span><span class="o">.</span><span class="n">iter_errors</span><span class="p">(</span><span class="n">content</span><span class="p">)]</span>
+
+
+<div class="viewcode-block" id="validate_with_models">
+<a class="viewcode-back" href="../../module_docs/hired/validators.html#hired.validators.validate_with_models">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_with_models</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">ResumeContent</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate a raw resume dict using pydantic models first.</span>
+
+<span class="sd">    This normalizes fields like work.company/name before schema validation.</span>
+<span class="sd">    Raises pydantic ValidationError if structure invalid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">basics</span> <span class="o">=</span> <span class="n">ResumeBasics</span><span class="p">(</span><span class="o">**</span><span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;basics&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+    <span class="n">work</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]:</span>
+        <span class="k">if</span> <span class="s1">&#39;company&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">w</span> <span class="ow">and</span> <span class="s1">&#39;name&#39;</span> <span class="ow">in</span> <span class="n">w</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">w</span><span class="p">,</span> <span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="n">w</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]}</span>
+        <span class="n">work</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ResumeWork</span><span class="p">(</span><span class="o">**</span><span class="n">w</span><span class="p">))</span>
+    <span class="n">education</span> <span class="o">=</span> <span class="p">[</span><span class="n">ResumeEducation</span><span class="p">(</span><span class="o">**</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="p">[])</span> <span class="ow">or</span> <span class="p">[]]</span>
+    <span class="c1"># Capture extra/freeform sections (top-level keys not recognized)</span>
+    <span class="n">known_keys</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;basics&#39;</span><span class="p">,</span> <span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="s1">&#39;education&#39;</span><span class="p">}</span>
+    <span class="n">extra_sections</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">known_keys</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">ResumeContent</span><span class="p">(</span>
+        <span class="n">basics</span><span class="o">=</span><span class="n">basics</span><span class="p">,</span> <span class="n">work</span><span class="o">=</span><span class="n">work</span><span class="p">,</span> <span class="n">education</span><span class="o">=</span><span class="n">education</span><span class="p">,</span> <span class="n">extra_sections</span><span class="o">=</span><span class="n">extra_sections</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="validate_and_normalize">
+<a class="viewcode-back" href="../../module_docs/hired/validators.html#hired.validators.validate_and_normalize">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_and_normalize</span><span class="p">(</span>
+    <span class="n">raw</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResumeContent</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Full pipeline validation: pydantic + json schema (optional strict).</span>
+
+<span class="sd">    Returns normalized ResumeContent.</span>
+<span class="sd">    Raises ValidationError if pydantic validation fails or schema invalid in strict mode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model_content</span> <span class="o">=</span> <span class="n">validate_with_models</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+    <span class="n">dump</span> <span class="o">=</span> <span class="n">model_content</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">dump</span> <span class="o">=</span> <span class="n">_prune_none</span><span class="p">(</span><span class="n">dump</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_resume_content</span><span class="p">(</span><span class="n">dump</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">):</span>
+        <span class="c1"># gather errors only if strict</span>
+        <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+            <span class="n">errors</span> <span class="o">=</span> <span class="n">_get_validation_errors</span><span class="p">(</span><span class="n">dump</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Schema validation failed: </span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model_content</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
