@@ -67,22 +67,22 @@ def _check_dependencies():
 def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
     """
     Normalize JSON Resume data to ensure all required fields are present.
-    
+
     The jsonresume-to-rendercv tool is strict about required fields, so we'll
     add missing fields with appropriate defaults to make the conversion robust.
-    
+
     Args:
         resumejson_dict: Original resume data
-        
+
     Returns:
         Normalized resume data with all required fields
     """
     import copy
     from collections import defaultdict
-    
+
     # Create a deep copy to avoid modifying the original
     normalized = copy.deepcopy(resumejson_dict)
-    
+
     # Define required fields for each section with their default values
     SECTION_DEFAULTS = {
         'basics': {
@@ -97,9 +97,9 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 'postalCode': '',
                 'city': '',
                 'countryCode': '',
-                'region': ''
+                'region': '',
             },
-            'profiles': []
+            'profiles': [],
         },
         'work': {
             '_item_defaults': {
@@ -110,7 +110,7 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 # 'endDate' intentionally omitted - empty string fails validation
                 'summary': '',
                 'highlights': [],
-                'location': ''
+                'location': '',
             }
         },
         'volunteer': {
@@ -121,7 +121,7 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 'startDate': '2000-01',
                 # 'endDate' intentionally omitted - empty string fails validation
                 'summary': '',
-                'highlights': []
+                'highlights': [],
             }
         },
         'education': {
@@ -133,7 +133,7 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 'startDate': '2000-01',  # Required by jsonresume-to-rendercv
                 # 'endDate' intentionally omitted - empty string fails validation
                 'score': '',
-                'courses': []
+                'courses': [],
             }
         },
         'awards': {
@@ -141,16 +141,11 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 'title': '',
                 'date': '2000-01',
                 'awarder': '',
-                'summary': ''
+                'summary': '',
             }
         },
         'certificates': {
-            '_item_defaults': {
-                'name': '',
-                'date': '2000-01',
-                'issuer': '',
-                'url': ''
-            }
+            '_item_defaults': {'name': '', 'date': '2000-01', 'issuer': '', 'url': ''}
         },
         'publications': {
             '_item_defaults': {
@@ -158,34 +153,13 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 'publisher': '',
                 'releaseDate': '2000-01',  # Required by jsonresume-to-rendercv
                 'url': '',
-                'summary': ''
+                'summary': '',
             }
         },
-        'skills': {
-            '_item_defaults': {
-                'name': '',
-                'level': '',
-                'keywords': []
-            }
-        },
-        'languages': {
-            '_item_defaults': {
-                'language': '',
-                'fluency': ''
-            }
-        },
-        'interests': {
-            '_item_defaults': {
-                'name': '',
-                'keywords': []
-            }
-        },
-        'references': {
-            '_item_defaults': {
-                'name': '',
-                'reference': ''
-            }
-        },
+        'skills': {'_item_defaults': {'name': '', 'level': '', 'keywords': []}},
+        'languages': {'_item_defaults': {'language': '', 'fluency': ''}},
+        'interests': {'_item_defaults': {'name': '', 'keywords': []}},
+        'references': {'_item_defaults': {'name': '', 'reference': ''}},
         'projects': {
             '_item_defaults': {
                 'name': '',
@@ -197,11 +171,11 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 'url': '',
                 'roles': [],
                 'entity': '',
-                'type': ''
+                'type': '',
             }
-        }
+        },
     }
-    
+
     # Normalize top-level sections
     for section_name, defaults in SECTION_DEFAULTS.items():
         if section_name not in normalized:
@@ -209,9 +183,9 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 normalized[section_name] = []
             else:
                 normalized[section_name] = {}
-        
+
         section_data = normalized[section_name]
-        
+
         if '_item_defaults' in defaults:
             # This is an array section (work, education, etc.)
             item_defaults = defaults['_item_defaults']
@@ -223,7 +197,7 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                         for date_field in date_fields:
                             if date_field in item and item[date_field] == '':
                                 del item[date_field]
-                        
+
                         # Then add missing required fields
                         for key, default_value in item_defaults.items():
                             if key not in item:
@@ -234,7 +208,7 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
                 for key, default_value in defaults.items():
                     if key not in section_data:
                         section_data[key] = default_value
-    
+
     return normalized
 
 
@@ -253,7 +227,7 @@ def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
         ValueError: If conversion fails
     """
     _check_dependencies()
-    
+
     # Normalize the input data to ensure all required fields are present
     normalized_data = _normalize_resumejson(resumejson_dict)
 
@@ -524,28 +498,36 @@ def render_resume_w_rendercv(
             if format_spec == 'pdf':
                 output_file = temp_path / "resume.pdf"
                 try:
-                    rendercv.api.create_a_pdf_from_a_python_dictionary(rendercv_dict, str(output_file))
+                    rendercv.api.create_a_pdf_from_a_python_dictionary(
+                        rendercv_dict, str(output_file)
+                    )
                 except Exception as pdf_error:
                     raise ValueError(f"PDF generation failed: {pdf_error}")
 
             elif format_spec == 'html':
                 output_file = temp_path / "resume.html"
                 try:
-                    rendercv.api.create_an_html_file_from_a_python_dictionary(rendercv_dict, str(output_file))
+                    rendercv.api.create_an_html_file_from_a_python_dictionary(
+                        rendercv_dict, str(output_file)
+                    )
                 except Exception as html_error:
                     raise ValueError(f"HTML generation failed: {html_error}")
 
             elif format_spec == 'markdown':
                 output_file = temp_path / "resume.md"
                 try:
-                    rendercv.api.create_a_markdown_file_from_a_python_dictionary(rendercv_dict, str(output_file))
+                    rendercv.api.create_a_markdown_file_from_a_python_dictionary(
+                        rendercv_dict, str(output_file)
+                    )
                 except Exception as md_error:
                     raise ValueError(f"Markdown generation failed: {md_error}")
 
             elif format_spec == 'typst':
                 output_file = temp_path / "resume.typ"
                 try:
-                    rendercv.api.create_a_typst_file_from_a_python_dictionary(rendercv_dict, str(output_file))
+                    rendercv.api.create_a_typst_file_from_a_python_dictionary(
+                        rendercv_dict, str(output_file)
+                    )
                 except Exception as typst_error:
                     raise ValueError(f"Typst generation failed: {typst_error}")
 
