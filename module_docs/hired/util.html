@@ -59,7 +59,11 @@
 <li class="toctree-l1"><a class="reference internal" href="renderers/rendercv.html">hired.renderers.rendercv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">hired.tools</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.util</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.util</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.util.dump_yaml"><code class="docutils literal notranslate"><span class="pre">dump_yaml()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.util.load_yaml"><code class="docutils literal notranslate"><span class="pre">load_yaml()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="validators.html">hired.validators</a></li>
 </ul>
 
@@ -91,6 +95,20 @@
 <span id="hired-util"></span><h1>hired.util<a class="headerlink" href="#module-hired.util" title="Link to this heading"></a></h1>
 <p>Utilities for external dependencies and general helpers.
 All imports here are external to the hired package.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.util.dump_yaml">
+<span class="sig-prename descclassname"><span class="pre">hired.util.</span></span><span class="sig-name descname"><span class="pre">dump_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/util.html#dump_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.util.dump_yaml" title="Link to this definition"></a></dt>
+<dd><p>Dumps a dictionary to a YAML file using PyYAML,
+preserving key order and using a readable block style.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.util.load_yaml">
+<span class="sig-prename descclassname"><span class="pre">hired.util.</span></span><span class="sig-name descname"><span class="pre">load_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yaml_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/util.html#load_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.util.load_yaml" title="Link to this definition"></a></dt>
+<dd><p>Loads a YAML file using PyYAML.
+This works in Python 3.7+ because dicts preserve insertion order.</p>
+</dd></dl>
+
 </section>
 
 

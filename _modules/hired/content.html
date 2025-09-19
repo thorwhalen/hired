@@ -103,7 +103,7 @@
     <span class="n">ResumeWork</span><span class="p">,</span>
     <span class="n">ResumeEducation</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hired.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">_load_json_file</span><span class="p">,</span> <span class="n">_load_yaml_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">_load_json_file</span><span class="p">,</span> <span class="n">load_yaml</span>
 
 
 <div class="viewcode-block" id="FileContentSource">
@@ -118,7 +118,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.json&#39;</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">_load_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.yaml&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.yml&#39;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">_load_yaml_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">load_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported file type: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 

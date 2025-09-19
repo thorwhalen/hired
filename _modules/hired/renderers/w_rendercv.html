@@ -114,6 +114,8 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Literal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib.parse</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="c1"># Try to import the third-party packages</span>
@@ -299,6 +301,117 @@
     <span class="k">return</span> <span class="n">normalized</span>
 
 
+<div class="viewcode-block" id="sanitize_rendercv_data">
+<a class="viewcode-back" href="../../../module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.sanitize_rendercv_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sanitize_rendercv_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sanitize a renderCV-like dict (or JSON Resume normalized dict) so that</span>
+<span class="sd">    - empty-string values are removed to avoid jsonschema minLength failures,</span>
+<span class="sd">    - URLs containing &#39;@&#39; are preserved as visible text in a &#39;journal&#39; field</span>
+<span class="sd">      while reducing the clickable &#39;url&#39; to an origin-only target to avoid</span>
+<span class="sd">      Typst label tokenization problems.</span>
+
+<span class="sd">    This function is intentionally conservative: it removes only empty strings</span>
+<span class="sd">    and rewrites urls that contain &#39;@&#39;. It returns a deep-copied sanitized</span>
+<span class="sd">    structure.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_clean</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">cleaned</span> <span class="o">=</span> <span class="n">_clean</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">cleaned</span>
+            <span class="k">return</span> <span class="n">out</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">out_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">cleaned_item</span> <span class="o">=</span> <span class="n">_clean</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="n">out_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cleaned_item</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">out_list</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">url_sections</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;work&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;volunteer&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;education&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;publications&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;projects&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;certificates&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;awards&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">url_sections</span><span class="p">:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+                    <span class="n">url_val</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">url_val</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;@&#39;</span> <span class="ow">in</span> <span class="n">url_val</span><span class="p">:</span>
+                        <span class="n">original</span> <span class="o">=</span> <span class="n">url_val</span>
+                        <span class="n">parsed</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+                        <span class="n">origin</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">and</span> <span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span><span class="p">:</span>
+                            <span class="n">origin</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parsed</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span><span class="si">}</span><span class="s2">/&quot;</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">origin</span> <span class="o">=</span> <span class="n">original</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;journal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">original</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin</span>
+
+    <span class="c1"># Some renderCV sections (for example &#39;technologies&#39;) expect a</span>
+    <span class="c1"># OneLineEntry with a non-empty &#39;details&#39; field. If the input has</span>
+    <span class="c1"># empty or missing details we should drop those entries to avoid</span>
+    <span class="c1"># validation failures during rendering. Support both shapes:</span>
+    <span class="c1"># - top-level section lists (cleaned[&#39;technologies&#39;])</span>
+    <span class="c1"># - renderCV shape (cleaned[&#39;cv&#39;][&#39;sections&#39;][&#39;technologies&#39;])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prune_empty_one_line_section</span><span class="p">(</span><span class="n">container</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">section_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">new_items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="c1"># If &#39;details&#39; is missing or empty, drop the entry</span>
+                <span class="k">if</span> <span class="n">it</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;details&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+            <span class="n">new_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">it</span><span class="p">)</span>
+        <span class="n">container</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_items</span>
+
+    <span class="n">_prune_empty_one_line_section</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="s1">&#39;technologies&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cleaned</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cv&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;cv&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sections&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">_prune_empty_one_line_section</span><span class="p">(</span><span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;cv&#39;</span><span class="p">][</span><span class="s1">&#39;sections&#39;</span><span class="p">],</span> <span class="s1">&#39;technologies&#39;</span><span class="p">)</span>
+
+    <span class="c1"># If technologies section is now empty, remove it entirely so RenderCV</span>
+    <span class="c1"># doesn&#39;t attempt to validate an empty section.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cleaned</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;technologies&#39;</span><span class="p">),</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;technologies&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;technologies&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">cleaned</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cv&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;cv&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sections&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;cv&#39;</span><span class="p">][</span><span class="s1">&#39;sections&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;technologies&#39;</span><span class="p">),</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;cv&#39;</span><span class="p">][</span><span class="s1">&#39;sections&#39;</span><span class="p">][</span><span class="s1">&#39;technologies&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="p">):</span>
+        <span class="k">del</span> <span class="n">cleaned</span><span class="p">[</span><span class="s1">&#39;cv&#39;</span><span class="p">][</span><span class="s1">&#39;sections&#39;</span><span class="p">][</span><span class="s1">&#39;technologies&#39;</span><span class="p">]</span>
+
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="n">_clean</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;sanitize_rendercv_data applied&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cleaned</span></div>
+
+
+
 <div class="viewcode-block" id="resumejson_to_rendercv">
 <a class="viewcode-back" href="../../../module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.resumejson_to_rendercv">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">resumejson_to_rendercv</span><span class="p">(</span><span class="n">resumejson_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -317,16 +430,36 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_check_dependencies</span><span class="p">()</span>
 
+    <span class="c1"># If the caller already passed a renderCV dict (or a dict with a</span>
+    <span class="c1"># &#39;design&#39;/&#39;cv&#39;/&#39;sections&#39; top-level key), don&#39;t try to run the</span>
+    <span class="c1"># jsonresume-to-rendercv converter which expects JSON Resume format.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resumejson_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">k</span> <span class="ow">in</span> <span class="n">resumejson_dict</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span> <span class="s1">&#39;design&#39;</span><span class="p">,</span> <span class="s1">&#39;sections&#39;</span><span class="p">)):</span>
+        <span class="n">rendercv_candidate</span> <span class="o">=</span> <span class="n">sanitize_rendercv_data</span><span class="p">(</span><span class="n">resumejson_dict</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;design&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rendercv_candidate</span><span class="p">:</span>
+            <span class="n">rendercv_candidate</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">rendercv_candidate</span><span class="p">)</span>
+            <span class="n">rendercv_candidate</span><span class="p">[</span><span class="s1">&#39;design&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;theme&#39;</span><span class="p">:</span> <span class="s1">&#39;classic&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="s1">&#39;us-letter&#39;</span><span class="p">},</span>
+                <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;font_family&#39;</span><span class="p">:</span> <span class="s1">&#39;Source Sans 3&#39;</span><span class="p">,</span> <span class="s1">&#39;font_size&#39;</span><span class="p">:</span> <span class="s1">&#39;10pt&#39;</span><span class="p">},</span>
+            <span class="p">}</span>
+        <span class="k">return</span> <span class="n">rendercv_candidate</span>
+
     <span class="c1"># Normalize the input data to ensure all required fields are present</span>
     <span class="n">normalized_data</span> <span class="o">=</span> <span class="n">_normalize_resumejson</span><span class="p">(</span><span class="n">resumejson_dict</span><span class="p">)</span>
+
+    <span class="c1"># Use module-level `sanitize_rendercv_data` to clean the normalized input</span>
+    <span class="c1"># (defined at module scope) before attempting conversion.</span>
 
     <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
         <span class="n">temp_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
 
+        <span class="c1"># Sanitize input to avoid validator failures (empty strings, problematic urls)</span>
+        <span class="n">sanitized_input</span> <span class="o">=</span> <span class="n">sanitize_rendercv_data</span><span class="p">(</span><span class="n">normalized_data</span><span class="p">)</span>
+
         <span class="c1"># Write JSON Resume to temp file</span>
         <span class="n">json_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;input.json&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">normalized_data</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">sanitized_input</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># Convert using jsonresume-to-rendercv CLI</span>
         <span class="n">yaml_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;output.yaml&quot;</span>
@@ -342,6 +475,23 @@
         <span class="c1"># Read the converted YAML</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">rendercv_dict</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="c1"># Ensure the converted rendercv_dict has a sane default design so</span>
+        <span class="c1"># downstream rendering (render_resume_w_rendercv) does not fail if</span>
+        <span class="c1"># callers passed a dict without a &#39;design&#39; section.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;design&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rendercv_dict</span><span class="p">:</span>
+                <span class="n">rendercv_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">)</span>  <span class="c1"># shallow copy</span>
+                <span class="n">rendercv_dict</span><span class="p">[</span><span class="s1">&#39;design&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;theme&#39;</span><span class="p">:</span> <span class="s1">&#39;classic&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="s1">&#39;us-letter&#39;</span><span class="p">},</span>
+                    <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;font_family&#39;</span><span class="p">:</span> <span class="s1">&#39;Source Sans 3&#39;</span><span class="p">,</span> <span class="s1">&#39;font_size&#39;</span><span class="p">:</span> <span class="s1">&#39;10pt&#39;</span><span class="p">},</span>
+                <span class="p">}</span>
+
+        <span class="c1"># Sanitize the converted structure as well (some fields appear only</span>
+        <span class="c1"># after conversion and may contain empty strings or problematic urls)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">rendercv_dict</span> <span class="o">=</span> <span class="n">sanitize_rendercv_data</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">rendercv_dict</span></div>
 
@@ -570,20 +720,40 @@
         <span class="n">rendercv_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">)</span>  <span class="c1"># Don&#39;t modify original</span>
         <span class="n">rendercv_dict</span><span class="p">[</span><span class="s1">&#39;design&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="c1"># Update design settings</span>
+    <span class="c1"># Update design settings with proper renderCV structure</span>
     <span class="n">design</span> <span class="o">=</span> <span class="n">rendercv_dict</span><span class="p">[</span><span class="s1">&#39;design&#39;</span><span class="p">]</span>
-    <span class="n">design</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="p">{</span>
-            <span class="s1">&#39;theme&#39;</span><span class="p">:</span> <span class="n">theme</span><span class="p">,</span>
-            <span class="s1">&#39;font_size&#39;</span><span class="p">:</span> <span class="n">font_size</span><span class="p">,</span>
-            <span class="s1">&#39;page_size&#39;</span><span class="p">:</span> <span class="n">page_size</span><span class="p">,</span>
-            <span class="o">**</span><span class="p">{</span>
-                <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;disable_page_numbering&#39;</span><span class="p">,</span> <span class="s1">&#39;header_separator&#39;</span><span class="p">]</span>
-            <span class="p">},</span>
-        <span class="p">}</span>
-    <span class="p">)</span>
+
+    <span class="c1"># Set theme</span>
+    <span class="k">if</span> <span class="s1">&#39;theme&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">design</span><span class="p">:</span>
+        <span class="n">design</span><span class="p">[</span><span class="s1">&#39;theme&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">theme</span>
+
+    <span class="c1"># Set page settings</span>
+    <span class="k">if</span> <span class="s1">&#39;page&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">design</span><span class="p">:</span>
+        <span class="n">design</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">design</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Map page_size to renderCV format</span>
+    <span class="n">page_size_mapping</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;letterpaper&#39;</span><span class="p">:</span> <span class="s1">&#39;us-letter&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;us-letter&#39;</span><span class="p">:</span> <span class="s1">&#39;us-letter&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;a4paper&#39;</span><span class="p">:</span> <span class="s1">&#39;a4&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;a4&#39;</span><span class="p">:</span> <span class="s1">&#39;a4&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="s1">&#39;size&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">page</span><span class="p">:</span>
+        <span class="n">page</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_size_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">page_size</span><span class="p">,</span> <span class="s1">&#39;us-letter&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Set text settings</span>
+    <span class="k">if</span> <span class="s1">&#39;text&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">design</span><span class="p">:</span>
+        <span class="n">design</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">design</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="s1">&#39;font_size&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="n">text</span><span class="p">[</span><span class="s1">&#39;font_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">font_size</span>
+
+    <span class="c1"># Add any additional kwargs that are valid</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;disable_page_numbering&#39;</span><span class="p">,</span> <span class="s1">&#39;header_separator&#39;</span><span class="p">]:</span>
+            <span class="n">design</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
     <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">temp_dir</span><span class="p">:</span>
         <span class="n">temp_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">)</span>
@@ -591,22 +761,62 @@
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">format_spec</span> <span class="o">==</span> <span class="s1">&#39;pdf&#39;</span><span class="p">:</span>
-                <span class="n">output_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.pdf&quot;</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">rendercv</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">create_a_pdf_from_a_python_dictionary</span><span class="p">(</span>
-                        <span class="n">rendercv_dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
-                    <span class="p">)</span>
-                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">pdf_error</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PDF generation failed: </span><span class="si">{</span><span class="n">pdf_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># Prefer using the rendercv CLI pipeline which produces a</span>
+                <span class="c1"># real PDF from the YAML/Typst pipeline. Fall back to the</span>
+                <span class="c1"># API call if the CLI isn&#39;t available or fails.</span>
+                <span class="n">yaml_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.yaml&quot;</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rendercv_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-            <span class="k">elif</span> <span class="n">format_spec</span> <span class="o">==</span> <span class="s1">&#39;html&#39;</span><span class="p">:</span>
-                <span class="n">output_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.html&quot;</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">rendercv</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">create_an_html_file_from_a_python_dictionary</span><span class="p">(</span>
-                        <span class="n">rendercv_dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+                <span class="c1"># Try CLI render first</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="s1">&#39;rendercv&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;render&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;--output-folder-name&#39;</span><span class="p">,</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">temp_path</span><span class="p">),</span>
+                        <span class="s1">&#39;--dont-generate-html&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;--dont-generate-markdown&#39;</span><span class="p">,</span>
+                        <span class="nb">str</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">),</span>
+                    <span class="p">],</span>
+                    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># The CLI typically generates a PDF; find it</span>
+                    <span class="n">pdf_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">temp_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.pdf&quot;</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">pdf_files</span><span class="p">:</span>
+                        <span class="n">output_file</span> <span class="o">=</span> <span class="n">pdf_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># If CLI produced a Typst file, try rendering that to PDF</span>
+                        <span class="n">typst_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">temp_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.typ&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span>
+                            <span class="n">temp_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.typst&quot;</span><span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">typst_files</span><span class="p">:</span>
+                            <span class="c1"># Try rendering the typst file via rendercv CLI</span>
+                            <span class="n">tf</span> <span class="o">=</span> <span class="n">typst_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="n">rt</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="s1">&#39;rendercv&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;render&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;--output-folder-name&#39;</span><span class="p">,</span>
+                                    <span class="nb">str</span><span class="p">(</span><span class="n">temp_path</span><span class="p">),</span>
+                                    <span class="nb">str</span><span class="p">(</span><span class="n">tf</span><span class="p">),</span>
+                                <span class="p">],</span>
+                                <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="k">if</span> <span class="n">rt</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">pdf_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">temp_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.pdf&quot;</span><span class="p">))</span>
+                                <span class="k">if</span> <span class="n">pdf_files</span><span class="p">:</span>
+                                    <span class="n">output_file</span> <span class="o">=</span> <span class="n">pdf_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="c1"># otherwise we&#39;ll let the fallback API try below</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># CLI failed; surface stderr for easier debugging.</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;PDF generation failed (CLI stdout: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="si">!r}</span><span class="s2">, stderr: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">!r}</span><span class="s2">)&quot;</span>
                     <span class="p">)</span>
-                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">html_error</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;HTML generation failed: </span><span class="si">{</span><span class="n">html_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="k">elif</span> <span class="n">format_spec</span> <span class="o">==</span> <span class="s1">&#39;markdown&#39;</span><span class="p">:</span>
                 <span class="n">output_file</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.md&quot;</span>
@@ -647,7 +857,9 @@
                 <span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PNG generation failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;PNG generation failed (CLI stdout: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="si">!r}</span><span class="s2">, stderr: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">!r}</span><span class="s2">)&quot;</span>
+                    <span class="p">)</span>
 
                 <span class="c1"># Find the first PNG file</span>
                 <span class="n">png_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">temp_path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.png&quot;</span><span class="p">))</span>

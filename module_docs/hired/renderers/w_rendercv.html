@@ -64,6 +64,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.render_resume_w_rendercv"><code class="docutils literal notranslate"><span class="pre">render_resume_w_rendercv()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.rendercv_to_resumejson"><code class="docutils literal notranslate"><span class="pre">rendercv_to_resumejson()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.resumejson_to_rendercv"><code class="docutils literal notranslate"><span class="pre">resumejson_to_rendercv()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.w_rendercv.sanitize_rendercv_data"><code class="docutils literal notranslate"><span class="pre">sanitize_rendercv_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tools.html">hired.tools</a></li>
@@ -193,6 +194,21 @@ one direction, this implements the reverse mapping.</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.renderers.w_rendercv.sanitize_rendercv_data">
+<span class="sig-prename descclassname"><span class="pre">hired.renderers.w_rendercv.</span></span><span class="sig-name descname"><span class="pre">sanitize_rendercv_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/w_rendercv.html#sanitize_rendercv_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.w_rendercv.sanitize_rendercv_data" title="Link to this definition"></a></dt>
+<dd><p>Sanitize a renderCV-like dict (or JSON Resume normalized dict) so that
+- empty-string values are removed to avoid jsonschema minLength failures,
+- URLs containing ‘&#64;’ are preserved as visible text in a ‘journal’ field</p>
+<blockquote>
+<div><p>while reducing the clickable ‘url’ to an origin-only target to avoid
+Typst label tokenization problems.</p>
+</div></blockquote>
+<p>This function is intentionally conservative: it removes only empty strings
+and rewrites urls that contain ‘&#64;’. It returns a deep-copied sanitized
+structure.</p>
 </dd></dl>
 
 </section>
