@@ -2,7 +2,7 @@
 Minimal unit tests for hired.render
 """
 
-from hired.render import ThemeRegistry, HTMLRenderer
+from hired.renderers.html import ThemeRegistry, HTMLRenderer
 from hired.base import (
     ResumeContent,
     ResumeBasics,
