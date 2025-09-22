@@ -8,9 +8,9 @@ Implement:
 """
 
 from typing import Mapping, Any
+from functools import lru_cache
 from hired.base import ResumeContent, ResumeBasics, ResumeWork, ResumeEducation
-from hired.util import _load_json_file, _get_package_data_path
-from collections.abc import Mapping as ABCMapping
+from hired.util import _load_json_file, DFLT_RESUME_SCHEMA_PATH
 
 
 def _prune_none(obj):
@@ -28,43 +28,43 @@ except ImportError:
     jsonschema = None
 
 
-def _load_schema() -> dict:
+@lru_cache
+def resume_schema(schema_path: str = DFLT_RESUME_SCHEMA_PATH) -> dict:
     """Load the JSON Resume schema from package data."""
-    schema_path = _get_package_data_path('schemas/resume.json')
     try:
         return _load_json_file(schema_path)
     except FileNotFoundError:
         return {}
 
 
-_schema_cache = None
-
-
-def validate_resume_content(content: Mapping[str, Any], *, strict: bool = True) -> bool:
+def validate_resume_content(
+    content: Mapping[str, Any],
+    *,
+    strict: bool = True,
+    schema_path: str = DFLT_RESUME_SCHEMA_PATH,
+) -> bool:
     """Validate resume content against the JSON Resume schema.
 
     If strict=False and schema fails, returns True (permissive mode).
     """
-    global _schema_cache
-    if _schema_cache is None:
-        _schema_cache = _load_schema()
+    _resume_schema = resume_schema(schema_path)
     if jsonschema is None:
         raise ImportError('jsonschema is required for validation')
     try:
-        jsonschema.validate(instance=_prune_none(dict(content)), schema=_schema_cache)
+        jsonschema.validate(instance=_prune_none(dict(content)), schema=_resume_schema)
         return True
     except jsonschema.ValidationError:
         return False if strict else True
 
 
-def _get_validation_errors(content: Mapping[str, Any]) -> list[str]:
+def _get_validation_errors(
+    content: Mapping[str, Any], schema_path: str = DFLT_RESUME_SCHEMA_PATH
+) -> list[str]:
     """Return a list of validation error messages."""
-    global _schema_cache
-    if _schema_cache is None:
-        _schema_cache = _load_schema()
+    _resume_schema = resume_schema(schema_path)
     if jsonschema is None:
         raise ImportError('jsonschema is required for validation')
-    validator = jsonschema.Draft7Validator(_schema_cache)
+    validator = jsonschema.Draft7Validator(_resume_schema)
     return [str(e) for e in validator.iter_errors(content)]
 
 

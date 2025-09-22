@@ -327,6 +327,46 @@ def sanitize_rendercv_data(data: Dict[str, Any]) -> Dict[str, Any]:
     return cleaned
 
 
+def is_valid_rendercv_dict(d: Dict[str, Any], strict: bool = True) -> bool:
+    """
+    Heuristic validator that returns True when the provided dict looks
+    like a renderCV input dict.
+
+    Args:
+        d: candidate dictionary
+        strict: when True, require presence of 'cv' and at least one of
+            'sections' or 'design' with expected shapes. When False, use
+            a looser heuristic that allows top-level keys like 'name',
+            'sections', or 'cv' to be present.
+
+    Returns:
+        True if the dict appears to be renderCV-shaped.
+    """
+    if not isinstance(d, dict):
+        return False
+
+    # Strict mode: must have top-level 'cv' dict with 'sections' (dict)
+    if strict:
+        cv = d.get('cv')
+        if not isinstance(cv, dict):
+            return False
+        sections = cv.get('sections')
+        if not isinstance(sections, dict):
+            return False
+        # Basic sanity: sections should have at least one key mapping to a list
+        for v in sections.values():
+            if isinstance(v, list):
+                return True
+        return False
+
+    # Loose mode: accept many shapes commonly present in renderCV data
+    loose_indicators = ('cv', 'sections', 'design', 'name', 'experience', 'education')
+    for k in loose_indicators:
+        if k in d:
+            return True
+    return False
+
+
 def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
     """
     Convert JSON Resume format to renderCV format using jsonresume-to-rendercv.

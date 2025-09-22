@@ -34,7 +34,7 @@
         {
             "name": "Figiri",
             "position": "Co-founder",
-            "startDate": "2023-01-01",
+            "startDate": "2023-01",
             "summary": "Building visualization and analytics tools for graph and embedding data.",
             "highlights": [
                 "Built data visualization tools for exploring LLM semantic spaces and customer journeys.",
@@ -44,8 +44,8 @@
         {
             "name": "Addix Group",
             "position": "AI Integration Consultant",
-            "startDate": "2023-01-01",
-            "endDate": "2023-12-31",
+            "startDate": "2023-01",
+            "endDate": "2023-12",
             "summary": "Consulted on AI agent integration into core business workflows.",
             "highlights": [
                 "Delivered AI agent prototypes (resume-matching, no-code apps, contextual assistants).",
@@ -55,8 +55,8 @@
         {
             "name": "Analog Devices",
             "position": "Director of Machine Learning",
-            "startDate": "2018-01-01",
-            "endDate": "2023-01-01",
+            "startDate": "2018-01",
+            "endDate": "2023-01",
             "summary": "Led ML/data science team post-acquisition of OtoSense.",
             "highlights": [
                 "Scaled predictive maintenance workflows from IoT data ingestion to device-level deployment.",
@@ -67,8 +67,8 @@
         {
             "name": "OtoSense",
             "position": "Co-founder & CTO",
-            "startDate": "2016-01-01",
-            "endDate": "2018-12-31",
+            "startDate": "2016-01",
+            "endDate": "2018-12",
             "summary": "Founded AI startup for IoT sound/vibration recognition, acquired by Analog Devices.",
             "highlights": [
                 "Created IoT recognition systems for logistics and industrial use cases.",
@@ -80,8 +80,8 @@
         {
             "name": "TagCommander (Commanders Act)",
             "position": "Lead Data Scientist",
-            "startDate": "2014-01-01",
-            "endDate": "2016-12-31",
+            "startDate": "2014-01",
+            "endDate": "2016-12",
             "summary": "Developed data science and attribution models for high-volume marketing.",
             "highlights": [
                 "Built attribution models, real-time KPIs, and automated pipelines.",
@@ -91,8 +91,8 @@
         {
             "name": "Expedia",
             "position": "Senior Data Scientist",
-            "startDate": "2011-01-01",
-            "endDate": "2014-12-31",
+            "startDate": "2011-01",
+            "endDate": "2014-12",
             "summary": "Applied AI to large-scale SEM optimization for millions of hotel nights.",
             "highlights": [
                 "Aligned structured hotel/destination data with unstructured ad copy.",
@@ -102,8 +102,8 @@
         {
             "name": "Independent Consultant (Methodic Solutions)",
             "position": "Consultant",
-            "startDate": "2000-01-01",
-            "endDate": "2011-12-31",
+            "startDate": "2000-01",
+            "endDate": "2011-12",
             "summary": "Delivered AI/ML consulting across industries (media, e-commerce, healthcare, logistics).",
             "highlights": [
                 "Unified messy, siloed data into clean ecosystems.",
