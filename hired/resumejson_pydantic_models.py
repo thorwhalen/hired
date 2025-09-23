@@ -1,21 +1,23 @@
-"""Pydantic models for resume json schema"""
-
+"""Pydantic models for resume json schema
+"""
 from __future__ import annotations
 
 from datetime import date as date_aliased
 from typing import List, Optional
 
-from pydantic import AnyUrl, BaseModel, ConfigDict, EmailStr, Field, RootModel, constr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, RootModel, constr
+
+# Type alias to avoid strict URL validation
+AnyUrl = Optional[str]
+
 
 
 class Location(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     address: Optional[str] = Field(
         None,
-        description='To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li.',
-    )
+        description='To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li.')
     postalCode: Optional[str] = None
     city: Optional[str] = None
     countryCode: Optional[str] = Field(
@@ -23,14 +25,12 @@ class Location(BaseModel):
     )
     region: Optional[str] = Field(
         None,
-        description='The general region where you live. Can be a US state, or a province, for instance.',
-    )
+        description='The general region where you live. Can be a US state, or a province, for instance.')
 
 
 class Profile(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     network: Optional[str] = Field(None, description='e.g. Facebook or Twitter')
     username: Optional[str] = Field(None, description='e.g. neutralthoughts')
     url: Optional[AnyUrl] = Field(
@@ -40,8 +40,7 @@ class Profile(BaseModel):
 
 class Basics(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     name: Optional[str] = None
     label: Optional[str] = Field(None, description='e.g. Web Developer')
     image: Optional[str] = Field(
@@ -50,26 +49,22 @@ class Basics(BaseModel):
     email: Optional[EmailStr] = Field(None, description='e.g. thomas@gmail.com')
     phone: Optional[str] = Field(
         None,
-        description='Phone numbers are stored as strings so use any format you like, e.g. 712-117-2923',
-    )
+        description='Phone numbers are stored as strings so use any format you like, e.g. 712-117-2923')
     url: Optional[AnyUrl] = Field(
         None,
-        description='URL (as per RFC 3986) to your website, e.g. personal homepage',
-    )
+        description='URL (as per RFC 3986) to your website, e.g. personal homepage')
     summary: Optional[str] = Field(
         None, description='Write a short 2-3 sentence biography about yourself'
     )
     location: Optional[Location] = None
     profiles: Optional[List[Profile]] = Field(
         None,
-        description='Specify any number of social networks that you participate in',
-    )
+        description='Specify any number of social networks that you participate in')
 
 
 class Certificate(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     name: Optional[str] = Field(
         None, description='e.g. Certified Kubernetes Administrator'
     )
@@ -80,8 +75,7 @@ class Certificate(BaseModel):
 
 class Skill(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     name: Optional[str] = Field(None, description='e.g. Web Development')
     level: Optional[str] = Field(None, description='e.g. Master')
     keywords: Optional[List[str]] = Field(
@@ -91,35 +85,30 @@ class Skill(BaseModel):
 
 class Language(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     language: Optional[str] = Field(None, description='e.g. English, Spanish')
     fluency: Optional[str] = Field(None, description='e.g. Fluent, Beginner')
 
 
 class Interest(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     name: Optional[str] = Field(None, description='e.g. Philosophy')
     keywords: Optional[List[str]] = None
 
 
 class Reference(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     name: Optional[str] = Field(None, description='e.g. Timothy Cook')
     reference: Optional[str] = Field(
         None,
-        description='e.g. Joe blogs was a great employee, who turned up to work at least once a week. He exceeded my expectations when it came to doing nothing.',
-    )
+        description='e.g. Joe blogs was a great employee, who turned up to work at least once a week. He exceeded my expectations when it came to doing nothing.')
 
 
 class Meta(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     canonical: Optional[AnyUrl] = Field(
         None, description='URL (as per RFC 3986) to latest version of this document'
     )
@@ -145,8 +134,7 @@ class Iso8601(
 
 class WorkItem(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     name: Optional[str] = Field(None, description='e.g. Facebook')
     location: Optional[str] = Field(None, description='e.g. Menlo Park, CA')
     description: Optional[str] = Field(None, description='e.g. Social Media Company')
@@ -164,8 +152,7 @@ class WorkItem(BaseModel):
 
 class VolunteerItem(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     organization: Optional[str] = Field(None, description='e.g. Facebook')
     position: Optional[str] = Field(None, description='e.g. Software Engineer')
     url: Optional[AnyUrl] = Field(None, description='e.g. http://facebook.example.com')
@@ -181,8 +168,7 @@ class VolunteerItem(BaseModel):
 
 class EducationItem(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     institution: Optional[str] = Field(
         None, description='e.g. Massachusetts Institute of Technology'
     )
@@ -199,8 +185,7 @@ class EducationItem(BaseModel):
 
 class Award(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     title: Optional[str] = Field(
         None, description='e.g. One of the 100 greatest minds of the century'
     )
@@ -213,25 +198,21 @@ class Award(BaseModel):
 
 class Publication(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     name: Optional[str] = Field(None, description='e.g. The World Wide Web')
     publisher: Optional[str] = Field(None, description='e.g. IEEE, Computer Magazine')
     releaseDate: Optional[Iso8601] = None
     url: Optional[AnyUrl] = Field(
         None,
-        description='e.g. http://www.computer.org.example.com/csdl/mags/co/1996/10/rx069-abs.html',
-    )
+        description='e.g. http://www.computer.org.example.com/csdl/mags/co/1996/10/rx069-abs.html')
     summary: Optional[str] = Field(
         None,
-        description='Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.',
-    )
+        description='Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.')
 
 
 class Project(BaseModel):
     model_config = ConfigDict(
-        extra='allow',
-    )
+        extra='allow')
     name: Optional[str] = Field(None, description='e.g. The World Wide Web')
     description: Optional[str] = Field(
         None, description='Short summary of project. e.g. Collated works of 2017.'
@@ -246,42 +227,35 @@ class Project(BaseModel):
     endDate: Optional[Iso8601] = None
     url: Optional[AnyUrl] = Field(
         None,
-        description='e.g. http://www.computer.org/csdl/mags/co/1996/10/rx069-abs.html',
-    )
+        description='e.g. http://www.computer.org/csdl/mags/co/1996/10/rx069-abs.html')
     roles: Optional[List[str]] = Field(
         None, description='Specify your role on this project or in company'
     )
     entity: Optional[str] = Field(
         None,
-        description="Specify the relevant company/entity affiliations e.g. 'greenpeace', 'corporationXYZ'",
-    )
+        description="Specify the relevant company/entity affiliations e.g. 'greenpeace', 'corporationXYZ'")
     type: Optional[str] = Field(
         None,
-        description=" e.g. 'volunteering', 'presentation', 'talk', 'application', 'conference'",
-    )
+        description=" e.g. 'volunteering', 'presentation', 'talk', 'application', 'conference'")
 
 
 class ResumeSchema(BaseModel):
     model_config = ConfigDict(
-        extra='forbid',
-    )
+        extra='forbid')
     field_schema: Optional[AnyUrl] = Field(
         None,
         alias='$schema',
-        description='link to the version of the schema that can validate the resume',
-    )
+        description='link to the version of the schema that can validate the resume')
     basics: Optional[Basics] = None
     work: Optional[List[WorkItem]] = None
     volunteer: Optional[List[VolunteerItem]] = None
     education: Optional[List[EducationItem]] = None
     awards: Optional[List[Award]] = Field(
         None,
-        description='Specify any awards you have received throughout your professional career',
-    )
+        description='Specify any awards you have received throughout your professional career')
     certificates: Optional[List[Certificate]] = Field(
         None,
-        description='Specify any certificates you have received throughout your professional career',
-    )
+        description='Specify any certificates you have received throughout your professional career')
     publications: Optional[List[Publication]] = Field(
         None, description='Specify your publications through your career'
     )
@@ -300,5 +274,4 @@ class ResumeSchema(BaseModel):
     )
     meta: Optional[Meta] = Field(
         None,
-        description='The schema version and any other tooling configuration lives here',
-    )
+        description='The schema version and any other tooling configuration lives here')
