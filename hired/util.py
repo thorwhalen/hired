@@ -16,7 +16,7 @@ from hired.resumejson_pydantic_models import ResumeSchema
 
 proj_files = files('hired')
 data_files = files('hired') / 'data'
-
+themes_files = data_files / 'themes'
 
 def _load_json_file(path: str) -> dict:
     """Load a JSON file from the given path."""

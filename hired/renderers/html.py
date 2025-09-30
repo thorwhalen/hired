@@ -35,11 +35,55 @@ class ThemeRegistry(ABCMapping):
             import hired
 
             themes_path = os.path.join(os.path.dirname(hired.__file__), 'themes')
-        self._themes_path = themes_path
+        # Base themes path (packaged)
+        packaged_themes = themes_path
+
+        # Also consider themes shipped under hired/data/themes via util.themes_files
+        extra_themes = None
+        try:
+            from hired.util import themes_files
+
+            extra_themes = str(themes_files)
+        except Exception:
+            extra_themes = None
+
+        # Build search path list for the Jinja loader
+        search_paths = [packaged_themes]
+        if extra_themes and os.path.isdir(extra_themes):
+            search_paths.append(extra_themes)
+
+        # Store as either a single path or a list (used by FileSystemLoader)
+        self._themes_path = search_paths if len(search_paths) > 1 else search_paths[0]
+
         self._themes = {
             'default': {'template': 'default.html', 'css': ''},
             'minimal': {'template': 'minimal.html', 'css': ''},
         }
+
+        # Auto-discover subdirectories under extra themes paths and register simple themes.
+        candidate_names = ['default.html', 'index.html', 'Header.j2.md', 'Preamble.j2.typ']
+        for base in (search_paths or []):
+            try:
+                for entry in os.listdir(base):
+                    p = os.path.join(base, entry)
+                    if os.path.isdir(p) and entry not in self._themes:
+                        # Look for a sensible template file inside the folder
+                        found = None
+                        for name in candidate_names:
+                            candidate = os.path.join(p, name)
+                            if os.path.exists(candidate):
+                                found = name
+                                break
+                        if found:
+                            # Register theme with a template path relative to the base
+                            rel_template = os.path.join(entry, found)
+                            self._themes[entry] = {'template': rel_template, 'css': ''}
+                        else:
+                            # Register folder name with empty template as a placeholder
+                            self._themes[entry] = {'template': '', 'css': ''}
+            except Exception:
+                # ignore directories we cannot list
+                pass
 
     def __getitem__(self, theme_name: str) -> dict:
         return self._themes[theme_name]
