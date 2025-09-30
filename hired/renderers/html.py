@@ -76,16 +76,45 @@ class HTMLRenderer:
         self, content: Any, config: RenderingConfig
     ) -> bytes:  # content is ResumeSchema
         theme = self._themes[config.theme]
-        html = self._render_to_html(content, theme)
+
+        # If a custom_template path is provided, prefer it; otherwise use theme
+        html = self._render_to_html(content, theme, config)
+
+        # Choose CSS: prefer custom_css if provided
+        css = (
+            config.custom_css
+            if getattr(config, 'custom_css', None)
+            else theme.get('css', '')
+        )
+
         if config.format == 'pdf':
-            return self._html_to_pdf(html, theme.get('css', ''))
+            return self._html_to_pdf(html, css)
         return html.encode('utf-8')
 
     # ------------------ HTML rendering ------------------ #
     def _render_to_html(
-        self, content: Any, theme: dict
+        self, content: Any, theme: dict, config: RenderingConfig
     ) -> str:  # content is ResumeSchema
         ctx = self._build_context(content)
+
+        # If a custom_template path is provided, and it exists, load it.
+        ctpl = getattr(config, 'custom_template', None)
+        if ctpl:
+            # If it's a file path, load its contents and render from string
+            if os.path.exists(ctpl):
+                with open(ctpl, 'r', encoding='utf-8') as f:
+                    template_text = f.read()
+                template = self._env.from_string(template_text)
+                return template.render(**ctx)
+            else:
+                # Not a file — assume it's a template name in the themes path
+                try:
+                    template = self._env.get_template(ctpl)
+                    return template.render(**ctx)
+                except Exception:
+                    # Fall through to theme template
+                    pass
+
         template = self._env.get_template(theme['template'])
         return template.render(**ctx)
 

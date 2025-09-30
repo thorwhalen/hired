@@ -12,7 +12,11 @@ from hired.base import (
     ResumeSchemaExtended,
 )
 from hired.content import FileContentSource, DictContentSource, DefaultAIAgent
-from hired.util import validate_resume_content_dict, ensure_resume_content_dict
+from hired.util import (
+    validate_resume_content_dict,
+    ensure_resume_content_dict,
+    normalize_and_validate_resume,
+)
 from hired.render import _get_renderer_for_format
 from hired.config import ConfigStore
 
@@ -58,14 +62,13 @@ def mk_resume(
     """
     Render resume content to final format.
     """
+    # Normalize and validate in a single place. Accept dicts or pydantic models.
     if isinstance(content, dict):
-        # Use ResumeSchemaExtended which allows extra fields
-        validate_resume_content_dict(content)
-        content = ResumeSchemaExtended(**content)
+        content = normalize_and_validate_resume(content, strict=strict)
     elif hasattr(content, 'model_dump'):
-        # Already a pydantic model, validate the dict form
+        # Convert to dict and re-normalize; this will validate and prune None
         content_dict = content.model_dump()
-        validate_resume_content_dict(content_dict)
+        content = normalize_and_validate_resume(content_dict, strict=strict)
 
     if rendering is None:
         rendering = RenderingConfig()

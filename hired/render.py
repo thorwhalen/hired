@@ -55,5 +55,6 @@ def _get_renderer_for_format(format: str) -> Renderer:
         raise NotImplementedError(f'Format {format} not supported')
 
 
-# Initialize renderers when module is imported
-_initialize_default_renderers()
+# NOTE: do not register renderers at import time to avoid surprising side
+# effects. _get_renderer_for_format will lazily initialize the defaults when
+# needed (see call above).

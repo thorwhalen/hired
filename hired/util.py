@@ -144,6 +144,81 @@ def ensure_resume_content_dict(content_src: ResumeSource) -> ResumeDict:
     return validate_resume_content_dict(content)
 
 
+def _prune_none(obj):
+    """Recursively remove keys or list items that are None so schema validation doesn't see explicit nulls for optional fields."""
+    if isinstance(obj, dict):
+        return {k: _prune_none(v) for k, v in obj.items() if v is not None}
+    if isinstance(obj, list):
+        return [_prune_none(x) for x in obj if x is not None]
+    return obj
+
+
+def normalize_and_validate_resume(raw: Mapping, *, strict: bool = True):
+    """Normalize and validate a resume-like mapping.
+
+    - Prunes None values.
+    - Validates via Pydantic ResumeSchemaExtended (allows extra fields).
+    - If strict is True and jsonschema is available, will attempt schema
+      validation against the packaged JSON schema (best-effort).
+
+    Returns a ResumeSchemaExtended instance on success. Raises
+    pydantic.ValidationError on failure.
+    """
+    from hired.base import ResumeSchemaExtended
+
+    # Make a shallow dict to ensure we mutate a copy
+    if not isinstance(raw, Mapping):
+        raise TypeError('raw must be a mapping')
+
+    pruned = _prune_none(dict(raw))
+
+    # First, construct the pydantic model (this provides strong typing)
+    model = ResumeSchemaExtended(**pruned)
+
+    # Optionally perform jsonschema validation if the package schema exists
+    if strict:
+        try:
+            import jsonschema
+
+            schema_path = DFLT_RESUME_SCHEMA_PATH
+            try:
+                schema = _load_json_file(schema_path)
+            except FileNotFoundError:
+                schema = None
+
+            if schema is not None:
+                # Will raise jsonschema.ValidationError if invalid
+                jsonschema.validate(instance=pruned, schema=schema)
+        except ImportError:
+            # jsonschema not available — skip schema validation
+            pass
+
+    return model
+
+
+def get_jsonschema_errors(
+    content: Mapping, schema_path: str | None = None
+) -> list[str]:
+    """Return a list of jsonschema validation error messages for the content.
+
+    If jsonschema is not available or the schema file is missing, returns an
+    empty list.
+    """
+    try:
+        import jsonschema
+    except ImportError:
+        return []
+
+    try:
+        schema_path = schema_path or DFLT_RESUME_SCHEMA_PATH
+        schema = _load_json_file(schema_path)
+    except FileNotFoundError:
+        return []
+
+    validator = jsonschema.Draft7Validator(schema)
+    return [str(e) for e in validator.iter_errors(content)]
+
+
 def validate_resume_content_dict(content: dict, *, raise_errors=True) -> ResumeDict:
     """Validate resume content using ResumeSchemaExtended (which allows extra fields)."""
     from hired.base import ResumeSchemaExtended
