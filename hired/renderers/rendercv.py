@@ -5,7 +5,7 @@ import os
 import warnings
 from pathlib import Path
 from typing import Any, Dict, List
-from hired.base import Renderer, ResumeContent, RenderingConfig
+from hired.base import Renderer, RenderingConfig
 
 try:
     from jsonresume_to_rendercv.converter import convert
@@ -45,11 +45,13 @@ class RenderCVRenderer(Renderer):
         self.strict_validation = strict_validation
         self.warnings = []
 
-    def render(self, content: ResumeContent, config: RenderingConfig) -> bytes:
+    def render(
+        self, content: Any, config: RenderingConfig
+    ) -> bytes:  # content is ResumeSchemaExtended
         """Render resume content using RenderCV backend."""
         self.warnings = []  # Reset warnings for each render
 
-        # Convert ResumeContent to JSON Resume dict with robust handling
+        # Convert ResumeSchemaExtended to JSON Resume dict with robust handling
         json_resume = self._content_to_json_resume_robust(content)
 
         # Print warnings if any
@@ -120,73 +122,80 @@ class RenderCVRenderer(Renderer):
                     "RenderCV failed to generate PDF - no output file created"
                 )
 
-    def _content_to_json_resume_robust(self, content: ResumeContent) -> dict:
-        """Convert ResumeContent to JSON Resume dictionary format with robust error handling."""
+    def _content_to_json_resume_robust(
+        self, content: Any
+    ) -> dict:  # content is ResumeSchemaExtended
+        """Convert ResumeSchemaExtended to JSON Resume dictionary format with robust error handling."""
 
-        # Convert Pydantic models to dict
-        basics = content.basics.model_dump(exclude_none=True)
+        # Convert Pydantic model to dict
+        content_dict = (
+            content.model_dump(exclude_none=True)
+            if hasattr(content, 'model_dump')
+            else content
+        )
 
-        # Robust handling of basics section
+        # Extract basics section
+        basics = content_dict.get('basics', {})
         basics = self._ensure_basics_complete(basics)
 
         # Build JSON Resume structure
         json_resume = {
             "basics": basics,
-            "work": self._ensure_work_complete(
-                [w.model_dump(exclude_none=True) for w in content.work]
-            ),
+            "work": self._ensure_work_complete(content_dict.get('work', [])),
             "education": self._ensure_education_complete(
-                [e.model_dump(exclude_none=True) for e in content.education]
+                content_dict.get('education', [])
             ),
         }
 
-        # Add extra sections if present
-        if hasattr(content, 'extra_sections') and content.extra_sections:
-            # Handle common optional sections with robust validation
-            for section_name, section_data in content.extra_sections.items():
+        # Add optional sections if present
+        optional_sections = [
+            'volunteer',
+            'awards',
+            'certificates',
+            'publications',
+            'skills',
+            'languages',
+            'interests',
+            'references',
+            'projects',
+        ]
+
+        for section_name in optional_sections:
+            if section_name in content_dict:
+                section_data = content_dict[section_name]
                 if section_name == 'publications':
                     json_resume[section_name] = self._ensure_publications_complete(
-                        section_data
+                        section_data or []
                     )
                 elif section_name == 'projects':
                     json_resume[section_name] = self._ensure_projects_complete(
-                        section_data
+                        section_data or []
                     )
                 elif section_name == 'skills':
                     json_resume[section_name] = self._ensure_skills_complete(
-                        section_data
+                        section_data or []
                     )
                 elif section_name == 'awards':
                     json_resume[section_name] = self._ensure_awards_complete(
-                        section_data
+                        section_data or []
                     )
-                elif section_name in [
-                    'languages',
-                    'interests',
-                    'certificates',
-                    'volunteer',
-                    'references',
-                ]:
-                    json_resume[section_name] = section_data
                 else:
-                    json_resume[section_name] = section_data
-                    self.warnings.append(
-                        f"Unknown section '{section_name}' may not render correctly"
-                    )
+                    json_resume[section_name] = section_data or []
+
+        # Handle any extra sections (not in standard JSON Resume schema)
+        for section_name, section_data in content_dict.items():
+            if section_name not in [
+                'basics',
+                'work',
+                'education',
+            ] + optional_sections + ['field_schema', 'meta']:
+                json_resume[section_name] = section_data
+                self.warnings.append(
+                    f"Unknown section '{section_name}' may not render correctly"
+                )
 
         # Ensure all required top-level sections exist (even if empty)
-        required_sections = [
-            'skills',
-            'projects',
-            'publications',
-            'awards',
-            'languages',
-            'interests',
-            'certificates',
-            'volunteer',
-            'references',
-        ]
-        for section in required_sections:
+        for section in optional_sections:
             if section not in json_resume:
                 json_resume[section] = []
 
@@ -415,6 +424,8 @@ class RenderCVRenderer(Renderer):
 
         return awards
 
-    def _content_to_json_resume(self, content: ResumeContent) -> dict:
+    def _content_to_json_resume(
+        self, content: Any
+    ) -> dict:  # content is ResumeSchemaExtended
         """Legacy method - kept for backward compatibility."""
         return self._content_to_json_resume_robust(content)

@@ -7,19 +7,12 @@ the entire pipeline.
 
 from typing import Any, Mapping
 from hired.base import (
-    ResumeContent,
     RenderingConfig,
     ContentSource,
-    ResumeBasics,
-    ResumeWork,
-    ResumeEducation,
+    ResumeSchemaExtended,
 )
 from hired.content import FileContentSource, DictContentSource, DefaultAIAgent
-from hired.validators import (
-    validate_resume_content,
-    validate_and_normalize,
-    validate_with_models,
-)
+from hired.util import validate_resume_content_dict, ensure_resume_content_dict
 from hired.render import _get_renderer_for_format
 from hired.config import ConfigStore
 
@@ -31,7 +24,7 @@ def mk_content_for_resume(
     agent: Any | None = None,
     validate: bool = True,
     strict: bool = False
-) -> ResumeContent:
+) -> ResumeSchemaExtended:
     """
     Generate resume content from candidate and job information.
     """
@@ -48,14 +41,15 @@ def mk_content_for_resume(
     agent = agent or DefaultAIAgent()
     content = agent.generate_content(candidate, job)
     if validate:
-        assert validate_resume_content(
-            content.model_dump(), strict=strict
-        ), "Validation failed"
+        content_dict = (
+            content.model_dump() if hasattr(content, 'model_dump') else content
+        )
+        assert validate_resume_content_dict(content_dict), "Validation failed"
     return content
 
 
 def mk_resume(
-    content: ResumeContent | dict,
+    content: ResumeSchemaExtended | dict,
     rendering: RenderingConfig | dict | None = None,
     *,
     output_path: str | None = None,
@@ -65,8 +59,14 @@ def mk_resume(
     Render resume content to final format.
     """
     if isinstance(content, dict):
-        # Use validator pipeline to normalize and optionally enforce schema
-        content = validate_and_normalize(content, strict=strict)
+        # Use ResumeSchemaExtended which allows extra fields
+        validate_resume_content_dict(content)
+        content = ResumeSchemaExtended(**content)
+    elif hasattr(content, 'model_dump'):
+        # Already a pydantic model, validate the dict form
+        content_dict = content.model_dump()
+        validate_resume_content_dict(content_dict)
+
     if rendering is None:
         rendering = RenderingConfig()
     elif isinstance(rendering, dict):

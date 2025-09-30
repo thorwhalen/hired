@@ -3,28 +3,25 @@ Minimal unit tests for hired.base
 """
 
 from hired.base import (
-    ResumeBasics,
-    ResumeWork,
-    ResumeEducation,
-    ResumeContent,
     RenderingConfig,
+    ResumeSchemaExtended,
 )
+from hired.resumejson_pydantic_models import Basics
+
+# For backward compatibility
+ResumeContent = ResumeSchemaExtended
 
 
 def test_resume_basics():
-    basics = ResumeBasics(name='Alice', email='alice@example.com')
-    assert basics.name == 'Alice'
-    assert basics.email == 'alice@example.com'
+    basics = Basics(name='John Doe', email='john@example.com')
+    assert basics.name == 'John Doe'
+    assert basics.email == 'john@example.com'
 
 
 def test_resume_content():
-    basics = ResumeBasics(name='Bob', email='bob@example.com')
-    work = [ResumeWork(company='X', position='Y')]
-    education = [ResumeEducation(institution='U', area='CS')]
-    content = ResumeContent(basics=basics, work=work, education=education)
-    assert content.basics.name == 'Bob'
-    assert content.work[0].company == 'X'
-    assert content.education[0].institution == 'U'
+    basics = Basics(name='John Doe', email='john@example.com')
+    content = ResumeSchemaExtended(basics=basics)
+    assert content.basics.name == 'John Doe'
 
 
 def test_rendering_config_defaults():

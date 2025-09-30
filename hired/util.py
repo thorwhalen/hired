@@ -6,11 +6,13 @@ All imports here are external to the hired package.
 import json
 from importlib.resources import files
 import os
-import urllib.request
-from typing import Dict, Any, Mapping, Union
-from hired.resumejson_pydantic_models import ResumeSchema
+from typing import Mapping, Union
+from pathlib import Path
 
 import yaml  # pip install PyYAML
+
+from hired._converters import ensure_dict
+from hired.resumejson_pydantic_models import ResumeSchema
 
 proj_files = files('hired')
 data_files = files('hired') / 'data'
@@ -58,9 +60,8 @@ def dump_yaml(d: dict, yaml_path: str):
 
 # --------------------------------------------------------------------------------------
 # Helpers
-
-import importlib.resources
-import os
+from pydantic import ValidationError as PydanticValidationError
+from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
 
 
 def _merge_dicts(base: dict, override: dict) -> dict:
@@ -70,33 +71,15 @@ def _merge_dicts(base: dict, override: dict) -> dict:
     return result
 
 
-def url_to_jdict(url: str) -> Dict[str, Any]:
-    """
-    Fetches JSON data from a given URL and returns it as a Python dictionary.
-
-    Args:
-        url: The URL of the JSON file.
-
-    Returns:
-        A dictionary representation of the JSON data.
-    """
-    try:
-        with urllib.request.urlopen(url) as response:
-            data = response.read().decode('utf-8')
-            return json.loads(data)
-    except Exception as e:
-        print(f"Error fetching or parsing JSON from URL: {e}")
-        return {}
+ValidationErrorType = Union[PydanticValidationError, JsonSchemaValidationError]
+ValidationErrors = (PydanticValidationError, JsonSchemaValidationError)
+JsonContentStr = str  # JSON string
+PathStr = str  # filesystem path
+ResumeSource = Union[PathStr, JsonContentStr, Path, Mapping]
+ResumeDict = dict  # one that is valid in the ResumeSchema sense
 
 
-from typing import Union
-from pydantic import ValidationError as PydanticValidationError
-from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
-
-ValidationError = Union[PydanticValidationError, JsonSchemaValidationError]
-
-
-def extract_friendly_errors(error_obj: ValidationError, schema=None, data=None):
+def extract_friendly_errors(error_obj: ValidationErrorType, schema=None, data=None):
     """
     Extracts a generator of user-friendly error messages from a validation error object.
 
@@ -127,21 +110,24 @@ def extract_friendly_errors(error_obj: ValidationError, schema=None, data=None):
         yield field, error_obj.message
 
 
-def validate_resume_content_dict(content: dict) -> dict:
-    try:
-        _ = ResumeSchema(**content)
-    except Exception as e:
-        for field, message in extract_friendly_errors(e):
-            print(f"Error in field '{field}': {message}")
-        raise
-    return content
+def validation_friendly_errors_string(
+    error_obj: ValidationErrorType,
+    schema=None,
+    data=None,
+) -> str:
+    return '\n'.join(
+        f"Error in field '{field}': {message}"
+        for field, message in extract_friendly_errors(error_obj, schema, data)
+    )
 
 
-def ensure_resume_content_dict(content_src: Union[str, Mapping]) -> dict:
+def ensure_resume_content_dict(content_src: ResumeSource) -> ResumeDict:
     """
     Get a schema-valid resume dict from various sources
     (json file, json string, dict, ...)
     """
+    if isinstance(content_src, Path):
+        content_src = str(content_src.expanduser())
     if isinstance(content_src, str):
         if os.path.exists(content_src):
             with open(content_src, 'r', encoding='utf-8') as f:
@@ -151,17 +137,29 @@ def ensure_resume_content_dict(content_src: Union[str, Mapping]) -> dict:
                 content = json.loads(content_src)
             except json.JSONDecodeError as e:
                 raise ValueError(f"Invalid JSON content provided: {e}")
-    elif not isinstance(content, Mapping):
+    elif not isinstance(content_src, Mapping):
         raise TypeError(
-            f"Content source must be a dict or a valid JSON string/filename: {content}"
+            f"Content source must be a dict or a valid JSON string/filename: {content_src}"
         )
     return validate_resume_content_dict(content)
+
+
+def validate_resume_content_dict(content: dict, *, raise_errors=True) -> ResumeDict:
+    """Validate resume content using ResumeSchemaExtended (which allows extra fields)."""
+    from hired.base import ResumeSchemaExtended
+
+    try:
+        _ = ResumeSchemaExtended(**content)
+    except ValidationErrors as e:
+        print(validation_friendly_errors_string(e))
+        if raise_errors:
+            raise
+    return content
 
 
 # --------------------------------------------------------------------------------------
 # Functions that manage resources
 
-from pathlib import Path
 
 schemas_files = data_files / 'schemas'
 resume_jsons_files = data_files / 'resume_jsons'
@@ -236,7 +234,7 @@ def refresh_resume_schema():
         return '\n'.join(lines)
 
     print('Get the schema (dict) from the url')
-    new_schema = url_to_jdict(DFLT_SCHEMA_URL)
+    new_schema = ensure_dict(DFLT_SCHEMA_URL)
     print('Make pydantic models (code) from it')
     new_schema_code = pydantic_model_to_code(
         new_schema, egress_transform=fix_anyurl_transform

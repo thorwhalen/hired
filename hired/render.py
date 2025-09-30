@@ -8,7 +8,6 @@ Current features:
 
 from hired.base import (
     Renderer,
-    ResumeContent,
     RenderingConfig,
     register_renderer,
     get_renderer_registry,

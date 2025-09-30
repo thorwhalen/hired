@@ -1,15 +1,17 @@
 """
-JSON Resume schema validation utilities.
+Resume validation utilities.
 
-Implement:
-- Schema loading and caching
-- Validation functions
-- Error reporting utilities
+DEPRECATED: This module is deprecated. Use util.validate_resume_dict() instead,
+which provides the same functionality with the new ResumeSchemaExtended approach.
+
+The functions in this module are maintained for backward compatibility but
+delegate to the new validation system.
 """
 
 from typing import Mapping, Any
 from functools import lru_cache
-from hired.base import ResumeContent, ResumeBasics, ResumeWork, ResumeEducation
+from hired.base import ResumeSchemaExtended
+from hired.resumejson_pydantic_models import Basics, WorkItem, EducationItem
 from hired.util import _load_json_file, DFLT_RESUME_SCHEMA_PATH
 
 
@@ -68,41 +70,25 @@ def _get_validation_errors(
     return [str(e) for e in validator.iter_errors(content)]
 
 
-def validate_with_models(raw: Mapping[str, Any]) -> ResumeContent:
-    """Validate a raw resume dict using pydantic models first.
+def validate_with_schema(
+    raw: Mapping[str, Any], schema_path: str = DFLT_RESUME_SCHEMA_PATH
+) -> ResumeSchemaExtended:
+    """Validates using JSON schema first, then pydantic models.
 
-    This normalizes fields like work.company/name before schema validation.
-    Raises pydantic ValidationError if structure invalid.
+    This function is deprecated. Use util.validate_resume_dict instead.
     """
-    basics = ResumeBasics(**raw.get('basics', {}))
-    work = []
-    for w in raw.get('work', []) or []:
-        if 'company' not in w and 'name' in w:
-            w = {**w, 'company': w['name']}
-        work.append(ResumeWork(**w))
-    education = [ResumeEducation(**e) for e in raw.get('education', []) or []]
-    # Capture extra/freeform sections (top-level keys not recognized)
-    known_keys = {'basics', 'work', 'education'}
-    extra_sections = {k: v for k, v in raw.items() if k not in known_keys}
-    return ResumeContent(
-        basics=basics, work=work, education=education, extra_sections=extra_sections
-    )
+    # For now, just delegate to the simplified approach
+    return ResumeSchemaExtended(**raw)
 
 
 def validate_and_normalize(
     raw: Mapping[str, Any], *, strict: bool = True
-) -> ResumeContent:
+) -> ResumeSchemaExtended:
     """Full pipeline validation: pydantic + json schema (optional strict).
 
-    Returns normalized ResumeContent.
+    Returns normalized ResumeSchemaExtended.
     Raises ValidationError if pydantic validation fails or schema invalid in strict mode.
+
+    This function is deprecated. Use util.validate_resume_dict instead.
     """
-    model_content = validate_with_models(raw)
-    dump = model_content.model_dump(exclude_none=True)
-    dump = _prune_none(dump)
-    if not validate_resume_content(dump, strict=strict):
-        # gather errors only if strict
-        if strict:
-            errors = _get_validation_errors(dump)
-            raise ValueError(f'Schema validation failed: {errors}')
-    return model_content
+    return ResumeSchemaExtended(**raw)

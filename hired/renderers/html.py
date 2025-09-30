@@ -4,7 +4,7 @@ from typing import Mapping, Any, Iterable
 import re, os, importlib
 import html as html_mod
 from collections.abc import Mapping as ABCMapping
-from hired.base import Renderer, ResumeContent, RenderingConfig
+from hired.base import Renderer, RenderingConfig
 
 try:  # Optional dependency
     import weasyprint  # type: ignore
@@ -72,7 +72,9 @@ class HTMLRenderer:
         )
 
     # ------------------ Public API ------------------ #
-    def render(self, content: ResumeContent, config: RenderingConfig) -> bytes:
+    def render(
+        self, content: Any, config: RenderingConfig
+    ) -> bytes:  # content is ResumeSchema
         theme = self._themes[config.theme]
         html = self._render_to_html(content, theme)
         if config.format == 'pdf':
@@ -80,26 +82,52 @@ class HTMLRenderer:
         return html.encode('utf-8')
 
     # ------------------ HTML rendering ------------------ #
-    def _render_to_html(self, content: ResumeContent, theme: dict) -> str:
+    def _render_to_html(
+        self, content: Any, theme: dict
+    ) -> str:  # content is ResumeSchema
         ctx = self._build_context(content)
         template = self._env.get_template(theme['template'])
         return template.render(**ctx)
 
-    def _build_context(self, content: ResumeContent) -> dict:
-        basics = content.basics.model_dump(exclude_none=True)
-        work = [
-            w.model_dump(exclude_none=True)
-            for w in content.work
-            if not _is_empty_section(w.model_dump())
-        ]
-        education = [
-            e.model_dump(exclude_none=True)
-            for e in content.education
-            if not _is_empty_section(e.model_dump())
-        ]
-        extra_sections = list(
-            _iter_extra_sections(getattr(content, 'extra_sections', {}))
+    def _build_context(self, content: Any) -> dict:  # content is ResumeSchema
+        # Convert pydantic model to dict, handling the new schema structure
+        content_dict = (
+            content.model_dump(exclude_none=True)
+            if hasattr(content, 'model_dump')
+            else content
         )
+
+        basics = content_dict.get('basics', {})
+        work = content_dict.get('work', [])
+        education = content_dict.get('education', [])
+
+        # Filter out empty work and education entries
+        work = [w for w in work if not _is_empty_section(w)]
+        education = [e for e in education if not _is_empty_section(e)]
+
+        # Handle extra sections (anything not in the core schema)
+        core_sections = {
+            'basics',
+            'work',
+            'education',
+            'volunteer',
+            'awards',
+            'certificates',
+            'publications',
+            'skills',
+            'languages',
+            'interests',
+            'references',
+            'projects',
+            'meta',
+            'field_schema',
+        }
+        extra_sections = list(
+            _iter_extra_sections(
+                {k: v for k, v in content_dict.items() if k not in core_sections}
+            )
+        )
+
         return {
             'basics': basics,
             'work': work,

@@ -3,7 +3,11 @@ Minimal unit tests for hired.content
 """
 
 from hired.content import FileContentSource, DictContentSource, DefaultAIAgent
-from hired.base import ResumeBasics, ResumeWork, ResumeEducation
+from hired.resumejson_pydantic_models import Basics, WorkItem, EducationItem
+from hired.base import ResumeSchemaExtended
+
+# For backward compatibility
+ResumeContent = ResumeSchemaExtended
 import tempfile
 import json
 
@@ -28,8 +32,12 @@ def test_file_content_source_json():
 
 def test_default_ai_agent():
     agent = DefaultAIAgent()
-    candidate = {'basics': {'name': 'A', 'email': 'a@b'}, 'work': [], 'education': []}
+    candidate = {
+        'basics': {'name': 'A', 'email': 'a@example.com'},
+        'work': [],
+        'education': [],
+    }
     job = {'title': 'X'}
     content = agent.generate_content(candidate, job)
     assert content.basics.name == 'A'
-    assert content.basics.email == 'a@b'
+    assert content.basics.email == 'a@example.com'

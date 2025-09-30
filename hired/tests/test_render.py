@@ -3,13 +3,11 @@ Minimal unit tests for hired.render
 """
 
 from hired.renderers.html import ThemeRegistry, HTMLRenderer
-from hired.base import (
-    ResumeContent,
-    ResumeBasics,
-    ResumeWork,
-    ResumeEducation,
-    RenderingConfig,
-)
+from hired.base import RenderingConfig, ResumeSchemaExtended
+from hired.resumejson_pydantic_models import Basics
+
+# For backward compatibility
+ResumeContent = ResumeSchemaExtended
 
 
 def test_theme_registry():
@@ -19,8 +17,8 @@ def test_theme_registry():
 
 
 def test_html_renderer_html():
-    basics = ResumeBasics(name='A', email='a@b')
-    content = ResumeContent(basics=basics, work=[], education=[])
+    basics = Basics(name='A', email='a@example.com')
+    content = ResumeSchemaExtended(basics=basics)
     config = RenderingConfig(format='html')
     renderer = HTMLRenderer()
     html = renderer.render(content, config)
@@ -28,8 +26,8 @@ def test_html_renderer_html():
 
 
 def test_html_renderer_pdf():
-    basics = ResumeBasics(name='A', email='a@b')
-    content = ResumeContent(basics=basics, work=[], education=[])
+    basics = Basics(name='A', email='a@example.com')
+    content = ResumeSchemaExtended(basics=basics)
     config = RenderingConfig(format='pdf')
     renderer = HTMLRenderer()
     pdf = renderer.render(content, config)

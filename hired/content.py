@@ -11,10 +11,7 @@ from typing import Mapping, Any, Iterable
 from hired.base import (
     ContentSource,
     AIAgent,
-    ResumeContent,
-    ResumeBasics,
-    ResumeWork,
-    ResumeEducation,
+    ResumeSchemaExtended,
 )
 from hired.util import _load_json_file, load_yaml
 
@@ -70,9 +67,6 @@ class DefaultAIAgent:
 
     def generate_content(
         self, candidate_info: Mapping[str, Any], job_info: Mapping[str, Any]
-    ) -> ResumeContent:
-        # Minimal mock: just fill basics and work from candidate_info
-        basics = ResumeBasics(**candidate_info.get('basics', {}))
-        work = [ResumeWork(**w) for w in candidate_info.get('work', [])]
-        education = [ResumeEducation(**e) for e in candidate_info.get('education', [])]
-        return ResumeContent(basics=basics, work=work, education=education)
+    ) -> ResumeSchemaExtended:
+        # Convert candidate info to use the new models, allowing any extra fields
+        return ResumeSchemaExtended(**candidate_info)
