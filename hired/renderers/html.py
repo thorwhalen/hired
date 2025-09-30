@@ -61,8 +61,13 @@ class ThemeRegistry(ABCMapping):
         }
 
         # Auto-discover subdirectories under extra themes paths and register simple themes.
-        candidate_names = ['default.html', 'index.html', 'Header.j2.md', 'Preamble.j2.typ']
-        for base in (search_paths or []):
+        candidate_names = [
+            'default.html',
+            'index.html',
+            'Header.j2.md',
+            'Preamble.j2.typ',
+        ]
+        for base in search_paths or []:
             try:
                 for entry in os.listdir(base):
                     p = os.path.join(base, entry)
