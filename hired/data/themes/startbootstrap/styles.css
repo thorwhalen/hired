@@ -1,0 +1,7 @@
+body { font-family: Arial, Helvetica, sans-serif; color: #222; background: #fff; padding: 24px; }
+.container { max-width: 800px; margin: 0 auto; }
+.header { border-bottom: 1px solid #ddd; padding-bottom: 12px; margin-bottom: 18px; }
+h1 { margin: 0; font-size: 28px; }
+h2 { color: #444; border-bottom: 1px solid #eee; padding-bottom: 6px; }
+ul { margin: 8px 0 16px 20px; }
+.work-entry, .edu-entry { margin-bottom: 12px; }

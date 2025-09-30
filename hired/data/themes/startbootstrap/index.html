@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ basics.name if basics and basics.get('name') else 'Resume' }}</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>{{ basics.name }}</h1>
+        {% if basics.email %}<p>{{ basics.email }}</p>{% endif %}
+      </header>
+
+      <section>
+        <h2>Work</h2>
+        {% for w in work %}
+        <div class="work-entry">
+          <h3>{{ w.position }} — {{ w.company }}</h3>
+          <p>{{ w.startDate }} — {{ w.endDate or 'Present' }}</p>
+          {% if w.highlights %}
+          <ul>
+            {% for h in w.highlights %}
+            <li>{{ h }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </section>
+
+      <section>
+        <h2>Education</h2>
+        {% for e in education %}
+        <div class="edu-entry">
+          <h3>{{ e.institution }} — {{ e.studyType or ''}}</h3>
+          <p>{{ e.startDate }} — {{ e.endDate or '' }}</p>
+        </div>
+        {% endfor %}
+      </section>
+    </div>
+  </body>
+</html>

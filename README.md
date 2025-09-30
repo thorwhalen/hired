@@ -2,6 +2,8 @@
 
 Streamline the job application process for job seekers
 
+To install: `pip install hired`
+
 ## Overview
 
 The `hired` package is a Python library designed to simplify the process of creating professional resumes tailored to specific job applications. It leverages AI-driven content generation, schema validation, and customizable rendering pipelines to produce high-quality resumes in various formats.
@@ -24,9 +26,6 @@ The `hired` package is a Python library designed to simplify the process of crea
 - **Fallback PDF Builder**: Minimal PDF generation without external dependencies.
 - **Empty Section Omission**: Automatically skips rendering empty sections.
 
-## Installation
-
-Install the package using pip:
 # hired — resume rendering toolkit
 
 This repository contains a small toolkit for working with JSON Resume-style
@@ -113,6 +112,73 @@ Inserting custom changes / custom sections:
     collects keys not in the core schema and exposes them as `extra_sections`
     (rendered as small HTML fragments). That is the supported extension path
     for custom content.
+
+## Examples — render the packaged test resume
+
+Below are a few concrete examples that show how to render the packaged
+example resume located in the package data (`data_files / 'resume_jsons' / 'test_resume.json'`)
+and write outputs into a dedicated folder (`data_files / 'resume _renderings'`).
+These examples use the package-provided `data_files` helper so they work when
+running from an installed package or from the repository; you can replace
+`data_files` with any Path to a different folder if you prefer to store
+renderings elsewhere.
+
+```python
+from pathlib import Path
+import json
+
+from hired.util import data_files, resume_json_example
+from hired.tools import mk_resume
+from hired.base import RenderingConfig
+
+# Source and target locations (packaged data_files by default)
+resume_path = resume_json_example  # Path object pointing at the packaged JSON
+out_dir = data_files / 'resume _renderings'
+out_dir.mkdir(parents=True, exist_ok=True)
+
+# Load the resume dict
+resume = json.loads(resume_path.read_text())
+
+# 1) Render to nice HTML using a packaged theme (e.g. 'startbootstrap')
+html_bytes = mk_resume(resume, RenderingConfig(format='html', theme='startbootstrap'))
+html_path = out_dir / 'test_resume_html_startbootstrap.html'
+html_path.write_bytes(html_bytes)
+
+# 2) Render to PDF using the same theme. If WeasyPrint is installed you'll
+# get a styled PDF; otherwise the library falls back to a minimal PDF builder.
+pdf_bytes = mk_resume(resume, RenderingConfig(format='pdf', theme='startbootstrap'))
+pdf_path = out_dir / 'test_resume_pdf_startbootstrap.pdf'
+pdf_path.write_bytes(pdf_bytes)
+
+# 3) Render to Markdown — two options:
+#   a) Use mk_resume with a custom template name that produces markdown (if
+#      your theme provides a .j2.md template), or
+#   b) Use a small inline Jinja template that emits markdown and render via
+#      HTMLRenderer.from_string (advanced). Example (a):
+md_bytes = mk_resume(resume, RenderingConfig(format='html', theme='elegant', custom_template='Header.j2.md'))
+md_path = out_dir / 'test_resume_md_elegant.md'
+md_path.write_bytes(md_bytes)
+
+# 4) Parametrizations you may want to try
+# - Change the `theme` to any available theme (list available via ThemeRegistry).
+# - Pass `custom_css` (string) in RenderingConfig to override or augment theme CSS
+#   for PDF rendering.
+# - Use `custom_template` to point at a template file (absolute path) or a
+#   template name found in the theme folder (relative name).
+# - Use your own output path by replacing `out_dir` with any Path you control.
+
+print('Saved examples to', out_dir)
+```
+
+Notes:
+- The snippets above use `data_files` and `resume_json_example` provided by the
+    package so you can run them out-of-the-box. If you install `hired` via pip,
+    these paths resolve to the package data directory inside your environment.
+- `mk_resume` returns bytes and also accepts an `output_path=` argument if you
+    prefer to have it write files directly (see `hired.tools.mk_resume` docs).
+- The PDF quality depends on WeasyPrint when available; when WeasyPrint is not
+    installed the package will still produce a minimal, single-page PDF as a
+    fallback.
 
 ## What to improve / refactor (recommended, ordered)
 

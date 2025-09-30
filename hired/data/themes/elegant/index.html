@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ basics.name or 'Resume' }}</title>
+    <style>
+      body{font-family: Georgia, serif; color:#111; padding:24px}
+      .name{font-size:26px;font-weight:700}
+      section{margin-top:18px}
+    </style>
+  </head>
+  <body>
+    <div class="name">{{ basics.name }}</div>
+    <div class="contact">{{ basics.email }} {% if basics.phone %} • {{ basics.phone }}{% endif %}</div>
+
+    <section>
+      <h3>Experience</h3>
+      {% for w in work %}
+      <div>
+        <strong>{{ w.position }}</strong> — {{ w.company }}<br />
+        <small>{{ w.startDate }} — {{ w.endDate or 'Present' }}</small>
+        {% if w.highlights %}
+        <ul>{% for h in w.highlights %}<li>{{ h }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </section>
+  </body>
+</html>

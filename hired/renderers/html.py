@@ -90,6 +90,61 @@ class ThemeRegistry(ABCMapping):
                 # ignore directories we cannot list
                 pass
 
+        # Attempt to load stylesheet content for discovered themes.
+        # We look for common filenames inside the theme folder (styles.css, style.css)
+        # or a sibling CSS named after the template (e.g. default.css).
+        css_candidates = ['styles.css', 'style.css']
+        for tname, meta in list(self._themes.items()):
+            tpl = meta.get('template', '')
+            if not tpl:
+                # nothing to locate
+                continue
+            loaded_css = ''
+            # If template is in a folder (folder/index.html), prefer folder/styles.css
+            parts = tpl.split(os.path.sep)
+            if len(parts) > 1:
+                folder = parts[0]
+                for base in search_paths or []:
+                    try:
+                        for css_name in css_candidates:
+                            css_path = os.path.join(base, folder, css_name)
+                            if os.path.exists(css_path):
+                                try:
+                                    with open(css_path, 'r', encoding='utf-8') as cf:
+                                        loaded_css = cf.read()
+                                except Exception:
+                                    loaded_css = ''
+                                break
+                        if loaded_css:
+                            break
+                    except Exception:
+                        continue
+            else:
+                # Template lives at root of a search path: look for a sibling CSS with same basename
+                base_name = os.path.splitext(tpl)[0]
+                for base in search_paths or []:
+                    try:
+                        # check common names first, then basename.css
+                        for css_name in css_candidates + [f"{base_name}.css"]:
+                            css_path = os.path.join(base, css_name)
+                            if os.path.exists(css_path):
+                                try:
+                                    with open(css_path, 'r', encoding='utf-8') as cf:
+                                        loaded_css = cf.read()
+                                except Exception:
+                                    loaded_css = ''
+                                break
+                        if loaded_css:
+                            break
+                    except Exception:
+                        continue
+
+            # Store CSS text (possibly empty) into theme metadata
+            try:
+                self._themes[tname]['css'] = loaded_css or ''
+            except Exception:
+                pass
+
     def __getitem__(self, theme_name: str) -> dict:
         return self._themes[theme_name]
 
