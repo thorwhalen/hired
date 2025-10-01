@@ -1,0 +1,149 @@
+body {
+  --fg-color: black;
+  --bg-color: #fff;
+  --header-h1-fg-color: #fff;
+  --header-h2-fg-color: #f3f3f3;
+  --header-bg-color: #1866c3;
+  --link-color: #3061a5;
+  --separator-color: #e2e2e2;
+
+  margin: 0;
+  color: var(--fg-color);
+  background: var(--bg-color);
+  font-size: 15px;
+  font-family: Roboto, 'Helvetica Neue', 'Arial Nova', 'Liberation Sans', Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --fg-color: #eee;
+    --bg-color: #2c2c2c;
+    --header-h1-fg-color: #ddd;
+    --header-h2-fg-color: #eee;
+    --header-bg-color: #1b1b1b;
+    --link-color: #70a1e5;
+    --separator-color: #939393
+  }
+}
+
+em {
+  color: #999;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+section {
+  margin-bottom: 2em;
+}
+
+.item {
+  break-inside: avoid;
+}
+
+header {
+  background: var(--header-bg-color);
+  padding: 50px;
+  margin-bottom: 50px;
+}
+
+header h1 {
+  color: var(--header-h1-fg-color);
+  max-width: 772px;
+  margin: 0 auto;
+}
+
+header h2 {
+  color: var(--header-h2-fg-color);
+  font-size: 1em;
+  max-width: 772px;
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 772px;
+  padding: 0 50px;
+  margin: 0 auto;
+}
+
+#basics {
+  margin-bottom: 10px;
+  border-bottom: 1px var(--separator-color) solid;
+}
+
+.split {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.split strong {
+  margin-right: 2em;
+}
+
+.website,
+.email,
+.phone,
+#profiles .item,
+#languages .item,
+#interests .item,
+#skills .item {
+  width: 50%;
+}
+
+.username {
+  margin-top: .5em;
+}
+
+.work_date,
+.work_position,
+.work_website,
+.institution,
+.study_date,
+.qualification {
+  margin-bottom: 10px;
+  width: 30%;
+}
+
+.courses,
+#references,
+#interests {
+  clear: both;
+}
+
+.dissertation {
+  margin-top: 10px;
+}
+
+#work,
+#volunteer {
+  padding-bottom: 5px;
+  border-bottom: 1px var(--separator-color) solid;
+}
+
+#work .item,
+#volunteer .item {
+  margin: 25px 0;
+}
+
+#skills {
+  margin-bottom: 10px;
+  border-bottom: 1px var(--separator-color) solid;
+  padding-bottom: 5px;
+  overflow: hidden;
+}
+
+#skills .item,
+#languages .item,
+#interests .item {
+  margin: 0 0 25px 0;
+}
+
+@page {
+  margin: 2em 0 0 0;
+}
+
+@page :first {
+  margin: 0;
+}

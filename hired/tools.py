@@ -6,6 +6,7 @@ the entire pipeline.
 """
 
 from typing import Any, Mapping
+from pathlib import Path
 from hired.base import (
     RenderingConfig,
     ContentSource,
@@ -27,7 +28,7 @@ def mk_content_for_resume(
     *,
     agent: Any | None = None,
     validate: bool = True,
-    strict: bool = False
+    strict: bool = False,
 ) -> ResumeSchemaExtended:
     """
     Generate resume content from candidate and job information.
@@ -57,7 +58,7 @@ def mk_resume(
     rendering: RenderingConfig | dict | None = None,
     *,
     output_path: str | None = None,
-    strict: bool = False
+    strict: bool = False,
 ) -> bytes:
     """
     Render resume content to final format.
@@ -80,3 +81,56 @@ def mk_resume(
         with open(output_path, 'wb') as f:
             f.write(result)
     return result
+
+
+def render_resume_with_template_and_css(
+    content: ResumeSchemaExtended | dict,
+    template_path: str | Path,
+    css_path: str | Path | None = None,
+    *,
+    format='pdf',
+    strict: bool = False,
+) -> bytes:
+    """Render a resume dict (or pydantic model) to PDF using a specific
+    HTML template file and optional CSS file.
+
+    Args:
+        content: Resume content as a dict or ResumeSchemaExtended instance.
+        template_path: Path to an HTML/Jinja template file to render from.
+        css_path: Optional path to a CSS file; its contents will be passed to
+            the renderer as `custom_css` so PDF rendering picks up the styles.
+        format: Output format, 'pdf' or 'html'. Default is 'pdf'.
+        strict: If True, enable stricter schema validation.
+
+    Returns:
+        PDF file bytes.
+    """
+    from pathlib import Path
+
+    # Normalize input content (mk_resume will also normalize, but do it here
+    # to provide clearer error messages earlier).
+    content = ensure_resume_content_dict(content)
+    if isinstance(content, dict):
+        content = normalize_and_validate_resume(content, strict=strict)
+    elif hasattr(content, 'model_dump'):
+        content = normalize_and_validate_resume(content.model_dump(), strict=strict)
+
+    tpl_path = Path(template_path)
+    if not tpl_path.exists():
+        raise FileNotFoundError(f"Template file not found: {tpl_path}")
+
+    css_text = None
+    if css_path is not None:
+        css_path = Path(css_path)
+        if not css_path.exists():
+            raise FileNotFoundError(f"CSS file not found: {css_path}")
+        css_text = css_path.read_text(encoding='utf-8')
+
+    rendering = RenderingConfig(
+        format=format,
+        theme='default',
+        custom_template=str(tpl_path),
+        custom_css=css_text,
+    )
+
+    return mk_resume(content, rendering, strict=strict)
