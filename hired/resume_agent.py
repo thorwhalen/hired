@@ -20,6 +20,9 @@ import hashlib
 import pickle
 
 
+APP_DATA_PATH = Path.home() / ".cache" / "hired"
+SESSION_DATA_PATH = APP_DATA_PATH / "resume_agent_sessions"
+
 # ============================================================================
 # Base Types and Protocols
 # ============================================================================
@@ -174,29 +177,29 @@ class SessionSnapshot:
 # ============================================================================
 
 
-class SessionCache:
+class SessionStore:
     """
-    Manages automatic caching of resume sessions.
+    Manages automatic persistence of resume sessions.
 
     Sessions are saved after each chat turn to enable recovery and history.
 
-    >>> cache = SessionCache()
-    >>> cache.cache_dir
+    >>> store = SessionStore()
+    >>> store.data_dir
     PosixPath('~/.cache/hired/resume_agent_sessions')
     """
 
-    def __init__(self, *, cache_dir: Optional[Path] = None):
-        self.cache_dir = self._resolve_cache_dir(cache_dir)
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
+    def __init__(self, *, data_dir: Optional[Path] = None):
+        self.data_dir = self._resolve_data_dir(data_dir)
+        self.data_dir.mkdir(parents=True, exist_ok=True)
 
     @staticmethod
-    def _resolve_cache_dir(cache_dir: Optional[Path]) -> Path:
-        """Resolve cache directory path."""
-        if cache_dir:
-            return Path(cache_dir).expanduser()
+    def _resolve_data_dir(data_dir: Optional[Path]) -> Path:
+        """Resolve data directory path."""
+        if data_dir:
+            return Path(data_dir).expanduser()
 
         # Default: ~/.cache/hired/resume_agent_sessions/
-        default = Path.home() / ".cache" / "hired" / "resume_agent_sessions"
+        default = SESSION_DATA_PATH
         return default
 
     def _generate_session_id(self, job_info: str, candidate_info: str) -> str:
@@ -207,12 +210,12 @@ class SessionCache:
 
     def save_session(self, session: 'ResumeSession') -> Path:
         """
-        Save session to cache.
+        Save session to persistent storage.
 
         Returns path to saved session file.
         """
         session_id = session.session_id
-        session_file = self.cache_dir / f"{session_id}.pkl"
+        session_file = self.data_dir / f"{session_id}.pkl"
 
         # Create serializable session data
         session_data = {
@@ -233,7 +236,7 @@ class SessionCache:
             pickle.dump(session_data, f)
 
         # Also save JSON version for human readability
-        json_file = self.cache_dir / f"{session_id}.json"
+        json_file = self.data_dir / f"{session_id}.json"
         with open(json_file, 'w') as f:
             json.dump(session_data, f, indent=2, default=str)
 
@@ -243,11 +246,11 @@ class SessionCache:
         self, session_id: str, *, llm_config: Optional[LLMConfig] = None
     ) -> Optional['ResumeSession']:
         """
-        Load session from cache.
+        Load session from persistent storage.
 
         Returns None if session not found.
         """
-        session_file = self.cache_dir / f"{session_id}.pkl"
+        session_file = self.data_dir / f"{session_id}.pkl"
 
         if not session_file.exists():
             return None
@@ -263,7 +266,7 @@ class SessionCache:
             candidate_info=session_data['candidate_info'],
             llm_config=config,
             mode=OperationMode(session_data['mode']),
-            auto_cache=False,  # Prevent re-caching during load
+            auto_persist=False,  # Prevent re-persisting during load
         )
 
         # Restore state
@@ -280,11 +283,11 @@ class SessionCache:
 
     def list_sessions(self) -> Iterable[dict]:
         """
-        List all cached sessions.
+        List all persisted sessions.
 
         Yields session metadata dicts.
         """
-        for json_file in self.cache_dir.glob("*.json"):
+        for json_file in self.data_dir.glob("*.json"):
             try:
                 with open(json_file) as f:
                     data = json.load(f)
@@ -299,9 +302,9 @@ class SessionCache:
                 continue
 
     def delete_session(self, session_id: str) -> bool:
-        """Delete session from cache."""
-        pkl_file = self.cache_dir / f"{session_id}.pkl"
-        json_file = self.cache_dir / f"{session_id}.json"
+        """Delete session from persistent storage."""
+        pkl_file = self.data_dir / f"{session_id}.pkl"
+        json_file = self.data_dir / f"{session_id}.json"
 
         deleted = False
         if pkl_file.exists():
@@ -432,8 +435,8 @@ class ResumeSession:
         max_recent_turns: int = 10,
         llm_config: Optional[LLMConfig] = None,
         model_registry: Optional[ModelRegistry] = None,
-        auto_cache: bool = True,
-        cache_dir: Optional[Path] = None,
+        auto_persist: bool = True,
+        data_dir: Optional[Path] = None,
     ):
         self.job_info = job_info
         self.candidate_info = candidate_info
@@ -459,9 +462,9 @@ class ResumeSession:
         self.created_at = datetime.now()
         self.session_id = self._generate_session_id()
 
-        # Caching
-        self.auto_cache = auto_cache
-        self._cache = SessionCache(cache_dir=cache_dir) if auto_cache else None
+        # Persistence
+        self.auto_persist = auto_persist
+        self._store = SessionStore(data_dir=data_dir) if auto_persist else None
 
         # Initialize state with job and candidate info
         self._state['candidate']['raw_info'] = candidate_info
@@ -542,7 +545,7 @@ produce high-quality results."""
         Process user instruction and return assistant response.
 
         This is the main interface for manual mode operation.
-        Automatically caches session after each turn if auto_cache enabled.
+        Automatically persists session after each turn if auto_persist enabled.
         """
         # Add user message to history
         self._memory.add_turn("user", user_message)
@@ -557,8 +560,8 @@ produce high-quality results."""
         self._memory.add_turn("assistant", assistant_response)
 
         # Auto-save session
-        if self.auto_cache:
-            self._cache.save_session(self)
+        if self.auto_persist:
+            self.save()
 
         return assistant_response
 
@@ -863,46 +866,46 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         )
 
         # Save after mode switch
-        if self.auto_cache:
-            self._cache.save_session(self)
+        if self.auto_persist:
+            self.save()
 
-    def save(self, cache_dir: Optional[Path] = None) -> Path:
+    def save(self, data_dir: Optional[Path] = None) -> Path:
         """
-        Manually save session to cache.
+        Manually save session to persistent storage.
 
         Returns path to saved session file.
         """
-        cache = self._cache or SessionCache(cache_dir=cache_dir)
-        return cache.save_session(self)
+        store = self._store or SessionStore(data_dir=data_dir)
+        return store.save_session(self)
 
     @classmethod
     def load(
         cls,
         session_id: str,
         *,
-        cache_dir: Optional[Path] = None,
+        data_dir: Optional[Path] = None,
         llm_config: Optional[LLMConfig] = None,
     ) -> Optional['ResumeSession']:
         """
-        Load session from cache.
+        Load session from persistent storage.
 
         >>> session = ResumeSession.load("abc123def456")
         >>> session.session_id if session else None
         'abc123def456'
         """
-        cache = SessionCache(cache_dir=cache_dir)
-        return cache.load_session(session_id, llm_config=llm_config)
+        store = SessionStore(data_dir=data_dir)
+        return store.load_session(session_id, llm_config=llm_config)
 
     @classmethod
-    def list_cached(cls, cache_dir: Optional[Path] = None) -> Iterable[dict]:
+    def list_persisted(cls, data_dir: Optional[Path] = None) -> Iterable[dict]:
         """
-        List all cached sessions.
+        List all persisted sessions.
 
-        >>> for session_info in ResumeSession.list_cached():
+        >>> for session_info in ResumeSession.list_persisted():
         ...     print(session_info['session_id'])
         """
-        cache = SessionCache(cache_dir=cache_dir)
-        return cache.list_sessions()
+        store = SessionStore(data_dir=data_dir)
+        return store.list_sessions()
 
 
 # ============================================================================
@@ -1487,31 +1490,34 @@ def _example_custom_provider_registry():
     )
 
 
-def _example_caching():
-    """Example of session caching and recovery."""
+def _example_persistence():
+    """Example of session persistence and recovery."""
 
     job_info = "Senior ML Engineer at TechCo..."
     candidate_info = "Jane Doe, 6 years experience..."
 
-    # Create session with auto-caching (enabled by default)
+    # Create session with auto-persistence (enabled by default)
     config = LLMConfig(
         model="deepseek-r1:8b", provider="ollama", base_url="http://localhost:11434"
     )
 
     session = ResumeSession(
-        job_info, candidate_info, llm_config=config, auto_cache=True  # Default is True
+        job_info,
+        candidate_info,
+        llm_config=config,
+        auto_persist=True,  # Default is True
     )
 
     print(f"Created session: {session.session_id}")
-    print(f"Cache location: {session._cache.cache_dir}")
+    print(f"Data location: {session._store.data_dir}")
 
     # Each chat is automatically saved
     r1 = session.chat("Extract key job requirements")
     r2 = session.chat("Expand my experience bullets")
 
-    # Later: List all cached sessions
-    print("\nCached sessions:")
-    for info in ResumeSession.list_cached():
+    # Later: List all persisted sessions
+    print("\nPersisted sessions:")
+    for info in ResumeSession.list_persisted():
         print(
             f"  - {info['session_id']}: {info['turn_count']} turns, "
             f"updated {info['updated_at']}"
@@ -1525,17 +1531,17 @@ def _example_caching():
         # Continue from where you left off
         r3 = loaded.chat("Generate the resume now")
 
-    # Custom cache directory
+    # Custom data directory
     custom_session = ResumeSession(
         job_info,
         candidate_info,
         llm_config=config,
-        cache_dir=Path("./my_resume_sessions"),
+        data_dir=Path("./my_resume_sessions"),
     )
 
-    # Disable auto-caching and save manually
+    # Disable auto-persisting and save manually
     manual_session = ResumeSession(
-        job_info, candidate_info, llm_config=config, auto_cache=False
+        job_info, candidate_info, llm_config=config, auto_persist=False
     )
     manual_session.chat("Do something")
     manual_session.save()  # Explicit save
@@ -1546,4 +1552,4 @@ if __name__ == "__main__":
     print("\n" + "=" * 80 + "\n")
     _example_auto_usage()
     print("\n" + "=" * 80 + "\n")
-    _example_caching()
+    _example_persistence()
