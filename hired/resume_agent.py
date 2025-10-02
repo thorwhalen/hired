@@ -11,7 +11,17 @@ Architecture follows supervisor-worker pattern with:
 """
 
 from dataclasses import dataclass, field, asdict
-from typing import Iterable, Iterator, Optional, Protocol, Any, MutableMapping
+from typing import (
+    Iterable,
+    Iterator,
+    Optional,
+    Protocol,
+    Any,
+    MutableMapping,
+    Callable,
+    List,
+    Set,
+)
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -171,6 +181,95 @@ class SessionSnapshot:
     data: dict
     mode: str
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
+
+
+@dataclass
+class PlanStep:
+    """A single step in an execution plan."""
+
+    id: str
+    action: str  # e.g., "analyze_job", "expand_achievements"
+    description: str  # Human-readable description
+    params: dict = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)  # IDs of prerequisite steps
+    estimated_tokens: Optional[int] = None
+
+    def can_execute(self, completed_steps: set[str]) -> bool:
+        """Check if all dependencies are satisfied."""
+        return all(dep_id in completed_steps for dep_id in self.dependencies)
+
+
+@dataclass
+class Plan:
+    """Structured execution plan for resume creation."""
+
+    steps: list[PlanStep]
+    rationale: str
+    created_at: str = field(default_factory=lambda: datetime.now().isoformat())
+
+    def to_markdown(self) -> str:
+        """Convert plan to human-readable markdown."""
+        lines = [f"# Resume Creation Plan\n", f"**Rationale:** {self.rationale}\n"]
+        for i, step in enumerate(self.steps, 1):
+            deps = (
+                f" (depends on: {', '.join(step.dependencies)})"
+                if step.dependencies
+                else ""
+            )
+            lines.append(f"{i}. **[{step.action}]** {step.description}{deps}")
+            if step.params:
+                lines.append(f"   - Params: {step.params}")
+        return "\n".join(lines)
+
+    def validate(self) -> list[str]:
+        """Validate plan structure and dependencies."""
+        errors = []
+        step_ids = {step.id for step in self.steps}
+
+        # Check for missing dependencies and self-dependency
+        for step in self.steps:
+            for dep_id in step.dependencies:
+                if dep_id not in step_ids:
+                    errors.append(
+                        f"Step '{step.id}' depends on non-existent step '{dep_id}'"
+                    )
+            if step.id in step.dependencies:
+                errors.append(f"Step '{step.id}' depends on itself")
+
+        # Detect cycles in dependency graph using DFS
+        graph = {step.id: list(step.dependencies) for step in self.steps}
+
+        visiting: Set[str] = set()
+        visited: Set[str] = set()
+
+        def dfs(node: str) -> bool:
+            if node in visited:
+                return False
+            if node in visiting:
+                return True  # cycle found
+
+            visiting.add(node)
+            for nbr in graph.get(node, []):
+                if dfs(nbr):
+                    return True
+            visiting.remove(node)
+            visited.add(node)
+            return False
+
+        for node in graph:
+            if dfs(node):
+                errors.append(f"Dependency cycle detected involving step '{node}'")
+                break
+
+        return errors
+
+    def get_executable_steps(self, completed_steps: set[str]) -> list[PlanStep]:
+        """Get steps that can currently be executed."""
+        return [
+            step
+            for step in self.steps
+            if step.id not in completed_steps and step.can_execute(completed_steps)
+        ]
 
 
 # ============================================================================
@@ -911,7 +1010,7 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
     def history(self) -> list[Turn]:
         """Get all conversation turns."""
         return self._memory.get_all_turns()
-    
+
     def __iter__(self) -> Iterator[Turn]:
         """Iterate over conversation turns."""
         return iter(self._memory.get_all_turns())
@@ -1345,34 +1444,311 @@ class ResumeExpertAgent:
         4. Generate resume
         5. Critique and refine
         """
-        # Switch session to auto mode
-        original_mode = session.mode
-        session.switch_mode(OperationMode.AUTO)
+        # Generate plan
+        plan = self.propose_plan(session, mode=mode)
 
-        try:
-            # Plan-and-Execute pattern
-            plan = self._create_plan(session, mode)
-            self._execute_plan(session, plan)
-            resume = self._generate_resume(session)
-            refined_resume = self._critique_and_refine(session, resume)
+        # Execute plan
+        execution_result = self.execute_plan(session, plan, interactive=False)
 
-            return refined_resume
+        if not execution_result.get("success"):
+            return f"Error executing plan: {execution_result.get('error', 'Unknown error')}"
 
-        finally:
-            # Restore original mode
-            session.switch_mode(original_mode)
+        # Extract final resume from session state
+        if 'resume' in session.state._data.get('drafts', {}):
+            return session.state['drafts']['resume']
+
+        # Fallback: get from last generation step
+        for step_id in reversed(execution_result.get("completed_steps", [])):
+            result = execution_result["results"].get(step_id)
+            if result and result["action"] in ["generate_draft", "refine"]:
+                return result["response"]
+
+        return "Resume generation completed but no resume found in results."
 
     def _create_plan(self, session: ResumeSession, mode: str) -> list[dict]:
         """Create execution plan for resume generation."""
-        # TODO: Implement with LLM planning
-        plan = [
+        # Deprecated. Use propose_plan instead.
+        return [
             {"action": "analyze_job", "params": {}},
             {"action": "extract_key_requirements", "params": {}},
             {"action": "expand_achievements", "params": {}},
             {"action": "match_experience", "params": {}},
             {"action": "generate_draft", "params": {}},
         ]
-        return plan
+
+    def propose_plan(self, session: ResumeSession, *, mode: str = "standard") -> Plan:
+        """
+        Generate execution plan for resume creation.
+
+        Returns structured Plan object that can be edited before execution.
+        """
+        # TODO: Replace with actual LLM-based planning
+        # For now, generate reasonable default plan based on mode
+
+        if mode == "comprehensive":
+            steps = [
+                PlanStep(
+                    id="step_1",
+                    action="analyze_job",
+                    description="Analyze job description to extract key requirements and priorities",
+                    params={},
+                ),
+                PlanStep(
+                    id="step_2",
+                    action="search_company",
+                    description="Research the company to understand culture and values",
+                    params={"company_name": "extracted_from_job_info"},
+                    dependencies=["step_1"],
+                ),
+                PlanStep(
+                    id="step_3",
+                    action="match_skills",
+                    description="Identify strongest matches between candidate experience and job requirements",
+                    params={},
+                    dependencies=["step_1"],
+                ),
+                PlanStep(
+                    id="step_4",
+                    action="expand_achievements",
+                    description="Expand top 3-5 achievements with metrics and impact",
+                    params={"count": 5},
+                    dependencies=["step_3"],
+                ),
+                PlanStep(
+                    id="step_5",
+                    action="generate_draft",
+                    description="Generate complete resume draft in markdown",
+                    params={"format": "markdown", "length": "1-page"},
+                    dependencies=["step_4"],
+                ),
+                PlanStep(
+                    id="step_6",
+                    action="critique",
+                    description="Review and critique the draft for improvements",
+                    params={},
+                    dependencies=["step_5"],
+                ),
+                PlanStep(
+                    id="step_7",
+                    action="refine",
+                    description="Apply improvements from critique",
+                    params={},
+                    dependencies=["step_6"],
+                ),
+            ]
+            rationale = "Comprehensive approach: research company, match skills carefully, expand key achievements, then generate and refine."
+        else:  # standard mode
+            steps = [
+                PlanStep(
+                    id="step_1",
+                    action="analyze_job",
+                    description="Extract key requirements from job description",
+                    params={},
+                ),
+                PlanStep(
+                    id="step_2",
+                    action="expand_achievements",
+                    description="Expand candidate's top 3 achievements",
+                    params={"count": 3},
+                    dependencies=["step_1"],
+                ),
+                PlanStep(
+                    id="step_3",
+                    action="generate_draft",
+                    description="Generate resume draft",
+                    params={"format": "markdown"},
+                    dependencies=["step_2"],
+                ),
+            ]
+            rationale = "Standard approach: analyze requirements, expand key achievements, generate resume."
+
+        return Plan(steps=steps, rationale=rationale)
+
+    def revise_plan(self, plan: Plan, instruction: str) -> Plan:
+        """
+        Revise plan based on natural language instruction.
+
+        Uses LLM to interpret instruction and modify plan accordingly.
+        """
+        # Try to use planner LLM if available to parse the instruction
+        import copy
+
+        revised = copy.deepcopy(plan)
+
+        if self._planner_llm:
+            try:
+                prompt = (
+                    "You are a planner. Given the following plan (JSON) and a user instruction,"
+                    " produce a revised plan as JSON with fields: steps (array of {id, action, description, params, dependencies})"
+                )
+                plan_json = {
+                    "rationale": revised.rationale,
+                    "steps": [
+                        {
+                            "id": s.id,
+                            "action": s.action,
+                            "description": s.description,
+                            "params": s.params,
+                            "dependencies": s.dependencies,
+                        }
+                        for s in revised.steps
+                    ],
+                }
+
+                # Prefer chat-style interface
+                try:
+                    response = self._planner_llm.chat(
+                        [
+                            {"role": "system", "content": prompt},
+                            {"role": "system", "content": json.dumps(plan_json)},
+                            {"role": "user", "content": instruction},
+                        ]
+                    )
+                except Exception:
+                    response = self._planner_llm.complete(
+                        f"{prompt}\nPLAN:{json.dumps(plan_json)}\nINSTRUCTION:{instruction}"
+                    )
+
+                # Parse JSON response into Plan
+                try:
+                    parsed = json.loads(response)
+                    new_steps = []
+                    for s in parsed.get("steps", []):
+                        new_steps.append(
+                            PlanStep(
+                                id=s["id"],
+                                action=s.get("action", ""),
+                                description=s.get("description", ""),
+                                params=s.get("params", {}),
+                                dependencies=s.get("dependencies", []),
+                            )
+                        )
+                    revised.steps = new_steps
+                    revised.rationale = parsed.get("rationale", revised.rationale)
+                    return revised
+                except Exception:
+                    revised.rationale += f"\n\nUser requested: {instruction} (planner LLM returned non-JSON)"
+                    return revised
+
+            except Exception as e:
+                revised.rationale += (
+                    f"\n\nPlan revision attempted but planner LLM error: {e}"
+                )
+                return revised
+
+        # No planner LLM available: append note to rationale
+        revised.rationale += f"\n\nUser requested: {instruction}"
+        return revised
+
+    def execute_plan(
+        self,
+        session: ResumeSession,
+        plan: Plan,
+        *,
+        interactive: bool = False,
+        approval_callback: Optional[Callable[[PlanStep], str]] = None,
+    ) -> dict:
+        """
+        Execute a plan step by step.
+
+        Args:
+            session: Resume session to operate on
+            plan: Plan to execute
+            interactive: If True, pause after each step for approval
+
+        Returns:
+            Dict with execution results and final outputs
+        """
+        # Validate plan first
+        errors = plan.validate()
+        if errors:
+            return {"success": False, "errors": errors, "completed_steps": []}
+
+        completed_steps = set()
+        results = {}
+
+        # Switch to auto mode for execution
+        original_mode = session.mode
+        session.switch_mode(OperationMode.AUTO)
+
+        try:
+            while len(completed_steps) < len(plan.steps):
+                # Get executable steps
+                executable = plan.get_executable_steps(completed_steps)
+
+                if not executable:
+                    # Deadlock - no steps can execute
+                    return {
+                        "success": False,
+                        "error": "Plan deadlock: no executable steps remaining",
+                        "completed_steps": list(completed_steps),
+                        "results": results,
+                    }
+
+                # Execute first executable step
+                step = executable[0]
+
+                if interactive:
+                    if approval_callback:
+                        response = approval_callback(step).lower()
+                    else:
+                        print(f"\nExecute: {step.description}?")
+                        response = input("(y/n/skip): ").lower()
+
+                    if response == 'n':
+                        break
+                    elif response == 'skip':
+                        completed_steps.add(step.id)
+                        continue
+
+                # Execute the step
+                instruction = self._step_to_instruction(step)
+                response = session.chat(instruction)
+
+                # Record result
+                results[step.id] = {
+                    "action": step.action,
+                    "description": step.description,
+                    "response": response,
+                    "timestamp": datetime.now().isoformat(),
+                }
+                completed_steps.add(step.id)
+
+                # Record in execution history
+                self._execution_history.append(
+                    {
+                        "step_id": step.id,
+                        "action": step.action,
+                        "params": step.params,
+                        "response": response,
+                        "timestamp": datetime.now(),
+                    }
+                )
+
+            return {
+                "success": True,
+                "completed_steps": list(completed_steps),
+                "results": results,
+            }
+
+        finally:
+            # Restore original mode
+            session.switch_mode(original_mode)
+
+    def _step_to_instruction(self, step: PlanStep) -> str:
+        """Convert a plan step to natural language instruction."""
+        # Map action types to instructions
+        action_templates = {
+            "analyze_job": "Analyze the job description and extract key requirements, focusing on technical skills and experience needed.",
+            "search_company": f"Search for information about {step.params.get('company_name', 'the company')} and provide relevant context for a job candidate.",
+            "match_skills": "Identify and list the strongest matches between the candidate's experience and the job requirements.",
+            "expand_achievements": f"Expand the candidate's top {step.params.get('count', 3)} achievements into detailed bullet points with metrics and impact.",
+            "generate_draft": f"Generate a complete {step.params.get('length', '')} resume in {step.params.get('format', 'markdown')} format.",
+            "critique": "Critique the current resume draft and identify specific areas for improvement.",
+            "refine": "Refine the resume based on the previous critique, implementing the suggested improvements.",
+        }
+
+        return action_templates.get(step.action, f"Perform action: {step.description}")
 
     def _execute_plan(self, session: ResumeSession, plan: list[dict]) -> None:
         """Execute plan steps using session tools."""
@@ -1643,9 +2019,49 @@ def _example_persistence():
     manual_session.save()  # Explicit save
 
 
+def _example_semi_auto_usage():
+    """Example of semi-autonomous mode with plan editing."""
+
+    job_info = "Senior ML Engineer at TechCo..."
+    candidate_info = "Jane Doe, 6 years experience..."
+
+    config = LLMConfig(
+        model="deepseek-r1:8b", provider="ollama", base_url="http://localhost:11434"
+    )
+
+    session = ResumeSession(job_info, candidate_info, llm_config=config)
+    agent = ResumeExpertAgent(llm_config=config)
+
+    # 1. Agent proposes plan
+    plan = agent.propose_plan(session, mode="comprehensive")
+    print(plan.to_markdown())
+
+    # 2. User edits plan (example: remove company search)
+    plan.steps = [s for s in plan.steps if s.action != "search_company"]
+
+    # 3. Validate edited plan
+    errors = plan.validate()
+    if errors:
+        print(f"Plan validation errors: {errors}")
+
+    # 4. Execute with approval at each step
+    result = agent.execute_plan(session, plan, interactive=True)
+
+    # Or: Execute automatically
+    # result = agent.execute_plan(session, plan)
+
+    print(f"\nExecution completed: {result.get('success')}")
+    print(f"Completed {len(result.get('completed_steps', []))} steps")
+
+
 if __name__ == "__main__":
     _example_manual_usage()
+
+    print("\n" + "=" * 80 + "\n")
+    _example_semi_auto_usage()
+
     print("\n" + "=" * 80 + "\n")
     _example_auto_usage()
+
     print("\n" + "=" * 80 + "\n")
     _example_persistence()
