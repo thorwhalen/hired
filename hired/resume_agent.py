@@ -11,13 +11,14 @@ Architecture follows supervisor-worker pattern with:
 """
 
 from dataclasses import dataclass, field, asdict
-from typing import Iterable, Iterator, Optional, Protocol, Any
+from typing import Iterable, Iterator, Optional, Protocol, Any, MutableMapping
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
 import json
 import hashlib
 import pickle
+import copy
 
 
 APP_DATA_PATH = Path.home() / ".cache" / "hired"
@@ -177,7 +178,7 @@ class SessionSnapshot:
 # ============================================================================
 
 
-class SessionStore:
+class SessionStore(MutableMapping):
     """
     Manages automatic persistence of resume sessions.
 
@@ -229,6 +230,7 @@ class SessionStore:
             'created_at': session.created_at.isoformat(),
             'updated_at': datetime.now().isoformat(),
             'llm_config': asdict(session.llm_config),
+            'name': getattr(session, 'name', None),
         }
 
         # Save with pickle for full object support
@@ -267,6 +269,7 @@ class SessionStore:
             llm_config=config,
             mode=OperationMode(session_data['mode']),
             auto_persist=False,  # Prevent re-persisting during load
+            name=session_data.get('name'),
         )
 
         # Restore state
@@ -278,6 +281,9 @@ class SessionStore:
         session._memory._turns = [
             Turn(**turn_data) for turn_data in session_data['history']
         ]
+
+        # Restore optional name
+        session.name = session_data.get('name')
 
         return session
 
@@ -297,6 +303,7 @@ class SessionStore:
                         'updated_at': data['updated_at'],
                         'turn_count': len(data['history']),
                         'mode': data['mode'],
+                        'name': data.get('name'),
                     }
             except Exception:
                 continue
@@ -315,6 +322,59 @@ class SessionStore:
             deleted = True
 
         return deleted
+
+    # -----------------------------
+    # MutableMapping interface
+    # -----------------------------
+    def __getitem__(self, key):
+        """s[key] or s[(key, llm_config)] -> load_session(key, llm_config=...)
+
+        Accepts either a single session_id string or a tuple of (session_id, llm_config).
+        """
+        if isinstance(key, tuple):
+            session_id, maybe_cfg = key
+            if isinstance(maybe_cfg, LLMConfig):
+                return self.load_session(session_id, llm_config=maybe_cfg)
+            elif isinstance(maybe_cfg, dict):
+                return self.load_session(session_id, llm_config=LLMConfig(**maybe_cfg))
+            else:
+                # Try to pass through whatever it is; load_session will error if invalid
+                return self.load_session(session_id, llm_config=maybe_cfg)
+        else:
+            return self.load_session(key)
+
+    def __setitem__(self, key, value: 'ResumeSession') -> None:
+        """s[session_id] = session -> save session, aligning session_id if needed."""
+        session_id = key
+        if not isinstance(value, ResumeSession):
+            raise TypeError("Value must be a ResumeSession instance")
+
+        # If the session_id differs, deepcopy and align the id to avoid mutating caller
+        if getattr(value, 'session_id', None) != session_id:
+            new_session = copy.deepcopy(value)
+            new_session.session_id = session_id
+            # Optionally update created_at to now for the new id
+            new_session.created_at = getattr(new_session, 'created_at', datetime.now())
+            self.save_session(new_session)
+        else:
+            self.save_session(value)
+
+    def __delitem__(self, key) -> None:
+        deleted = self.delete_session(key)
+        if not deleted:
+            raise KeyError(key)
+
+    def __iter__(self) -> Iterator[str]:
+        """Iterate over session ids (so list(s) == s.list_sessions())."""
+        for info in self.list_sessions():
+            yield info['session_id']
+
+    def __len__(self) -> int:
+        return sum(1 for _ in self.list_sessions())
+
+    def add(self, session: 'ResumeSession') -> Path:
+        """Alias for save_session to behave like a set.add(session)."""
+        return self.save_session(session)
 
 
 # ============================================================================
@@ -437,6 +497,7 @@ class ResumeSession:
         model_registry: Optional[ModelRegistry] = None,
         auto_persist: bool = True,
         data_dir: Optional[Path] = None,
+        name: Optional[str] = None,
     ):
         self.job_info = job_info
         self.candidate_info = candidate_info
@@ -465,6 +526,9 @@ class ResumeSession:
         # Persistence
         self.auto_persist = auto_persist
         self._store = SessionStore(data_dir=data_dir) if auto_persist else None
+
+        # Optional human-friendly name for the session
+        self.name = name
 
         # Initialize state with job and candidate info
         self._state['candidate']['raw_info'] = candidate_info
@@ -847,6 +911,10 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
     def history(self) -> list[Turn]:
         """Get all conversation turns."""
         return self._memory.get_all_turns()
+    
+    def __iter__(self) -> Iterator[Turn]:
+        """Iterate over conversation turns."""
+        return iter(self._memory.get_all_turns())
 
     @property
     def state(self) -> SessionState:
@@ -857,6 +925,34 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
     def snapshots(self) -> list[SessionSnapshot]:
         """Get all session snapshots."""
         return self._snapshots.copy()
+
+    @property
+    def metadata(self) -> dict:
+        """Return a small metadata dict for quick inspection.
+
+        Includes: session_id, name, created_at (iso), n_turns, mode, model
+        """
+        return {
+            'session_id': getattr(self, 'session_id', None),
+            'name': getattr(self, 'name', None),
+            'created_at': (
+                getattr(self, 'created_at', None).isoformat()
+                if getattr(self, 'created_at', None)
+                else None
+            ),
+            'n_turns': len(self.history) if self.history is not None else 0,
+            'mode': self.mode.value if getattr(self, 'mode', None) else None,
+            'model': getattr(self.llm_config, 'model', None),
+        }
+
+    def __repr__(self) -> str:
+        meta = self.metadata
+        name = f"'{meta['name']}' " if meta.get('name') else ""
+        return (
+            f"<ResumeSession {name}id={meta.get('session_id')} "
+            f"model={meta.get('model')} turns={meta.get('n_turns')} "
+            f"created={meta.get('created_at')}>"
+        )
 
     def switch_mode(self, mode: OperationMode) -> None:
         """Switch between manual and auto operation modes."""
