@@ -96,7 +96,7 @@ class RenderCVRenderer(Renderer):
             pdf_path = temp_path / "resume.pdf"
 
             # Use RenderCV API to create PDF
-            with open(rendercv_yaml_path, 'r') as f:
+            with open(rendercv_yaml_path) as f:
                 yaml_content = f.read()
 
             try:
@@ -234,7 +234,7 @@ class RenderCVRenderer(Renderer):
 
         return basics
 
-    def _ensure_work_complete(self, work_entries: List[dict]) -> List[dict]:
+    def _ensure_work_complete(self, work_entries: list[dict]) -> list[dict]:
         """Ensure work entries have required fields."""
 
         for i, work in enumerate(work_entries):
@@ -268,7 +268,7 @@ class RenderCVRenderer(Renderer):
 
         return work_entries
 
-    def _ensure_education_complete(self, education_entries: List[dict]) -> List[dict]:
+    def _ensure_education_complete(self, education_entries: list[dict]) -> list[dict]:
         """Ensure education entries have required fields."""
 
         for i, edu in enumerate(education_entries):
@@ -334,7 +334,7 @@ class RenderCVRenderer(Renderer):
 
         return fixed_resume
 
-    def _ensure_publications_complete(self, publications: List[dict]) -> List[dict]:
+    def _ensure_publications_complete(self, publications: list[dict]) -> list[dict]:
         """Ensure publications entries have required fields."""
 
         for i, pub in enumerate(publications):
@@ -358,7 +358,7 @@ class RenderCVRenderer(Renderer):
 
         return publications
 
-    def _ensure_projects_complete(self, projects: List[dict]) -> List[dict]:
+    def _ensure_projects_complete(self, projects: list[dict]) -> list[dict]:
         """Ensure projects entries have required fields."""
 
         for i, proj in enumerate(projects):
@@ -382,7 +382,7 @@ class RenderCVRenderer(Renderer):
 
         return projects
 
-    def _ensure_skills_complete(self, skills: List[dict]) -> List[dict]:
+    def _ensure_skills_complete(self, skills: list[dict]) -> list[dict]:
         """Ensure skills entries have required fields."""
 
         for i, skill in enumerate(skills):
@@ -401,7 +401,7 @@ class RenderCVRenderer(Renderer):
 
         return skills
 
-    def _ensure_awards_complete(self, awards: List[dict]) -> List[dict]:
+    def _ensure_awards_complete(self, awards: list[dict]) -> list[dict]:
         """Ensure awards entries have required fields."""
 
         for i, award in enumerate(awards):

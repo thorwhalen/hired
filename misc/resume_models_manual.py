@@ -1,130 +1,129 @@
-
 from typing import Optional, List
 from pydantic import BaseModel, Field, HttpUrl, EmailStr
 from datetime import date
 
 class Location(BaseModel):
-    address: Optional[str] = None
-    postalCode: Optional[str] = None
-    city: Optional[str] = None
-    countryCode: Optional[str] = None
-    region: Optional[str] = None
+    address: str | None = None
+    postalCode: str | None = None
+    city: str | None = None
+    countryCode: str | None = None
+    region: str | None = None
 
 class Profile(BaseModel):
-    network: Optional[str] = None
-    username: Optional[str] = None
-    url: Optional[str] = None
+    network: str | None = None
+    username: str | None = None
+    url: str | None = None
 
 class Basics(BaseModel):
-    name: Optional[str] = None
-    label: Optional[str] = None
-    image: Optional[str] = None
-    email: Optional[EmailStr] = None
-    phone: Optional[str] = None
-    url: Optional[HttpUrl] = None
-    summary: Optional[str] = None
-    location: Optional[Location] = None
-    profiles: Optional[List[Profile]] = None
+    name: str | None = None
+    label: str | None = None
+    image: str | None = None
+    email: EmailStr | None = None
+    phone: str | None = None
+    url: HttpUrl | None = None
+    summary: str | None = None
+    location: Location | None = None
+    profiles: list[Profile] | None = None
 
 class Work(BaseModel):
-    name: Optional[str] = None
-    location: Optional[str] = None
-    description: Optional[str] = None
-    position: Optional[str] = None
-    url: Optional[HttpUrl] = None
-    startDate: Optional[str] = None
-    endDate: Optional[str] = None
-    summary: Optional[str] = None
-    highlights: Optional[List[str]] = None
+    name: str | None = None
+    location: str | None = None
+    description: str | None = None
+    position: str | None = None
+    url: HttpUrl | None = None
+    startDate: str | None = None
+    endDate: str | None = None
+    summary: str | None = None
+    highlights: list[str] | None = None
 
 class Volunteer(BaseModel):
-    organization: Optional[str] = None
-    position: Optional[str] = None
-    url: Optional[HttpUrl] = None
-    startDate: Optional[str] = None
-    endDate: Optional[str] = None
-    summary: Optional[str] = None
-    highlights: Optional[List[str]] = None
+    organization: str | None = None
+    position: str | None = None
+    url: HttpUrl | None = None
+    startDate: str | None = None
+    endDate: str | None = None
+    summary: str | None = None
+    highlights: list[str] | None = None
 
 class Education(BaseModel):
-    institution: Optional[str] = None
-    url: Optional[HttpUrl] = None
-    area: Optional[str] = None
-    studyType: Optional[str] = None
-    startDate: Optional[str] = None
-    endDate: Optional[str] = None
-    score: Optional[str] = None
-    courses: Optional[List[str]] = None
+    institution: str | None = None
+    url: HttpUrl | None = None
+    area: str | None = None
+    studyType: str | None = None
+    startDate: str | None = None
+    endDate: str | None = None
+    score: str | None = None
+    courses: list[str] | None = None
 
 class Award(BaseModel):
-    title: Optional[str] = None
-    date: Optional[str] = None
-    awarder: Optional[str] = None
-    summary: Optional[str] = None
+    title: str | None = None
+    date: str | None = None
+    awarder: str | None = None
+    summary: str | None = None
 
 class Certificate(BaseModel):
-    name: Optional[str] = None
-    date: Optional[str] = None
-    url: Optional[HttpUrl] = None
-    issuer: Optional[str] = None
+    name: str | None = None
+    date: str | None = None
+    url: HttpUrl | None = None
+    issuer: str | None = None
 
 class Publication(BaseModel):
-    name: Optional[str] = None
-    publisher: Optional[str] = None
-    releaseDate: Optional[str] = None
-    url: Optional[HttpUrl] = None
-    summary: Optional[str] = None
+    name: str | None = None
+    publisher: str | None = None
+    releaseDate: str | None = None
+    url: HttpUrl | None = None
+    summary: str | None = None
 
 class Skill(BaseModel):
-    name: Optional[str] = None
-    level: Optional[str] = None
-    keywords: Optional[List[str]] = None
+    name: str | None = None
+    level: str | None = None
+    keywords: list[str] | None = None
 
 class Language(BaseModel):
-    language: Optional[str] = None
-    fluency: Optional[str] = None
+    language: str | None = None
+    fluency: str | None = None
 
 class Interest(BaseModel):
-    name: Optional[str] = None
-    keywords: Optional[List[str]] = None
+    name: str | None = None
+    keywords: list[str] | None = None
 
 class Reference(BaseModel):
-    name: Optional[str] = None
-    reference: Optional[str] = None
+    name: str | None = None
+    reference: str | None = None
 
 class Project(BaseModel):
-    name: Optional[str] = None
-    description: Optional[str] = None
-    highlights: Optional[List[str]] = None
-    keywords: Optional[List[str]] = None
-    startDate: Optional[str] = None
-    endDate: Optional[str] = None
-    url: Optional[str] = None
-    roles: Optional[List[str]] = None
-    entity: Optional[str] = None
-    type: Optional[str] = None
+    name: str | None = None
+    description: str | None = None
+    highlights: list[str] | None = None
+    keywords: list[str] | None = None
+    startDate: str | None = None
+    endDate: str | None = None
+    url: str | None = None
+    roles: list[str] | None = None
+    entity: str | None = None
+    type: str | None = None
 
 class Meta(BaseModel):
-    canonical: Optional[HttpUrl] = None
-    version: Optional[str] = None
-    lastModified: Optional[str] = None
+    canonical: HttpUrl | None = None
+    version: str | None = None
+    lastModified: str | None = None
 
 class Resume(BaseModel):
     """JSON Resume Schema model"""
-    schema_: Optional[HttpUrl] = Field(None, alias="$schema")
-    basics: Optional[Basics] = None
-    work: Optional[List[Work]] = None
-    volunteer: Optional[List[Volunteer]] = None
-    education: Optional[List[Education]] = None
-    awards: Optional[List[Award]] = None
-    certificates: Optional[List[Certificate]] = None
-    publications: Optional[List[Publication]] = None
-    skills: Optional[List[Skill]] = None
-    languages: Optional[List[Language]] = None
-    interests: Optional[List[Interest]] = None
-    references: Optional[List[Reference]] = None
-    projects: Optional[List[Project]] = None
-    meta: Optional[Meta] = None
+    schema_: HttpUrl | None = Field(None, alias="$schema")
+    basics: Basics | None = None
+    work: list[Work] | None = None
+    volunteer: list[Volunteer] | None = None
+    education: list[Education] | None = None
+    awards: list[Award] | None = None
+    certificates: list[Certificate] | None = None
+    publications: list[Publication] | None = None
+    skills: list[Skill] | None = None
+    languages: list[Language] | None = None
+    interests: list[Interest] | None = None
+    references: list[Reference] | None = None
+    projects: list[Project] | None = None
+    meta: Meta | None = None
     
     class Config:
         populate_by_name = True

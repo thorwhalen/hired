@@ -7,7 +7,8 @@ Implement:
 - Configuration merging utilities
 """
 
-from typing import MutableMapping, Any
+from typing import Any
+from collections.abc import MutableMapping
 from collections.abc import MutableMapping as ABCMutableMapping
 from hired.base import RenderingConfig
 from hired.util import _merge_dicts

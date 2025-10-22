@@ -7,7 +7,8 @@ Implement:
 - content extraction and filtering utilities
 """
 
-from typing import Mapping, Any, Iterable
+from typing import Any
+from collections.abc import Mapping, Iterable
 from hired.base import (
     ContentSource,
     AIAgent,

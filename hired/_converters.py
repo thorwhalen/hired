@@ -8,7 +8,8 @@ import json
 import os
 import urllib.request
 from pathlib import Path
-from typing import Any, Mapping, Optional
+from typing import Any, Optional
+from collections.abc import Mapping
 
 # --- Optional parsers ---------------------------------------------------------
 
@@ -59,7 +60,7 @@ from i2.castgraph import ConversionRegistry, ConversionError  # type: ignore
 # --- Helpers ------------------------------------------------------------------
 
 
-def _read_bytes_from_pathlike(p: Path, ctx: Optional[dict]) -> bytes:
+def _read_bytes_from_pathlike(p: Path, ctx: dict | None) -> bytes:
     """Read bytes from real filesystem, unless a virtual fs mapping is provided."""
     if ctx and "fs" in ctx:
         fs = ctx["fs"]
@@ -70,7 +71,7 @@ def _read_bytes_from_pathlike(p: Path, ctx: Optional[dict]) -> bytes:
     return p.read_bytes()
 
 
-def _str_maybe_path_to_bytes(s: str, ctx: Optional[dict]) -> bytes:
+def _str_maybe_path_to_bytes(s: str, ctx: dict | None) -> bytes:
     """Heuristic for str inputs: prefer ctx['fs'], else real path if exists, else text."""
     if ctx:
         fs = ctx.get("fs", {})
@@ -201,12 +202,12 @@ def register_std_config_converters(reg: ConversionRegistry) -> ConversionRegistr
 
     # pathlib.Path -> bytes
     @reg.register(Path, bytes, cost=0.2)
-    def path_to_bytes(p: Path, ctx: Optional[dict]) -> bytes:
+    def path_to_bytes(p: Path, ctx: dict | None) -> bytes:
         return _read_bytes_from_pathlike(p, ctx)
 
     # str -> bytes (heuristic path-or-text)
     @reg.register(str, bytes, cost=0.5)
-    def str_to_bytes(s: str, ctx: Optional[dict]) -> bytes:
+    def str_to_bytes(s: str, ctx: dict | None) -> bytes:
         # If the string looks like an HTTP(S) URL, fetch it directly.
         if isinstance(s, str) and (s.startswith("http://") or s.startswith("https://")):
             try:
@@ -220,12 +221,12 @@ def register_std_config_converters(reg: ConversionRegistry) -> ConversionRegistr
 
     # bytes -> Mapping (sniff with available parsers only)
     @reg.register(bytes, Mapping, cost=0.6)
-    def bytes_to_mapping(b: bytes, ctx: Optional[dict]) -> Mapping[str, Any]:
+    def bytes_to_mapping(b: bytes, ctx: dict | None) -> Mapping[str, Any]:
         return _sniff_and_parse(b)
 
     # str -> Mapping (via bytes; extension-aware when forced/exists)
     @reg.register(str, Mapping, cost=0.8)
-    def str_to_mapping(s: str, ctx: Optional[dict]) -> Mapping[str, Any]:
+    def str_to_mapping(s: str, ctx: dict | None) -> Mapping[str, Any]:
         b = reg.convert(s, bytes, context=ctx)
         if (ctx and ctx.get("treat_str_as_path") is True) or os.path.exists(s):
             try:
@@ -236,27 +237,28 @@ def register_std_config_converters(reg: ConversionRegistry) -> ConversionRegistr
 
     # pathlib.Path -> Mapping (extension-aware; lowest cost)
     @reg.register(Path, Mapping, cost=0.3)
-    def path_to_mapping(p: Path, ctx: Optional[dict]) -> Mapping[str, Any]:
+    def path_to_mapping(p: Path, ctx: dict | None) -> Mapping[str, Any]:
         b = reg.convert(p, bytes, context=ctx)
         return _parse_by_extension(p, b)
 
     # Concrete dict targets, for convenience
     @reg.register(bytes, dict, cost=0.61)
-    def bytes_to_dict(b: bytes, ctx: Optional[dict]) -> dict:
+    def bytes_to_dict(b: bytes, ctx: dict | None) -> dict:
         return dict(reg.convert(b, Mapping, context=ctx))
 
     @reg.register(str, dict, cost=0.81)
-    def str_to_dict(s: str, ctx: Optional[dict]) -> dict:
+    def str_to_dict(s: str, ctx: dict | None) -> dict:
         return dict(reg.convert(s, Mapping, context=ctx))
 
     @reg.register(Path, dict, cost=0.31)
-    def path_to_dict(p: Path, ctx: Optional[dict]) -> dict:
+    def path_to_dict(p: Path, ctx: dict | None) -> dict:
         return dict(reg.convert(p, Mapping, context=ctx))
 
     return reg
 
 
-from typing import Mapping, Union, Optional, Any, Dict
+from typing import Union, Optional, Any, Dict
+from collections.abc import Mapping
 from pathlib import Path
 
 from i2.castgraph import ConversionRegistry  # your existing registry
@@ -266,10 +268,10 @@ _REGISTRY = register_std_config_converters(ConversionRegistry())
 
 
 def ensure_dict(
-    src: Union[str, Mapping[str, Any]],
+    src: str | Mapping[str, Any],
     *,
-    treat_str_as_path: Optional[bool] = None,
-    fs: Optional[Mapping[str, Union[bytes, str]]] = None,
+    treat_str_as_path: bool | None = None,
+    fs: Mapping[str, bytes | str] | None = None,
 ) -> Mapping[str, Any]:
     """
     Ensure the src is in `Mapping` form, from filepaths, or bytes/string contents.

@@ -66,7 +66,7 @@ def _check_dependencies():
         raise ImportError(f"Missing dependencies: {', '.join(missing)}")
 
 
-def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
+def _normalize_resumejson(resumejson_dict: dict[str, Any]) -> dict[str, Any]:
     """
     Normalize JSON Resume data to ensure all required fields are present.
 
@@ -214,7 +214,7 @@ def _normalize_resumejson(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
     return normalized
 
 
-def sanitize_rendercv_data(data: Dict[str, Any]) -> Dict[str, Any]:
+def sanitize_rendercv_data(data: dict[str, Any]) -> dict[str, Any]:
     """
     Sanitize a renderCV-like dict (or JSON Resume normalized dict) so that
     - empty-string values are removed to avoid jsonschema minLength failures,
@@ -231,7 +231,7 @@ def sanitize_rendercv_data(data: Dict[str, Any]) -> Dict[str, Any]:
 
     def _clean(obj: Any) -> Any:
         if isinstance(obj, dict):
-            out: Dict[str, Any] = {}
+            out: dict[str, Any] = {}
             for k, v in obj.items():
                 if v == "":
                     continue
@@ -327,7 +327,7 @@ def sanitize_rendercv_data(data: Dict[str, Any]) -> Dict[str, Any]:
     return cleaned
 
 
-def is_valid_rendercv_dict(d: Dict[str, Any], strict: bool = True) -> bool:
+def is_valid_rendercv_dict(d: dict[str, Any], strict: bool = True) -> bool:
     """
     Heuristic validator that returns True when the provided dict looks
     like a renderCV input dict.
@@ -367,7 +367,7 @@ def is_valid_rendercv_dict(d: Dict[str, Any], strict: bool = True) -> bool:
     return False
 
 
-def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
+def resumejson_to_rendercv(resumejson_dict: dict[str, Any]) -> dict[str, Any]:
     """
     Convert JSON Resume format to renderCV format using jsonresume-to-rendercv.
 
@@ -428,7 +428,7 @@ def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
             raise ValueError(f"Conversion failed: {result.stderr}")
 
         # Read the converted YAML
-        with open(yaml_file, 'r', encoding='utf-8') as f:
+        with open(yaml_file, encoding='utf-8') as f:
             rendercv_dict = yaml.safe_load(f)
 
         # Ensure the converted rendercv_dict has a sane default design so
@@ -451,7 +451,7 @@ def resumejson_to_rendercv(resumejson_dict: Dict[str, Any]) -> Dict[str, Any]:
         return rendercv_dict
 
 
-def rendercv_to_resumejson(rendercv_dict: Dict[str, Any]) -> Dict[str, Any]:
+def rendercv_to_resumejson(rendercv_dict: dict[str, Any]) -> dict[str, Any]:
     """
     Convert renderCV format to JSON Resume format.
 
@@ -636,7 +636,7 @@ def rendercv_to_resumejson(rendercv_dict: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def render_resume_w_rendercv(
-    rendercv_dict: Dict[str, Any],
+    rendercv_dict: dict[str, Any],
     format_spec: Literal['pdf', 'html', 'markdown', 'typst', 'png'] = 'pdf',
     theme: str = 'classic',
     font_size: str = '10pt',
@@ -836,17 +836,17 @@ def render_resume_w_rendercv(
 
 
 # Convenience functions for common use cases
-def render_pdf(rendercv_dict: Dict[str, Any], **kwargs) -> bytes:
+def render_pdf(rendercv_dict: dict[str, Any], **kwargs) -> bytes:
     """Render resume as PDF."""
     return render_resume_w_rendercv(rendercv_dict, 'pdf', **kwargs)
 
 
-def render_html(rendercv_dict: Dict[str, Any], **kwargs) -> bytes:
+def render_html(rendercv_dict: dict[str, Any], **kwargs) -> bytes:
     """Render resume as HTML."""
     return render_resume_w_rendercv(rendercv_dict, 'html', **kwargs)
 
 
-def render_markdown(rendercv_dict: Dict[str, Any], **kwargs) -> bytes:
+def render_markdown(rendercv_dict: dict[str, Any], **kwargs) -> bytes:
     """Render resume as Markdown."""
     return render_resume_w_rendercv(rendercv_dict, 'markdown', **kwargs)
 

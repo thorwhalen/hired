@@ -1,6 +1,7 @@
 """HTML renderer implementation using Jinja2 templates."""
 
-from typing import Mapping, Any, Iterable
+from typing import Any
+from collections.abc import Mapping, Iterable
 import re, os, importlib
 import html as html_mod
 from collections.abc import Mapping as ABCMapping
@@ -110,7 +111,7 @@ class ThemeRegistry(ABCMapping):
                             css_path = os.path.join(base, folder, css_name)
                             if os.path.exists(css_path):
                                 try:
-                                    with open(css_path, 'r', encoding='utf-8') as cf:
+                                    with open(css_path, encoding='utf-8') as cf:
                                         loaded_css = cf.read()
                                 except Exception:
                                     loaded_css = ''
@@ -129,7 +130,7 @@ class ThemeRegistry(ABCMapping):
                             css_path = os.path.join(base, css_name)
                             if os.path.exists(css_path):
                                 try:
-                                    with open(css_path, 'r', encoding='utf-8') as cf:
+                                    with open(css_path, encoding='utf-8') as cf:
                                         loaded_css = cf.read()
                                 except Exception:
                                     loaded_css = ''
@@ -206,7 +207,7 @@ class HTMLRenderer:
         if ctpl:
             # If it's a file path, load its contents and render from string
             if os.path.exists(ctpl):
-                with open(ctpl, 'r', encoding='utf-8') as f:
+                with open(ctpl, encoding='utf-8') as f:
                     template_text = f.read()
                 template = self._env.from_string(template_text)
                 return template.render(**ctx)
@@ -349,13 +350,13 @@ def _build_minimal_pdf(text: str) -> bytes:
     # PDF content stream commands: start text, move for each line
     y = 720
     line_gap = 14
-    parts = ["BT /F1 12 Tf 72 {} Td ({} ) Tj".format(y, lines[0])]  # first line
+    parts = [f"BT /F1 12 Tf 72 {y} Td ({lines[0]} ) Tj"]  # first line
     for line in lines[1:]:
         y -= line_gap
         if y < 50:  # simple overflow guard
             parts.append("(… truncated …) Tj")
             break
-        parts.append("T* ({} ) Tj".format(line))
+        parts.append(f"T* ({line} ) Tj")
     parts.append("ET")
     stream_text = ' '.join(parts)
     stream_bytes = stream_text.encode('utf-8')

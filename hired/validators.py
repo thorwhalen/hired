@@ -8,7 +8,8 @@ The functions in this module are maintained for backward compatibility but
 delegate to the new validation system.
 """
 
-from typing import Mapping, Any
+from typing import Any
+from collections.abc import Mapping
 from functools import lru_cache
 from hired.base import ResumeSchemaExtended
 from hired.resumejson_pydantic_models import Basics, WorkItem, EducationItem

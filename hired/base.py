@@ -9,7 +9,8 @@ Define:
 - ResumeSchemaExtended: Extended version of ResumeSchema that allows extra fields
 """
 
-from typing import Protocol, Any, Mapping, List, Dict, Type, Optional
+from typing import Protocol, Any, List, Dict, Type, Optional
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pydantic import ConfigDict
 from hired.resumejson_pydantic_models import ResumeSchema
@@ -41,10 +42,10 @@ class RendererRegistry:
     """Registry for managing multiple renderer implementations."""
 
     def __init__(self):
-        self._renderers: Dict[str, Type[Renderer]] = {}
-        self._instances: Dict[str, Renderer] = {}
+        self._renderers: dict[str, type[Renderer]] = {}
+        self._instances: dict[str, Renderer] = {}
 
-    def register(self, format_name: str, renderer_class: Type[Renderer]) -> None:
+    def register(self, format_name: str, renderer_class: type[Renderer]) -> None:
         """Register a renderer class for a specific format."""
         self._renderers[format_name] = renderer_class
 
@@ -59,7 +60,7 @@ class RendererRegistry:
 
         return self._instances[format_name]
 
-    def list_formats(self) -> List[str]:
+    def list_formats(self) -> list[str]:
         """List all registered format names."""
         return list(self._renderers.keys())
 
@@ -75,7 +76,7 @@ _renderer_registry = RendererRegistry()
 def register_renderer(format_name: str):
     """Decorator for registering renderer classes."""
 
-    def decorator(renderer_class: Type[Renderer]):
+    def decorator(renderer_class: type[Renderer]):
         _renderer_registry.register(format_name, renderer_class)
         return renderer_class
 

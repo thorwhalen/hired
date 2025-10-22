@@ -12,16 +12,13 @@ Architecture follows supervisor-worker pattern with:
 
 from dataclasses import dataclass, field, asdict
 from typing import (
-    Iterable,
-    Iterator,
     Optional,
     Protocol,
     Any,
-    MutableMapping,
-    Callable,
     List,
     Set,
 )
+from collections.abc import Iterable, Iterator, MutableMapping, Callable
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -58,11 +55,11 @@ class LLMConfig:
 
     model: str
     temperature: float = 0.7
-    max_tokens: Optional[int] = None
+    max_tokens: int | None = None
     top_p: float = 1.0
     provider: str = "openai"  # "openai", "anthropic", "together", etc.
-    api_key: Optional[str] = None
-    base_url: Optional[str] = None
+    api_key: str | None = None
+    base_url: str | None = None
     extra_params: dict = field(default_factory=dict)
 
     def to_langchain_kwargs(self) -> dict:
@@ -118,10 +115,10 @@ class ModelRegistry:
 
     supervisor: LLMConfig
     workers: LLMConfig
-    expansion: Optional[LLMConfig] = None
-    distillation: Optional[LLMConfig] = None
-    matching: Optional[LLMConfig] = None
-    search: Optional[LLMConfig] = None
+    expansion: LLMConfig | None = None
+    distillation: LLMConfig | None = None
+    matching: LLMConfig | None = None
+    search: LLMConfig | None = None
 
     def get_config(self, role: str) -> LLMConfig:
         """
@@ -192,7 +189,7 @@ class PlanStep:
     description: str  # Human-readable description
     params: dict = field(default_factory=dict)
     dependencies: list[str] = field(default_factory=list)  # IDs of prerequisite steps
-    estimated_tokens: Optional[int] = None
+    estimated_tokens: int | None = None
 
     def can_execute(self, completed_steps: set[str]) -> bool:
         """Check if all dependencies are satisfied."""
@@ -239,8 +236,8 @@ class Plan:
         # Detect cycles in dependency graph using DFS
         graph = {step.id: list(step.dependencies) for step in self.steps}
 
-        visiting: Set[str] = set()
-        visited: Set[str] = set()
+        visiting: set[str] = set()
+        visited: set[str] = set()
 
         def dfs(node: str) -> bool:
             if node in visited:
@@ -288,12 +285,12 @@ class SessionStore(MutableMapping):
     PosixPath('~/.cache/hired/resume_agent_sessions')
     """
 
-    def __init__(self, *, data_dir: Optional[Path] = None):
+    def __init__(self, *, data_dir: Path | None = None):
         self.data_dir = self._resolve_data_dir(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
     @staticmethod
-    def _resolve_data_dir(data_dir: Optional[Path]) -> Path:
+    def _resolve_data_dir(data_dir: Path | None) -> Path:
         """Resolve data directory path."""
         if data_dir:
             return Path(data_dir).expanduser()
@@ -344,7 +341,7 @@ class SessionStore(MutableMapping):
         return session_file
 
     def load_session(
-        self, session_id: str, *, llm_config: Optional[LLMConfig] = None
+        self, session_id: str, *, llm_config: LLMConfig | None = None
     ) -> Optional['ResumeSession']:
         """
         Load session from persistent storage.
@@ -490,14 +487,14 @@ class ConversationMemory:
     def __init__(self, *, max_recent_turns: int = 10):
         self._turns: list[Turn] = []
         self._max_recent_turns = max_recent_turns
-        self._summary: Optional[str] = None
+        self._summary: str | None = None
 
     def add_turn(self, role: str, content: str, **metadata) -> None:
         """Add a conversation turn."""
         turn = Turn(role=role, content=content, metadata=metadata)
         self._turns.append(turn)
 
-    def get_recent_turns(self, n: Optional[int] = None) -> list[Turn]:
+    def get_recent_turns(self, n: int | None = None) -> list[Turn]:
         """Get the n most recent turns (defaults to max_recent_turns)."""
         n = n or self._max_recent_turns
         return self._turns[-n:]
@@ -590,13 +587,13 @@ class ResumeSession:
         candidate_info: str,
         *,
         mode: OperationMode = OperationMode.MANUAL,
-        system_prompt: Optional[str] = None,
+        system_prompt: str | None = None,
         max_recent_turns: int = 10,
-        llm_config: Optional[LLMConfig] = None,
-        model_registry: Optional[ModelRegistry] = None,
+        llm_config: LLMConfig | None = None,
+        model_registry: ModelRegistry | None = None,
         auto_persist: bool = True,
-        data_dir: Optional[Path] = None,
-        name: Optional[str] = None,
+        data_dir: Path | None = None,
+        name: str | None = None,
     ):
         self.job_info = job_info
         self.candidate_info = candidate_info
@@ -1064,7 +1061,7 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         if self.auto_persist:
             self.save()
 
-    def save(self, data_dir: Optional[Path] = None) -> Path:
+    def save(self, data_dir: Path | None = None) -> Path:
         """
         Manually save session to persistent storage.
 
@@ -1078,8 +1075,8 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         cls,
         session_id: str,
         *,
-        data_dir: Optional[Path] = None,
-        llm_config: Optional[LLMConfig] = None,
+        data_dir: Path | None = None,
+        llm_config: LLMConfig | None = None,
     ) -> Optional['ResumeSession']:
         """
         Load session from persistent storage.
@@ -1092,7 +1089,7 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         return store.load_session(session_id, llm_config=llm_config)
 
     @classmethod
-    def list_persisted(cls, data_dir: Optional[Path] = None) -> Iterable[dict]:
+    def list_persisted(cls, data_dir: Path | None = None) -> Iterable[dict]:
         """
         List all persisted sessions.
 
@@ -1115,7 +1112,7 @@ class ExpansionAgent:
     Uses DSPy-optimized prompts for consistent, high-quality expansions.
     """
 
-    def __init__(self, *, llm_config: Optional[LLMConfig] = None):
+    def __init__(self, *, llm_config: LLMConfig | None = None):
         self.llm_config = llm_config or LLMConfig(model="gpt-3.5-turbo")
         self._llm = self._init_llm()
 
@@ -1176,7 +1173,7 @@ class DistillationAgent:
     Uses DSPy-optimized prompts with metrics for conciseness and clarity.
     """
 
-    def __init__(self, *, llm_config: Optional[LLMConfig] = None):
+    def __init__(self, *, llm_config: LLMConfig | None = None):
         self.llm_config = llm_config or LLMConfig(model="gpt-3.5-turbo")
         self._llm = self._init_llm()
 
@@ -1193,7 +1190,7 @@ class DistillationAgent:
         self,
         verbose_text: str,
         *,
-        max_words: Optional[int] = None,
+        max_words: int | None = None,
         preserve_metrics: bool = True,
     ) -> str:
         """
@@ -1245,7 +1242,7 @@ class MatchingAgent:
     Uses embedding-based similarity and cross-encoder reranking.
     """
 
-    def __init__(self, *, llm_config: Optional[LLMConfig] = None):
+    def __init__(self, *, llm_config: LLMConfig | None = None):
         self.llm_config = llm_config or LLMConfig(model="gpt-3.5-turbo")
         self._llm = self._init_llm()
 
@@ -1322,7 +1319,7 @@ class SearchAgent:
     Integrates with search APIs to gather relevant information.
     """
 
-    def __init__(self, *, llm_config: Optional[LLMConfig] = None):
+    def __init__(self, *, llm_config: LLMConfig | None = None):
         self.llm_config = llm_config or LLMConfig(model="gpt-3.5-turbo")
         self._llm = self._init_llm()
 
@@ -1406,8 +1403,8 @@ class ResumeExpertAgent:
     def __init__(
         self,
         *,
-        llm_config: Optional[LLMConfig] = None,
-        model_registry: Optional[ModelRegistry] = None,
+        llm_config: LLMConfig | None = None,
+        model_registry: ModelRegistry | None = None,
     ):
         # Prioritize registry over single config
         if model_registry:
@@ -1646,7 +1643,7 @@ class ResumeExpertAgent:
         plan: Plan,
         *,
         interactive: bool = False,
-        approval_callback: Optional[Callable[[PlanStep], str]] = None,
+        approval_callback: Callable[[PlanStep], str] | None = None,
     ) -> dict:
         """
         Execute a plan step by step.

@@ -6,7 +6,8 @@ All imports here are external to the hired package.
 import json
 from importlib.resources import files
 import os
-from typing import Mapping, Union
+from typing import Union
+from collections.abc import Mapping
 from pathlib import Path
 
 import yaml  # pip install PyYAML
@@ -20,7 +21,7 @@ themes_files = data_files / 'themes'
 
 def _load_json_file(path: str) -> dict:
     """Load a JSON file from the given path."""
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, encoding='utf-8') as f:
         return json.load(f)
 
 
@@ -28,7 +29,7 @@ try:
     import toml
 
     def _load_toml_file(path: str) -> dict:
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, encoding='utf-8') as f:
             return toml.load(f)
 
 except ImportError:
@@ -42,7 +43,7 @@ def load_yaml(yaml_path: str):
     Loads a YAML file using PyYAML.
     This works in Python 3.7+ because dicts preserve insertion order.
     """
-    with open(yaml_path, 'r') as file:
+    with open(yaml_path) as file:
         # Use safe_load for security reasons.
         return yaml.safe_load(file)
 
@@ -130,7 +131,7 @@ def ensure_resume_content_dict(content_src: ResumeSource) -> ResumeDict:
         content_src = str(content_src.expanduser())
     if isinstance(content_src, str):
         if os.path.exists(content_src):
-            with open(content_src, 'r', encoding='utf-8') as f:
+            with open(content_src, encoding='utf-8') as f:
                 content = json.load(f)
         else:
             try:
