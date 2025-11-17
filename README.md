@@ -4,22 +4,59 @@ Streamline the job application process for job seekers
 
 To install: `pip install hired`
 
+For full features including job search: `pip install hired[all]`
+
 ## Overview
 
 The `hired` package is a Python library designed to simplify the process of creating professional resumes tailored to specific job applications. It leverages AI-driven content generation, schema validation, and customizable rendering pipelines to produce high-quality resumes in various formats.
 
+**NEW:** The package now includes comprehensive job search functionality, allowing you to search across multiple job boards and APIs using a unified interface.
+
+### Quick Start - Job Search
+
+```python
+from hired import JobSources, SearchCriteria
+
+# Create job sources interface
+sources = JobSources()
+
+# Search for jobs
+criteria = SearchCriteria(
+    query="python developer",
+    location="San Francisco, CA",
+    results_wanted=20
+)
+
+# Search across all available sources
+results = sources.search_all(criteria)
+
+# Display results
+for job in results:
+    print(f"{job.title} at {job.company}")
+    print(f"  {job.job_url}")
+```
+
+For detailed documentation, see [JOB_SEARCH_README.md](JOB_SEARCH_README.md)
+
 ## Features
 
-### 1. Content Generation
+### 1. Job Search (NEW!)
+- **Multi-Source Search**: Search jobs across Indeed, LinkedIn, Glassdoor, ZipRecruiter, Google, USAJobs, and Adzuna
+- **Unified Interface**: Consistent API across all job sources
+- **Plugin Architecture**: Easily extend with custom job sources
+- **Free & Paid Options**: Mix of free scrapers and API-based sources
+- See [JOB_SEARCH_README.md](JOB_SEARCH_README.md) for detailed documentation
+
+### 2. Content Generation
 - **AI-Driven Content**: Automatically generate resume content by analyzing candidate profiles and job descriptions.
 - **Flexible Sources**: Supports JSON, YAML, and Python dictionaries as input sources.
 
-### 2. Validation
+### 3. Validation
 - **JSON Resume Schema**: Ensures compliance with the [JSON Resume schema](https://jsonresume.org/schema/).
 - **Strict and Permissive Modes**: Validate content strictly or allow flexibility for missing fields.
 - **Pruning**: Automatically removes `None` values to ensure schema compliance.
 
-### 3. Rendering
+### 4. Rendering
 - **HTML and PDF**: Render resumes as HTML or PDF.
 - **Template-Based Themes**: Use Jinja2 templates for customizable themes (e.g., `default`, `minimal`).
 - **Optional WeasyPrint Integration**: Generate professional PDFs with WeasyPrint if installed.
