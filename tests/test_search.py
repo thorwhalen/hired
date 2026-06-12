@@ -396,7 +396,10 @@ class TestJobSpySource:
         """Test behavior when jobspy is not installed."""
         from hired.search.sources.jobspy import JobSpySource
 
-        with patch('hired.search.sources.jobspy.JobSpySource._check_jobspy_available', return_value=False):
+        # patch.object on the imported class avoids a fragile dotted-path lookup
+        # through `hired.search.sources` (which can fail under CI's
+        # coverage+doctest import mechanism).
+        with patch.object(JobSpySource, '_check_jobspy_available', return_value=False):
             source = JobSpySource()
             assert not source.is_configured()
             assert "python-jobspy" in source.get_setup_instructions()
