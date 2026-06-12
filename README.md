@@ -1,39 +1,54 @@
 # hired
 
-Streamline the job application process for job seekers
+AI-assisted job applications: tailor a resume to a job, render it (PDF/HTML),
+search jobs across boards, and support the application (matching, ATS check,
+cover letter, tracking).
 
-To install: `pip install hired`
+## Install
 
-For full features including job search: `pip install hired[all]`
+`pip install hired` gives you the core resume pipeline and the workflow helpers;
+optional features are extras:
 
-## Overview
+| Install | Adds |
+|---|---|
+| `pip install hired` | core: resume tailoring + HTML rendering, matching, ATS, cover letters, tracking |
+| `hired[pdf]` | PDF rendering via WeasyPrint (needs system libs: cairo/pango) |
+| `hired[rendercv]` | LaTeX/Typst-quality PDFs via rendercv |
+| `hired[search]` | multi-board job search (jobspy) |
+| `hired[ai]` | real LLM resume tailoring (openai) |
+| `hired[all]` | everything above |
 
-The `hired` package is a Python library designed to simplify the process of creating professional resumes tailored to specific job applications. It leverages AI-driven content generation, schema validation, and customizable rendering pipelines to produce high-quality resumes in various formats.
+`import hired` works with just the core deps — the heavy integrations load lazily.
 
-**NEW:** The package now includes comprehensive job search functionality, allowing you to search across multiple job boards and APIs using a unified interface.
+## Quick start — tailor and render a resume
 
-### Quick Start - Job Search
+```python
+from hired import mk_content_for_resume, mk_resume
+
+# candidate / job can be dicts, file paths (json/yaml), or a JobResult
+content = mk_content_for_resume("candidate.json", "job.txt")
+pdf_bytes = mk_resume(content, {"format": "pdf", "theme": "default"})
+```
+
+By default this uses a pass-through agent. For real AI tailoring, install
+`hired[ai]` and inject the LLM agent (set `OPENAI_API_KEY`):
+
+```python
+from hired import LLMResumeAgent
+content = mk_content_for_resume("candidate.json", "job.txt", agent=LLMResumeAgent())
+```
+
+## Quick start — job search
 
 ```python
 from hired import JobSources, SearchCriteria
 
-# Create job sources interface
 sources = JobSources()
-
-# Search for jobs
-criteria = SearchCriteria(
-    query="python developer",
-    location="San Francisco, CA",
-    results_wanted=20
-)
-
-# Search across all available sources
-results = sources.search_all(criteria)
-
-# Display results
+results = sources.search_all(SearchCriteria(
+    query="python developer", location="San Francisco, CA", results_wanted=20
+))
 for job in results:
-    print(f"{job.title} at {job.company}")
-    print(f"  {job.job_url}")
+    print(f"{job.title} at {job.company} — {job.job_url}")
 ```
 
 For detailed documentation, see [JOB_SEARCH_README.md](JOB_SEARCH_README.md)

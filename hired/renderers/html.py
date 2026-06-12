@@ -160,6 +160,20 @@ class ThemeRegistry(ABCMapping):
         return self._themes_path
 
 
+def html_to_pdf(html: str, css: str | None) -> bytes:
+    """Convert HTML to PDF using WeasyPrint if available, else minimal builder."""
+    if weasyprint is not None:
+        try:  # pragma: no cover (WeasyPrint path typically optional in tests)
+            return weasyprint.HTML(string=html).write_pdf(
+                stylesheets=[weasyprint.CSS(string=css)] if css else None
+            )
+        except Exception:
+            # Fallback to minimal builder if WeasyPrint fails for some reason
+            pass
+    text = _extract_text_from_html(html)
+    return _build_minimal_pdf(text)
+
+
 class HTMLRenderer:
     """Renders resume to HTML or PDF.
 
@@ -271,16 +285,8 @@ class HTMLRenderer:
 
     # ------------------ PDF conversion ------------------ #
     def _html_to_pdf(self, html: str, css: str) -> bytes:
-        if weasyprint is not None:
-            try:  # pragma: no cover (WeasyPrint path typically optional in tests)
-                return weasyprint.HTML(string=html).write_pdf(
-                    stylesheets=[weasyprint.CSS(string=css)] if css else None
-                )
-            except Exception:
-                # Fallback to minimal builder if WeasyPrint fails for some reason
-                pass
-        text = _extract_text_from_html(html)
-        return _build_minimal_pdf(text)
+        # Delegate to the module-level function (single source of truth).
+        return html_to_pdf(html, css)
 
 
 # ---------------------------- helpers ---------------------------- #

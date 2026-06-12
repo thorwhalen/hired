@@ -4,7 +4,22 @@ Utilities for working with job postings and matching them to resumes.
 
 import re
 from typing import List, Set, Dict, Any, Optional
-from hired.search.base import JobResult
+from hired.search.base import JobResult, LocationInfo
+
+
+def _format_location(location: Optional[LocationInfo]) -> str:
+    """Human-readable location string from the raw field or structured parts.
+
+    Falls back to ``city, state, country`` when the source provided no raw
+    string (so a structured-only location like ``LocationInfo(city="San
+    Francisco", state="CA")`` is not dropped).
+    """
+    if not location:
+        return ""
+    if location.raw:
+        return location.raw
+    parts = [p for p in (location.city, location.state, location.country) if p]
+    return ", ".join(parts)
 
 
 class JobAnalyzer:
@@ -174,8 +189,9 @@ class JobAnalyzer:
         if self.job.company:
             lines.append(f"Company: {self.job.company}")
 
-        if self.job.location and self.job.location.raw:
-            lines.append(f"Location: {self.job.location.raw}")
+        location_text = _format_location(self.job.location)
+        if location_text:
+            lines.append(f"Location: {location_text}")
 
         if self.job.is_remote:
             lines.append("Work Mode: Remote")
@@ -227,7 +243,7 @@ class JobAnalyzer:
         return {
             'title': self.job.title,
             'company': self.job.company,
-            'location': self.job.location.raw if self.job.location else None,
+            'location': _format_location(self.job.location) or None,
             'is_remote': self.job.is_remote,
             'skills': list(self.extract_skills()),
             'requirements': self.extract_requirements(),
