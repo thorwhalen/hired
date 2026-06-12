@@ -5,18 +5,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; hired 0.0.3 documentation</title>
+  <title>Index &mdash; hired 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=47de8214"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="_static/copybutton.js?v=f281be69"></script>
@@ -47,17 +47,31 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/base.html">hired.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/tracking.html">hired.tracking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/util.html">hired.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/validators.html">hired.validators</a></li>
 </ul>
 
         </div>
@@ -88,24 +102,88 @@
 
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionStore.add">add() (hired.resume_agent.SessionStore method)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.add_application">add_application() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.add_application">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ConversationMemory.add_turn">add_turn() (hired.resume_agent.ConversationMemory method)</a>
+</li>
+      <li><a href="module_docs/hired/search.html#hired.search.AdzunaSource">AdzunaSource (class in hired.search)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#hired.search.sources.adzuna.AdzunaSource">(class in hired.search.sources.adzuna)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/base.html#hired.base.AIAgent">AIAgent (class in hired.base)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.Application">Application (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.Application">(class in hired.tracking)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker">ApplicationTracker (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker">(class in hired.tracking)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.ATSChecker">ATSChecker (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSChecker">(class in hired.ats_checker)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSIssue">ATSIssue (class in hired.ats_checker)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.ATSReport">ATSReport (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSReport">(class in hired.ats_checker)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Award">Award (class in hired.resumejson_pydantic_models)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Basics">Basics (class in hired.resumejson_pydantic_models)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -113,46 +191,358 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/config.html#hired.config.ConfigStore">ConfigStore (class in hired.config)</a>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.PlanStep.can_execute">can_execute() (hired.resume_agent.PlanStep method)</a>
 </li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Certificate">Certificate (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.LLMProvider.chat">chat() (hired.resume_agent.LLMProvider method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.chat">(hired.resume_agent.ResumeSession method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.chat">(hired.ResumeSession method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSChecker.check_resume">check_resume() (hired.ats_checker.ATSChecker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ATSChecker.check_resume">(hired.ATSChecker method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.check_resume_ats">check_resume_ats() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.check_resume_ats">(in module hired.ats_checker)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/search.html#hired.search.CompensationInfo">CompensationInfo (class in hired.search)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.CompensationInfo">(class in hired.search.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.LLMProvider.complete">complete() (hired.resume_agent.LLMProvider method)</a>
+</li>
+      <li><a href="module_docs/hired/config.html#hired.config.ConfigStore">ConfigStore (class in hired.config)</a>
+</li>
       <li><a href="module_docs/hired/base.html#hired.base.ContentSource">ContentSource (class in hired.base)</a>
 </li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ConversationMemory">ConversationMemory (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.CoverLetterData">CoverLetterData (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/cover_letter.html#hired.cover_letter.CoverLetterData">(class in hired.cover_letter)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeExpertAgent.create_resume">create_resume() (hired.resume_agent.ResumeExpertAgent method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeExpertAgent.create_resume">(hired.ResumeExpertAgent method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/content.html#hired.content.DefaultAIAgent">DefaultAIAgent (class in hired.content)</a>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ModelRegistry.default">default() (hired.resume_agent.ModelRegistry class method)</a>
 </li>
+      <li><a href="module_docs/hired.html#hired.DefaultAIAgent">DefaultAIAgent (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/content.html#hired.content.DefaultAIAgent">(class in hired.content)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.delete_application">delete_application() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.delete_application">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionStore.delete_session">delete_session() (hired.resume_agent.SessionStore method)</a>
+</li>
+      <li><a href="module_docs/hired/content.html#hired.content.DictContentSource">DictContentSource (class in hired.content)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.JobSearchSource.display_name">display_name (hired.JobSearchSource property)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.AdzunaSource.display_name">(hired.search.AdzunaSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobSearchSource.display_name">(hired.search.base.JobSearchSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource.display_name">(hired.search.JobSearchSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSpySource.display_name">(hired.search.JobSpySource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#hired.search.sources.adzuna.AdzunaSource.display_name">(hired.search.sources.adzuna.AdzunaSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#hired.search.sources.jobspy.JobSpySource.display_name">(hired.search.sources.jobspy.JobSpySource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#hired.search.sources.usajobs.USAJobsSource.display_name">(hired.search.sources.usajobs.USAJobsSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.USAJobsSource.display_name">(hired.search.USAJobsSource property)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/content.html#hired.content.DictContentSource">DictContentSource (class in hired.content)</a>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.DistillationAgent.distill">distill() (hired.resume_agent.DistillationAgent method)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.DistillationAgent">DistillationAgent (class in hired.resume_agent)</a>
 </li>
       <li><a href="module_docs/hired/util.html#hired.util.dump_yaml">dump_yaml() (in module hired.util)</a>
 </li>
   </ul></td>
 </tr></table>
 
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.EducationItem">EducationItem (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired/_converters.html#hired._converters.ensure_dict">ensure_dict() (in module hired._converters)</a>
+</li>
+      <li><a href="module_docs/hired/util.html#hired.util.ensure_resume_content_dict">ensure_resume_content_dict() (in module hired.util)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeExpertAgent.execute_plan">execute_plan() (hired.resume_agent.ResumeExpertAgent method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeExpertAgent.execute_plan">(hired.ResumeExpertAgent method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ExpansionAgent.expand">expand() (hired.resume_agent.ExpansionAgent method)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ExpansionAgent">ExpansionAgent (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.export_to_csv">export_to_csv() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.export_to_csv">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/util.html#hired.util.extract_friendly_errors">extract_friendly_errors() (in module hired.util)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.extract_job_keywords">extract_job_keywords() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/job_utils.html#hired.job_utils.extract_job_keywords">(in module hired.job_utils)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/job_utils.html#hired.job_utils.JobAnalyzer.extract_keywords">extract_keywords() (hired.job_utils.JobAnalyzer method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.JobAnalyzer.extract_keywords">(hired.JobAnalyzer method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/job_utils.html#hired.job_utils.JobAnalyzer.extract_requirements">extract_requirements() (hired.job_utils.JobAnalyzer method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.JobAnalyzer.extract_requirements">(hired.JobAnalyzer method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/job_utils.html#hired.job_utils.JobAnalyzer.extract_skills">extract_skills() (hired.job_utils.JobAnalyzer method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.JobAnalyzer.extract_skills">(hired.JobAnalyzer method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ModelRegistry.fast">fast() (hired.resume_agent.ModelRegistry class method)</a>
+</li>
       <li><a href="module_docs/hired/content.html#hired.content.FileContentSource">FileContentSource (class in hired.content)</a>
 </li>
+      <li><a href="module_docs/hired.html#hired.JobMatcher.filter_jobs">filter_jobs() (hired.JobMatcher method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.filter_jobs">(hired.matching.JobMatcher method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.MatchingAgent.find_matches">find_matches() (hired.resume_agent.MatchingAgent method)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.Application.from_job_result">from_job_result() (hired.Application class method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.Application.from_job_result">(hired.tracking.Application class method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry.get_renderer">get_renderer() (hired.base.RendererRegistry method)</a>
+      <li><a href="module_docs/hired.html#hired.generate_cover_letter_content">generate_cover_letter_content() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/cover_letter.html#hired.cover_letter.generate_cover_letter_content">(in module hired.cover_letter)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionState.get">get() (hired.resume_agent.SessionState method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/registry.html#hired.search.registry.SourceRegistry.get">(hired.search.registry.SourceRegistry method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry.get">(hired.search.SourceRegistry method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/search/sources/adzuna.html#hired.search.sources.adzuna.get_adzuna_source">get_adzuna_source() (in module hired.search.sources.adzuna)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ConversationMemory.get_all_turns">get_all_turns() (hired.resume_agent.ConversationMemory method)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.get_application">get_application() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.get_application">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.get_applications">get_applications() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.get_applications">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ModelRegistry.get_config">get_config() (hired.resume_agent.ModelRegistry method)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ConversationMemory.get_context_for_prompt">get_context_for_prompt() (hired.resume_agent.ConversationMemory method)</a>
+</li>
+      <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSReport.get_critical_issues">get_critical_issues() (hired.ats_checker.ATSReport method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ATSReport.get_critical_issues">(hired.ATSReport method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.Plan.get_executable_steps">get_executable_steps() (hired.resume_agent.Plan method)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.get_follow_ups_due">get_follow_ups_due() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.get_follow_ups_due">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobSources.get_info">get_info() (hired.JobSources method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.get_info">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.get_info">(hired.search.JobSources method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSReport.get_issues_by_category">get_issues_by_category() (hired.ats_checker.ATSReport method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ATSReport.get_issues_by_category">(hired.ATSReport method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.get_job_skills">get_job_skills() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/job_utils.html#hired.job_utils.get_job_skills">(in module hired.job_utils)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/search/sources/jobspy.html#hired.search.sources.jobspy.get_jobspy_source">get_jobspy_source() (in module hired.search.sources.jobspy)</a>
+</li>
+      <li><a href="module_docs/hired/util.html#hired.util.get_jsonschema_errors">get_jsonschema_errors() (in module hired.util)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ConversationMemory.get_recent_turns">get_recent_turns() (hired.resume_agent.ConversationMemory method)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.JobMatcher.get_recommendations">get_recommendations() (hired.JobMatcher method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.get_recommendations">(hired.matching.JobMatcher method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/search.html#hired.search.get_registry">get_registry() (in module hired.search)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/registry.html#hired.search.registry.get_registry">(in module hired.search.registry)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry.get_renderer">get_renderer() (hired.base.RendererRegistry method)</a>
+</li>
       <li><a href="module_docs/hired/base.html#hired.base.get_renderer_registry">get_renderer_registry() (in module hired.base)</a>
 </li>
+      <li><a href="module_docs/hired.html#hired.JobSearchSource.get_setup_instructions">get_setup_instructions() (hired.JobSearchSource method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.AdzunaSource.get_setup_instructions">(hired.search.AdzunaSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobSearchSource.get_setup_instructions">(hired.search.base.JobSearchSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource.get_setup_instructions">(hired.search.JobSearchSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSpySource.get_setup_instructions">(hired.search.JobSpySource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#hired.search.sources.adzuna.AdzunaSource.get_setup_instructions">(hired.search.sources.adzuna.AdzunaSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#hired.search.sources.jobspy.JobSpySource.get_setup_instructions">(hired.search.sources.jobspy.JobSpySource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#hired.search.sources.usajobs.USAJobsSource.get_setup_instructions">(hired.search.sources.usajobs.USAJobsSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.USAJobsSource.get_setup_instructions">(hired.search.USAJobsSource method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobSources.get_source">get_source() (hired.JobSources method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.get_source">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.get_source">(hired.search.JobSources method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/search/registry.html#hired.search.registry.SourceRegistry.get_source_info">get_source_info() (hired.search.registry.SourceRegistry method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry.get_source_info">(hired.search.SourceRegistry method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.get_statistics">get_statistics() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.get_statistics">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSReport.get_summary">get_summary() (hired.ats_checker.ATSReport method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ATSReport.get_summary">(hired.ATSReport method)</a>
+</li>
+        <li><a href="module_docs/hired/job_utils.html#hired.job_utils.JobAnalyzer.get_summary">(hired.job_utils.JobAnalyzer method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.JobAnalyzer.get_summary">(hired.JobAnalyzer method)</a>
+</li>
+        <li><a href="module_docs/hired/matching.html#hired.matching.MatchScore.get_summary">(hired.matching.MatchScore method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.MatchScore.get_summary">(hired.MatchScore method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobMatcher.get_top_matches">get_top_matches() (hired.JobMatcher method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.get_top_matches">(hired.matching.JobMatcher method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/search/sources/usajobs.html#hired.search.sources.usajobs.get_usajobs_source">get_usajobs_source() (in module hired.search.sources.usajobs)</a>
+</li>
+      <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSReport.get_warnings">get_warnings() (hired.ats_checker.ATSReport method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ATSReport.get_warnings">(hired.ATSReport method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -164,6 +554,20 @@
 
       <ul>
         <li><a href="module_docs/hired.html#module-hired">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired._converters
+
+      <ul>
+        <li><a href="module_docs/hired/_converters.html#module-hired._converters">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.ats_checker
+
+      <ul>
+        <li><a href="module_docs/hired/ats_checker.html#module-hired.ats_checker">module</a>
 </li>
       </ul></li>
       <li>
@@ -188,6 +592,27 @@
 </li>
       </ul></li>
       <li>
+    hired.cover_letter
+
+      <ul>
+        <li><a href="module_docs/hired/cover_letter.html#module-hired.cover_letter">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.job_utils
+
+      <ul>
+        <li><a href="module_docs/hired/job_utils.html#module-hired.job_utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.matching
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#module-hired.matching">module</a>
+</li>
+      </ul></li>
+      <li>
     hired.render
 
       <ul>
@@ -208,8 +633,6 @@
         <li><a href="module_docs/hired/renderers/html.html#module-hired.renderers.html">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     hired.renderers.rendercv
 
@@ -218,10 +641,75 @@
 </li>
       </ul></li>
       <li>
-    hired.renderers.w_rendercv
+    hired.resume_agent
 
       <ul>
-        <li><a href="module_docs/hired/renderers/w_rendercv.html#module-hired.renderers.w_rendercv">module</a>
+        <li><a href="module_docs/hired/resume_agent.html#module-hired.resume_agent">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    hired.resumejson_pydantic_models
+
+      <ul>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#module-hired.resumejson_pydantic_models">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.search
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#module-hired.search">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.search.base
+
+      <ul>
+        <li><a href="module_docs/hired/search/base.html#module-hired.search.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.search.facade
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#module-hired.search.facade">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.search.registry
+
+      <ul>
+        <li><a href="module_docs/hired/search/registry.html#module-hired.search.registry">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.search.sources
+
+      <ul>
+        <li><a href="module_docs/hired/search/sources.html#module-hired.search.sources">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.search.sources.adzuna
+
+      <ul>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#module-hired.search.sources.adzuna">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.search.sources.jobspy
+
+      <ul>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#module-hired.search.sources.jobspy">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.search.sources.usajobs
+
+      <ul>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#module-hired.search.sources.usajobs">module</a>
 </li>
       </ul></li>
       <li>
@@ -232,19 +720,27 @@
 </li>
       </ul></li>
       <li>
+    hired.tracking
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#module-hired.tracking">module</a>
+</li>
+      </ul></li>
+      <li>
     hired.util
 
       <ul>
         <li><a href="module_docs/hired/util.html#module-hired.util">module</a>
 </li>
       </ul></li>
-      <li>
-    hired.validators
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.history">history (hired.resume_agent.ResumeSession property)</a>
 
       <ul>
-        <li><a href="module_docs/hired/validators.html#module-hired.validators">module</a>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.history">(hired.ResumeSession property)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/hired/renderers/html.html#hired.renderers.html.html_to_pdf">html_to_pdf() (in module hired.renderers.html)</a>
+</li>
       <li><a href="module_docs/hired/renderers.html#hired.renderers.HTMLRenderer">HTMLRenderer (class in hired.renderers)</a>
 
       <ul>
@@ -257,30 +753,244 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.JobMatcher.identify_skill_gaps">identify_skill_gaps() (hired.JobMatcher method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.identify_skill_gaps">(hired.matching.JobMatcher method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Interest">Interest (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.JobSearchSource.is_configured">is_configured() (hired.JobSearchSource method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.AdzunaSource.is_configured">(hired.search.AdzunaSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobSearchSource.is_configured">(hired.search.base.JobSearchSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource.is_configured">(hired.search.JobSearchSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSpySource.is_configured">(hired.search.JobSpySource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#hired.search.sources.adzuna.AdzunaSource.is_configured">(hired.search.sources.adzuna.AdzunaSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#hired.search.sources.jobspy.JobSpySource.is_configured">(hired.search.sources.jobspy.JobSpySource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#hired.search.sources.usajobs.USAJobsSource.is_configured">(hired.search.sources.usajobs.USAJobsSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.USAJobsSource.is_configured">(hired.search.USAJobsSource method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry.is_registered">is_registered() (hired.base.RendererRegistry method)</a>
 </li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Iso8601">Iso8601 (class in hired.resumejson_pydantic_models)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.job_to_text">job_to_text() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/job_utils.html#hired.job_utils.job_to_text">(in module hired.job_utils)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobAnalyzer">JobAnalyzer (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/job_utils.html#hired.job_utils.JobAnalyzer">(class in hired.job_utils)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobMatcher">JobMatcher (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher">(class in hired.matching)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobResult">JobResult (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.JobResult">(class in hired.search)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobResult">(class in hired.search.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobSearchSource">JobSearchSource (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource">(class in hired.search)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobSearchSource">(class in hired.search.base)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.JobSources">JobSources (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources">(class in hired.search)</a>
+</li>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources">(class in hired.search.facade)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/search.html#hired.search.JobSpySource">JobSpySource (class in hired.search)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#hired.search.sources.jobspy.JobSpySource">(class in hired.search.sources.jobspy)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobType">JobType (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.JobType">(class in hired.search)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobType">(class in hired.search.base)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.JobSources.keys">keys() (hired.JobSources method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.keys">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.keys">(hired.search.JobSources method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Language">Language (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.JobSources.list">list() (hired.JobSources method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.list">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.list">(hired.search.JobSources method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobSources.list_available">list_available() (hired.JobSources method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.list_available">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.list_available">(hired.search.JobSources method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/search/registry.html#hired.search.registry.SourceRegistry.list_available_sources">list_available_sources() (hired.search.registry.SourceRegistry method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry.list_available_sources">(hired.search.SourceRegistry method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry.list_formats">list_formats() (hired.base.RendererRegistry method)</a>
 </li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.list_persisted">list_persisted() (hired.resume_agent.ResumeSession class method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.list_persisted">(hired.ResumeSession class method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionStore.list_sessions">list_sessions() (hired.resume_agent.SessionStore method)</a>
+</li>
+      <li><a href="module_docs/hired/search/registry.html#hired.search.registry.SourceRegistry.list_sources">list_sources() (hired.search.registry.SourceRegistry method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry.list_sources">(hired.search.SourceRegistry method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobSources.list_unconfigured">list_unconfigured() (hired.JobSources method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.list_unconfigured">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.list_unconfigured">(hired.search.JobSources method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/search/registry.html#hired.search.registry.SourceRegistry.list_unconfigured_sources">list_unconfigured_sources() (hired.search.registry.SourceRegistry method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry.list_unconfigured_sources">(hired.search.SourceRegistry method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.LLMConfig">LLMConfig (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.LLMConfig">(class in hired.resume_agent)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.LLMProvider">LLMProvider (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.LLMResumeAgent">LLMResumeAgent (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/content.html#hired.content.LLMResumeAgent">(class in hired.content)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.load">load() (hired.resume_agent.ResumeSession class method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.load">(hired.ResumeSession class method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionStore.load_session">load_session() (hired.resume_agent.SessionStore method)</a>
+</li>
       <li><a href="module_docs/hired/util.html#hired.util.load_yaml">load_yaml() (in module hired.util)</a>
 </li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Location">Location (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired/search.html#hired.search.LocationInfo">LocationInfo (class in hired.search)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.LocationInfo">(class in hired.search.base)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.MatchingAgent">MatchingAgent (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.MatchScore">MatchScore (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.MatchScore">(class in hired.matching)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Meta">Meta (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.metadata">metadata (hired.resume_agent.ResumeSession property)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.metadata">(hired.ResumeSession property)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired.html#hired.mk_content_for_resume">mk_content_for_resume() (in module hired)</a>
 
       <ul>
         <li><a href="module_docs/hired/tools.html#hired.tools.mk_content_for_resume">(in module hired.tools)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.mk_cover_letter">mk_cover_letter() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/cover_letter.html#hired.cover_letter.mk_cover_letter">(in module hired.cover_letter)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/hired.html#hired.mk_resume">mk_resume() (in module hired)</a>
@@ -289,29 +999,73 @@
         <li><a href="module_docs/hired/tools.html#hired.tools.mk_resume">(in module hired.tools)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/hired/base.html#hired.base.ResumeBasics.model_config">model_config (hired.base.ResumeBasics attribute)</a>
+      <li><a href="module_docs/hired/base.html#hired.base.ResumeSchemaExtended.model_config">model_config (hired.base.ResumeSchemaExtended attribute)</a>
 
       <ul>
-        <li><a href="module_docs/hired/base.html#hired.base.ResumeContent.model_config">(hired.base.ResumeContent attribute)</a>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Award.model_config">(hired.resumejson_pydantic_models.Award attribute)</a>
 </li>
-        <li><a href="module_docs/hired/base.html#hired.base.ResumeEducation.model_config">(hired.base.ResumeEducation attribute)</a>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Basics.model_config">(hired.resumejson_pydantic_models.Basics attribute)</a>
 </li>
-        <li><a href="module_docs/hired/base.html#hired.base.ResumeWork.model_config">(hired.base.ResumeWork attribute)</a>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Certificate.model_config">(hired.resumejson_pydantic_models.Certificate attribute)</a>
 </li>
-        <li><a href="module_docs/hired.html#hired.ResumeContent.model_config">(hired.ResumeContent attribute)</a>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.EducationItem.model_config">(hired.resumejson_pydantic_models.EducationItem attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Interest.model_config">(hired.resumejson_pydantic_models.Interest attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Iso8601.model_config">(hired.resumejson_pydantic_models.Iso8601 attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Language.model_config">(hired.resumejson_pydantic_models.Language attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Location.model_config">(hired.resumejson_pydantic_models.Location attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Meta.model_config">(hired.resumejson_pydantic_models.Meta attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Profile.model_config">(hired.resumejson_pydantic_models.Profile attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Project.model_config">(hired.resumejson_pydantic_models.Project attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Publication.model_config">(hired.resumejson_pydantic_models.Publication attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Reference.model_config">(hired.resumejson_pydantic_models.Reference attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.ResumeSchema.model_config">(hired.resumejson_pydantic_models.ResumeSchema attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Skill.model_config">(hired.resumejson_pydantic_models.Skill attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.VolunteerItem.model_config">(hired.resumejson_pydantic_models.VolunteerItem attribute)</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.WorkItem.model_config">(hired.resumejson_pydantic_models.WorkItem attribute)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.ResumeSchema.model_config">(hired.ResumeSchema attribute)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.ResumeSchemaExtended.model_config">(hired.ResumeSchemaExtended attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ModelRegistry">ModelRegistry (class in hired.resume_agent)</a>
+</li>
       <li>
     module
 
       <ul>
         <li><a href="module_docs/hired.html#module-hired">hired</a>
 </li>
+        <li><a href="module_docs/hired/_converters.html#module-hired._converters">hired._converters</a>
+</li>
+        <li><a href="module_docs/hired/ats_checker.html#module-hired.ats_checker">hired.ats_checker</a>
+</li>
         <li><a href="module_docs/hired/base.html#module-hired.base">hired.base</a>
 </li>
         <li><a href="module_docs/hired/config.html#module-hired.config">hired.config</a>
 </li>
         <li><a href="module_docs/hired/content.html#module-hired.content">hired.content</a>
+</li>
+        <li><a href="module_docs/hired/cover_letter.html#module-hired.cover_letter">hired.cover_letter</a>
+</li>
+        <li><a href="module_docs/hired/job_utils.html#module-hired.job_utils">hired.job_utils</a>
+</li>
+        <li><a href="module_docs/hired/matching.html#module-hired.matching">hired.matching</a>
 </li>
         <li><a href="module_docs/hired/render.html#module-hired.render">hired.render</a>
 </li>
@@ -321,13 +1075,117 @@
 </li>
         <li><a href="module_docs/hired/renderers/rendercv.html#module-hired.renderers.rendercv">hired.renderers.rendercv</a>
 </li>
-        <li><a href="module_docs/hired/renderers/w_rendercv.html#module-hired.renderers.w_rendercv">hired.renderers.w_rendercv</a>
+        <li><a href="module_docs/hired/resume_agent.html#module-hired.resume_agent">hired.resume_agent</a>
+</li>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#module-hired.resumejson_pydantic_models">hired.resumejson_pydantic_models</a>
+</li>
+        <li><a href="module_docs/hired/search.html#module-hired.search">hired.search</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#module-hired.search.base">hired.search.base</a>
+</li>
+        <li><a href="module_docs/hired/search/facade.html#module-hired.search.facade">hired.search.facade</a>
+</li>
+        <li><a href="module_docs/hired/search/registry.html#module-hired.search.registry">hired.search.registry</a>
+</li>
+        <li><a href="module_docs/hired/search/sources.html#module-hired.search.sources">hired.search.sources</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#module-hired.search.sources.adzuna">hired.search.sources.adzuna</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#module-hired.search.sources.jobspy">hired.search.sources.jobspy</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#module-hired.search.sources.usajobs">hired.search.sources.usajobs</a>
 </li>
         <li><a href="module_docs/hired/tools.html#module-hired.tools">hired.tools</a>
 </li>
+        <li><a href="module_docs/hired/tracking.html#module-hired.tracking">hired.tracking</a>
+</li>
         <li><a href="module_docs/hired/util.html#module-hired.util">hired.util</a>
 </li>
-        <li><a href="module_docs/hired/validators.html#module-hired.validators">hired.validators</a>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.JobSearchSource.name">name (hired.JobSearchSource property)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.AdzunaSource.name">(hired.search.AdzunaSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobSearchSource.name">(hired.search.base.JobSearchSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource.name">(hired.search.JobSearchSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSpySource.name">(hired.search.JobSpySource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#hired.search.sources.adzuna.AdzunaSource.name">(hired.search.sources.adzuna.AdzunaSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#hired.search.sources.jobspy.JobSpySource.name">(hired.search.sources.jobspy.JobSpySource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#hired.search.sources.usajobs.USAJobsSource.name">(hired.search.sources.usajobs.USAJobsSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.USAJobsSource.name">(hired.search.USAJobsSource property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/util.html#hired.util.normalize_and_validate_resume">normalize_and_validate_resume() (in module hired.util)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.OperationMode">OperationMode (class in hired.resume_agent)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.Plan">Plan (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.PlanStep">PlanStep (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.JobSources.print_status">print_status() (hired.JobSources method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.print_status">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.print_status">(hired.search.JobSources method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Profile">Profile (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Project">Project (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeExpertAgent.propose_plan">propose_plan() (hired.resume_agent.ResumeExpertAgent method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeExpertAgent.propose_plan">(hired.ResumeExpertAgent method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Publication">Publication (class in hired.resumejson_pydantic_models)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ModelRegistry.quality">quality() (hired.resume_agent.ModelRegistry class method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.quick_match">quick_match() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.quick_match">(in module hired.matching)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -336,9 +1194,25 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry.register">register() (hired.base.RendererRegistry method)</a>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Reference">Reference (class in hired.resumejson_pydantic_models)</a>
 </li>
+      <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry.register">register() (hired.base.RendererRegistry method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/registry.html#hired.search.registry.SourceRegistry.register">(hired.search.registry.SourceRegistry method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry.register">(hired.search.SourceRegistry method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/base.html#hired.base.register_renderer">register_renderer() (in module hired.base)</a>
+</li>
+      <li><a href="module_docs/hired/search.html#hired.search.register_source">register_source() (in module hired.search)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/registry.html#hired.search.registry.register_source">(in module hired.search.registry)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/_converters.html#hired._converters.register_std_config_converters">register_std_config_converters() (in module hired._converters)</a>
 </li>
       <li><a href="module_docs/hired/renderers/rendercv.html#hired.renderers.rendercv.RenderCVRenderer.render">render() (hired.renderers.rendercv.RenderCVRenderer method)</a>
 
@@ -346,15 +1220,9 @@
         <li><a href="module_docs/hired/renderers.html#hired.renderers.RenderCVRenderer.render">(hired.renderers.RenderCVRenderer method)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.render_html">render_html() (in module hired.renderers.w_rendercv)</a>
+      <li><a href="module_docs/hired/cover_letter.html#hired.cover_letter.render_cover_letter">render_cover_letter() (in module hired.cover_letter)</a>
 </li>
-      <li><a href="module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.render_markdown">render_markdown() (in module hired.renderers.w_rendercv)</a>
-</li>
-      <li><a href="module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.render_pdf">render_pdf() (in module hired.renderers.w_rendercv)</a>
-</li>
-      <li><a href="module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.render_resume_w_rendercv">render_resume_w_rendercv() (in module hired.renderers.w_rendercv)</a>
-</li>
-      <li><a href="module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.rendercv_to_resumejson">rendercv_to_resumejson() (in module hired.renderers.w_rendercv)</a>
+      <li><a href="module_docs/hired/tools.html#hired.tools.render_resume_with_template_and_css">render_resume_with_template_and_css() (in module hired.tools)</a>
 </li>
       <li><a href="module_docs/hired/renderers.html#hired.renderers.RenderCVRenderer">RenderCVRenderer (class in hired.renderers)</a>
 
@@ -362,8 +1230,6 @@
         <li><a href="module_docs/hired/renderers/rendercv.html#hired.renderers.rendercv.RenderCVRenderer">(class in hired.renderers.rendercv)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/base.html#hired.base.Renderer">Renderer (class in hired.base)</a>
 </li>
       <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry">RendererRegistry (class in hired.base)</a>
@@ -374,28 +1240,172 @@
         <li><a href="module_docs/hired/base.html#hired.base.RenderingConfig">(class in hired.base)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/hired/base.html#hired.base.ResumeBasics">ResumeBasics (class in hired.base)</a>
-</li>
-      <li><a href="module_docs/hired.html#hired.ResumeContent">ResumeContent (class in hired)</a>
+      <li><a href="module_docs/hired.html#hired.JobSearchSource.requires_auth">requires_auth (hired.JobSearchSource property)</a>
 
       <ul>
-        <li><a href="module_docs/hired/base.html#hired.base.ResumeContent">(class in hired.base)</a>
+        <li><a href="module_docs/hired/search.html#hired.search.AdzunaSource.requires_auth">(hired.search.AdzunaSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobSearchSource.requires_auth">(hired.search.base.JobSearchSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource.requires_auth">(hired.search.JobSearchSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSpySource.requires_auth">(hired.search.JobSpySource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#hired.search.sources.adzuna.AdzunaSource.requires_auth">(hired.search.sources.adzuna.AdzunaSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#hired.search.sources.jobspy.JobSpySource.requires_auth">(hired.search.sources.jobspy.JobSpySource property)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#hired.search.sources.usajobs.USAJobsSource.requires_auth">(hired.search.sources.usajobs.USAJobsSource property)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.USAJobsSource.requires_auth">(hired.search.USAJobsSource property)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/hired/base.html#hired.base.ResumeEducation">ResumeEducation (class in hired.base)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.ResumeContent">ResumeContent (in module hired)</a>
 </li>
-      <li><a href="module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.resumejson_to_rendercv">resumejson_to_rendercv() (in module hired.renderers.w_rendercv)</a>
+      <li><a href="module_docs/hired.html#hired.ResumeExpertAgent">ResumeExpertAgent (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeExpertAgent">(class in hired.resume_agent)</a>
 </li>
-      <li><a href="module_docs/hired/base.html#hired.base.ResumeWork">ResumeWork (class in hired.base)</a>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.ResumeSchema">ResumeSchema (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.ResumeSchema">(class in hired.resumejson_pydantic_models)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.ResumeSchemaExtended">ResumeSchemaExtended (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/base.html#hired.base.ResumeSchemaExtended">(class in hired.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.ResumeSession">ResumeSession (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession">(class in hired.resume_agent)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeExpertAgent.revise_plan">revise_plan() (hired.resume_agent.ResumeExpertAgent method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeExpertAgent.revise_plan">(hired.ResumeExpertAgent method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/renderers/w_rendercv.html#hired.renderers.w_rendercv.sanitize_rendercv_data">sanitize_rendercv_data() (in module hired.renderers.w_rendercv)</a>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.save">save() (hired.resume_agent.ResumeSession method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.save">(hired.ResumeSession method)</a>
 </li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionStore.save_session">save_session() (hired.resume_agent.SessionStore method)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.JobMatcher.score_job">score_job() (hired.JobMatcher method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.score_job">(hired.matching.JobMatcher method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobMatcher.score_jobs">score_jobs() (hired.JobMatcher method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.score_jobs">(hired.matching.JobMatcher method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobSearchSource.search">search() (hired.JobSearchSource method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.JobSources.search">(hired.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SearchAgent.search">(hired.resume_agent.SearchAgent method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.AdzunaSource.search">(hired.search.AdzunaSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobSearchSource.search">(hired.search.base.JobSearchSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.search">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource.search">(hired.search.JobSearchSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.search">(hired.search.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSpySource.search">(hired.search.JobSpySource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/adzuna.html#hired.search.sources.adzuna.AdzunaSource.search">(hired.search.sources.adzuna.AdzunaSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/jobspy.html#hired.search.sources.jobspy.JobSpySource.search">(hired.search.sources.jobspy.JobSpySource method)</a>
+</li>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#hired.search.sources.usajobs.USAJobsSource.search">(hired.search.sources.usajobs.USAJobsSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.USAJobsSource.search">(hired.search.USAJobsSource method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.JobSources.search_all">search_all() (hired.JobSources method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/facade.html#hired.search.facade.JobSources.search_all">(hired.search.facade.JobSources method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSources.search_all">(hired.search.JobSources method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SearchAgent">SearchAgent (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.SearchCriteria">SearchCriteria (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.SearchCriteria">(class in hired.search)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.SearchCriteria">(class in hired.search.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionSnapshot">SessionSnapshot (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionState">SessionState (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionStore">SessionStore (class in hired.resume_agent)</a>
+</li>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Skill">Skill (class in hired.resumejson_pydantic_models)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionState.snapshot">snapshot() (hired.resume_agent.SessionState method)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.snapshots">snapshots (hired.resume_agent.ResumeSession property)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.snapshots">(hired.ResumeSession property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/search.html#hired.search.SourceConfigError">SourceConfigError</a>, <a href="module_docs/hired/search/base.html#hired.search.base.SourceConfigError">[1]</a>
+</li>
+      <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry">SourceRegistry (class in hired.search)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/registry.html#hired.search.registry.SourceRegistry">(class in hired.search.registry)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.state">state (hired.resume_agent.ResumeSession property)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.state">(hired.ResumeSession property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ConversationMemory.summarize_old_turns">summarize_old_turns() (hired.resume_agent.ConversationMemory method)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.switch_mode">switch_mode() (hired.resume_agent.ResumeSession method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.ResumeSession.switch_mode">(hired.ResumeSession method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -404,19 +1414,117 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/renderers/html.html#hired.renderers.html.ThemeRegistry">ThemeRegistry (class in hired.renderers.html)</a>
 </li>
+      <li><a href="module_docs/hired.html#hired.Application.to_dict">to_dict() (hired.Application method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.ATSReport.to_dict">(hired.ats_checker.ATSReport method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.ATSReport.to_dict">(hired.ATSReport method)</a>
+</li>
+        <li><a href="module_docs/hired/cover_letter.html#hired.cover_letter.CoverLetterData.to_dict">(hired.cover_letter.CoverLetterData method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CoverLetterData.to_dict">(hired.CoverLetterData method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.JobResult.to_dict">(hired.JobResult method)</a>
+</li>
+        <li><a href="module_docs/hired/matching.html#hired.matching.MatchScore.to_dict">(hired.matching.MatchScore method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.MatchScore.to_dict">(hired.MatchScore method)</a>
+</li>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobResult.to_dict">(hired.search.base.JobResult method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobResult.to_dict">(hired.search.JobResult method)</a>
+</li>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.Application.to_dict">(hired.tracking.Application method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.LLMConfig.to_dspy_lm">to_dspy_lm() (hired.LLMConfig method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.LLMConfig.to_dspy_lm">(hired.resume_agent.LLMConfig method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/job_utils.html#hired.job_utils.JobAnalyzer.to_job_info_text">to_job_info_text() (hired.job_utils.JobAnalyzer method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired.html#hired.JobAnalyzer.to_job_info_text">(hired.JobAnalyzer method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.LLMConfig.to_langchain_kwargs">to_langchain_kwargs() (hired.LLMConfig method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.LLMConfig.to_langchain_kwargs">(hired.resume_agent.LLMConfig method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.Plan.to_markdown">to_markdown() (hired.resume_agent.Plan method)</a>
+</li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.Turn">Turn (class in hired.resume_agent)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/search/registry.html#hired.search.registry.SourceRegistry.unregister">unregister() (hired.search.registry.SourceRegistry method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry.unregister">(hired.search.SourceRegistry method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionState.update">update() (hired.resume_agent.SessionState method)</a>
+</li>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.update_application">update_application() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.update_application">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired.html#hired.ApplicationTracker.update_status">update_status() (hired.ApplicationTracker method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.update_status">(hired.tracking.ApplicationTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/search.html#hired.search.USAJobsSource">USAJobsSource (class in hired.search)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/sources/usajobs.html#hired.search.sources.usajobs.USAJobsSource">(class in hired.search.sources.usajobs)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/validators.html#hired.validators.validate_and_normalize">validate_and_normalize() (in module hired.validators)</a>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.Plan.validate">validate() (hired.resume_agent.Plan method)</a>
 </li>
+      <li><a href="module_docs/hired.html#hired.JobSearchSource.validate_configured">validate_configured() (hired.JobSearchSource method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/search/base.html#hired.search.base.JobSearchSource.validate_configured">(hired.search.base.JobSearchSource method)</a>
+</li>
+        <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource.validate_configured">(hired.search.JobSearchSource method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/validators.html#hired.validators.validate_resume_content">validate_resume_content() (in module hired.validators)</a>
+      <li><a href="module_docs/hired/util.html#hired.util.validate_resume_content_dict">validate_resume_content_dict() (in module hired.util)</a>
 </li>
-      <li><a href="module_docs/hired/validators.html#hired.validators.validate_with_models">validate_with_models() (in module hired.validators)</a>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.VolunteerItem">VolunteerItem (class in hired.resumejson_pydantic_models)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.WorkItem">WorkItem (class in hired.resumejson_pydantic_models)</a>
 </li>
   </ul></td>
 </tr></table>

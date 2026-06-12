@@ -5,18 +5,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.renderers.rendercv &mdash; hired 0.0.3 documentation</title>
+  <title>hired.renderers.rendercv &mdash; hired 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=47de8214"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
@@ -47,17 +47,31 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tracking.html">hired.tracking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/validators.html">hired.validators</a></li>
 </ul>
 
         </div>
@@ -92,7 +106,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hired.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span><span class="p">,</span> <span class="n">ResumeContent</span><span class="p">,</span> <span class="n">RenderingConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Renderer</span><span class="p">,</span> <span class="n">RenderingConfig</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">jsonresume_to_rendercv.converter</span><span class="w"> </span><span class="kn">import</span> <span class="n">convert</span>
@@ -136,11 +150,13 @@
 
 <div class="viewcode-block" id="RenderCVRenderer.render">
 <a class="viewcode-back" href="../../../module_docs/hired/renderers/rendercv.html#hired.renderers.RenderCVRenderer.render">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">RenderingConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">RenderingConfig</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>  <span class="c1"># content is ResumeSchemaExtended</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Render resume content using RenderCV backend.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Reset warnings for each render</span>
 
-        <span class="c1"># Convert ResumeContent to JSON Resume dict with robust handling</span>
+        <span class="c1"># Convert ResumeSchemaExtended to JSON Resume dict with robust handling</span>
         <span class="n">json_resume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_to_json_resume_robust</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
 
         <span class="c1"># Print warnings if any</span>
@@ -185,7 +201,7 @@
             <span class="n">pdf_path</span> <span class="o">=</span> <span class="n">temp_path</span> <span class="o">/</span> <span class="s2">&quot;resume.pdf&quot;</span>
 
             <span class="c1"># Use RenderCV API to create PDF</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rendercv_yaml_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rendercv_yaml_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">yaml_content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
             <span class="k">try</span><span class="p">:</span>
@@ -212,73 +228,80 @@
                 <span class="p">)</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_content_to_json_resume_robust</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert ResumeContent to JSON Resume dictionary format with robust error handling.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_content_to_json_resume_robust</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>  <span class="c1"># content is ResumeSchemaExtended</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert ResumeSchemaExtended to JSON Resume dictionary format with robust error handling.&quot;&quot;&quot;</span>
 
-        <span class="c1"># Convert Pydantic models to dict</span>
-        <span class="n">basics</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Convert Pydantic model to dict</span>
+        <span class="n">content_dict</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">content</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="s1">&#39;model_dump&#39;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">content</span>
+        <span class="p">)</span>
 
-        <span class="c1"># Robust handling of basics section</span>
+        <span class="c1"># Extract basics section</span>
+        <span class="n">basics</span> <span class="o">=</span> <span class="n">content_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;basics&#39;</span><span class="p">,</span> <span class="p">{})</span>
         <span class="n">basics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_basics_complete</span><span class="p">(</span><span class="n">basics</span><span class="p">)</span>
 
         <span class="c1"># Build JSON Resume structure</span>
         <span class="n">json_resume</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;basics&quot;</span><span class="p">:</span> <span class="n">basics</span><span class="p">,</span>
-            <span class="s2">&quot;work&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_work_complete</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">work</span><span class="p">]</span>
-            <span class="p">),</span>
+            <span class="s2">&quot;work&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_work_complete</span><span class="p">(</span><span class="n">content_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="p">[])),</span>
             <span class="s2">&quot;education&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_education_complete</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">education</span><span class="p">]</span>
+                <span class="n">content_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="p">[])</span>
             <span class="p">),</span>
         <span class="p">}</span>
 
-        <span class="c1"># Add extra sections if present</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="s1">&#39;extra_sections&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">content</span><span class="o">.</span><span class="n">extra_sections</span><span class="p">:</span>
-            <span class="c1"># Handle common optional sections with robust validation</span>
-            <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">section_data</span> <span class="ow">in</span> <span class="n">content</span><span class="o">.</span><span class="n">extra_sections</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Add optional sections if present</span>
+        <span class="n">optional_sections</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;volunteer&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;awards&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;certificates&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;publications&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;skills&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;languages&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;interests&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;references&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;projects&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">section_name</span> <span class="ow">in</span> <span class="n">optional_sections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">section_name</span> <span class="ow">in</span> <span class="n">content_dict</span><span class="p">:</span>
+                <span class="n">section_data</span> <span class="o">=</span> <span class="n">content_dict</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">section_name</span> <span class="o">==</span> <span class="s1">&#39;publications&#39;</span><span class="p">:</span>
                     <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_publications_complete</span><span class="p">(</span>
-                        <span class="n">section_data</span>
+                        <span class="n">section_data</span> <span class="ow">or</span> <span class="p">[]</span>
                     <span class="p">)</span>
                 <span class="k">elif</span> <span class="n">section_name</span> <span class="o">==</span> <span class="s1">&#39;projects&#39;</span><span class="p">:</span>
                     <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_projects_complete</span><span class="p">(</span>
-                        <span class="n">section_data</span>
+                        <span class="n">section_data</span> <span class="ow">or</span> <span class="p">[]</span>
                     <span class="p">)</span>
                 <span class="k">elif</span> <span class="n">section_name</span> <span class="o">==</span> <span class="s1">&#39;skills&#39;</span><span class="p">:</span>
                     <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_skills_complete</span><span class="p">(</span>
-                        <span class="n">section_data</span>
+                        <span class="n">section_data</span> <span class="ow">or</span> <span class="p">[]</span>
                     <span class="p">)</span>
                 <span class="k">elif</span> <span class="n">section_name</span> <span class="o">==</span> <span class="s1">&#39;awards&#39;</span><span class="p">:</span>
                     <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_awards_complete</span><span class="p">(</span>
-                        <span class="n">section_data</span>
+                        <span class="n">section_data</span> <span class="ow">or</span> <span class="p">[]</span>
                     <span class="p">)</span>
-                <span class="k">elif</span> <span class="n">section_name</span> <span class="ow">in</span> <span class="p">[</span>
-                    <span class="s1">&#39;languages&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;interests&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;certificates&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;volunteer&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;references&#39;</span><span class="p">,</span>
-                <span class="p">]:</span>
-                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">section_data</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">section_data</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Unknown section &#39;</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2">&#39; may not render correctly&quot;</span>
-                    <span class="p">)</span>
+                    <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">section_data</span> <span class="ow">or</span> <span class="p">[]</span>
+
+        <span class="c1"># Handle any extra sections (not in standard JSON Resume schema)</span>
+        <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">section_data</span> <span class="ow">in</span> <span class="n">content_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">section_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s1">&#39;basics&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;work&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;education&#39;</span><span class="p">,</span>
+            <span class="p">]</span> <span class="o">+</span> <span class="n">optional_sections</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;field_schema&#39;</span><span class="p">,</span> <span class="s1">&#39;meta&#39;</span><span class="p">]:</span>
+                <span class="n">json_resume</span><span class="p">[</span><span class="n">section_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">section_data</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">warnings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Unknown section &#39;</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2">&#39; may not render correctly&quot;</span>
+                <span class="p">)</span>
 
         <span class="c1"># Ensure all required top-level sections exist (even if empty)</span>
-        <span class="n">required_sections</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;skills&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;projects&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;publications&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;awards&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;languages&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;interests&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;certificates&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;volunteer&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;references&#39;</span><span class="p">,</span>
-        <span class="p">]</span>
-        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">required_sections</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">optional_sections</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">section</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_resume</span><span class="p">:</span>
                 <span class="n">json_resume</span><span class="p">[</span><span class="n">section</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -317,7 +340,7 @@
 
         <span class="k">return</span> <span class="n">basics</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_work_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">work_entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_work_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">work_entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure work entries have required fields.&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">work</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">work_entries</span><span class="p">):</span>
@@ -351,7 +374,7 @@
 
         <span class="k">return</span> <span class="n">work_entries</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_education_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">education_entries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_education_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">education_entries</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure education entries have required fields.&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">edu</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">education_entries</span><span class="p">):</span>
@@ -417,7 +440,7 @@
 
         <span class="k">return</span> <span class="n">fixed_resume</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_publications_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">publications</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_publications_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">publications</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure publications entries have required fields.&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pub</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">publications</span><span class="p">):</span>
@@ -441,7 +464,7 @@
 
         <span class="k">return</span> <span class="n">publications</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_projects_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_projects_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projects</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure projects entries have required fields.&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">proj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">projects</span><span class="p">):</span>
@@ -465,7 +488,7 @@
 
         <span class="k">return</span> <span class="n">projects</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_skills_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_skills_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">skills</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure skills entries have required fields.&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">skill</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">skills</span><span class="p">):</span>
@@ -484,7 +507,7 @@
 
         <span class="k">return</span> <span class="n">skills</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_awards_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">awards</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_awards_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">awards</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure awards entries have required fields.&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">award</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">awards</span><span class="p">):</span>
@@ -507,7 +530,9 @@
 
         <span class="k">return</span> <span class="n">awards</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_content_to_json_resume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">ResumeContent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_content_to_json_resume</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>  <span class="c1"># content is ResumeSchemaExtended</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Legacy method - kept for backward compatibility.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_to_json_resume_robust</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
 

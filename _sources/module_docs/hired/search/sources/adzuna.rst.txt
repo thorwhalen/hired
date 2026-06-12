@@ -1,0 +1,4 @@
+hired.search.sources.adzuna
+===========================
+.. automodule:: hired.search.sources.adzuna
+   :members:

@@ -6,18 +6,18 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.renderers.html &mdash; hired 0.0.3 documentation</title>
+  <title>hired.renderers.html &mdash; hired 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=47de8214"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
@@ -50,21 +50,36 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../base.html">hired.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../renderers.html">hired.renderers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">hired.renderers.html</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#hired.renderers.html.HTMLRenderer"><code class="docutils literal notranslate"><span class="pre">HTMLRenderer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.renderers.html.ThemeRegistry"><code class="docutils literal notranslate"><span class="pre">ThemeRegistry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.renderers.html.html_to_pdf"><code class="docutils literal notranslate"><span class="pre">html_to_pdf()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rendercv.html">hired.renderers.rendercv</a></li>
-<li class="toctree-l1"><a class="reference internal" href="w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracking.html">hired.tracking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">hired.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../validators.html">hired.validators</a></li>
 </ul>
 
         </div>
@@ -96,7 +111,7 @@
 <p>HTML renderer implementation using Jinja2 templates.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.renderers.html.HTMLRenderer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hired.renderers.html.</span></span><span class="sig-name descname"><span class="pre">HTMLRenderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme_registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.renderers.html.ThemeRegistry" title="hired.renderers.html.ThemeRegistry"><span class="pre">ThemeRegistry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hired/renderers/html.html#HTMLRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.html.HTMLRenderer" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.renderers.html.</span></span><span class="sig-name descname"><span class="pre">HTMLRenderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme_registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.renderers.html.ThemeRegistry" title="hired.renderers.html.ThemeRegistry"><span class="pre">ThemeRegistry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hired/renderers/html.html#HTMLRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.html.HTMLRenderer" title="Link to this definition"></a></dt>
 <dd><p>Renders resume to HTML or PDF.</p>
 <dl class="simple">
 <dt>Process:</dt><dd><ul class="simple">
@@ -110,7 +125,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.renderers.html.ThemeRegistry">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hired.renderers.html.</span></span><span class="sig-name descname"><span class="pre">ThemeRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">themes_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hired/renderers/html.html#ThemeRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.html.ThemeRegistry" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.renderers.html.</span></span><span class="sig-name descname"><span class="pre">ThemeRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">themes_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hired/renderers/html.html#ThemeRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.html.ThemeRegistry" title="Link to this definition"></a></dt>
 <dd><p>Registry for available themes.</p>
 <dl class="simple">
 <dt>Each theme is a mapping with keys:</dt><dd><p>name: str
@@ -118,6 +133,12 @@ template: str (filename relative to themes directory)
 css: str (raw CSS text, optional)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.renderers.html.html_to_pdf">
+<span class="sig-prename descclassname"><span class="pre">hired.renderers.html.</span></span><span class="sig-name descname"><span class="pre">html_to_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">css</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/html.html#html_to_pdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.html.html_to_pdf" title="Link to this definition"></a></dt>
+<dd><p>Convert HTML to PDF using WeasyPrint if available, else minimal builder.</p>
 </dd></dl>
 
 </section>

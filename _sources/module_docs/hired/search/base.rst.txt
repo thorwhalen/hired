@@ -1,0 +1,4 @@
+hired.search.base
+=================
+.. automodule:: hired.search.base
+   :members:

@@ -1,0 +1,4 @@
+hired.resume_agent
+==================
+.. automodule:: hired.resume_agent
+   :members:

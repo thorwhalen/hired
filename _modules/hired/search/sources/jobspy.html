@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.search.sources.jobspy &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.search.sources.jobspy</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.search.sources.jobspy</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">JobSpy source adapter.</span>
+
+<span class="sd">Wraps the python-jobspy package to search across multiple job boards</span>
+<span class="sd">(LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google) concurrently.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.search.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">JobSearchSource</span><span class="p">,</span>
+    <span class="n">JobResult</span><span class="p">,</span>
+    <span class="n">SearchCriteria</span><span class="p">,</span>
+    <span class="n">JobType</span><span class="p">,</span>
+    <span class="n">LocationInfo</span><span class="p">,</span>
+    <span class="n">CompensationInfo</span><span class="p">,</span>
+    <span class="n">SourceConfigError</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="JobSpySource">
+<a class="viewcode-back" href="../../../../module_docs/hired/search/sources/jobspy.html#hired.search.JobSpySource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">JobSpySource</span><span class="p">(</span><span class="n">JobSearchSource</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    JobSpy source implementation.</span>
+
+<span class="sd">    Uses python-jobspy to scrape jobs from multiple sources simultaneously.</span>
+<span class="sd">    Does not require API keys, but may be subject to rate limiting.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">sites</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">proxies</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize JobSpy source.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            sites: List of site names to search. Options: &#39;indeed&#39;, &#39;linkedin&#39;,</span>
+<span class="sd">                   &#39;zip_recruiter&#39;, &#39;glassdoor&#39;, &#39;google&#39;. If None, searches all.</span>
+<span class="sd">            proxies: Optional list of proxies in format &#39;user:pass@host:port&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sites</span> <span class="o">=</span> <span class="n">sites</span> <span class="ow">or</span> <span class="p">[</span><span class="s1">&#39;indeed&#39;</span><span class="p">,</span> <span class="s1">&#39;linkedin&#39;</span><span class="p">,</span> <span class="s1">&#39;zip_recruiter&#39;</span><span class="p">,</span> <span class="s1">&#39;glassdoor&#39;</span><span class="p">,</span> <span class="s1">&#39;google&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span> <span class="o">=</span> <span class="n">proxies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jobspy_available</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_jobspy_available</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_jobspy_available</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if python-jobspy package is available.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">jobspy</span>  <span class="c1"># noqa</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;jobspy&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;JobSpy (Multi-Source Scraper)&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">requires_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="JobSpySource.is_configured">
+<a class="viewcode-back" href="../../../../module_docs/hired/search/sources/jobspy.html#hired.search.JobSpySource.is_configured">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_configured</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jobspy_available</span></div>
+
+
+<div class="viewcode-block" id="JobSpySource.get_setup_instructions">
+<a class="viewcode-back" href="../../../../module_docs/hired/search/sources/jobspy.html#hired.search.JobSpySource.get_setup_instructions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_setup_instructions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">JobSpy Setup Instructions:</span>
+<span class="s2">=========================</span>
+
+<span class="s2">JobSpy does not require API keys, but you need to install the python-jobspy package.</span>
+
+<span class="s2">Installation:</span>
+<span class="s2">    pip install python-jobspy</span>
+
+<span class="s2">Features:</span>
+<span class="s2">    - Scrapes jobs from multiple sources: LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google</span>
+<span class="s2">    - No API keys required</span>
+<span class="s2">    - Concurrent scraping across all sources</span>
+
+<span class="s2">Note:</span>
+<span class="s2">    - LinkedIn is rate-limited around the 10th page with one IP</span>
+<span class="s2">    - Consider using proxies for large-scale scraping</span>
+<span class="s2">    - Indeed is the most reliable source with no rate limiting</span>
+
+<span class="s2">Documentation:</span>
+<span class="s2">    https://github.com/speedyapply/JobSpy</span>
+<span class="s2">    https://pypi.org/project/python-jobspy/</span>
+<span class="s2">&quot;&quot;&quot;</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_map_job_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_type_str</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">JobType</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Map JobSpy job type to our JobType enum.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">job_type_str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;fulltime&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
+            <span class="s1">&#39;parttime&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">PART_TIME</span><span class="p">,</span>
+            <span class="s1">&#39;contract&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">CONTRACT</span><span class="p">,</span>
+            <span class="s1">&#39;internship&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">INTERNSHIP</span><span class="p">,</span>
+            <span class="s1">&#39;temporary&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">TEMPORARY</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">job_type_str</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">JobType</span><span class="o">.</span><span class="n">OTHER</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_convert_jobspy_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">site</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JobResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a JobSpy result row to JobResult.&quot;&quot;&quot;</span>
+        <span class="c1"># Extract location info</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">),</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;city&#39;</span><span class="p">),</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">),</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">)]):</span>
+            <span class="c1"># Check if location is a dict or string</span>
+            <span class="n">loc_data</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">loc_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">location</span> <span class="o">=</span> <span class="n">LocationInfo</span><span class="p">(</span>
+                    <span class="n">city</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;city&#39;</span><span class="p">),</span>
+                    <span class="n">state</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">),</span>
+                    <span class="n">country</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">),</span>
+                    <span class="n">postal_code</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;postal_code&#39;</span><span class="p">),</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;raw&#39;</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">location</span> <span class="o">=</span> <span class="n">LocationInfo</span><span class="p">(</span>
+                    <span class="n">city</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;city&#39;</span><span class="p">),</span>
+                    <span class="n">state</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;state&#39;</span><span class="p">),</span>
+                    <span class="n">country</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">),</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">loc_data</span><span class="p">)</span> <span class="k">if</span> <span class="n">loc_data</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Extract compensation info</span>
+        <span class="n">compensation</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">comp_data</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compensation&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;salary&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">comp_data</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">comp_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">compensation</span> <span class="o">=</span> <span class="n">CompensationInfo</span><span class="p">(</span>
+                <span class="n">min_amount</span><span class="o">=</span><span class="n">comp_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min_amount&#39;</span><span class="p">),</span>
+                <span class="n">max_amount</span><span class="o">=</span><span class="n">comp_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max_amount&#39;</span><span class="p">),</span>
+                <span class="n">currency</span><span class="o">=</span><span class="n">comp_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;currency&#39;</span><span class="p">),</span>
+                <span class="n">interval</span><span class="o">=</span><span class="n">comp_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interval&#39;</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Parse date posted</span>
+        <span class="n">date_posted</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date_posted&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;date_posted&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">date_posted</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;date_posted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;+00:00&#39;</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;date_posted&#39;</span><span class="p">],</span> <span class="n">datetime</span><span class="p">):</span>
+                    <span class="n">date_posted</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;date_posted&#39;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+                <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="n">JobResult</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">),</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">site</span><span class="p">,</span>
+            <span class="n">company</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">),</span>
+            <span class="n">company_url</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company_url&#39;</span><span class="p">),</span>
+            <span class="n">job_url</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;job_url&#39;</span><span class="p">),</span>
+            <span class="n">location</span><span class="o">=</span><span class="n">location</span><span class="p">,</span>
+            <span class="n">is_remote</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;is_remote&#39;</span><span class="p">),</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">),</span>
+            <span class="n">job_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_map_job_type</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;job_type&#39;</span><span class="p">)),</span>
+            <span class="n">compensation</span><span class="o">=</span><span class="n">compensation</span><span class="p">,</span>
+            <span class="n">date_posted</span><span class="o">=</span><span class="n">date_posted</span><span class="p">,</span>
+            <span class="n">emails</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;emails&#39;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;emails&#39;</span><span class="p">),</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+            <span class="n">raw_data</span><span class="o">=</span><span class="n">row</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="JobSpySource.search">
+<a class="viewcode-back" href="../../../../module_docs/hired/search/sources/jobspy.html#hired.search.JobSpySource.search">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criteria</span><span class="p">:</span> <span class="n">SearchCriteria</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search for jobs using JobSpy.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            criteria: Search criteria</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of JobResult objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_configured</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">jobspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">scrape_jobs</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SourceConfigError</span><span class="p">(</span>
+                <span class="s2">&quot;python-jobspy is not installed. &quot;</span>
+                <span class="s2">&quot;Install it with: pip install python-jobspy&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Build JobSpy parameters</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;search_term&#39;</span><span class="p">:</span> <span class="n">criteria</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+            <span class="s1">&#39;results_wanted&#39;</span><span class="p">:</span> <span class="n">criteria</span><span class="o">.</span><span class="n">results_wanted</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Add optional parameters</span>
+        <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">location</span>
+
+        <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">distance_miles</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">distance_miles</span>
+
+        <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">is_remote</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;is_remote&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">is_remote</span>
+
+        <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">job_type</span><span class="p">:</span>
+            <span class="c1"># Map our JobType to JobSpy format</span>
+            <span class="n">job_type_map</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">:</span> <span class="s1">&#39;fulltime&#39;</span><span class="p">,</span>
+                <span class="n">JobType</span><span class="o">.</span><span class="n">PART_TIME</span><span class="p">:</span> <span class="s1">&#39;parttime&#39;</span><span class="p">,</span>
+                <span class="n">JobType</span><span class="o">.</span><span class="n">CONTRACT</span><span class="p">:</span> <span class="s1">&#39;contract&#39;</span><span class="p">,</span>
+                <span class="n">JobType</span><span class="o">.</span><span class="n">INTERNSHIP</span><span class="p">:</span> <span class="s1">&#39;internship&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">job_type</span> <span class="ow">in</span> <span class="n">job_type_map</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;job_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">job_type_map</span><span class="p">[</span><span class="n">criteria</span><span class="o">.</span><span class="n">job_type</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">posted_within_days</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;hours_old&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">posted_within_days</span> <span class="o">*</span> <span class="mi">24</span>
+
+        <span class="c1"># Use configured sites or allow override via source_params</span>
+        <span class="n">sites</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">source_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sites&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sites</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;site_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sites</span>
+
+        <span class="c1"># Add proxies if configured</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;proxies&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxies</span>
+
+        <span class="c1"># Add any additional source-specific parameters</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">criteria</span><span class="o">.</span><span class="n">source_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sites&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="c1"># Perform the search</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">scrape_jobs</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+
+            <span class="c1"># Convert to list of JobResult objects</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+                <span class="n">row_dict</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+                <span class="n">site</span> <span class="o">=</span> <span class="n">row_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;site&#39;</span><span class="p">,</span> <span class="s1">&#39;unknown&#39;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">job_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_jobspy_result</span><span class="p">(</span><span class="n">row_dict</span><span class="p">,</span> <span class="n">site</span><span class="p">)</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job_result</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="c1"># Log error but continue processing other results</span>
+                    <span class="c1"># You might want to add proper logging here</span>
+                    <span class="k">continue</span>
+
+            <span class="k">return</span> <span class="n">results</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;JobSpy search failed: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1"># Create a default instance</span>
+<span class="n">_default_jobspy_source</span> <span class="o">=</span> <span class="n">JobSpySource</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="get_jobspy_source">
+<a class="viewcode-back" href="../../../../module_docs/hired/search/sources/jobspy.html#hired.search.get_jobspy_source">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_jobspy_source</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">JobSpySource</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the default JobSpy source instance.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_default_jobspy_source</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

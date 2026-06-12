@@ -6,25 +6,25 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.renderers.rendercv &mdash; hired 0.0.3 documentation</title>
+  <title>hired.renderers.rendercv &mdash; hired 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=47de8214"></script>
-      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="hired.renderers.w_rendercv" href="w_rendercv.html" />
+    <link rel="next" title="hired.resume_agent" href="../resume_agent.html" />
     <link rel="prev" title="hired.renderers.html" href="html.html" /> 
 </head>
 
@@ -50,9 +50,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../base.html">hired.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="html.html">hired.renderers.html</a></li>
@@ -63,10 +68,19 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracking.html">hired.tracking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../util.html">hired.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../validators.html">hired.validators</a></li>
 </ul>
 
         </div>
@@ -98,7 +112,7 @@
 <p>RenderCV renderer implementation using the RenderCV backend.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.renderers.rendercv.RenderCVRenderer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hired.renderers.rendercv.</span></span><span class="sig-name descname"><span class="pre">RenderCVRenderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strict_validation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hired/renderers/rendercv.html#RenderCVRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.rendercv.RenderCVRenderer" title="Link to this definition"></a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.renderers.rendercv.</span></span><span class="sig-name descname"><span class="pre">RenderCVRenderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strict_validation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/hired/renderers/rendercv.html#RenderCVRenderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.rendercv.RenderCVRenderer" title="Link to this definition"></a></dt>
 <dd><p>Renderer that uses RenderCV for high-quality PDF generation.</p>
 <p>This renderer:
 1. Converts JSON Resume format to RenderCV YAML format
@@ -110,7 +124,7 @@
 - Gracefully handles schema validation issues</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hired.renderers.rendercv.RenderCVRenderer.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#hired.base.ResumeContent" title="hired.base.ResumeContent"><span class="pre">ResumeContent</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#hired.base.RenderingConfig" title="hired.base.RenderingConfig"><span class="pre">RenderingConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/rendercv.html#RenderCVRenderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.rendercv.RenderCVRenderer.render" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../base.html#hired.base.RenderingConfig" title="hired.base.RenderingConfig"><span class="pre">RenderingConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="../../../_modules/hired/renderers/rendercv.html#RenderCVRenderer.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.renderers.rendercv.RenderCVRenderer.render" title="Link to this definition"></a></dt>
 <dd><p>Render resume content using RenderCV backend.</p>
 </dd></dl>
 
@@ -123,7 +137,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="html.html" class="btn btn-neutral float-left" title="hired.renderers.html" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="w_rendercv.html" class="btn btn-neutral float-right" title="hired.renderers.w_rendercv" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../resume_agent.html" class="btn btn-neutral float-right" title="hired.resume_agent" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

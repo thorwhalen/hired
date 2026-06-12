@@ -1,4 +1,0 @@
-hired.validators
-================
-.. automodule:: hired.validators
-   :members:

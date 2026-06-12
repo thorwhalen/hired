@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.tracking &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="hired.util" href="util.html" />
+    <link rel="prev" title="hired.tools" href="tools.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">hired.tools</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.tracking</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.tracking.Application"><code class="docutils literal notranslate"><span class="pre">Application</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.Application.from_job_result"><code class="docutils literal notranslate"><span class="pre">Application.from_job_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.Application.to_dict"><code class="docutils literal notranslate"><span class="pre">Application.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.tracking.ApplicationTracker"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.add_application"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.add_application()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.delete_application"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.delete_application()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.export_to_csv"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.export_to_csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.get_application"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.get_application()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.get_applications"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.get_applications()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.get_follow_ups_due"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.get_follow_ups_due()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.get_statistics"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.get_statistics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.update_application"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.update_application()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.tracking.ApplicationTracker.update_status"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker.update_status()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.tracking</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/hired/tracking.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.tracking">
+<span id="hired-tracking"></span><h1>hired.tracking<a class="headerlink" href="#module-hired.tracking" title="Link to this heading"></a></h1>
+<p>Application tracking system for managing job applications.</p>
+<p>Track applications, statuses, follow-ups, and outcomes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.tracking.Application">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.tracking.</span></span><span class="sig-name descname"><span class="pre">Application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">salary_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resume_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cover_letter_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'draft'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">applied_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow_up_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_contact_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contacts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interview_dates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/tracking.html#Application"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.Application" title="Link to this definition"></a></dt>
+<dd><p>Represents a job application.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.Application.from_job_result">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_job_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hired.html#hired.JobResult" title="hired.JobResult"><span class="pre">JobResult</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.tracking.Application" title="hired.tracking.Application"><span class="pre">Application</span></a></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#Application.from_job_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.Application.from_job_result" title="Link to this definition"></a></dt>
+<dd><p>Create an Application from a JobResult.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job</strong> – JobResult object</p></li>
+<li><p><strong>**kwargs</strong> – Additional fields to set</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Application object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.Application.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#Application.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.Application.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Convert to dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.tracking.</span></span><span class="sig-name descname"><span class="pre">ApplicationTracker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker" title="Link to this definition"></a></dt>
+<dd><p>Track job applications in a SQLite database.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tracker</span> <span class="o">=</span> <span class="n">ApplicationTracker</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add application from job search</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app_id</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">add_application</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">job</span><span class="o">=</span><span class="n">job_result</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resume_path</span><span class="o">=</span><span class="s2">&quot;resume.pdf&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">status</span><span class="o">=</span><span class="s2">&quot;applied&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Update status</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tracker</span><span class="o">.</span><span class="n">update_status</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="s2">&quot;interview&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get all applications in interview stage</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interviews</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">get_applications</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="s2">&quot;interview&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get statistics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">get_statistics</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.add_application">
+<span class="sig-name descname"><span class="pre">add_application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../hired.html#hired.JobResult" title="hired.JobResult"><span class="pre">JobResult</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.add_application"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.add_application" title="Link to this definition"></a></dt>
+<dd><p>Add a new application.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>job</strong> – Optional JobResult to create application from</p></li>
+<li><p><strong>**kwargs</strong> – Additional fields (or all fields if job not provided)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ID of created application</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># From JobResult</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app_id</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">add_application</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">job</span><span class="o">=</span><span class="n">job_result</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">resume_path</span><span class="o">=</span><span class="s2">&quot;resume.pdf&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">status</span><span class="o">=</span><span class="s2">&quot;applied&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Manual entry</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">app_id</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">add_application</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">job_title</span><span class="o">=</span><span class="s2">&quot;Software Engineer&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">company</span><span class="o">=</span><span class="s2">&quot;TechCorp&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">status</span><span class="o">=</span><span class="s2">&quot;applied&quot;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.delete_application">
+<span class="sig-name descname"><span class="pre">delete_application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.delete_application"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.delete_application" title="Link to this definition"></a></dt>
+<dd><p>Delete an application.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>app_id</strong> – Application ID</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if deleted, False if not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.export_to_csv">
+<span class="sig-name descname"><span class="pre">export_to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.export_to_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.export_to_csv" title="Link to this definition"></a></dt>
+<dd><p>Export applications to CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_path</strong> – Path to output CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.get_application">
+<span class="sig-name descname"><span class="pre">get_application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.tracking.Application" title="hired.tracking.Application"><span class="pre">Application</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.get_application"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.get_application" title="Link to this definition"></a></dt>
+<dd><p>Get application by ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>app_id</strong> – Application ID</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Application object or None if not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.get_applications">
+<span class="sig-name descname"><span class="pre">get_applications</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.tracking.Application" title="hired.tracking.Application"><span class="pre">Application</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.get_applications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.get_applications" title="Link to this definition"></a></dt>
+<dd><p>Get applications with optional filtering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status</strong> – Filter by status</p></li>
+<li><p><strong>company</strong> – Filter by company name</p></li>
+<li><p><strong>limit</strong> – Maximum number of results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Application objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.get_follow_ups_due">
+<span class="sig-name descname"><span class="pre">get_follow_ups_due</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">days</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.tracking.Application" title="hired.tracking.Application"><span class="pre">Application</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.get_follow_ups_due"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.get_follow_ups_due" title="Link to this definition"></a></dt>
+<dd><p>Get applications that need follow-up.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>days</strong> – Number of days to look ahead</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Application objects needing follow-up</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.get_statistics">
+<span class="sig-name descname"><span class="pre">get_statistics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.get_statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.get_statistics" title="Link to this definition"></a></dt>
+<dd><p>Get application statistics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary with statistics</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.update_application">
+<span class="sig-name descname"><span class="pre">update_application</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.update_application"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.update_application" title="Link to this definition"></a></dt>
+<dd><p>Update application fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>app_id</strong> – Application ID</p></li>
+<li><p><strong>**kwargs</strong> – Fields to update</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if updated, False if not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.tracking.ApplicationTracker.update_status">
+<span class="sig-name descname"><span class="pre">update_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/tracking.html#ApplicationTracker.update_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.tracking.ApplicationTracker.update_status" title="Link to this definition"></a></dt>
+<dd><p>Update application status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>app_id</strong> – Application ID</p></li>
+<li><p><strong>status</strong> – New status</p></li>
+<li><p><strong>notes</strong> – Optional notes to append</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if updated, False if not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tools.html" class="btn btn-neutral float-left" title="hired.tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="util.html" class="btn btn-neutral float-right" title="hired.util" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

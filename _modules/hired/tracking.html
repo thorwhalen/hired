@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.tracking &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.tracking</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.tracking</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Application tracking system for managing job applications.</span>
+
+<span class="sd">Track applications, statuses, follow-ups, and outcomes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">asdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.search.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobResult</span>
+
+
+<span class="c1"># Default database location</span>
+<span class="n">DEFAULT_DB_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.hired&quot;</span> <span class="o">/</span> <span class="s2">&quot;applications.db&quot;</span>
+
+
+<div class="viewcode-block" id="Application">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.Application">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Application</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a job application.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Required fields</span>
+    <span class="n">job_title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">company</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="c1"># Identification</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Job details</span>
+    <span class="n">job_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">salary_range</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Application materials</span>
+    <span class="n">resume_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">cover_letter_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Status tracking</span>
+    <span class="n">status</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;draft&quot;</span>  <span class="c1"># draft, applied, interview, offer, rejected, accepted, withdrawn</span>
+    <span class="n">applied_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Timeline</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">updated_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Follow-up</span>
+    <span class="n">follow_up_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">last_contact_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Notes and metadata</span>
+    <span class="n">notes</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">contacts</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># JSON string of contact information</span>
+    <span class="n">interview_dates</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># JSON string of interview dates</span>
+
+    <span class="c1"># Matching score (from JobMatcher)</span>
+    <span class="n">match_score</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Source tracking</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># e.g., &quot;linkedin&quot;, &quot;indeed&quot;, &quot;usajobs&quot;</span>
+    <span class="n">source_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># JSON string for additional source data</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">updated_at</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updated_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Application.to_dict">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.Application.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to dictionary.&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># Parse JSON fields</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">contacts</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;contacts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">contacts</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;contacts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interview_dates</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;interview_dates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interview_dates</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;interview_dates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;source_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source_data</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s1">&#39;source_data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="Application.from_job_result">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.Application.from_job_result">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_job_result</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">job</span><span class="p">:</span> <span class="s1">&#39;JobResult&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Application&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an Application from a JobResult.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            job: JobResult object</span>
+<span class="sd">            **kwargs: Additional fields to set</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Application object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">salary_range</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">compensation</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">min_amount</span> <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">max_amount</span><span class="p">:</span>
+                <span class="n">currency</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">currency</span> <span class="ow">or</span> <span class="s2">&quot;USD&quot;</span>
+                <span class="n">salary_range</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">min_amount</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2"> - $</span><span class="si">{</span><span class="n">job</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">max_amount</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">currency</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">location</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">raw</span> <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">location</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">job_title</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">company</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">company</span> <span class="ow">or</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">,</span>
+            <span class="n">job_url</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span>
+            <span class="n">location</span><span class="o">=</span><span class="n">location</span><span class="p">,</span>
+            <span class="n">salary_range</span><span class="o">=</span><span class="n">salary_range</span><span class="p">,</span>
+            <span class="n">source</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="n">source_data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">raw_data</span><span class="p">)</span> <span class="k">if</span> <span class="n">job</span><span class="o">.</span><span class="n">raw_data</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ApplicationTracker">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ApplicationTracker</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Track job applications in a SQLite database.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; tracker = ApplicationTracker()</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Add application from job search</span>
+<span class="sd">        &gt;&gt;&gt; app_id = tracker.add_application(</span>
+<span class="sd">        ...     job=job_result,</span>
+<span class="sd">        ...     resume_path=&quot;resume.pdf&quot;,</span>
+<span class="sd">        ...     status=&quot;applied&quot;</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Update status</span>
+<span class="sd">        &gt;&gt;&gt; tracker.update_status(app_id, &quot;interview&quot;)</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Get all applications in interview stage</span>
+<span class="sd">        &gt;&gt;&gt; interviews = tracker.get_applications(status=&quot;interview&quot;)</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Get statistics</span>
+<span class="sd">        &gt;&gt;&gt; stats = tracker.get_statistics()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize application tracker.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            db_path: Path to SQLite database. If None, uses default location.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_path</span> <span class="o">=</span> <span class="n">db_path</span> <span class="ow">or</span> <span class="n">DEFAULT_DB_PATH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_db</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_init_db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize database schema.&quot;&quot;&quot;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            CREATE TABLE IF NOT EXISTS applications (</span>
+<span class="s2">                id INTEGER PRIMARY KEY AUTOINCREMENT,</span>
+<span class="s2">                job_title TEXT NOT NULL,</span>
+<span class="s2">                company TEXT NOT NULL,</span>
+<span class="s2">                job_url TEXT,</span>
+<span class="s2">                location TEXT,</span>
+<span class="s2">                salary_range TEXT,</span>
+<span class="s2">                resume_path TEXT,</span>
+<span class="s2">                cover_letter_path TEXT,</span>
+<span class="s2">                status TEXT DEFAULT &#39;draft&#39;,</span>
+<span class="s2">                applied_date TEXT,</span>
+<span class="s2">                created_at TEXT NOT NULL,</span>
+<span class="s2">                updated_at TEXT NOT NULL,</span>
+<span class="s2">                follow_up_date TEXT,</span>
+<span class="s2">                last_contact_date TEXT,</span>
+<span class="s2">                notes TEXT,</span>
+<span class="s2">                contacts TEXT,</span>
+<span class="s2">                interview_dates TEXT,</span>
+<span class="s2">                match_score REAL,</span>
+<span class="s2">                source TEXT,</span>
+<span class="s2">                source_data TEXT</span>
+<span class="s2">            )</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Create indexes for common queries</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            CREATE INDEX IF NOT EXISTS idx_status ON applications(status)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            CREATE INDEX IF NOT EXISTS idx_company ON applications(company)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            CREATE INDEX IF NOT EXISTS idx_applied_date ON applications(applied_date)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ApplicationTracker.add_application">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.add_application">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_application</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">job</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s1">&#39;JobResult&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new application.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            job: Optional JobResult to create application from</span>
+<span class="sd">            **kwargs: Additional fields (or all fields if job not provided)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ID of created application</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; # From JobResult</span>
+<span class="sd">            &gt;&gt;&gt; app_id = tracker.add_application(</span>
+<span class="sd">            ...     job=job_result,</span>
+<span class="sd">            ...     resume_path=&quot;resume.pdf&quot;,</span>
+<span class="sd">            ...     status=&quot;applied&quot;</span>
+<span class="sd">            ... )</span>
+<span class="sd">            &gt;&gt;&gt;</span>
+<span class="sd">            &gt;&gt;&gt; # Manual entry</span>
+<span class="sd">            &gt;&gt;&gt; app_id = tracker.add_application(</span>
+<span class="sd">            ...     job_title=&quot;Software Engineer&quot;,</span>
+<span class="sd">            ...     company=&quot;TechCorp&quot;,</span>
+<span class="sd">            ...     status=&quot;applied&quot;</span>
+<span class="sd">            ... )</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">job</span><span class="p">:</span>
+            <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="o">.</span><span class="n">from_job_result</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">app</span> <span class="o">=</span> <span class="n">Application</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">app</span><span class="o">.</span><span class="n">updated_at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            INSERT INTO applications (</span>
+<span class="s2">                job_title, company, job_url, location, salary_range,</span>
+<span class="s2">                resume_path, cover_letter_path, status, applied_date,</span>
+<span class="s2">                created_at, updated_at, follow_up_date, last_contact_date,</span>
+<span class="s2">                notes, contacts, interview_dates, match_score, source, source_data</span>
+<span class="s2">            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">job_title</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">company</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">location</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">salary_range</span><span class="p">,</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">resume_path</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">cover_letter_path</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">applied_date</span><span class="p">,</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">created_at</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">updated_at</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">follow_up_date</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">last_contact_date</span><span class="p">,</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">notes</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">contacts</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">interview_dates</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">match_score</span><span class="p">,</span>
+            <span class="n">app</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">source_data</span>
+        <span class="p">))</span>
+
+        <span class="n">app_id</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">lastrowid</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">app_id</span></div>
+
+
+<div class="viewcode-block" id="ApplicationTracker.get_application">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.get_application">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Application</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get application by ID.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            app_id: Application ID</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Application object or None if not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">row_factory</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Row</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM applications WHERE id = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">app_id</span><span class="p">,))</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">row</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Application</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="ApplicationTracker.get_applications">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.get_applications">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_applications</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">company</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Application</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get applications with optional filtering.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            status: Filter by status</span>
+<span class="sd">            company: Filter by company name</span>
+<span class="sd">            limit: Maximum number of results</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of Application objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">row_factory</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Row</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT * FROM applications WHERE 1=1&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">+=</span> <span class="s2">&quot; AND status = ?&quot;</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">company</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">+=</span> <span class="s2">&quot; AND company LIKE ?&quot;</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%</span><span class="si">{</span><span class="n">company</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+
+        <span class="n">query</span> <span class="o">+=</span> <span class="s2">&quot; ORDER BY updated_at DESC&quot;</span>
+
+        <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">+=</span> <span class="s2">&quot; LIMIT ?&quot;</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">Application</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="p">))</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ApplicationTracker.update_status">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.update_status">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_status</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">app_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">status</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">notes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update application status.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            app_id: Application ID</span>
+<span class="sd">            status: New status</span>
+<span class="sd">            notes: Optional notes to append</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if updated, False if not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">updates</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>
+            <span class="s1">&#39;updated_at&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s2">&quot;applied&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_application</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span><span class="o">.</span><span class="n">applied_date</span><span class="p">:</span>
+            <span class="n">updates</span><span class="p">[</span><span class="s1">&#39;applied_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">notes</span><span class="p">:</span>
+            <span class="n">app</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_application</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">app</span><span class="p">:</span>
+                <span class="n">existing_notes</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">notes</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+                <span class="n">updates</span><span class="p">[</span><span class="s1">&#39;notes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">existing_notes</span><span class="si">}</span><span class="se">\n</span><span class="s2">[</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">notes</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_application</span><span class="p">(</span><span class="n">app_id</span><span class="p">,</span> <span class="o">**</span><span class="n">updates</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ApplicationTracker.update_application">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.update_application">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update application fields.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            app_id: Application ID</span>
+<span class="sd">            **kwargs: Fields to update</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if updated, False if not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;updated_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+        <span class="n">set_clause</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = ?&quot;</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">app_id</span><span class="p">)</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;UPDATE applications SET </span><span class="si">{</span><span class="n">set_clause</span><span class="si">}</span><span class="s2"> WHERE id = ?&quot;</span><span class="p">,</span>
+            <span class="n">values</span>
+        <span class="p">)</span>
+
+        <span class="n">rows_affected</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">rows_affected</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="ApplicationTracker.delete_application">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.delete_application">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_application</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete an application.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            app_id: Application ID</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if deleted, False if not found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM applications WHERE id = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">app_id</span><span class="p">,))</span>
+
+        <span class="n">rows_affected</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">rows_affected</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="ApplicationTracker.get_statistics">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.get_statistics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get application statistics.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary with statistics</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="c1"># Total applications</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM applications&quot;</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># By status</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SELECT status, COUNT(*) FROM applications GROUP BY status</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">by_status</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+
+        <span class="c1"># Response rate (if applied, how many got responses)</span>
+        <span class="n">applied</span> <span class="o">=</span> <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;applied&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interview&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> \
+                  <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;offer&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;accepted&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> \
+                  <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rejected&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">responses</span> <span class="o">=</span> <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interview&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;offer&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> \
+                   <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;accepted&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">by_status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rejected&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">response_rate</span> <span class="o">=</span> <span class="p">(</span><span class="n">responses</span> <span class="o">/</span> <span class="n">applied</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span> <span class="k">if</span> <span class="n">applied</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="c1"># Average time to response</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SELECT AVG(julianday(last_contact_date) - julianday(applied_date))</span>
+<span class="s2">            FROM applications</span>
+<span class="s2">            WHERE applied_date IS NOT NULL AND last_contact_date IS NOT NULL</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="n">avg_days</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="mi">0</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;total_applications&#39;</span><span class="p">:</span> <span class="n">total</span><span class="p">,</span>
+            <span class="s1">&#39;by_status&#39;</span><span class="p">:</span> <span class="n">by_status</span><span class="p">,</span>
+            <span class="s1">&#39;response_rate&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">response_rate</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s1">&#39;avg_days_to_response&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">avg_days</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="ApplicationTracker.get_follow_ups_due">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.get_follow_ups_due">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_follow_ups_due</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">days</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">7</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Application</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get applications that need follow-up.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            days: Number of days to look ahead</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of Application objects needing follow-up</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cutoff_date</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">days</span><span class="p">))</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">row_factory</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Row</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SELECT * FROM applications</span>
+<span class="s2">            WHERE follow_up_date IS NOT NULL</span>
+<span class="s2">            AND follow_up_date &lt;= ?</span>
+<span class="s2">            AND status NOT IN (&#39;rejected&#39;, &#39;accepted&#39;, &#39;withdrawn&#39;)</span>
+<span class="s2">            ORDER BY follow_up_date</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">cutoff_date</span><span class="p">,))</span>
+
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">Application</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">row</span><span class="p">))</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ApplicationTracker.export_to_csv">
+<a class="viewcode-back" href="../../module_docs/hired/tracking.html#hired.ApplicationTracker.export_to_csv">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export applications to CSV file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            output_path: Path to output CSV file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+
+        <span class="n">applications</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_applications</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">applications</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;job_title&#39;</span><span class="p">,</span> <span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;location&#39;</span><span class="p">,</span> <span class="s1">&#39;salary_range&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;applied_date&#39;</span><span class="p">,</span> <span class="s1">&#39;job_url&#39;</span><span class="p">,</span> <span class="s1">&#39;match_score&#39;</span><span class="p">,</span> <span class="s1">&#39;notes&#39;</span>
+            <span class="p">]</span>
+
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">applications</span><span class="p">:</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="p">{</span><span class="n">field</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fieldnames</span><span class="p">}</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

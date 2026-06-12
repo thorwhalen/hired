@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.search.base &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.search.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.search.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Base classes and interfaces for job search functionality.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="JobType">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">JobType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Standardized job types across all sources.&quot;&quot;&quot;</span>
+    <span class="n">FULL_TIME</span> <span class="o">=</span> <span class="s2">&quot;fulltime&quot;</span>
+    <span class="n">PART_TIME</span> <span class="o">=</span> <span class="s2">&quot;parttime&quot;</span>
+    <span class="n">CONTRACT</span> <span class="o">=</span> <span class="s2">&quot;contract&quot;</span>
+    <span class="n">INTERNSHIP</span> <span class="o">=</span> <span class="s2">&quot;internship&quot;</span>
+    <span class="n">TEMPORARY</span> <span class="o">=</span> <span class="s2">&quot;temporary&quot;</span>
+    <span class="n">VOLUNTEER</span> <span class="o">=</span> <span class="s2">&quot;volunteer&quot;</span>
+    <span class="n">OTHER</span> <span class="o">=</span> <span class="s2">&quot;other&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CompensationInfo">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.CompensationInfo">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CompensationInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compensation information for a job.&quot;&quot;&quot;</span>
+    <span class="n">min_amount</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">max_amount</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">currency</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">interval</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># e.g., &quot;yearly&quot;, &quot;monthly&quot;, &quot;hourly&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="LocationInfo">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.LocationInfo">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LocationInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Location information for a job.&quot;&quot;&quot;</span>
+    <span class="n">city</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">country</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">postal_code</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">raw</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Raw location string from source</span></div>
+
+
+
+<div class="viewcode-block" id="JobResult">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobResult">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">JobResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Standardized job result across all sources.</span>
+
+<span class="sd">    This provides a unified interface regardless of which source</span>
+<span class="sd">    the job was retrieved from.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Required fields</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Name of the source (e.g., &quot;indeed&quot;, &quot;usajobs&quot;)</span>
+
+    <span class="c1"># Common optional fields</span>
+    <span class="n">company</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">company_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">job_url</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LocationInfo</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">is_remote</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">job_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">JobType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">compensation</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CompensationInfo</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">date_posted</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">date_updated</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">application_deadline</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Additional metadata</span>
+    <span class="n">skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">benefits</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">emails</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="c1"># Source-specific data</span>
+    <span class="n">raw_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+<div class="viewcode-block" id="JobResult.to_dict">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobResult.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert JobResult to dictionary.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
+            <span class="s1">&#39;company_url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company_url</span><span class="p">,</span>
+            <span class="s1">&#39;job_url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span>
+            <span class="s1">&#39;is_remote&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_remote</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s1">&#39;job_type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_type</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;skills&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">,</span>
+            <span class="s1">&#39;benefits&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">benefits</span><span class="p">,</span>
+            <span class="s1">&#39;emails&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emails</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">city</span><span class="p">,</span>
+                <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
+                <span class="s1">&#39;country&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">country</span><span class="p">,</span>
+                <span class="s1">&#39;postal_code&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">postal_code</span><span class="p">,</span>
+                <span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;compensation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;min_amount&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">min_amount</span><span class="p">,</span>
+                <span class="s1">&#39;max_amount&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">max_amount</span><span class="p">,</span>
+                <span class="s1">&#39;currency&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">currency</span><span class="p">,</span>
+                <span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">interval</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_posted</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;date_posted&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_posted</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_updated</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;date_updated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_updated</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">application_deadline</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;application_deadline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">application_deadline</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SearchCriteria">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.SearchCriteria">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SearchCriteria</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Standardized search criteria across all sources.</span>
+
+<span class="sd">    Different sources may not support all criteria, but this provides</span>
+<span class="sd">    a consistent interface for users.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Required</span>
+    <span class="n">query</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Free-form text query</span>
+
+    <span class="c1"># Optional location filters</span>
+    <span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">country</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">city</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">postal_code</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">distance_miles</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Job type and arrangement</span>
+    <span class="n">job_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">JobType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">is_remote</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Temporal filters</span>
+    <span class="n">posted_within_days</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Pagination</span>
+    <span class="n">results_wanted</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Compensation</span>
+    <span class="n">min_salary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">max_salary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Additional filters</span>
+    <span class="n">keywords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">exclude_keywords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="c1"># Source-specific parameters</span>
+    <span class="n">source_params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="SourceConfigError">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.SourceConfigError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SourceConfigError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a source is not properly configured.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="JobSearchSource">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobSearchSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">JobSearchSource</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract base class for job search sources.</span>
+
+<span class="sd">    All job search sources must implement this interface to be</span>
+<span class="sd">    registered in the system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the name of this source (e.g., &#39;indeed&#39;, &#39;usajobs&#39;).&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">display_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the display name of this source (e.g., &#39;Indeed&#39;, &#39;USAJobs&#39;).&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">requires_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return True if this source requires authentication/API keys.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="JobSearchSource.is_configured">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobSearchSource.is_configured">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_configured</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if this source is properly configured.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if the source is ready to use, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="JobSearchSource.get_setup_instructions">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobSearchSource.get_setup_instructions">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_setup_instructions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return setup instructions for this source.</span>
+
+<span class="sd">        Should include:</span>
+<span class="sd">        - Where to get API keys if needed</span>
+<span class="sd">        - Environment variables or config file settings</span>
+<span class="sd">        - URLs for documentation</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Multi-line string with setup instructions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="JobSearchSource.search">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobSearchSource.search">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criteria</span><span class="p">:</span> <span class="n">SearchCriteria</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Search for jobs using the given criteria.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            criteria: SearchCriteria object with search parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of JobResult objects</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SourceConfigError: If the source is not properly configured</span>
+<span class="sd">            Exception: For other errors during search</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="JobSearchSource.validate_configured">
+<a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobSearchSource.validate_configured">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_configured</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate that the source is configured, raise error if not.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            SourceConfigError: If the source is not properly configured</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_configured</span><span class="p">():</span>
+            <span class="n">instructions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_setup_instructions</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">SourceConfigError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s2"> is not properly configured.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">instructions</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

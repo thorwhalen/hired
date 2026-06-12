@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.job_utils &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.job_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.job_utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Utilities for working with job postings and matching them to resumes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.search.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobResult</span><span class="p">,</span> <span class="n">LocationInfo</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_format_location</span><span class="p">(</span><span class="n">location</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LocationInfo</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Human-readable location string from the raw field or structured parts.</span>
+
+<span class="sd">    Falls back to ``city, state, country`` when the source provided no raw</span>
+<span class="sd">    string (so a structured-only location like ``LocationInfo(city=&quot;San</span>
+<span class="sd">    Francisco&quot;, state=&quot;CA&quot;)`` is not dropped).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">location</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">raw</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">location</span><span class="o">.</span><span class="n">raw</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="n">location</span><span class="o">.</span><span class="n">city</span><span class="p">,</span> <span class="n">location</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">location</span><span class="o">.</span><span class="n">country</span><span class="p">)</span> <span class="k">if</span> <span class="n">p</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="JobAnalyzer">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.JobAnalyzer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">JobAnalyzer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analyze job postings to extract key information for resume tailoring.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Common skill keywords (can be extended)</span>
+    <span class="n">TECH_SKILLS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="s1">&#39;java&#39;</span><span class="p">,</span> <span class="s1">&#39;javascript&#39;</span><span class="p">,</span> <span class="s1">&#39;typescript&#39;</span><span class="p">,</span> <span class="s1">&#39;c++&#39;</span><span class="p">,</span> <span class="s1">&#39;c#&#39;</span><span class="p">,</span> <span class="s1">&#39;ruby&#39;</span><span class="p">,</span> <span class="s1">&#39;go&#39;</span><span class="p">,</span> <span class="s1">&#39;rust&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;react&#39;</span><span class="p">,</span> <span class="s1">&#39;angular&#39;</span><span class="p">,</span> <span class="s1">&#39;vue&#39;</span><span class="p">,</span> <span class="s1">&#39;node&#39;</span><span class="p">,</span> <span class="s1">&#39;django&#39;</span><span class="p">,</span> <span class="s1">&#39;flask&#39;</span><span class="p">,</span> <span class="s1">&#39;spring&#39;</span><span class="p">,</span> <span class="s1">&#39;express&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;aws&#39;</span><span class="p">,</span> <span class="s1">&#39;azure&#39;</span><span class="p">,</span> <span class="s1">&#39;gcp&#39;</span><span class="p">,</span> <span class="s1">&#39;docker&#39;</span><span class="p">,</span> <span class="s1">&#39;kubernetes&#39;</span><span class="p">,</span> <span class="s1">&#39;terraform&#39;</span><span class="p">,</span> <span class="s1">&#39;jenkins&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sql&#39;</span><span class="p">,</span> <span class="s1">&#39;postgresql&#39;</span><span class="p">,</span> <span class="s1">&#39;mysql&#39;</span><span class="p">,</span> <span class="s1">&#39;mongodb&#39;</span><span class="p">,</span> <span class="s1">&#39;redis&#39;</span><span class="p">,</span> <span class="s1">&#39;elasticsearch&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;ci/cd&#39;</span><span class="p">,</span> <span class="s1">&#39;agile&#39;</span><span class="p">,</span> <span class="s1">&#39;scrum&#39;</span><span class="p">,</span> <span class="s1">&#39;jira&#39;</span><span class="p">,</span> <span class="s1">&#39;linux&#39;</span><span class="p">,</span> <span class="s1">&#39;bash&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ml&#39;</span><span class="p">,</span> <span class="s1">&#39;ai&#39;</span><span class="p">,</span> <span class="s1">&#39;machine learning&#39;</span><span class="p">,</span> <span class="s1">&#39;deep learning&#39;</span><span class="p">,</span> <span class="s1">&#39;tensorflow&#39;</span><span class="p">,</span> <span class="s1">&#39;pytorch&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;data science&#39;</span><span class="p">,</span> <span class="s1">&#39;analytics&#39;</span><span class="p">,</span> <span class="s1">&#39;tableau&#39;</span><span class="p">,</span> <span class="s1">&#39;power bi&#39;</span><span class="p">,</span> <span class="s1">&#39;spark&#39;</span><span class="p">,</span> <span class="s1">&#39;hadoop&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;rest&#39;</span><span class="p">,</span> <span class="s1">&#39;graphql&#39;</span><span class="p">,</span> <span class="s1">&#39;microservices&#39;</span><span class="p">,</span> <span class="s1">&#39;api&#39;</span><span class="p">,</span> <span class="s1">&#39;backend&#39;</span><span class="p">,</span> <span class="s1">&#39;frontend&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">SOFT_SKILLS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;leadership&#39;</span><span class="p">,</span> <span class="s1">&#39;communication&#39;</span><span class="p">,</span> <span class="s1">&#39;collaboration&#39;</span><span class="p">,</span> <span class="s1">&#39;teamwork&#39;</span><span class="p">,</span> <span class="s1">&#39;problem-solving&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;critical thinking&#39;</span><span class="p">,</span> <span class="s1">&#39;project management&#39;</span><span class="p">,</span> <span class="s1">&#39;mentoring&#39;</span><span class="p">,</span> <span class="s1">&#39;coaching&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;strategic thinking&#39;</span><span class="p">,</span> <span class="s1">&#39;analytical&#39;</span><span class="p">,</span> <span class="s1">&#39;creative&#39;</span><span class="p">,</span> <span class="s1">&#39;adaptable&#39;</span><span class="p">,</span> <span class="s1">&#39;organized&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">:</span> <span class="n">JobResult</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize analyzer with a job posting.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            job: JobResult object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">job</span> <span class="o">=</span> <span class="n">job</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_text_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract all searchable text from job posting.&quot;&quot;&quot;</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">company</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">company</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+
+        <span class="c1"># Add skills if present</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">skills</span><span class="p">:</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">skills</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span>
+
+<div class="viewcode-block" id="JobAnalyzer.extract_skills">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.JobAnalyzer.extract_skills">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_skills</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_soft_skills</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract mentioned skills from job posting.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            include_soft_skills: Whether to include soft skills</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Set of identified skills</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">found_skills</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="c1"># Check technical skills</span>
+        <span class="k">for</span> <span class="n">skill</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">TECH_SKILLS</span><span class="p">:</span>
+            <span class="c1"># Use word boundaries to avoid partial matches</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\b&#39;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;\b&#39;</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_lower</span><span class="p">):</span>
+                <span class="n">found_skills</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span>
+
+        <span class="c1"># Check soft skills if requested</span>
+        <span class="k">if</span> <span class="n">include_soft_skills</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">skill</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SOFT_SKILLS</span><span class="p">:</span>
+                <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\b&#39;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;\b&#39;</span>
+                <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_lower</span><span class="p">):</span>
+                    <span class="n">found_skills</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">skill</span><span class="p">)</span>
+
+        <span class="c1"># Add explicitly listed skills</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">skills</span><span class="p">:</span>
+            <span class="n">found_skills</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">skills</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">found_skills</span></div>
+
+
+<div class="viewcode-block" id="JobAnalyzer.extract_requirements">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.JobAnalyzer.extract_requirements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract job requirements from description.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of requirement strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">requirements</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Look for common requirement section headers</span>
+        <span class="n">desc_lower</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c1"># Find requirements sections</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">r</span><span class="s1">&#39;(?:requirements?|qualifications?|what we</span><span class="se">\&#39;</span><span class="s1">re looking for):?\s*\n+((?:[-•*]\s*.+\n?)+)&#39;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s1">&#39;(?:required|must have):?\s*\n+((?:[-•*]\s*.+\n?)+)&#39;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s1">&#39;(?:responsibilities|you will):?\s*\n+((?:[-•*]\s*.+\n?)+)&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">:</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span> <span class="o">|</span> <span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="n">bullet_text</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># Split by bullets and clean</span>
+                <span class="n">bullets</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\n[-•*]\s*&#39;</span><span class="p">,</span> <span class="n">bullet_text</span><span class="p">)</span>
+                <span class="n">requirements</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bullets</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+        <span class="c1"># If no structured requirements found, look for years of experience</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">requirements</span><span class="p">:</span>
+            <span class="n">exp_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(\d+\+?\s*(?:years?|yrs?)\s+(?:of\s+)?experience)&#39;</span>
+            <span class="n">exp_matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">exp_pattern</span><span class="p">,</span> <span class="n">desc_lower</span><span class="p">)</span>
+            <span class="n">requirements</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">exp_matches</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">requirements</span></div>
+
+
+<div class="viewcode-block" id="JobAnalyzer.extract_keywords">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.JobAnalyzer.extract_keywords">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_keywords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">top_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract most important keywords from job posting.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            top_n: Number of top keywords to return</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of keywords sorted by relevance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Remove common words</span>
+        <span class="n">stop_words</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;the&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;an&#39;</span><span class="p">,</span> <span class="s1">&#39;and&#39;</span><span class="p">,</span> <span class="s1">&#39;or&#39;</span><span class="p">,</span> <span class="s1">&#39;but&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="s1">&#39;on&#39;</span><span class="p">,</span> <span class="s1">&#39;at&#39;</span><span class="p">,</span> <span class="s1">&#39;to&#39;</span><span class="p">,</span> <span class="s1">&#39;for&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;of&#39;</span><span class="p">,</span> <span class="s1">&#39;with&#39;</span><span class="p">,</span> <span class="s1">&#39;by&#39;</span><span class="p">,</span> <span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;as&#39;</span><span class="p">,</span> <span class="s1">&#39;is&#39;</span><span class="p">,</span> <span class="s1">&#39;was&#39;</span><span class="p">,</span> <span class="s1">&#39;are&#39;</span><span class="p">,</span> <span class="s1">&#39;were&#39;</span><span class="p">,</span> <span class="s1">&#39;be&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;been&#39;</span><span class="p">,</span> <span class="s1">&#39;being&#39;</span><span class="p">,</span> <span class="s1">&#39;have&#39;</span><span class="p">,</span> <span class="s1">&#39;has&#39;</span><span class="p">,</span> <span class="s1">&#39;had&#39;</span><span class="p">,</span> <span class="s1">&#39;do&#39;</span><span class="p">,</span> <span class="s1">&#39;does&#39;</span><span class="p">,</span> <span class="s1">&#39;did&#39;</span><span class="p">,</span> <span class="s1">&#39;will&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;would&#39;</span><span class="p">,</span> <span class="s1">&#39;should&#39;</span><span class="p">,</span> <span class="s1">&#39;could&#39;</span><span class="p">,</span> <span class="s1">&#39;may&#39;</span><span class="p">,</span> <span class="s1">&#39;might&#39;</span><span class="p">,</span> <span class="s1">&#39;can&#39;</span><span class="p">,</span> <span class="s1">&#39;this&#39;</span><span class="p">,</span> <span class="s1">&#39;that&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;these&#39;</span><span class="p">,</span> <span class="s1">&#39;those&#39;</span><span class="p">,</span> <span class="s1">&#39;we&#39;</span><span class="p">,</span> <span class="s1">&#39;you&#39;</span><span class="p">,</span> <span class="s1">&#39;they&#39;</span><span class="p">,</span> <span class="s1">&#39;our&#39;</span><span class="p">,</span> <span class="s1">&#39;your&#39;</span><span class="p">,</span> <span class="s1">&#39;their&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Tokenize and count</span>
+        <span class="n">words</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\b[a-z]{3,}\b&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_text_lower</span><span class="p">)</span>
+        <span class="n">word_freq</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stop_words</span><span class="p">:</span>
+                <span class="n">word_freq</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">word_freq</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Sort by frequency and return top N</span>
+        <span class="n">sorted_words</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">word_freq</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sorted_words</span><span class="p">[:</span><span class="n">top_n</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="JobAnalyzer.to_job_info_text">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.JobAnalyzer.to_job_info_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_job_info_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert job posting to a formatted text suitable for resume generation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Formatted job description text</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Position: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">company</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Company: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">company</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">location_text</span> <span class="o">=</span> <span class="n">_format_location</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">location</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">location_text</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Location: </span><span class="si">{</span><span class="n">location_text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">is_remote</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Work Mode: Remote&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">job_type</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job Type: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">job_type</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">compensation</span><span class="p">:</span>
+            <span class="n">comp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">compensation</span>
+            <span class="k">if</span> <span class="n">comp</span><span class="o">.</span><span class="n">min_amount</span> <span class="ow">and</span> <span class="n">comp</span><span class="o">.</span><span class="n">max_amount</span><span class="p">:</span>
+                <span class="n">currency</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">currency</span> <span class="ow">or</span> <span class="s2">&quot;USD&quot;</span>
+                <span class="n">interval</span> <span class="o">=</span> <span class="n">comp</span><span class="o">.</span><span class="n">interval</span> <span class="ow">or</span> <span class="s2">&quot;yearly&quot;</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Compensation: $</span><span class="si">{</span><span class="n">comp</span><span class="o">.</span><span class="n">min_amount</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2"> - $</span><span class="si">{</span><span class="n">comp</span><span class="o">.</span><span class="n">max_amount</span><span class="si">:</span><span class="s2">,.0f</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">currency</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">interval</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>  <span class="c1"># Blank line</span>
+
+        <span class="c1"># Add description</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Job Description:&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+
+        <span class="c1"># Add extracted requirements</span>
+        <span class="n">requirements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_requirements</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">requirements</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Key Requirements:&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">req</span> <span class="ow">in</span> <span class="n">requirements</span><span class="p">[:</span><span class="mi">10</span><span class="p">]:</span>  <span class="c1"># Top 10 requirements</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">req</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add skills</span>
+        <span class="n">skills</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_skills</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">skills</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Required Skills:&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">skills</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="JobAnalyzer.get_summary">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.JobAnalyzer.get_summary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a summary of the job posting.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary with job summary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
+            <span class="s1">&#39;location&#39;</span><span class="p">:</span> <span class="n">_format_location</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">location</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;is_remote&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">is_remote</span><span class="p">,</span>
+            <span class="s1">&#39;skills&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extract_skills</span><span class="p">()),</span>
+            <span class="s1">&#39;requirements&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_requirements</span><span class="p">(),</span>
+            <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_keywords</span><span class="p">(),</span>
+            <span class="s1">&#39;job_url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span>
+        <span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="job_to_text">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.job_to_text">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">job_to_text</span><span class="p">(</span><span class="n">job</span><span class="p">:</span> <span class="n">JobResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a JobResult to formatted text for resume generation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        job: JobResult object</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Formatted text description</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">JobAnalyzer</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">to_job_info_text</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="extract_job_keywords">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.extract_job_keywords">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_job_keywords</span><span class="p">(</span><span class="n">job</span><span class="p">:</span> <span class="n">JobResult</span><span class="p">,</span> <span class="n">top_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract top keywords from a job posting.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        job: JobResult object</span>
+<span class="sd">        top_n: Number of keywords to return</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of top keywords</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">JobAnalyzer</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">extract_keywords</span><span class="p">(</span><span class="n">top_n</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_job_skills">
+<a class="viewcode-back" href="../../module_docs/hired/job_utils.html#hired.get_job_skills">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_job_skills</span><span class="p">(</span><span class="n">job</span><span class="p">:</span> <span class="n">JobResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract skills mentioned in job posting.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        job: JobResult object</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Set of skills</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">JobAnalyzer</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">extract_skills</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

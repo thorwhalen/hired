@@ -1,0 +1,4 @@
+hired.search.registry
+=====================
+.. automodule:: hired.search.registry
+   :members:

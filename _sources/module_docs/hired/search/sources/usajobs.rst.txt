@@ -1,0 +1,4 @@
+hired.search.sources.usajobs
+============================
+.. automodule:: hired.search.sources.usajobs
+   :members:

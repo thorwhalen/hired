@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired._converters &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="hired.ats_checker" href="ats_checker.html" />
+    <link rel="prev" title="hired" href="../hired.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hired.html">hired</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired._converters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired._converters.ensure_dict"><code class="docutils literal notranslate"><span class="pre">ensure_dict()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired._converters.register_std_config_converters"><code class="docutils literal notranslate"><span class="pre">register_std_config_converters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired._converters</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/hired/_converters.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired._converters">
+<span id="hired-converters"></span><h1>hired._converters<a class="headerlink" href="#module-hired._converters" title="Link to this heading"></a></h1>
+<p>Tools to convert/cast resources.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hired._converters.ensure_dict">
+<span class="sig-prename descclassname"><span class="pre">hired._converters.</span></span><span class="sig-name descname"><span class="pre">ensure_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_str_as_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/_converters.html#ensure_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired._converters.ensure_dict" title="Link to this definition"></a></dt>
+<dd><p>Ensure the src is in <cite>Mapping</cite> form, from filepaths, or bytes/string contents.</p>
+<ul>
+<li><p>If <cite>src</cite> is already a mapping, return <cite>src</cite>.</p></li>
+<li><p>If <cite>src</cite> is a <cite>str</cite>, it is interpreted either as a filesystem path or as
+inline content. Disambiguation policy:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If <cite>treat_str_as_path</cite> is True, treat it as a path.</p></li>
+<li><p>If False, treat it as inline text.</p></li>
+<li><p>If None (default), prefer <cite>fs</cite> if provided and keyed by <cite>src</cite>; else,
+treat as a real path if it exists; otherwise as inline text.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>TOML is parsed only if <cite>tomllib</cite> (3.11+) or third-party <cite>toml</cite> is importable.</p></li>
+<li><p>YAML is parsed only if <cite>pyyaml</cite> is importable.</p></li>
+<li><p>JSON is always available via stdlib.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>str</em><em> | </em><em>Mapping</em>) – Path or inline text (<cite>str</cite>), or a <cite>Mapping</cite> (e.g., <cite>dict</cite>).</p></li>
+<li><p><strong>treat_str_as_path</strong> (<em>bool</em><em> | </em><em>None</em>) – Force interpretation of strings. See policy above.</p></li>
+<li><p><strong>fs</strong> (<em>Mapping</em><em>[</em><em>str</em><em>, </em><em>bytes</em><em>|</em><em>str</em><em>] </em><em>| </em><em>None</em>) – Optional virtual filesystem for tests or in-memory content.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A <cite>Mapping</cite> (usually <cite>dict</cite>) representation of the parsed content.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ConversionError</strong> – If no suitable parser is available for the given content/extension, or
+    the content is invalid for all available parsers.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Mapping passthrough</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_dict</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+<span class="go">{&#39;a&#39;: 1}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Inline JSON</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_dict</span><span class="p">(</span><span class="s1">&#39;{&quot;a&quot;: 2}&#39;</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 2}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Virtual FS path resolution</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">memfs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;/cfg.json&quot;</span><span class="p">:</span> <span class="sa">b</span><span class="s1">&#39;{&quot;a&quot;: 3}&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_dict</span><span class="p">(</span><span class="s2">&quot;/cfg.json&quot;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">memfs</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 3}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Force treating a string as inline text even if a real file exists:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ensure_dict</span><span class="p">(</span><span class="s1">&#39;{&quot;a&quot;: 4}&#39;</span><span class="p">,</span> <span class="n">treat_str_as_path</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">{&#39;a&#39;: 4}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired._converters.register_std_config_converters">
+<span class="sig-prename descclassname"><span class="pre">hired._converters.</span></span><span class="sig-name descname"><span class="pre">register_std_config_converters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ConversionRegistry</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ConversionRegistry</span></span></span><a class="reference internal" href="../../_modules/hired/_converters.html#register_std_config_converters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired._converters.register_std_config_converters" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Register conversions to load JSON (+optional TOML/YAML) from:</dt><dd><ul class="simple">
+<li><p>pathlib.Path  → Mapping / dict</p></li>
+<li><p>str (path or inline text) → Mapping / dict</p></li>
+<li><p>bytes → Mapping / dict</p></li>
+<li><p>pathlib.Path → bytes</p></li>
+<li><p>str (path or inline text) → bytes</p></li>
+</ul>
+</dd>
+<dt>Optional features:</dt><dd><ul class="simple">
+<li><p>TOML: only if either ‘tomllib’ (3.11+) or ‘toml’ is importable.</p></li>
+<li><p>YAML: only if ‘pyyaml’ is importable.</p></li>
+</ul>
+</dd>
+<dt>Context knobs:</dt><dd><ul class="simple">
+<li><p>fs: optional virtual filesystem mapping {path_str: bytes|str}</p></li>
+<li><p>treat_str_as_path: True|False to force how str is interpreted</p></li>
+</ul>
+</dd>
+</dl>
+<p>Minimal doctest using an in-memory fs. Each format test is conditional
+on parser availability, so doctests pass regardless of environment:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">i2.castgraph</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConversionRegistry</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reg</span> <span class="o">=</span> <span class="n">register_std_config_converters</span><span class="p">(</span><span class="n">ConversionRegistry</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;/a.json&quot;</span><span class="p">:</span> <span class="sa">b</span><span class="s1">&#39;{&quot;x&quot;: 1}&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ctx</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fs&quot;</span><span class="p">:</span> <span class="n">fs</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reg</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/a.json&quot;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">ctx</span><span class="p">)[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># TOML path (only if parser available)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">_TOML_LOADER</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">fs</span><span class="p">[</span><span class="s2">&quot;/b.toml&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;x = 2&#39;</span>
+<span class="gp">... </span>    <span class="n">reg</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/b.toml&quot;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">ctx</span><span class="p">)[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="kc">True</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># YAML path (only if pyyaml available)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">_HAS_YAML</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">fs</span><span class="p">[</span><span class="s2">&quot;/c.yaml&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;x: 3&quot;</span>
+<span class="gp">... </span>    <span class="n">reg</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/c.yaml&quot;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">ctx</span><span class="p">)[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="kc">True</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../hired.html" class="btn btn-neutral float-left" title="hired" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ats_checker.html" class="btn btn-neutral float-right" title="hired.ats_checker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,698 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.resume_agent &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="hired.resumejson_pydantic_models" href="resumejson_pydantic_models.html" />
+    <link rel="prev" title="hired.renderers.rendercv" href="renderers/rendercv.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.resume_agent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.ConversationMemory"><code class="docutils literal notranslate"><span class="pre">ConversationMemory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ConversationMemory.add_turn"><code class="docutils literal notranslate"><span class="pre">ConversationMemory.add_turn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ConversationMemory.get_all_turns"><code class="docutils literal notranslate"><span class="pre">ConversationMemory.get_all_turns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ConversationMemory.get_context_for_prompt"><code class="docutils literal notranslate"><span class="pre">ConversationMemory.get_context_for_prompt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ConversationMemory.get_recent_turns"><code class="docutils literal notranslate"><span class="pre">ConversationMemory.get_recent_turns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ConversationMemory.summarize_old_turns"><code class="docutils literal notranslate"><span class="pre">ConversationMemory.summarize_old_turns()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.DistillationAgent"><code class="docutils literal notranslate"><span class="pre">DistillationAgent</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.DistillationAgent.distill"><code class="docutils literal notranslate"><span class="pre">DistillationAgent.distill()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.ExpansionAgent"><code class="docutils literal notranslate"><span class="pre">ExpansionAgent</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ExpansionAgent.expand"><code class="docutils literal notranslate"><span class="pre">ExpansionAgent.expand()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.LLMConfig"><code class="docutils literal notranslate"><span class="pre">LLMConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.LLMConfig.to_dspy_lm"><code class="docutils literal notranslate"><span class="pre">LLMConfig.to_dspy_lm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.LLMConfig.to_langchain_kwargs"><code class="docutils literal notranslate"><span class="pre">LLMConfig.to_langchain_kwargs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.LLMProvider"><code class="docutils literal notranslate"><span class="pre">LLMProvider</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.LLMProvider.chat"><code class="docutils literal notranslate"><span class="pre">LLMProvider.chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.LLMProvider.complete"><code class="docutils literal notranslate"><span class="pre">LLMProvider.complete()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.MatchingAgent"><code class="docutils literal notranslate"><span class="pre">MatchingAgent</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.MatchingAgent.find_matches"><code class="docutils literal notranslate"><span class="pre">MatchingAgent.find_matches()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.ModelRegistry"><code class="docutils literal notranslate"><span class="pre">ModelRegistry</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ModelRegistry.default"><code class="docutils literal notranslate"><span class="pre">ModelRegistry.default()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ModelRegistry.fast"><code class="docutils literal notranslate"><span class="pre">ModelRegistry.fast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ModelRegistry.get_config"><code class="docutils literal notranslate"><span class="pre">ModelRegistry.get_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ModelRegistry.quality"><code class="docutils literal notranslate"><span class="pre">ModelRegistry.quality()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.OperationMode"><code class="docutils literal notranslate"><span class="pre">OperationMode</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.Plan"><code class="docutils literal notranslate"><span class="pre">Plan</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.Plan.get_executable_steps"><code class="docutils literal notranslate"><span class="pre">Plan.get_executable_steps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.Plan.to_markdown"><code class="docutils literal notranslate"><span class="pre">Plan.to_markdown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.Plan.validate"><code class="docutils literal notranslate"><span class="pre">Plan.validate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.PlanStep"><code class="docutils literal notranslate"><span class="pre">PlanStep</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.PlanStep.can_execute"><code class="docutils literal notranslate"><span class="pre">PlanStep.can_execute()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.ResumeExpertAgent"><code class="docutils literal notranslate"><span class="pre">ResumeExpertAgent</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeExpertAgent.create_resume"><code class="docutils literal notranslate"><span class="pre">ResumeExpertAgent.create_resume()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeExpertAgent.execute_plan"><code class="docutils literal notranslate"><span class="pre">ResumeExpertAgent.execute_plan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeExpertAgent.propose_plan"><code class="docutils literal notranslate"><span class="pre">ResumeExpertAgent.propose_plan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeExpertAgent.revise_plan"><code class="docutils literal notranslate"><span class="pre">ResumeExpertAgent.revise_plan()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.ResumeSession"><code class="docutils literal notranslate"><span class="pre">ResumeSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.chat"><code class="docutils literal notranslate"><span class="pre">ResumeSession.chat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.history"><code class="docutils literal notranslate"><span class="pre">ResumeSession.history</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.list_persisted"><code class="docutils literal notranslate"><span class="pre">ResumeSession.list_persisted()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.load"><code class="docutils literal notranslate"><span class="pre">ResumeSession.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.metadata"><code class="docutils literal notranslate"><span class="pre">ResumeSession.metadata</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.save"><code class="docutils literal notranslate"><span class="pre">ResumeSession.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.snapshots"><code class="docutils literal notranslate"><span class="pre">ResumeSession.snapshots</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.state"><code class="docutils literal notranslate"><span class="pre">ResumeSession.state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.ResumeSession.switch_mode"><code class="docutils literal notranslate"><span class="pre">ResumeSession.switch_mode()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.SearchAgent"><code class="docutils literal notranslate"><span class="pre">SearchAgent</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SearchAgent.search"><code class="docutils literal notranslate"><span class="pre">SearchAgent.search()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.SessionSnapshot"><code class="docutils literal notranslate"><span class="pre">SessionSnapshot</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.SessionState"><code class="docutils literal notranslate"><span class="pre">SessionState</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SessionState.get"><code class="docutils literal notranslate"><span class="pre">SessionState.get()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SessionState.snapshot"><code class="docutils literal notranslate"><span class="pre">SessionState.snapshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SessionState.update"><code class="docutils literal notranslate"><span class="pre">SessionState.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.SessionStore"><code class="docutils literal notranslate"><span class="pre">SessionStore</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SessionStore.add"><code class="docutils literal notranslate"><span class="pre">SessionStore.add()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SessionStore.delete_session"><code class="docutils literal notranslate"><span class="pre">SessionStore.delete_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SessionStore.list_sessions"><code class="docutils literal notranslate"><span class="pre">SessionStore.list_sessions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SessionStore.load_session"><code class="docutils literal notranslate"><span class="pre">SessionStore.load_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.resume_agent.SessionStore.save_session"><code class="docutils literal notranslate"><span class="pre">SessionStore.save_session()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.resume_agent.Turn"><code class="docutils literal notranslate"><span class="pre">Turn</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.resume_agent</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/hired/resume_agent.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.resume_agent">
+<span id="hired-resume-agent"></span><h1>hired.resume_agent<a class="headerlink" href="#module-hired.resume_agent" title="Link to this heading"></a></h1>
+<p>Resume Generation System - Core Architecture</p>
+<p>A hybrid LangChain/DSPy system for AI-powered resume creation with manual
+and autonomous operation modes.</p>
+<p>Architecture follows supervisor-worker pattern with:
+- ResumeSession: Stateful conversation manager for manual mode
+- ResumeExpertAgent: Autonomous controller using ResumeSession as a tool
+- Specialized worker agents: expansion, distillation, matching, search</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.ConversationMemory">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">ConversationMemory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_recent_turns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ConversationMemory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ConversationMemory" title="Link to this definition"></a></dt>
+<dd><p>Manages conversation history with tiered memory strategy.</p>
+<p>Minimal docstring: Stores and retrieves conversation turns with summarization.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ConversationMemory.add_turn">
+<span class="sig-name descname"><span class="pre">add_turn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">metadata</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ConversationMemory.add_turn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ConversationMemory.add_turn" title="Link to this definition"></a></dt>
+<dd><p>Add a conversation turn.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ConversationMemory.get_all_turns">
+<span class="sig-name descname"><span class="pre">get_all_turns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.resume_agent.Turn" title="hired.resume_agent.Turn"><span class="pre">Turn</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ConversationMemory.get_all_turns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ConversationMemory.get_all_turns" title="Link to this definition"></a></dt>
+<dd><p>Get all conversation turns.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ConversationMemory.get_context_for_prompt">
+<span class="sig-name descname"><span class="pre">get_context_for_prompt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ConversationMemory.get_context_for_prompt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ConversationMemory.get_context_for_prompt" title="Link to this definition"></a></dt>
+<dd><p>Generate context for LLM prompt with recent history.</p>
+<p>Yields dicts with ‘role’ and ‘content’ for LLM consumption.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ConversationMemory.get_recent_turns">
+<span class="sig-name descname"><span class="pre">get_recent_turns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.resume_agent.Turn" title="hired.resume_agent.Turn"><span class="pre">Turn</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ConversationMemory.get_recent_turns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ConversationMemory.get_recent_turns" title="Link to this definition"></a></dt>
+<dd><p>Get the n most recent turns (defaults to max_recent_turns).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ConversationMemory.summarize_old_turns">
+<span class="sig-name descname"><span class="pre">summarize_old_turns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ConversationMemory.summarize_old_turns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ConversationMemory.summarize_old_turns" title="Link to this definition"></a></dt>
+<dd><p>Placeholder for summarization of old history.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.DistillationAgent">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">DistillationAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#DistillationAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.DistillationAgent" title="Link to this definition"></a></dt>
+<dd><p>Distills verbose text into concise, impactful statements.</p>
+<p>Uses DSPy-optimized prompts with metrics for conciseness and clarity.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.DistillationAgent.distill">
+<span class="sig-name descname"><span class="pre">distill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_words</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#DistillationAgent.distill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.DistillationAgent.distill" title="Link to this definition"></a></dt>
+<dd><p>Distill verbose text into concise statement.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">LLMConfig</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">DistillationAgent</span><span class="p">(</span><span class="n">llm_config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span><span class="o">.</span><span class="n">llm_config</span><span class="o">.</span><span class="n">model</span>
+<span class="go">&#39;gpt-4&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.ExpansionAgent">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">ExpansionAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ExpansionAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ExpansionAgent" title="Link to this definition"></a></dt>
+<dd><p>Expands brief bullet points into detailed achievement descriptions.</p>
+<p>Uses DSPy-optimized prompts for consistent, high-quality expansions.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ExpansionAgent.expand">
+<span class="sig-name descname"><span class="pre">expand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">brief_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'detailed'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ExpansionAgent.expand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ExpansionAgent.expand" title="Link to this definition"></a></dt>
+<dd><p>Expand brief text into detailed description.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">LLMConfig</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">ExpansionAgent</span><span class="p">(</span><span class="n">llm_config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span><span class="o">.</span><span class="n">llm_config</span><span class="o">.</span><span class="n">model</span>
+<span class="go">&#39;gpt-4&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.LLMConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">LLMConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'openai'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#LLMConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.LLMConfig" title="Link to this definition"></a></dt>
+<dd><p>Configuration for LLM model selection and parameters.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">LLMConfig</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span><span class="o">.</span><span class="n">model</span>
+<span class="go">&#39;gpt-4&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.LLMConfig.to_dspy_lm">
+<span class="sig-name descname"><span class="pre">to_dspy_lm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#LLMConfig.to_dspy_lm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.LLMConfig.to_dspy_lm" title="Link to this definition"></a></dt>
+<dd><p>Convert to DSPy LM instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.LLMConfig.to_langchain_kwargs">
+<span class="sig-name descname"><span class="pre">to_langchain_kwargs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#LLMConfig.to_langchain_kwargs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.LLMConfig.to_langchain_kwargs" title="Link to this definition"></a></dt>
+<dd><p>Convert to LangChain model kwargs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.LLMProvider">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">LLMProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#LLMProvider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.LLMProvider" title="Link to this definition"></a></dt>
+<dd><p>Protocol for LLM execution.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.LLMProvider.chat">
+<span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">messages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#LLMProvider.chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.LLMProvider.chat" title="Link to this definition"></a></dt>
+<dd><p>Generate response for chat messages.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.LLMProvider.complete">
+<span class="sig-name descname"><span class="pre">complete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#LLMProvider.complete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.LLMProvider.complete" title="Link to this definition"></a></dt>
+<dd><p>Generate completion for prompt.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.MatchingAgent">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">MatchingAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#MatchingAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.MatchingAgent" title="Link to this definition"></a></dt>
+<dd><p>Performs semantic matching between candidate info and job requirements.</p>
+<p>Uses embedding-based similarity and cross-encoder reranking.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.MatchingAgent.find_matches">
+<span class="sig-name descname"><span class="pre">find_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_requirements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#MatchingAgent.find_matches"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.MatchingAgent.find_matches" title="Link to this definition"></a></dt>
+<dd><p>Find semantic matches between candidate experience and job needs.</p>
+<p>Yields dicts with ‘candidate_snippet’, ‘job_requirement’, ‘score’.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.ModelRegistry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">ModelRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">supervisor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">expansion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distillation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matching</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ModelRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ModelRegistry" title="Link to this definition"></a></dt>
+<dd><p>Registry for different model configurations by role.</p>
+<p>Enables cost optimization by using different models for different tasks.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">registry</span> <span class="o">=</span> <span class="n">ModelRegistry</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">supervisor</span><span class="o">=</span><span class="n">LLMConfig</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">workers</span><span class="o">=</span><span class="n">LLMConfig</span><span class="p">(</span><span class="s2">&quot;gpt-3.5-turbo&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">registry</span><span class="o">.</span><span class="n">supervisor</span><span class="o">.</span><span class="n">model</span>
+<span class="go">&#39;gpt-4&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ModelRegistry.default">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">default</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.resume_agent.ModelRegistry" title="hired.resume_agent.ModelRegistry"><span class="pre">ModelRegistry</span></a></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ModelRegistry.default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ModelRegistry.default" title="Link to this definition"></a></dt>
+<dd><p>Create default registry with sensible model choices.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ModelRegistry.fast">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">fast</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.resume_agent.ModelRegistry" title="hired.resume_agent.ModelRegistry"><span class="pre">ModelRegistry</span></a></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ModelRegistry.fast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ModelRegistry.fast" title="Link to this definition"></a></dt>
+<dd><p>Create registry optimized for speed/cost.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ModelRegistry.get_config">
+<span class="sig-name descname"><span class="pre">get_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ModelRegistry.get_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ModelRegistry.get_config" title="Link to this definition"></a></dt>
+<dd><p>Get model config for specific role.</p>
+<p>Falls back to workers config if role-specific config not set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ModelRegistry.quality">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">quality</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.resume_agent.ModelRegistry" title="hired.resume_agent.ModelRegistry"><span class="pre">ModelRegistry</span></a></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ModelRegistry.quality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ModelRegistry.quality" title="Link to this definition"></a></dt>
+<dd><p>Create registry optimized for quality.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.OperationMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">OperationMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#OperationMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.OperationMode" title="Link to this definition"></a></dt>
+<dd><p>Session operation mode.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.Plan">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">Plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">steps:</span> <span class="pre">list[~hired.resume_agent.PlanStep],</span> <span class="pre">rationale:</span> <span class="pre">str,</span> <span class="pre">created_at:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#Plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.Plan" title="Link to this definition"></a></dt>
+<dd><p>Structured execution plan for resume creation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.Plan.get_executable_steps">
+<span class="sig-name descname"><span class="pre">get_executable_steps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">completed_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.resume_agent.PlanStep" title="hired.resume_agent.PlanStep"><span class="pre">PlanStep</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#Plan.get_executable_steps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.Plan.get_executable_steps" title="Link to this definition"></a></dt>
+<dd><p>Get steps that can currently be executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.Plan.to_markdown">
+<span class="sig-name descname"><span class="pre">to_markdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#Plan.to_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.Plan.to_markdown" title="Link to this definition"></a></dt>
+<dd><p>Convert plan to human-readable markdown.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.Plan.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#Plan.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.Plan.validate" title="Link to this definition"></a></dt>
+<dd><p>Validate plan structure and dependencies.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.PlanStep">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">PlanStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependencies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimated_tokens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#PlanStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.PlanStep" title="Link to this definition"></a></dt>
+<dd><p>A single step in an execution plan.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.PlanStep.can_execute">
+<span class="sig-name descname"><span class="pre">can_execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">completed_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#PlanStep.can_execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.PlanStep.can_execute" title="Link to this definition"></a></dt>
+<dd><p>Check if all dependencies are satisfied.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeExpertAgent">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">ResumeExpertAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.ModelRegistry" title="hired.resume_agent.ModelRegistry"><span class="pre">ModelRegistry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeExpertAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeExpertAgent" title="Link to this definition"></a></dt>
+<dd><p>Autonomous agent that uses ResumeSession as a tool.</p>
+<p>Operates in auto mode, making decisions about expansion, distillation,
+search, and generation operations to produce complete resumes.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">LLMConfig</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span> <span class="o">=</span> <span class="n">ResumeExpertAgent</span><span class="p">(</span><span class="n">llm_config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">agent</span><span class="o">.</span><span class="n">llm_config</span><span class="o">.</span><span class="n">model</span>
+<span class="go">&#39;gpt-4&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeExpertAgent.create_resume">
+<span class="sig-name descname"><span class="pre">create_resume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.ResumeSession" title="hired.resume_agent.ResumeSession"><span class="pre">ResumeSession</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'standard'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeExpertAgent.create_resume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeExpertAgent.create_resume" title="Link to this definition"></a></dt>
+<dd><p>Autonomously create resume using session as tool.</p>
+<p>Operates in plan-and-execute pattern:
+1. Analyze job and candidate info
+2. Plan resume creation strategy
+3. Execute operations (expand, distill, match)
+4. Generate resume
+5. Critique and refine</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeExpertAgent.execute_plan">
+<span class="sig-name descname"><span class="pre">execute_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.ResumeSession" title="hired.resume_agent.ResumeSession"><span class="pre">ResumeSession</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">plan</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.Plan" title="hired.resume_agent.Plan"><span class="pre">Plan</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approval_callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.resume_agent.PlanStep" title="hired.resume_agent.PlanStep"><span class="pre">PlanStep</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeExpertAgent.execute_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeExpertAgent.execute_plan" title="Link to this definition"></a></dt>
+<dd><p>Execute a plan step by step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – Resume session to operate on</p></li>
+<li><p><strong>plan</strong> – Plan to execute</p></li>
+<li><p><strong>interactive</strong> – If True, pause after each step for approval</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict with execution results and final outputs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeExpertAgent.propose_plan">
+<span class="sig-name descname"><span class="pre">propose_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.ResumeSession" title="hired.resume_agent.ResumeSession"><span class="pre">ResumeSession</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'standard'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.resume_agent.Plan" title="hired.resume_agent.Plan"><span class="pre">Plan</span></a></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeExpertAgent.propose_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeExpertAgent.propose_plan" title="Link to this definition"></a></dt>
+<dd><p>Generate execution plan for resume creation.</p>
+<p>Returns structured Plan object that can be edited before execution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeExpertAgent.revise_plan">
+<span class="sig-name descname"><span class="pre">revise_plan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plan</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.Plan" title="hired.resume_agent.Plan"><span class="pre">Plan</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">instruction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.resume_agent.Plan" title="hired.resume_agent.Plan"><span class="pre">Plan</span></a></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeExpertAgent.revise_plan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeExpertAgent.revise_plan" title="Link to this definition"></a></dt>
+<dd><p>Revise plan based on natural language instruction.</p>
+<p>Uses LLM to interpret instruction and modify plan accordingly.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">ResumeSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.OperationMode" title="hired.resume_agent.OperationMode"><span class="pre">OperationMode</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">OperationMode.MANUAL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_prompt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_recent_turns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_registry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.ModelRegistry" title="hired.resume_agent.ModelRegistry"><span class="pre">ModelRegistry</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_persist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeSession"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeSession" title="Link to this definition"></a></dt>
+<dd><p>Stateful conversation session for resume creation.</p>
+<p>Provides manual chat interface where users give natural language
+instructions to perform expansion, distillation, search, and generation
+operations. Maintains conversation history and structured state.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">LLMConfig</span><span class="p">(</span><span class="s2">&quot;gpt-4&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">ResumeSession</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">job_info</span><span class="o">=</span><span class="s2">&quot;Senior ML Engineer at TechCo&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">candidate_info</span><span class="o">=</span><span class="s2">&quot;5 years Python, ML experience&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">llm_config</span><span class="o">=</span><span class="n">config</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">llm_config</span><span class="o">.</span><span class="n">model</span>
+<span class="go">&#39;gpt-4&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.chat">
+<span class="sig-name descname"><span class="pre">chat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeSession.chat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeSession.chat" title="Link to this definition"></a></dt>
+<dd><p>Process user instruction and return assistant response.</p>
+<p>This is the main interface for manual mode operation.
+Automatically persists session after each turn if auto_persist enabled.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.history">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">history</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.resume_agent.Turn" title="hired.resume_agent.Turn"><span class="pre">Turn</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hired.resume_agent.ResumeSession.history" title="Link to this definition"></a></dt>
+<dd><p>Get all conversation turns.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.list_persisted">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">list_persisted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeSession.list_persisted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeSession.list_persisted" title="Link to this definition"></a></dt>
+<dd><p>List all persisted sessions.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">session_info</span> <span class="ow">in</span> <span class="n">ResumeSession</span><span class="o">.</span><span class="n">list_persisted</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">session_info</span><span class="p">[</span><span class="s1">&#39;session_id&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.load">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.resume_agent.ResumeSession" title="hired.resume_agent.ResumeSession"><span class="pre">ResumeSession</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeSession.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeSession.load" title="Link to this definition"></a></dt>
+<dd><p>Load session from persistent storage.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">ResumeSession</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;abc123def456&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span><span class="o">.</span><span class="n">session_id</span> <span class="k">if</span> <span class="n">session</span> <span class="k">else</span> <span class="kc">None</span>
+<span class="go">&#39;abc123def456&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.metadata">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">metadata</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#hired.resume_agent.ResumeSession.metadata" title="Link to this definition"></a></dt>
+<dd><p>Return a small metadata dict for quick inspection.</p>
+<p>Includes: session_id, name, created_at (iso), n_turns, mode, model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeSession.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeSession.save" title="Link to this definition"></a></dt>
+<dd><p>Manually save session to persistent storage.</p>
+<p>Returns path to saved session file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.snapshots">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">snapshots</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.resume_agent.SessionSnapshot" title="hired.resume_agent.SessionSnapshot"><span class="pre">SessionSnapshot</span></a><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#hired.resume_agent.ResumeSession.snapshots" title="Link to this definition"></a></dt>
+<dd><p>Get all session snapshots.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.state">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">state</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hired.resume_agent.SessionState" title="hired.resume_agent.SessionState"><span class="pre">SessionState</span></a></span><a class="headerlink" href="#hired.resume_agent.ResumeSession.state" title="Link to this definition"></a></dt>
+<dd><p>Get current session state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.ResumeSession.switch_mode">
+<span class="sig-name descname"><span class="pre">switch_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.OperationMode" title="hired.resume_agent.OperationMode"><span class="pre">OperationMode</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#ResumeSession.switch_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.ResumeSession.switch_mode" title="Link to this definition"></a></dt>
+<dd><p>Switch between manual and auto operation modes.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.SearchAgent">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">SearchAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SearchAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SearchAgent" title="Link to this definition"></a></dt>
+<dd><p>Performs web searches to expand context about companies, technologies, etc.</p>
+<p>Integrates with search APIs to gather relevant information.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SearchAgent.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SearchAgent.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SearchAgent.search" title="Link to this definition"></a></dt>
+<dd><p>Search web for relevant information.</p>
+<p>Yields dicts with ‘title’, ‘snippet’, ‘url’.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionSnapshot">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">SessionSnapshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">turn_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionSnapshot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionSnapshot" title="Link to this definition"></a></dt>
+<dd><p>Immutable snapshot of session state at a point in time.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">snapshot</span> <span class="o">=</span> <span class="n">SessionSnapshot</span><span class="p">(</span><span class="n">turn_count</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;skills&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Python&#39;</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">snapshot</span><span class="o">.</span><span class="n">turn_count</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">SessionState</span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionState" title="Link to this definition"></a></dt>
+<dd><p>Structured state for resume creation session.</p>
+<p>Stores extracted entities, analysis results, and work-in-progress content.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionState.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionState.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionState.get" title="Link to this definition"></a></dt>
+<dd><p>Get state value with default.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionState.snapshot">
+<span class="sig-name descname"><span class="pre">snapshot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionState.snapshot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionState.snapshot" title="Link to this definition"></a></dt>
+<dd><p>Create immutable snapshot of current state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionState.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionState.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionState.update" title="Link to this definition"></a></dt>
+<dd><p>Update state with new information.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionStore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">SessionStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionStore" title="Link to this definition"></a></dt>
+<dd><p>Manages automatic persistence of resume sessions.</p>
+<p>Sessions are saved after each chat turn to enable recovery and history.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">store</span> <span class="o">=</span> <span class="n">SessionStore</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">store</span><span class="o">.</span><span class="n">data_dir</span>
+<span class="go">PosixPath(&#39;~/.cache/hired/resume_agent_sessions&#39;)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionStore.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.ResumeSession" title="hired.resume_agent.ResumeSession"><span class="pre">ResumeSession</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionStore.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionStore.add" title="Link to this definition"></a></dt>
+<dd><p>Alias for save_session to behave like a set.add(session).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionStore.delete_session">
+<span class="sig-name descname"><span class="pre">delete_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionStore.delete_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionStore.delete_session" title="Link to this definition"></a></dt>
+<dd><p>Delete session from persistent storage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionStore.list_sessions">
+<span class="sig-name descname"><span class="pre">list_sessions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionStore.list_sessions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionStore.list_sessions" title="Link to this definition"></a></dt>
+<dd><p>List all persisted sessions.</p>
+<p>Yields session metadata dicts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionStore.load_session">
+<span class="sig-name descname"><span class="pre">load_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">llm_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.LLMConfig" title="hired.resume_agent.LLMConfig"><span class="pre">LLMConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.resume_agent.ResumeSession" title="hired.resume_agent.ResumeSession"><span class="pre">ResumeSession</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionStore.load_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionStore.load_session" title="Link to this definition"></a></dt>
+<dd><p>Load session from persistent storage.</p>
+<p>Returns None if session not found.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.resume_agent.SessionStore.save_session">
+<span class="sig-name descname"><span class="pre">save_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hired.resume_agent.ResumeSession" title="hired.resume_agent.ResumeSession"><span class="pre">ResumeSession</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span></span></span><a class="reference internal" href="../../_modules/hired/resume_agent.html#SessionStore.save_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.SessionStore.save_session" title="Link to this definition"></a></dt>
+<dd><p>Save session to persistent storage.</p>
+<p>Returns path to saved session file.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.resume_agent.Turn">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.resume_agent.</span></span><span class="sig-name descname"><span class="pre">Turn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/resume_agent.html#Turn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.resume_agent.Turn" title="Link to this definition"></a></dt>
+<dd><p>A single conversation turn.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">turn</span> <span class="o">=</span> <span class="n">Turn</span><span class="p">(</span><span class="n">role</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s2">&quot;Make a resume&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">turn</span><span class="o">.</span><span class="n">role</span>
+<span class="go">&#39;user&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="renderers/rendercv.html" class="btn btn-neutral float-left" title="hired.renderers.rendercv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="resumejson_pydantic_models.html" class="btn btn-neutral float-right" title="hired.resumejson_pydantic_models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

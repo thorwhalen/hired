@@ -1,0 +1,821 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.search &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="hired.search.base" href="search/base.html" />
+    <link rel="prev" title="hired.resumejson_pydantic_models" href="resumejson_pydantic_models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.AdzunaSource"><code class="docutils literal notranslate"><span class="pre">AdzunaSource</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.AdzunaSource.display_name"><code class="docutils literal notranslate"><span class="pre">AdzunaSource.display_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.AdzunaSource.get_setup_instructions"><code class="docutils literal notranslate"><span class="pre">AdzunaSource.get_setup_instructions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.AdzunaSource.is_configured"><code class="docutils literal notranslate"><span class="pre">AdzunaSource.is_configured()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.AdzunaSource.name"><code class="docutils literal notranslate"><span class="pre">AdzunaSource.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.AdzunaSource.requires_auth"><code class="docutils literal notranslate"><span class="pre">AdzunaSource.requires_auth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.AdzunaSource.search"><code class="docutils literal notranslate"><span class="pre">AdzunaSource.search()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.CompensationInfo"><code class="docutils literal notranslate"><span class="pre">CompensationInfo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.JobResult"><code class="docutils literal notranslate"><span class="pre">JobResult</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobResult.to_dict"><code class="docutils literal notranslate"><span class="pre">JobResult.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.JobSearchSource"><code class="docutils literal notranslate"><span class="pre">JobSearchSource</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSearchSource.display_name"><code class="docutils literal notranslate"><span class="pre">JobSearchSource.display_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSearchSource.get_setup_instructions"><code class="docutils literal notranslate"><span class="pre">JobSearchSource.get_setup_instructions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSearchSource.is_configured"><code class="docutils literal notranslate"><span class="pre">JobSearchSource.is_configured()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSearchSource.name"><code class="docutils literal notranslate"><span class="pre">JobSearchSource.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSearchSource.requires_auth"><code class="docutils literal notranslate"><span class="pre">JobSearchSource.requires_auth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSearchSource.search"><code class="docutils literal notranslate"><span class="pre">JobSearchSource.search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSearchSource.validate_configured"><code class="docutils literal notranslate"><span class="pre">JobSearchSource.validate_configured()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.JobSources"><code class="docutils literal notranslate"><span class="pre">JobSources</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.get_info"><code class="docutils literal notranslate"><span class="pre">JobSources.get_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.get_source"><code class="docutils literal notranslate"><span class="pre">JobSources.get_source()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.keys"><code class="docutils literal notranslate"><span class="pre">JobSources.keys()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.list"><code class="docutils literal notranslate"><span class="pre">JobSources.list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.list_available"><code class="docutils literal notranslate"><span class="pre">JobSources.list_available()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.list_unconfigured"><code class="docutils literal notranslate"><span class="pre">JobSources.list_unconfigured()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.print_status"><code class="docutils literal notranslate"><span class="pre">JobSources.print_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.search"><code class="docutils literal notranslate"><span class="pre">JobSources.search()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSources.search_all"><code class="docutils literal notranslate"><span class="pre">JobSources.search_all()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.JobSpySource"><code class="docutils literal notranslate"><span class="pre">JobSpySource</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSpySource.display_name"><code class="docutils literal notranslate"><span class="pre">JobSpySource.display_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSpySource.get_setup_instructions"><code class="docutils literal notranslate"><span class="pre">JobSpySource.get_setup_instructions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSpySource.is_configured"><code class="docutils literal notranslate"><span class="pre">JobSpySource.is_configured()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSpySource.name"><code class="docutils literal notranslate"><span class="pre">JobSpySource.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSpySource.requires_auth"><code class="docutils literal notranslate"><span class="pre">JobSpySource.requires_auth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.JobSpySource.search"><code class="docutils literal notranslate"><span class="pre">JobSpySource.search()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.JobType"><code class="docutils literal notranslate"><span class="pre">JobType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.LocationInfo"><code class="docutils literal notranslate"><span class="pre">LocationInfo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.SearchCriteria"><code class="docutils literal notranslate"><span class="pre">SearchCriteria</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.SourceConfigError"><code class="docutils literal notranslate"><span class="pre">SourceConfigError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.SourceRegistry"><code class="docutils literal notranslate"><span class="pre">SourceRegistry</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.SourceRegistry.get"><code class="docutils literal notranslate"><span class="pre">SourceRegistry.get()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.SourceRegistry.get_source_info"><code class="docutils literal notranslate"><span class="pre">SourceRegistry.get_source_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.SourceRegistry.list_available_sources"><code class="docutils literal notranslate"><span class="pre">SourceRegistry.list_available_sources()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.SourceRegistry.list_sources"><code class="docutils literal notranslate"><span class="pre">SourceRegistry.list_sources()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.SourceRegistry.list_unconfigured_sources"><code class="docutils literal notranslate"><span class="pre">SourceRegistry.list_unconfigured_sources()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.SourceRegistry.register"><code class="docutils literal notranslate"><span class="pre">SourceRegistry.register()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.SourceRegistry.unregister"><code class="docutils literal notranslate"><span class="pre">SourceRegistry.unregister()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.USAJobsSource"><code class="docutils literal notranslate"><span class="pre">USAJobsSource</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.USAJobsSource.display_name"><code class="docutils literal notranslate"><span class="pre">USAJobsSource.display_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.USAJobsSource.get_setup_instructions"><code class="docutils literal notranslate"><span class="pre">USAJobsSource.get_setup_instructions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.USAJobsSource.is_configured"><code class="docutils literal notranslate"><span class="pre">USAJobsSource.is_configured()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.USAJobsSource.name"><code class="docutils literal notranslate"><span class="pre">USAJobsSource.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.USAJobsSource.requires_auth"><code class="docutils literal notranslate"><span class="pre">USAJobsSource.requires_auth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.search.USAJobsSource.search"><code class="docutils literal notranslate"><span class="pre">USAJobsSource.search()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.get_registry"><code class="docutils literal notranslate"><span class="pre">get_registry()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.search.register_source"><code class="docutils literal notranslate"><span class="pre">register_source()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.search</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/hired/search.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.search">
+<span id="hired-search"></span><h1>hired.search<a class="headerlink" href="#module-hired.search" title="Link to this heading"></a></h1>
+<p>Job search functionality for the hired package.</p>
+<p>This module provides a unified interface for searching jobs across
+multiple sources (Indeed, LinkedIn, USAJobs, Adzuna, etc.).</p>
+<dl>
+<dt>Example usage:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.search</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobSources</span><span class="p">,</span> <span class="n">SearchCriteria</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create job sources facade</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">JobSources</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># List available sources</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sources</span><span class="o">.</span><span class="n">list_available</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Search using a specific source</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">criteria</span> <span class="o">=</span> <span class="n">SearchCriteria</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">query</span><span class="o">=</span><span class="s2">&quot;python developer&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="s2">&quot;San Francisco, CA&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">results_wanted</span><span class="o">=</span><span class="mi">20</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">sources</span><span class="o">.</span><span class="n">jobspy</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">criteria</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Or search across all sources</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_results</span> <span class="o">=</span> <span class="n">sources</span><span class="o">.</span><span class="n">search_all</span><span class="p">(</span><span class="n">criteria</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.AdzunaSource">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">AdzunaSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'us'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/sources/adzuna.html#AdzunaSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.AdzunaSource" title="Link to this definition"></a></dt>
+<dd><p>Adzuna API source implementation.</p>
+<p>Searches international job postings via the Adzuna Jobs API.
+Requires a free API key from <a class="reference external" href="https://developer.adzuna.com/">https://developer.adzuna.com/</a>.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.AdzunaSource.display_name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">display_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#hired.search.AdzunaSource.display_name" title="Link to this definition"></a></dt>
+<dd><p>Return the display name of this source (e.g., ‘Indeed’, ‘USAJobs’).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.AdzunaSource.get_setup_instructions">
+<span class="sig-name descname"><span class="pre">get_setup_instructions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/adzuna.html#AdzunaSource.get_setup_instructions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.AdzunaSource.get_setup_instructions" title="Link to this definition"></a></dt>
+<dd><p>Return setup instructions for this source.</p>
+<p>Should include:
+- Where to get API keys if needed
+- Environment variables or config file settings
+- URLs for documentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Multi-line string with setup instructions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.AdzunaSource.is_configured">
+<span class="sig-name descname"><span class="pre">is_configured</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/adzuna.html#AdzunaSource.is_configured"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.AdzunaSource.is_configured" title="Link to this definition"></a></dt>
+<dd><p>Check if this source is properly configured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the source is ready to use, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.AdzunaSource.name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#hired.search.AdzunaSource.name" title="Link to this definition"></a></dt>
+<dd><p>Return the name of this source (e.g., ‘indeed’, ‘usajobs’).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.AdzunaSource.requires_auth">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">requires_auth</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#hired.search.AdzunaSource.requires_auth" title="Link to this definition"></a></dt>
+<dd><p>Return True if this source requires authentication/API keys.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.AdzunaSource.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.SearchCriteria" title="hired.search.base.SearchCriteria"><span class="pre">SearchCriteria</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/adzuna.html#AdzunaSource.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.AdzunaSource.search" title="Link to this definition"></a></dt>
+<dd><p>Search for jobs using Adzuna API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criteria</strong> – Search criteria</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of JobResult objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.CompensationInfo">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">CompensationInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">currency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/base.html#CompensationInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.CompensationInfo" title="Link to this definition"></a></dt>
+<dd><p>Compensation information for a job.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.JobResult">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">JobResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.LocationInfo" title="hired.search.base.LocationInfo"><span class="pre">LocationInfo</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_remote</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.JobType" title="hired.search.base.JobType"><span class="pre">JobType</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.CompensationInfo" title="hired.search.base.CompensationInfo"><span class="pre">CompensationInfo</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_posted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_updated</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">application_deadline</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">benefits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emails</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/base.html#JobResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobResult" title="Link to this definition"></a></dt>
+<dd><p>Standardized job result across all sources.</p>
+<p>This provides a unified interface regardless of which source
+the job was retrieved from.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobResult.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/base.html#JobResult.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobResult.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Convert JobResult to dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.JobSearchSource">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">JobSearchSource</span></span><a class="reference internal" href="../../_modules/hired/search/base.html#JobSearchSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSearchSource" title="Link to this definition"></a></dt>
+<dd><p>Abstract base class for job search sources.</p>
+<p>All job search sources must implement this interface to be
+registered in the system.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.JobSearchSource.display_name">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">display_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#hired.search.JobSearchSource.display_name" title="Link to this definition"></a></dt>
+<dd><p>Return the display name of this source (e.g., ‘Indeed’, ‘USAJobs’).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSearchSource.get_setup_instructions">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_setup_instructions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/search/base.html#JobSearchSource.get_setup_instructions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSearchSource.get_setup_instructions" title="Link to this definition"></a></dt>
+<dd><p>Return setup instructions for this source.</p>
+<p>Should include:
+- Where to get API keys if needed
+- Environment variables or config file settings
+- URLs for documentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Multi-line string with setup instructions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSearchSource.is_configured">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_configured</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/search/base.html#JobSearchSource.is_configured"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSearchSource.is_configured" title="Link to this definition"></a></dt>
+<dd><p>Check if this source is properly configured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the source is ready to use, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.JobSearchSource.name">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#hired.search.JobSearchSource.name" title="Link to this definition"></a></dt>
+<dd><p>Return the name of this source (e.g., ‘indeed’, ‘usajobs’).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.JobSearchSource.requires_auth">
+<span class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">requires_auth</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#hired.search.JobSearchSource.requires_auth" title="Link to this definition"></a></dt>
+<dd><p>Return True if this source requires authentication/API keys.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSearchSource.search">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.SearchCriteria" title="hired.search.base.SearchCriteria"><span class="pre">SearchCriteria</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/base.html#JobSearchSource.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSearchSource.search" title="Link to this definition"></a></dt>
+<dd><p>Search for jobs using the given criteria.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criteria</strong> – SearchCriteria object with search parameters</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of JobResult objects</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#hired.search.SourceConfigError" title="hired.search.SourceConfigError"><strong>SourceConfigError</strong></a> – If the source is not properly configured</p></li>
+<li><p><strong>Exception</strong> – For other errors during search</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSearchSource.validate_configured">
+<span class="sig-name descname"><span class="pre">validate_configured</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/search/base.html#JobSearchSource.validate_configured"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSearchSource.validate_configured" title="Link to this definition"></a></dt>
+<dd><p>Validate that the source is configured, raise error if not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#hired.search.SourceConfigError" title="hired.search.SourceConfigError"><strong>SourceConfigError</strong></a> – If the source is not properly configured</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.JobSources">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">JobSources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">registry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources" title="Link to this definition"></a></dt>
+<dd><p>Main facade for accessing job search sources.</p>
+<p>Provides both mapping interface (dict-like access) and attribute access
+to registered job sources.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">JobSources</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># List all available sources</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<span class="go">[&#39;jobspy&#39;, &#39;usajobs&#39;, &#39;adzuna&#39;]</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Access via attribute</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">sources</span><span class="o">.</span><span class="n">jobspy</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">SearchCriteria</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;python developer&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Access via mapping</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">sources</span><span class="p">[</span><span class="s1">&#39;indeed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">SearchCriteria</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;data scientist&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Search across multiple sources</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">sources</span><span class="o">.</span><span class="n">search_all</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">SearchCriteria</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;software engineer&quot;</span><span class="p">,</span> <span class="n">location</span><span class="o">=</span><span class="s2">&quot;San Francisco&quot;</span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.get_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.get_info" title="Link to this definition"></a></dt>
+<dd><p>Get information about a source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – Name of the source</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with source information including setup instructions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.get_source">
+<span class="sig-name descname"><span class="pre">get_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="search/base.html#hired.search.base.JobSearchSource" title="hired.search.base.JobSearchSource"><span class="pre">JobSearchSource</span></a></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.get_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.get_source" title="Link to this definition"></a></dt>
+<dd><p>Get a source by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – Name of the source</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JobSearchSource instance</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – If source not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.keys" title="Link to this definition"></a></dt>
+<dd><p>Get list of source names (dict-like interface).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.list" title="Link to this definition"></a></dt>
+<dd><p>List all registered sources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of source names</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.list_available">
+<span class="sig-name descname"><span class="pre">list_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.list_available"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.list_available" title="Link to this definition"></a></dt>
+<dd><p>List sources that are configured and ready to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of configured source names</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.list_unconfigured">
+<span class="sig-name descname"><span class="pre">list_unconfigured</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.list_unconfigured"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.list_unconfigured" title="Link to this definition"></a></dt>
+<dd><p>List sources that need configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of unconfigured source names</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.print_status">
+<span class="sig-name descname"><span class="pre">print_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.print_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.print_status" title="Link to this definition"></a></dt>
+<dd><p>Print the status of all registered sources.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.SearchCriteria" title="hired.search.base.SearchCriteria"><span class="pre">SearchCriteria</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.search" title="Link to this definition"></a></dt>
+<dd><p>Search using a specific source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_name</strong> – Name of the source to use</p></li>
+<li><p><strong>criteria</strong> – Search criteria</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of JobResult objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSources.search_all">
+<span class="sig-name descname"><span class="pre">search_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.SearchCriteria" title="hired.search.base.SearchCriteria"><span class="pre">SearchCriteria</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_unconfigured</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/facade.html#JobSources.search_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSources.search_all" title="Link to this definition"></a></dt>
+<dd><p>Search across multiple sources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>criteria</strong> – Search criteria</p></li>
+<li><p><strong>sources</strong> – Optional list of source names. If None, uses all available sources.</p></li>
+<li><p><strong>skip_unconfigured</strong> – If True, skip sources that are not configured</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Combined list of JobResult objects from all sources</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.JobSpySource">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">JobSpySource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sites</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proxies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/sources/jobspy.html#JobSpySource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSpySource" title="Link to this definition"></a></dt>
+<dd><p>JobSpy source implementation.</p>
+<p>Uses python-jobspy to scrape jobs from multiple sources simultaneously.
+Does not require API keys, but may be subject to rate limiting.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.JobSpySource.display_name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">display_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#hired.search.JobSpySource.display_name" title="Link to this definition"></a></dt>
+<dd><p>Return the display name of this source (e.g., ‘Indeed’, ‘USAJobs’).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSpySource.get_setup_instructions">
+<span class="sig-name descname"><span class="pre">get_setup_instructions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/jobspy.html#JobSpySource.get_setup_instructions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSpySource.get_setup_instructions" title="Link to this definition"></a></dt>
+<dd><p>Return setup instructions for this source.</p>
+<p>Should include:
+- Where to get API keys if needed
+- Environment variables or config file settings
+- URLs for documentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Multi-line string with setup instructions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSpySource.is_configured">
+<span class="sig-name descname"><span class="pre">is_configured</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/jobspy.html#JobSpySource.is_configured"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSpySource.is_configured" title="Link to this definition"></a></dt>
+<dd><p>Check if this source is properly configured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the source is ready to use, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.JobSpySource.name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#hired.search.JobSpySource.name" title="Link to this definition"></a></dt>
+<dd><p>Return the name of this source (e.g., ‘indeed’, ‘usajobs’).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.JobSpySource.requires_auth">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">requires_auth</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#hired.search.JobSpySource.requires_auth" title="Link to this definition"></a></dt>
+<dd><p>Return True if this source requires authentication/API keys.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.JobSpySource.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.SearchCriteria" title="hired.search.base.SearchCriteria"><span class="pre">SearchCriteria</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/jobspy.html#JobSpySource.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobSpySource.search" title="Link to this definition"></a></dt>
+<dd><p>Search for jobs using JobSpy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criteria</strong> – Search criteria</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of JobResult objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.JobType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">JobType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/base.html#JobType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.JobType" title="Link to this definition"></a></dt>
+<dd><p>Standardized job types across all sources.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.LocationInfo">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">LocationInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">city</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postal_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/base.html#LocationInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.LocationInfo" title="Link to this definition"></a></dt>
+<dd><p>Location information for a job.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.SearchCriteria">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">SearchCriteria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">country</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">city</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postal_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_miles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.JobType" title="hired.search.base.JobType"><span class="pre">JobType</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_remote</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posted_within_days</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results_wanted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_salary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_salary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keywords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_keywords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict[str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~typing.Any]</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/base.html#SearchCriteria"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SearchCriteria" title="Link to this definition"></a></dt>
+<dd><p>Standardized search criteria across all sources.</p>
+<p>Different sources may not support all criteria, but this provides
+a consistent interface for users.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="hired.search.SourceConfigError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">SourceConfigError</span></span><a class="reference internal" href="../../_modules/hired/search/base.html#SourceConfigError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceConfigError" title="Link to this definition"></a></dt>
+<dd><p>Raised when a source is not properly configured.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.SourceRegistry">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">SourceRegistry</span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#SourceRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceRegistry" title="Link to this definition"></a></dt>
+<dd><p>Registry for job search sources.</p>
+<p>Provides a plugin system where sources can be registered
+and retrieved by name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.SourceRegistry.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="search/base.html#hired.search.base.JobSearchSource" title="hired.search.base.JobSearchSource"><span class="pre">JobSearchSource</span></a></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#SourceRegistry.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceRegistry.get" title="Link to this definition"></a></dt>
+<dd><p>Get a source by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – Name of the source</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JobSearchSource instance</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>KeyError</strong> – If source not found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.SourceRegistry.get_source_info">
+<span class="sig-name descname"><span class="pre">get_source_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#SourceRegistry.get_source_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceRegistry.get_source_info" title="Link to this definition"></a></dt>
+<dd><p>Get information about a source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – Name of the source</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with source information</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.SourceRegistry.list_available_sources">
+<span class="sig-name descname"><span class="pre">list_available_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#SourceRegistry.list_available_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceRegistry.list_available_sources" title="Link to this definition"></a></dt>
+<dd><p>List sources that are properly configured and ready to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of source names that are configured</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.SourceRegistry.list_sources">
+<span class="sig-name descname"><span class="pre">list_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#SourceRegistry.list_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceRegistry.list_sources" title="Link to this definition"></a></dt>
+<dd><p>List all registered source names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of source names</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.SourceRegistry.list_unconfigured_sources">
+<span class="sig-name descname"><span class="pre">list_unconfigured_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#SourceRegistry.list_unconfigured_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceRegistry.list_unconfigured_sources" title="Link to this definition"></a></dt>
+<dd><p>List sources that are registered but not configured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of source names that need configuration</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.SourceRegistry.register">
+<span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.JobSearchSource" title="hired.search.base.JobSearchSource"><span class="pre">JobSearchSource</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobSearchSource" title="hired.search.base.JobSearchSource"><span class="pre">JobSearchSource</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#SourceRegistry.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceRegistry.register" title="Link to this definition"></a></dt>
+<dd><p>Register a job search source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – Instance of a JobSearchSource implementation</p></li>
+<li><p><strong>source_class</strong> – Optional class of the source for reference</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.SourceRegistry.unregister">
+<span class="sig-name descname"><span class="pre">unregister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#SourceRegistry.unregister"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.SourceRegistry.unregister" title="Link to this definition"></a></dt>
+<dd><p>Unregister a source by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – Name of the source to unregister</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.search.USAJobsSource">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">USAJobsSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/search/sources/usajobs.html#USAJobsSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.USAJobsSource" title="Link to this definition"></a></dt>
+<dd><p>USAJobs API source implementation.</p>
+<p>Searches US Government job postings via the official USAJobs API.
+Requires a free API key from <a class="reference external" href="https://developer.usajobs.gov/">https://developer.usajobs.gov/</a>.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.USAJobsSource.display_name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">display_name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#hired.search.USAJobsSource.display_name" title="Link to this definition"></a></dt>
+<dd><p>Return the display name of this source (e.g., ‘Indeed’, ‘USAJobs’).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.USAJobsSource.get_setup_instructions">
+<span class="sig-name descname"><span class="pre">get_setup_instructions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/usajobs.html#USAJobsSource.get_setup_instructions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.USAJobsSource.get_setup_instructions" title="Link to this definition"></a></dt>
+<dd><p>Return setup instructions for this source.</p>
+<p>Should include:
+- Where to get API keys if needed
+- Environment variables or config file settings
+- URLs for documentation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Multi-line string with setup instructions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.USAJobsSource.is_configured">
+<span class="sig-name descname"><span class="pre">is_configured</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/usajobs.html#USAJobsSource.is_configured"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.USAJobsSource.is_configured" title="Link to this definition"></a></dt>
+<dd><p>Check if this source is properly configured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the source is ready to use, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.USAJobsSource.name">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#hired.search.USAJobsSource.name" title="Link to this definition"></a></dt>
+<dd><p>Return the name of this source (e.g., ‘indeed’, ‘usajobs’).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hired.search.USAJobsSource.requires_auth">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">requires_auth</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></span><a class="headerlink" href="#hired.search.USAJobsSource.requires_auth" title="Link to this definition"></a></dt>
+<dd><p>Return True if this source requires authentication/API keys.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.search.USAJobsSource.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.SearchCriteria" title="hired.search.base.SearchCriteria"><span class="pre">SearchCriteria</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/search/sources/usajobs.html#USAJobsSource.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.USAJobsSource.search" title="Link to this definition"></a></dt>
+<dd><p>Search for jobs using USAJobs API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>criteria</strong> – Search criteria</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of JobResult objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.search.get_registry">
+<span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">get_registry</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="search/registry.html#hired.search.registry.SourceRegistry" title="hired.search.registry.SourceRegistry"><span class="pre">SourceRegistry</span></a></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#get_registry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.get_registry" title="Link to this definition"></a></dt>
+<dd><p>Get the global source registry.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.search.register_source">
+<span class="sig-prename descclassname"><span class="pre">hired.search.</span></span><span class="sig-name descname"><span class="pre">register_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.JobSearchSource" title="hired.search.base.JobSearchSource"><span class="pre">JobSearchSource</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobSearchSource" title="hired.search.base.JobSearchSource"><span class="pre">JobSearchSource</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/hired/search/registry.html#register_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.search.register_source" title="Link to this definition"></a></dt>
+<dd><p>Register a source with the global registry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> – Instance of a JobSearchSource implementation</p></li>
+<li><p><strong>source_class</strong> – Optional class of the source for reference</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="resumejson_pydantic_models.html" class="btn btn-neutral float-left" title="hired.resumejson_pydantic_models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="search/base.html" class="btn btn-neutral float-right" title="hired.search.base" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

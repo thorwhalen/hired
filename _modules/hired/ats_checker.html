@@ -1,0 +1,628 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.ats_checker &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.ats_checker</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.ats_checker</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">ATS (Applicant Tracking System) compatibility checker.</span>
+
+<span class="sd">Analyze resumes to ensure they&#39;re compatible with automated screening systems.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.search.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobResult</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.job_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobAnalyzer</span>
+
+
+<div class="viewcode-block" id="ATSIssue">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSIssue">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ATSIssue</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents an ATS compatibility issue.&quot;&quot;&quot;</span>
+
+    <span class="n">category</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &#39;critical&#39;, &#39;warning&#39;, &#39;info&#39;</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">suggestion</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="p">,</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s1">&#39;suggestion&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">suggestion</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="ATSReport">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSReport">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ATSReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Report from ATS compatibility check.&quot;&quot;&quot;</span>
+
+    <span class="n">overall_score</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># 0-100</span>
+    <span class="n">issues</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">keyword_match_score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">matched_keywords</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+    <span class="n">missing_keywords</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ATSReport.get_issues_by_category">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSReport.get_issues_by_category">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_issues_by_category</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get issues filtered by category.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">issue</span> <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">issues</span> <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">category</span> <span class="o">==</span> <span class="n">category</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ATSReport.get_critical_issues">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSReport.get_critical_issues">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_critical_issues</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get critical issues.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_issues_by_category</span><span class="p">(</span><span class="s1">&#39;critical&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ATSReport.get_warnings">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSReport.get_warnings">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_warnings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get warnings.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_issues_by_category</span><span class="p">(</span><span class="s1">&#39;warning&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ATSReport.to_dict">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSReport.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to dictionary.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;overall_score&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">overall_score</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s1">&#39;keyword_match_score&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyword_match_score</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s1">&#39;matched_keywords&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matched_keywords</span><span class="p">),</span>
+            <span class="s1">&#39;missing_keywords&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_keywords</span><span class="p">),</span>
+            <span class="s1">&#39;issues&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">issues</span><span class="p">],</span>
+            <span class="s1">&#39;critical_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_critical_issues</span><span class="p">()),</span>
+            <span class="s1">&#39;warning_count&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_warnings</span><span class="p">()),</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="ATSReport.get_summary">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSReport.get_summary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get human-readable summary.&quot;&quot;&quot;</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;ATS Compatibility Report&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;Overall Score: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">overall_score</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">/100&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;Keyword Match: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">keyword_match_score</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;Critical Issues: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_critical_issues</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;Warnings: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_warnings</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_critical_issues</span><span class="p">():</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Critical Issues:&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_critical_issues</span><span class="p">():</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;• </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">suggestion</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_warnings</span><span class="p">():</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Warnings:&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">issue</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_warnings</span><span class="p">():</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;• </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  → </span><span class="si">{</span><span class="n">issue</span><span class="o">.</span><span class="n">suggestion</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">missing_keywords</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Important Missing Keywords:&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_keywords</span><span class="p">)[:</span><span class="mi">15</span><span class="p">]:</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ATSChecker">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSChecker">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ATSChecker</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check resume for ATS compatibility.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from hired.ats_checker import ATSChecker</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; checker = ATSChecker()</span>
+<span class="sd">        &gt;&gt;&gt; report = checker.check_resume(resume_dict)</span>
+<span class="sd">        &gt;&gt;&gt; print(report.get_summary())</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Check against specific job</span>
+<span class="sd">        &gt;&gt;&gt; report = checker.check_resume(resume_dict, job_result)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Standard section names that ATS systems recognize</span>
+    <span class="n">STANDARD_SECTIONS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;basics&#39;</span><span class="p">,</span> <span class="s1">&#39;summary&#39;</span><span class="p">,</span> <span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="s1">&#39;work experience&#39;</span><span class="p">,</span> <span class="s1">&#39;experience&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;skills&#39;</span><span class="p">,</span> <span class="s1">&#39;projects&#39;</span><span class="p">,</span> <span class="s1">&#39;certifications&#39;</span><span class="p">,</span> <span class="s1">&#39;awards&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;publications&#39;</span><span class="p">,</span> <span class="s1">&#39;volunteer&#39;</span><span class="p">,</span> <span class="s1">&#39;languages&#39;</span><span class="p">,</span> <span class="s1">&#39;interests&#39;</span><span class="p">,</span> <span class="s1">&#39;references&#39;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Common problematic elements</span>
+    <span class="n">AVOID_ELEMENTS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;tables&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;&lt;table&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;text_boxes&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;&lt;textarea&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;headers_footers&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># Checked separately</span>
+        <span class="s1">&#39;images&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;&lt;img&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;fancy_fonts&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># Checked separately</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize ATS checker.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="ATSChecker.check_resume">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.ATSChecker.check_resume">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_resume</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">resume_content</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">job</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">JobResult</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ATSReport</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check resume for ATS compatibility.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            resume_content: Resume content as dictionary (JSON Resume format)</span>
+<span class="sd">            job: Optional JobResult to check keyword matching</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ATSReport with compatibility score and issues</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="mf">100.0</span>
+
+        <span class="c1"># Check structure</span>
+        <span class="n">structure_issues</span><span class="p">,</span> <span class="n">structure_penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_structure</span><span class="p">(</span><span class="n">resume_content</span><span class="p">)</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">structure_issues</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">-=</span> <span class="n">structure_penalty</span>
+
+        <span class="c1"># Check contact information</span>
+        <span class="n">contact_issues</span><span class="p">,</span> <span class="n">contact_penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_contact_info</span><span class="p">(</span><span class="n">resume_content</span><span class="p">)</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">contact_issues</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">-=</span> <span class="n">contact_penalty</span>
+
+        <span class="c1"># Check formatting</span>
+        <span class="n">format_issues</span><span class="p">,</span> <span class="n">format_penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_formatting</span><span class="p">(</span><span class="n">resume_content</span><span class="p">)</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">format_issues</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">-=</span> <span class="n">format_penalty</span>
+
+        <span class="c1"># Check content</span>
+        <span class="n">content_issues</span><span class="p">,</span> <span class="n">content_penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_content</span><span class="p">(</span><span class="n">resume_content</span><span class="p">)</span>
+        <span class="n">issues</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">content_issues</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">-=</span> <span class="n">content_penalty</span>
+
+        <span class="c1"># Check keyword matching if job provided</span>
+        <span class="n">keyword_score</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">matched_keywords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">missing_keywords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">job</span><span class="p">:</span>
+            <span class="n">keyword_score</span><span class="p">,</span> <span class="n">matched_keywords</span><span class="p">,</span> <span class="n">missing_keywords</span><span class="p">,</span> <span class="n">keyword_issues</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">_check_keywords</span><span class="p">(</span><span class="n">resume_content</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">keyword_issues</span><span class="p">)</span>
+
+            <span class="c1"># Keyword matching affects overall score</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="n">score</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">keyword_score</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">)</span>
+
+        <span class="c1"># Ensure score is in valid range</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">score</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">ATSReport</span><span class="p">(</span>
+            <span class="n">overall_score</span><span class="o">=</span><span class="n">score</span><span class="p">,</span>
+            <span class="n">issues</span><span class="o">=</span><span class="n">issues</span><span class="p">,</span>
+            <span class="n">keyword_match_score</span><span class="o">=</span><span class="n">keyword_score</span><span class="p">,</span>
+            <span class="n">matched_keywords</span><span class="o">=</span><span class="n">matched_keywords</span><span class="p">,</span>
+            <span class="n">missing_keywords</span><span class="o">=</span><span class="n">missing_keywords</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resume</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check resume structure.&quot;&quot;&quot;</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">penalty</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Check for basics section</span>
+        <span class="k">if</span> <span class="s1">&#39;basics&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">resume</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">resume</span><span class="p">[</span><span class="s1">&#39;basics&#39;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;critical&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Missing Basics Section&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Resume must have a basics section with contact information.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Add a basics section with name, email, and phone number.&#39;</span>
+            <span class="p">))</span>
+            <span class="n">penalty</span> <span class="o">+=</span> <span class="mf">20.0</span>
+
+        <span class="c1"># Check for work experience</span>
+        <span class="k">if</span> <span class="s1">&#39;work&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">resume</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">resume</span><span class="p">[</span><span class="s1">&#39;work&#39;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;warning&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Missing Work Experience&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s1">&#39;No work experience section found.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Add work experience entries to demonstrate your background.&#39;</span>
+            <span class="p">))</span>
+            <span class="n">penalty</span> <span class="o">+=</span> <span class="mf">10.0</span>
+
+        <span class="c1"># Check for skills section</span>
+        <span class="k">if</span> <span class="s1">&#39;skills&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">resume</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">resume</span><span class="p">[</span><span class="s1">&#39;skills&#39;</span><span class="p">]:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;warning&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Missing Skills Section&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s1">&#39;No skills section found. ATS systems often filter by skills.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Add a skills section with relevant technical and soft skills.&#39;</span>
+            <span class="p">))</span>
+            <span class="n">penalty</span> <span class="o">+=</span> <span class="mf">10.0</span>
+
+        <span class="k">return</span> <span class="n">issues</span><span class="p">,</span> <span class="n">penalty</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_contact_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resume</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check contact information completeness.&quot;&quot;&quot;</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">penalty</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">basics</span> <span class="o">=</span> <span class="n">resume</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;basics&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="c1"># Check email</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">):</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;critical&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Missing Email Address&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Email address is required for ATS processing.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Add your professional email address to the basics section.&#39;</span>
+            <span class="p">))</span>
+            <span class="n">penalty</span> <span class="o">+=</span> <span class="mf">15.0</span>
+
+        <span class="c1"># Check phone</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;phone&#39;</span><span class="p">):</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;warning&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Missing Phone Number&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Phone number helps ATS systems contact you.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Add your phone number to the basics section.&#39;</span>
+            <span class="p">))</span>
+            <span class="n">penalty</span> <span class="o">+=</span> <span class="mf">5.0</span>
+
+        <span class="c1"># Check name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;critical&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Missing Name&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Your name is required.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Add your full name to the basics section.&#39;</span>
+            <span class="p">))</span>
+            <span class="n">penalty</span> <span class="o">+=</span> <span class="mf">15.0</span>
+
+        <span class="k">return</span> <span class="n">issues</span><span class="p">,</span> <span class="n">penalty</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_formatting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resume</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check for formatting that may cause ATS issues.&quot;&quot;&quot;</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">penalty</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># In JSON Resume format, we don&#39;t have direct access to the rendered format</span>
+        <span class="c1"># But we can check for potential issues in the data</span>
+
+        <span class="c1"># Check for overly long descriptions</span>
+        <span class="n">work_entries</span> <span class="o">=</span> <span class="n">resume</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">job</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">work_entries</span><span class="p">):</span>
+            <span class="n">summary</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;summary&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
+                <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="p">,</span>
+                    <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Long Job Description (Entry </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">,</span>
+                    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Very long descriptions may be truncated by ATS.&#39;</span><span class="p">,</span>
+                    <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Keep job descriptions concise (under 500 characters).&#39;</span>
+                <span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">issues</span><span class="p">,</span> <span class="n">penalty</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resume</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">],</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check resume content quality.&quot;&quot;&quot;</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">penalty</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Check for quantifiable achievements</span>
+        <span class="n">work_entries</span> <span class="o">=</span> <span class="n">resume</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">has_numbers</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">work_entries</span><span class="p">:</span>
+            <span class="n">highlights</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;highlights&#39;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">summary</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;summary&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+            <span class="n">combined_text</span> <span class="o">=</span> <span class="n">summary</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">highlights</span><span class="p">)</span>
+
+            <span class="c1"># Look for numbers, percentages, currency</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d+[%$]?|\$\d+&#39;</span><span class="p">,</span> <span class="n">combined_text</span><span class="p">):</span>
+                <span class="n">has_numbers</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_numbers</span><span class="p">:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;warning&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;No Quantifiable Achievements&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Including numbers and metrics makes your resume more compelling.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Add metrics like &quot;Increased sales by 25%&quot; or &quot;Managed team of 5&quot;.&#39;</span>
+            <span class="p">))</span>
+            <span class="n">penalty</span> <span class="o">+=</span> <span class="mf">5.0</span>
+
+        <span class="c1"># Check for action verbs</span>
+        <span class="k">if</span> <span class="n">work_entries</span><span class="p">:</span>
+            <span class="n">weak_verbs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;responsible for&#39;</span><span class="p">,</span> <span class="s1">&#39;worked on&#39;</span><span class="p">,</span> <span class="s1">&#39;helped with&#39;</span><span class="p">,</span> <span class="s1">&#39;did&#39;</span><span class="p">}</span>
+            <span class="n">has_weak_verbs</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">work_entries</span><span class="p">:</span>
+                <span class="n">highlights</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;highlights&#39;</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="k">for</span> <span class="n">highlight</span> <span class="ow">in</span> <span class="n">highlights</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">verb</span> <span class="ow">in</span> <span class="n">highlight</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">verb</span> <span class="ow">in</span> <span class="n">weak_verbs</span><span class="p">):</span>
+                        <span class="n">has_weak_verbs</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">has_weak_verbs</span><span class="p">:</span>
+                <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                    <span class="n">category</span><span class="o">=</span><span class="s1">&#39;info&#39;</span><span class="p">,</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Weak Action Verbs&#39;</span><span class="p">,</span>
+                    <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Using stronger action verbs improves impact.&#39;</span><span class="p">,</span>
+                    <span class="n">suggestion</span><span class="o">=</span><span class="s1">&#39;Replace &quot;responsible for&quot; with verbs like &quot;Led&quot;, &quot;Developed&quot;, &quot;Implemented&quot;.&#39;</span>
+                <span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">issues</span><span class="p">,</span> <span class="n">penalty</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_keywords</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">resume</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">job</span><span class="p">:</span> <span class="n">JobResult</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">ATSIssue</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check keyword matching against job posting.&quot;&quot;&quot;</span>
+        <span class="n">issues</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Extract keywords from job</span>
+        <span class="n">analyzer</span> <span class="o">=</span> <span class="n">JobAnalyzer</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="n">job_keywords</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">analyzer</span><span class="o">.</span><span class="n">extract_keywords</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span>
+        <span class="n">job_skills</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">extract_skills</span><span class="p">()</span>
+
+        <span class="c1"># Combine job keywords and skills</span>
+        <span class="n">required_keywords</span> <span class="o">=</span> <span class="n">job_keywords</span> <span class="o">|</span> <span class="n">job_skills</span>
+
+        <span class="c1"># Extract text from resume</span>
+        <span class="n">resume_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_resume_text</span><span class="p">(</span><span class="n">resume</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="c1"># Check which keywords are present</span>
+        <span class="n">matched</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">required_keywords</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">keyword</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">resume_text</span><span class="p">:</span>
+                <span class="n">matched</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">missing</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">keyword</span><span class="p">)</span>
+
+        <span class="c1"># Calculate score</span>
+        <span class="k">if</span> <span class="n">required_keywords</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matched</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">required_keywords</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="mf">100.0</span>
+
+        <span class="c1"># Add issues for missing important keywords</span>
+        <span class="k">if</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;critical&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Low Keyword Match&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Only </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">% of job keywords found in resume.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Include these keywords: </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">missing</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="p">))</span>
+        <span class="k">elif</span> <span class="n">score</span> <span class="o">&lt;</span> <span class="mi">70</span><span class="p">:</span>
+            <span class="n">issues</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ATSIssue</span><span class="p">(</span>
+                <span class="n">category</span><span class="o">=</span><span class="s1">&#39;warning&#39;</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Moderate Keyword Match&#39;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">% of job keywords found. Could be improved.&#39;</span><span class="p">,</span>
+                <span class="n">suggestion</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Consider adding: </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">missing</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">score</span><span class="p">,</span> <span class="n">matched</span><span class="p">,</span> <span class="n">missing</span><span class="p">,</span> <span class="n">issues</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_resume_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resume</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract all text from resume for keyword matching.&quot;&quot;&quot;</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Basics</span>
+        <span class="n">basics</span> <span class="o">=</span> <span class="n">resume</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;basics&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">):</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basics</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;label&#39;</span><span class="p">):</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basics</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;summary&#39;</span><span class="p">):</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basics</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">])</span>
+
+        <span class="c1"># Work</span>
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">resume</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;summary&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;highlights&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+
+        <span class="c1"># Skills</span>
+        <span class="k">for</span> <span class="n">skill_group</span> <span class="ow">in</span> <span class="n">resume</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skills&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">skill_group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">skill_group</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;keywords&#39;</span><span class="p">,</span> <span class="p">[]))</span>
+
+        <span class="c1"># Education</span>
+        <span class="k">for</span> <span class="n">edu</span> <span class="ow">in</span> <span class="n">resume</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edu</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;institution&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edu</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;studyType&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edu</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;area&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+        <span class="c1"># Projects</span>
+        <span class="k">for</span> <span class="n">project</span> <span class="ow">in</span> <span class="n">resume</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;projects&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="check_resume_ats">
+<a class="viewcode-back" href="../../module_docs/hired/ats_checker.html#hired.check_resume_ats">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_resume_ats</span><span class="p">(</span>
+    <span class="n">resume_content</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">job</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">JobResult</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ATSReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Quick utility to check resume ATS compatibility.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        resume_content: Resume content as dictionary (JSON Resume format)</span>
+<span class="sd">        job: Optional JobResult for keyword matching</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ATSReport</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from hired import mk_content_for_resume</span>
+<span class="sd">        &gt;&gt;&gt; from hired.ats_checker import check_resume_ats</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; resume = mk_content_for_resume(candidate_info, job_info)</span>
+<span class="sd">        &gt;&gt;&gt; report = check_resume_ats(resume.model_dump(), job_result)</span>
+<span class="sd">        &gt;&gt;&gt; print(report.get_summary())</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">checker</span> <span class="o">=</span> <span class="n">ATSChecker</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">checker</span><span class="o">.</span><span class="n">check_resume</span><span class="p">(</span><span class="n">resume_content</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

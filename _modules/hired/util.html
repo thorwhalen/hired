@@ -5,18 +5,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.util &mdash; hired 0.0.3 documentation</title>
+  <title>hired.util &mdash; hired 0.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=47de8214"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
       <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
       <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -47,17 +47,31 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/w_rendercv.html">hired.renderers.w_rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tracking.html">hired.tracking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/util.html">hired.util</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/validators.html">hired.validators</a></li>
 </ul>
 
         </div>
@@ -91,18 +105,24 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">files</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>  <span class="c1"># pip install PyYAML</span>
 
-<span class="n">proj_files</span> <span class="o">=</span> <span class="n">files</span><span class="p">(</span><span class="s1">&#39;hired&#39;</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired._converters</span><span class="w"> </span><span class="kn">import</span> <span class="n">ensure_dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.resumejson_pydantic_models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResumeSchema</span>
 
+<span class="n">proj_files</span> <span class="o">=</span> <span class="n">files</span><span class="p">(</span><span class="s1">&#39;hired&#39;</span><span class="p">)</span>
+<span class="n">data_files</span> <span class="o">=</span> <span class="n">files</span><span class="p">(</span><span class="s1">&#39;hired&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;data&#39;</span>
+<span class="n">themes_files</span> <span class="o">=</span> <span class="n">data_files</span> <span class="o">/</span> <span class="s1">&#39;themes&#39;</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_load_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a JSON file from the given path.&quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
 
@@ -110,7 +130,7 @@
     <span class="kn">import</span><span class="w"> </span><span class="nn">toml</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_load_toml_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">toml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -126,7 +146,7 @@
 <span class="sd">    Loads a YAML file using PyYAML.</span>
 <span class="sd">    This works in Python 3.7+ because dicts preserve insertion order.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">yaml_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="c1"># Use safe_load for security reasons.</span>
         <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div>
 
@@ -146,15 +166,10 @@
 
 
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_get_package_data_path</span><span class="p">(</span><span class="n">relative_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve a path to a data file within the package.&quot;&quot;&quot;</span>
-    <span class="c1"># This is a simple version; for real packages, use importlib.resources.files</span>
-    <span class="n">base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">relative_path</span><span class="p">)</span>
+<span class="c1"># --------------------------------------------------------------------------------------</span>
+<span class="c1"># Helpers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">PydanticValidationError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jsonschema.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">JsonSchemaValidationError</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_merge_dicts</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">override</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -162,6 +177,276 @@
     <span class="n">result</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">override</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="n">ValidationErrorType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">PydanticValidationError</span><span class="p">,</span> <span class="n">JsonSchemaValidationError</span><span class="p">]</span>
+<span class="n">ValidationErrors</span> <span class="o">=</span> <span class="p">(</span><span class="n">PydanticValidationError</span><span class="p">,</span> <span class="n">JsonSchemaValidationError</span><span class="p">)</span>
+<span class="n">JsonContentStr</span> <span class="o">=</span> <span class="nb">str</span>  <span class="c1"># JSON string</span>
+<span class="n">PathStr</span> <span class="o">=</span> <span class="nb">str</span>  <span class="c1"># filesystem path</span>
+<span class="n">ResumeSource</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">PathStr</span><span class="p">,</span> <span class="n">JsonContentStr</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">]</span>
+<span class="n">ResumeDict</span> <span class="o">=</span> <span class="nb">dict</span>  <span class="c1"># one that is valid in the ResumeSchema sense</span>
+
+
+<div class="viewcode-block" id="extract_friendly_errors">
+<a class="viewcode-back" href="../../module_docs/hired/util.html#hired.util.extract_friendly_errors">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_friendly_errors</span><span class="p">(</span><span class="n">error_obj</span><span class="p">:</span> <span class="n">ValidationErrorType</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracts a generator of user-friendly error messages from a validation error object.</span>
+
+<span class="sd">    This function works with both Pydantic&#39;s ValidationError and jsonschema&#39;s</span>
+<span class="sd">    ValidationError to provide a consistent output.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        error_obj: The ValidationError instance to process.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        A tuple of (field, message) for each validation error.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">error_obj</span><span class="p">,</span> <span class="n">PydanticValidationError</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">error_obj</span><span class="o">.</span><span class="n">errors</span><span class="p">():</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">error</span><span class="p">[</span><span class="s1">&#39;loc&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">error</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="n">field</span><span class="p">,</span> <span class="n">message</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">error_obj</span><span class="p">,</span> <span class="n">JsonSchemaValidationError</span><span class="p">):</span>
+        <span class="c1"># The jsonschema.exceptions.ValidationError object might only represent the first error.</span>
+        <span class="c1"># It&#39;s best to use jsonschema.iter_errors() to get all errors.</span>
+        <span class="c1"># This requires the schema and data, which are not directly available in the exception object.</span>
+        <span class="c1"># We&#39;ll handle the common case where a single error is passed in.</span>
+        <span class="c1"># To get the full list, you would typically use jsonschema.iter_errors(schema, data).</span>
+
+        <span class="c1"># This path extracts the field location from the error path tuple.</span>
+        <span class="n">field_path</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">error_obj</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">field_path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">field_path</span> <span class="k">else</span> <span class="s2">&quot;root&quot;</span>
+        <span class="k">yield</span> <span class="n">field</span><span class="p">,</span> <span class="n">error_obj</span><span class="o">.</span><span class="n">message</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">validation_friendly_errors_string</span><span class="p">(</span>
+    <span class="n">error_obj</span><span class="p">:</span> <span class="n">ValidationErrorType</span><span class="p">,</span>
+    <span class="n">schema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Error in field &#39;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">extract_friendly_errors</span><span class="p">(</span><span class="n">error_obj</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="ensure_resume_content_dict">
+<a class="viewcode-back" href="../../module_docs/hired/util.html#hired.util.ensure_resume_content_dict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ensure_resume_content_dict</span><span class="p">(</span><span class="n">content_src</span><span class="p">:</span> <span class="n">ResumeSource</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResumeDict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a schema-valid resume dict from various sources</span>
+<span class="sd">    (json file, json string, dict, ...)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content_src</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="n">content_src</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">content_src</span><span class="o">.</span><span class="n">expanduser</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content_src</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">content_src</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">content_src</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">content_src</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid JSON content provided: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content_src</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Content source must be a dict or a valid JSON string/filename: </span><span class="si">{</span><span class="n">content_src</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">validate_resume_content_dict</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_prune_none</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Recursively remove keys or list items that are None so schema validation doesn&#39;t see explicit nulls for optional fields.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">_prune_none</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">_prune_none</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">obj</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">obj</span>
+
+
+<div class="viewcode-block" id="normalize_and_validate_resume">
+<a class="viewcode-back" href="../../module_docs/hired/util.html#hired.util.normalize_and_validate_resume">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize_and_validate_resume</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">strict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Normalize and validate a resume-like mapping.</span>
+
+<span class="sd">    - Prunes None values.</span>
+<span class="sd">    - Validates via Pydantic ResumeSchemaExtended (allows extra fields).</span>
+<span class="sd">    - If strict is True and jsonschema is available, will attempt schema</span>
+<span class="sd">      validation against the packaged JSON schema (best-effort).</span>
+
+<span class="sd">    Returns a ResumeSchemaExtended instance on success. Raises</span>
+<span class="sd">    pydantic.ValidationError on failure.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResumeSchemaExtended</span>
+
+    <span class="c1"># Make a shallow dict to ensure we mutate a copy</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;raw must be a mapping&#39;</span><span class="p">)</span>
+
+    <span class="n">pruned</span> <span class="o">=</span> <span class="n">_prune_none</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">raw</span><span class="p">))</span>
+
+    <span class="c1"># First, construct the pydantic model (this provides strong typing)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">ResumeSchemaExtended</span><span class="p">(</span><span class="o">**</span><span class="n">pruned</span><span class="p">)</span>
+
+    <span class="c1"># Optionally perform jsonschema validation if the package schema exists</span>
+    <span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">jsonschema</span>
+
+            <span class="n">schema_path</span> <span class="o">=</span> <span class="n">DFLT_RESUME_SCHEMA_PATH</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">schema</span> <span class="o">=</span> <span class="n">_load_json_file</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+                <span class="n">schema</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Will raise jsonschema.ValidationError if invalid</span>
+                <span class="n">jsonschema</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">pruned</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="c1"># jsonschema not available — skip schema validation</span>
+            <span class="k">pass</span>
+
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+
+<div class="viewcode-block" id="get_jsonschema_errors">
+<a class="viewcode-back" href="../../module_docs/hired/util.html#hired.util.get_jsonschema_errors">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_jsonschema_errors</span><span class="p">(</span>
+    <span class="n">content</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">schema_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list of jsonschema validation error messages for the content.</span>
+
+<span class="sd">    If jsonschema is not available or the schema file is missing, returns an</span>
+<span class="sd">    empty list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">jsonschema</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">schema_path</span> <span class="o">=</span> <span class="n">schema_path</span> <span class="ow">or</span> <span class="n">DFLT_RESUME_SCHEMA_PATH</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">_load_json_file</span><span class="p">(</span><span class="n">schema_path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">validator</span> <span class="o">=</span> <span class="n">jsonschema</span><span class="o">.</span><span class="n">Draft7Validator</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">validator</span><span class="o">.</span><span class="n">iter_errors</span><span class="p">(</span><span class="n">content</span><span class="p">)]</span></div>
+
+
+
+<div class="viewcode-block" id="validate_resume_content_dict">
+<a class="viewcode-back" href="../../module_docs/hired/util.html#hired.util.validate_resume_content_dict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_resume_content_dict</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raise_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResumeDict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate resume content using ResumeSchemaExtended (which allows extra fields).&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ResumeSchemaExtended</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">ResumeSchemaExtended</span><span class="p">(</span><span class="o">**</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ValidationErrors</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">validation_friendly_errors_string</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">raise_errors</span><span class="p">:</span>
+            <span class="k">raise</span>
+    <span class="k">return</span> <span class="n">content</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------------------</span>
+<span class="c1"># Functions that manage resources</span>
+
+
+<span class="n">schemas_files</span> <span class="o">=</span> <span class="n">data_files</span> <span class="o">/</span> <span class="s1">&#39;schemas&#39;</span>
+<span class="n">resume_jsons_files</span> <span class="o">=</span> <span class="n">data_files</span> <span class="o">/</span> <span class="s1">&#39;resume_jsons&#39;</span>
+<span class="n">resume_json_example</span> <span class="o">=</span> <span class="n">resume_jsons_files</span> <span class="o">/</span> <span class="s1">&#39;test_resume.json&#39;</span>
+
+<span class="n">DFLT_RESUME_SCHEMA_PATH</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">schemas_files</span> <span class="o">/</span> <span class="s1">&#39;resume_schema.json&#39;</span><span class="p">)</span>
+<span class="n">DFLT_SCHEMA_URL</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json&quot;</span>
+<span class="p">)</span>
+<span class="n">DFLT_TEST_RESUME_URL</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/jsonresume/resume-schema/refs/heads/v1.0.0/sample.resume.json&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">refresh_resume_schema</span><span class="p">():</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ju</span><span class="w"> </span><span class="kn">import</span> <span class="n">pydantic_model_to_code</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">fix_anyurl_transform</span><span class="p">(</span><span class="n">code</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transform generated code to replace AnyUrl with Optional[str] type alias&quot;&quot;&quot;</span>
+
+        <span class="c1"># Note: The need for this egress comes from the fact that AnyUrl is too restrictive.</span>
+        <span class="c1">#   By &quot;too&quot; restrictive, I mean, MORE restrictive than the json schema actually enforces.</span>
+        <span class="c1">#   Using jsonschema (package) or pydantic.create_model, we get alignment (of schema version and example data).</span>
+        <span class="c1">#   But when we use pydantic_model_to_code (which uses datamodel_code_generator)</span>
+        <span class="c1">#   we get two failures:</span>
+        <span class="c1">#      - Error in field &#39;basics&#39;: Input should be a valid URL, input is empty</span>
+        <span class="c1">#      - Error in field &#39;projects&#39;: Input should be a valid URL, relative URL without a base</span>
+        <span class="c1"># because of UrlAny that was created.</span>
+
+        <span class="c1"># Check if AnyUrl is imported - if not, no changes needed</span>
+        <span class="k">if</span> <span class="s1">&#39;AnyUrl&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">code</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">code</span>
+
+        <span class="c1"># Remove AnyUrl from imports, handling various import patterns</span>
+        <span class="c1"># Pattern 1: from pydantic import AnyUrl, ...</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;from pydantic import ([^,\n]*,\s*)?AnyUrl(,\s*[^,\n]*)?&#39;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s1">&#39;from pydantic import \1\2&#39;</span><span class="p">,</span>
+            <span class="n">code</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Pattern 2: from pydantic import ..., AnyUrl</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;(from pydantic import [^,\n]*),\s*AnyUrl\s*$&#39;</span><span class="p">,</span>
+            <span class="sa">r</span><span class="s1">&#39;\1&#39;</span><span class="p">,</span>
+            <span class="n">code</span><span class="p">,</span>
+            <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">MULTILINE</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Pattern 3: from pydantic import AnyUrl only</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;from pydantic import AnyUrl\n&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+
+        <span class="c1"># Clean up any leftover commas from import removal</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;from pydantic import\s*,&#39;</span><span class="p">,</span> <span class="s1">&#39;from pydantic import&#39;</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;,\s*,&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;,\s*\)&#39;</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+
+        <span class="c1"># Add the type alias definition after the imports</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">code</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">import_end_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lines</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+                <span class="p">(</span><span class="s1">&#39;from &#39;</span><span class="p">,</span> <span class="s1">&#39;import &#39;</span><span class="p">)</span>
+            <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;# &#39;</span><span class="p">):</span>
+                <span class="n">import_end_idx</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="c1"># Insert the type alias after imports</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">import_end_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">import_end_idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;# Type alias to avoid strict URL validation&#39;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">import_end_idx</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;AnyUrl = Optional[str]&#39;</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">import_end_idx</span> <span class="o">+</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Get the schema (dict) from the url&#39;</span><span class="p">)</span>
+    <span class="n">new_schema</span> <span class="o">=</span> <span class="n">ensure_dict</span><span class="p">(</span><span class="n">DFLT_SCHEMA_URL</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Make pydantic models (code) from it&#39;</span><span class="p">)</span>
+    <span class="n">new_schema_code</span> <span class="o">=</span> <span class="n">pydantic_model_to_code</span><span class="p">(</span>
+        <span class="n">new_schema</span><span class="p">,</span> <span class="n">egress_transform</span><span class="o">=</span><span class="n">fix_anyurl_transform</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Replace the code that is in resumejson_pydantic_models.py&#39;</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">proj_files</span> <span class="o">/</span> <span class="s1">&#39;resumejson_pydantic_models.py&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;&quot;&quot;&quot;Pydantic models for resume json schema</span><span class="se">\n</span><span class="s1">&quot;&quot;&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">new_schema_code</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Writing the schema in the schema file (for reference)...&quot;</span><span class="p">)</span>
+    <span class="n">Path</span><span class="p">(</span><span class="n">DFLT_RESUME_SCHEMA_PATH</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">new_schema</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Refresh test json&#39;</span><span class="p">)</span>
+    <span class="n">Path</span><span class="p">(</span><span class="n">resume_json_example</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">url_to_jdict</span><span class="p">(</span><span class="n">DFLT_TEST_RESUME_URL</span><span class="p">)))</span>
 </pre></div>
 
            </div>

@@ -1,0 +1,588 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.cover_letter &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.cover_letter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.cover_letter</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Cover letter generation functionality.</span>
+
+<span class="sd">Generate professional cover letters tailored to specific job applications.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jinja2</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.search.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobResult</span>
+
+
+<div class="viewcode-block" id="CoverLetterData">
+<a class="viewcode-back" href="../../module_docs/hired/cover_letter.html#hired.CoverLetterData">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CoverLetterData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data structure for cover letter generation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Required fields</span>
+    <span class="n">applicant_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">applicant_email</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">company_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">position_title</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="c1"># Optional applicant information</span>
+    <span class="n">applicant_phone</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">applicant_address</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Optional target information</span>
+    <span class="n">hiring_manager_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Content</span>
+    <span class="n">opening_paragraph</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">body_paragraphs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">closing_paragraph</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># Metadata</span>
+    <span class="n">date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_paragraphs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">body_paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%B </span><span class="si">%d</span><span class="s2">, %Y&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CoverLetterData.to_dict">
+<a class="viewcode-back" href="../../module_docs/hired/cover_letter.html#hired.CoverLetterData.to_dict">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to dictionary for template rendering.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;applicant_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_name</span><span class="p">,</span>
+            <span class="s1">&#39;applicant_email&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_email</span><span class="p">,</span>
+            <span class="s1">&#39;applicant_phone&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_phone</span><span class="p">,</span>
+            <span class="s1">&#39;applicant_address&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_address</span><span class="p">,</span>
+            <span class="s1">&#39;company_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company_name</span><span class="p">,</span>
+            <span class="s1">&#39;position_title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_title</span><span class="p">,</span>
+            <span class="s1">&#39;hiring_manager_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hiring_manager_name</span><span class="p">,</span>
+            <span class="s1">&#39;opening_paragraph&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">opening_paragraph</span><span class="p">,</span>
+            <span class="s1">&#39;body_paragraphs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_paragraphs</span><span class="p">,</span>
+            <span class="s1">&#39;closing_paragraph&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing_paragraph</span><span class="p">,</span>
+            <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
+        <span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="generate_cover_letter_content">
+<a class="viewcode-back" href="../../module_docs/hired/cover_letter.html#hired.generate_cover_letter_content">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_cover_letter_content</span><span class="p">(</span>
+    <span class="n">candidate_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">job_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="s1">&#39;JobResult&#39;</span><span class="p">,</span>
+    <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;professional&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CoverLetterData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate cover letter content from candidate and job information.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        candidate_info: Candidate information (resume dict or basics)</span>
+<span class="sd">        job_info: Job information (dict, text, or JobResult)</span>
+<span class="sd">        tone: Tone of the letter (&#39;professional&#39;, &#39;enthusiastic&#39;, &#39;formal&#39;)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        CoverLetterData object with generated content</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; data = generate_cover_letter_content(</span>
+<span class="sd">        ...     candidate_info={&#39;basics&#39;: {&#39;name&#39;: &#39;Jane Doe&#39;, &#39;email&#39;: &#39;jane@example.com&#39;}},</span>
+<span class="sd">        ...     job_info={&#39;title&#39;: &#39;Software Engineer&#39;, &#39;company&#39;: &#39;TechCorp&#39;},</span>
+<span class="sd">        ... )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract applicant info</span>
+    <span class="n">basics</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;basics&#39;</span><span class="p">,</span> <span class="n">candidate_info</span><span class="p">)</span>
+    <span class="n">applicant_name</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Applicant&#39;</span><span class="p">)</span>
+    <span class="n">applicant_email</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">applicant_phone</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;phone&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Build address if available</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">applicant_address</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">location</span><span class="p">:</span>
+        <span class="n">address_parts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;address&#39;</span><span class="p">):</span>
+            <span class="n">address_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">location</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;city&#39;</span><span class="p">):</span>
+            <span class="n">city_state</span> <span class="o">=</span> <span class="n">location</span><span class="p">[</span><span class="s1">&#39;city&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">):</span>
+                <span class="n">city_state</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, </span><span class="si">{</span><span class="n">location</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">address_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">city_state</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;postalCode&#39;</span><span class="p">):</span>
+            <span class="n">address_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">location</span><span class="p">[</span><span class="s1">&#39;postalCode&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">address_parts</span><span class="p">:</span>
+            <span class="n">applicant_address</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">address_parts</span><span class="p">)</span>
+
+    <span class="c1"># Extract job info</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">):</span>  <span class="c1"># JobResult</span>
+        <span class="n">company_name</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">company</span> <span class="ow">or</span> <span class="s2">&quot;the company&quot;</span>
+        <span class="n">position_title</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">title</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># dict</span>
+        <span class="n">company_name</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company_name&#39;</span><span class="p">,</span> <span class="s1">&#39;the company&#39;</span><span class="p">))</span>
+        <span class="n">position_title</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;the position&#39;</span><span class="p">))</span>
+
+    <span class="c1"># Generate content based on tone</span>
+    <span class="n">opening</span> <span class="o">=</span> <span class="n">_generate_opening</span><span class="p">(</span><span class="n">applicant_name</span><span class="p">,</span> <span class="n">position_title</span><span class="p">,</span> <span class="n">company_name</span><span class="p">,</span> <span class="n">tone</span><span class="p">)</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">_generate_body</span><span class="p">(</span><span class="n">candidate_info</span><span class="p">,</span> <span class="n">job_info</span><span class="p">,</span> <span class="n">tone</span><span class="p">)</span>
+    <span class="n">closing</span> <span class="o">=</span> <span class="n">_generate_closing</span><span class="p">(</span><span class="n">tone</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">CoverLetterData</span><span class="p">(</span>
+        <span class="n">applicant_name</span><span class="o">=</span><span class="n">applicant_name</span><span class="p">,</span>
+        <span class="n">applicant_email</span><span class="o">=</span><span class="n">applicant_email</span><span class="p">,</span>
+        <span class="n">applicant_phone</span><span class="o">=</span><span class="n">applicant_phone</span><span class="p">,</span>
+        <span class="n">applicant_address</span><span class="o">=</span><span class="n">applicant_address</span><span class="p">,</span>
+        <span class="n">company_name</span><span class="o">=</span><span class="n">company_name</span><span class="p">,</span>
+        <span class="n">position_title</span><span class="o">=</span><span class="n">position_title</span><span class="p">,</span>
+        <span class="n">opening_paragraph</span><span class="o">=</span><span class="n">opening</span><span class="p">,</span>
+        <span class="n">body_paragraphs</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+        <span class="n">closing_paragraph</span><span class="o">=</span><span class="n">closing</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_opening</span><span class="p">(</span>
+    <span class="n">applicant_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">position_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">company_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate opening paragraph.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tone</span> <span class="o">==</span> <span class="s2">&quot;enthusiastic&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;I am thrilled to apply for the </span><span class="si">{</span><span class="n">position_title</span><span class="si">}</span><span class="s2"> position at </span><span class="si">{</span><span class="n">company_name</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;With my background and passion for the field, I am excited about the opportunity &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;to contribute to your team&#39;s success.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tone</span> <span class="o">==</span> <span class="s2">&quot;formal&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;I am writing to express my interest in the </span><span class="si">{</span><span class="n">position_title</span><span class="si">}</span><span class="s2"> position at </span><span class="si">{</span><span class="n">company_name</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;I believe my qualifications and experience make me a strong candidate for this role.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># professional</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;I am writing to apply for the </span><span class="si">{</span><span class="n">position_title</span><span class="si">}</span><span class="s2"> position at </span><span class="si">{</span><span class="n">company_name</span><span class="si">}</span><span class="s2">. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;I am confident that my skills and experience align well with the requirements &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;of this role and would allow me to make valuable contributions to your team.&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_body</span><span class="p">(</span>
+    <span class="n">candidate_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">job_info</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate body paragraphs.&quot;&quot;&quot;</span>
+    <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Paragraph 1: Relevant experience</span>
+    <span class="n">work</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">work</span><span class="p">:</span>
+        <span class="n">recent_job</span> <span class="o">=</span> <span class="n">work</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">recent_job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;my previous role&#39;</span><span class="p">)</span>
+        <span class="n">company</span> <span class="o">=</span> <span class="n">recent_job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;my previous employer&#39;</span><span class="p">)</span>
+
+        <span class="n">para1</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;In my current role as </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">company</span><span class="si">}</span><span class="s2">, I have developed strong skills &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;in relevant areas that directly apply to this position. My experience has &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;prepared me well for the challenges and opportunities of this role.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">para1</span><span class="p">)</span>
+
+    <span class="c1"># Paragraph 2: Skills and achievements</span>
+    <span class="n">skills</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skills&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">skills</span><span class="p">:</span>
+        <span class="n">skill_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">skills</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">skill_names</span><span class="p">:</span>
+            <span class="n">skill_list</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">skill_names</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">para2</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;My technical expertise includes </span><span class="si">{</span><span class="n">skill_list</span><span class="si">}</span><span class="s2">, among other skills. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;I have successfully applied these skills to deliver impactful results &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;and am eager to bring this experience to your organization.&quot;</span>
+            <span class="p">)</span>
+            <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">para2</span><span class="p">)</span>
+
+    <span class="c1"># Paragraph 3: Why this company</span>
+    <span class="n">para3</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;I am particularly drawn to this opportunity because of your company&#39;s reputation &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;and the exciting work you are doing. I am enthusiastic about the possibility of &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;contributing to your team and growing professionally in this role.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">para3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">paragraphs</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_closing</span><span class="p">(</span><span class="n">tone</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate closing paragraph.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tone</span> <span class="o">==</span> <span class="s2">&quot;enthusiastic&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;I would love the opportunity to discuss how my background, skills, and &quot;</span>
+            <span class="s2">&quot;enthusiasm can contribute to your team. Thank you for considering my application, &quot;</span>
+            <span class="s2">&quot;and I look forward to speaking with you soon!&quot;</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">tone</span> <span class="o">==</span> <span class="s2">&quot;formal&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;I would welcome the opportunity to discuss my qualifications in more detail. &quot;</span>
+            <span class="s2">&quot;Thank you for your time and consideration. I look forward to hearing from you.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># professional</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;I would appreciate the opportunity to discuss how my experience and skills &quot;</span>
+            <span class="s2">&quot;can benefit your team. Thank you for considering my application. &quot;</span>
+            <span class="s2">&quot;I look forward to the possibility of speaking with you.&quot;</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="render_cover_letter">
+<a class="viewcode-back" href="../../module_docs/hired/cover_letter.html#hired.render_cover_letter">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render_cover_letter</span><span class="p">(</span>
+    <span class="n">cover_letter_data</span><span class="p">:</span> <span class="n">CoverLetterData</span><span class="p">,</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
+    <span class="n">template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render cover letter to specified format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        cover_letter_data: CoverLetterData object</span>
+<span class="sd">        format: Output format (&#39;text&#39;, &#39;html&#39;, &#39;markdown&#39;)</span>
+<span class="sd">        template: Optional custom Jinja2 template string</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Rendered cover letter as string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">template</span><span class="p">:</span>
+        <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;html&#39;</span><span class="p">:</span>
+        <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">_HTML_TEMPLATE</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;markdown&#39;</span><span class="p">:</span>
+        <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">_MARKDOWN_TEMPLATE</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># text</span>
+        <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">_TEXT_TEMPLATE</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">jinja_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">cover_letter_data</span><span class="o">.</span><span class="n">to_dict</span><span class="p">())</span></div>
+
+
+
+<div class="viewcode-block" id="mk_cover_letter">
+<a class="viewcode-back" href="../../module_docs/hired/cover_letter.html#hired.mk_cover_letter">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">mk_cover_letter</span><span class="p">(</span>
+    <span class="n">candidate_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">job_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="s1">&#39;JobResult&#39;</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;professional&quot;</span><span class="p">,</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate and render a cover letter.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        candidate_info: Candidate information (resume dict or basics)</span>
+<span class="sd">        job_info: Job information (dict, text, or JobResult)</span>
+<span class="sd">        tone: Tone of the letter (&#39;professional&#39;, &#39;enthusiastic&#39;, &#39;formal&#39;)</span>
+<span class="sd">        format: Output format (&#39;text&#39;, &#39;html&#39;, &#39;markdown&#39;)</span>
+<span class="sd">        output_path: Optional path to save the cover letter</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Rendered cover letter as string</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from hired import mk_cover_letter, JobSources, SearchCriteria</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # From job search result</span>
+<span class="sd">        &gt;&gt;&gt; sources = JobSources()</span>
+<span class="sd">        &gt;&gt;&gt; jobs = sources.jobspy.search(SearchCriteria(query=&quot;software engineer&quot;))</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; letter = mk_cover_letter(</span>
+<span class="sd">        ...     candidate_info={&#39;basics&#39;: {&#39;name&#39;: &#39;Jane Doe&#39;, &#39;email&#39;: &#39;jane@example.com&#39;}},</span>
+<span class="sd">        ...     job_info=jobs[0],</span>
+<span class="sd">        ...     format=&#39;html&#39;</span>
+<span class="sd">        ... )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Handle JobResult conversion</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">hired.job_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">job_to_text</span>
+        <span class="c1"># Create a dict with the job info for easier processing</span>
+        <span class="n">job_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
+            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">cover_letter_data</span> <span class="o">=</span> <span class="n">generate_cover_letter_content</span><span class="p">(</span><span class="n">candidate_info</span><span class="p">,</span> <span class="n">job_info</span><span class="p">,</span> <span class="n">tone</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cover_letter_data</span> <span class="o">=</span> <span class="n">generate_cover_letter_content</span><span class="p">(</span><span class="n">candidate_info</span><span class="p">,</span> <span class="n">job_info</span><span class="p">,</span> <span class="n">tone</span><span class="p">)</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">render_cover_letter</span><span class="p">(</span><span class="n">cover_letter_data</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<span class="c1"># Templates</span>
+
+<span class="n">_TEXT_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;{{ date }}</span>
+
+<span class="s2">{{ applicant_name }}</span>
+<span class="s2">{</span><span class="si">% i</span><span class="s2">f applicant_address %}{{ applicant_address }}{</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">{{ applicant_email }}</span>
+<span class="s2">{</span><span class="si">% i</span><span class="s2">f applicant_phone %}{{ applicant_phone }}{</span><span class="si">% e</span><span class="s2">ndif %}</span>
+
+<span class="s2">{</span><span class="si">% i</span><span class="s2">f hiring_manager_name %}{{ hiring_manager_name }}{</span><span class="si">% e</span><span class="s2">lse %}Hiring Manager{</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">{{ company_name }}</span>
+
+<span class="s2">Dear {</span><span class="si">% i</span><span class="s2">f hiring_manager_name %}{{ hiring_manager_name }}{</span><span class="si">% e</span><span class="s2">lse %}Hiring Manager{</span><span class="si">% e</span><span class="s2">ndif %},</span>
+
+<span class="s2">{{ opening_paragraph }}</span>
+
+<span class="s2">{</span><span class="si">% f</span><span class="s2">or paragraph in body_paragraphs %}</span>
+<span class="s2">{{ paragraph }}</span>
+
+<span class="s2">{</span><span class="si">% e</span><span class="s2">ndfor %}</span>
+<span class="s2">{{ closing_paragraph }}</span>
+
+<span class="s2">Sincerely,</span>
+<span class="s2">{{ applicant_name }}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">_HTML_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;&lt;!DOCTYPE html&gt;</span>
+<span class="s2">&lt;html&gt;</span>
+<span class="s2">&lt;head&gt;</span>
+<span class="s2">    &lt;meta charset=&quot;UTF-8&quot;&gt;</span>
+<span class="s2">    &lt;style&gt;</span>
+<span class="s2">        body {</span>
+<span class="s2">            font-family: &#39;Times New Roman&#39;, serif;</span>
+<span class="s2">            max-width: 800px;</span>
+<span class="s2">            margin: 40px auto;</span>
+<span class="s2">            line-height: 1.6;</span>
+<span class="s2">            color: #333;</span>
+<span class="s2">        }</span>
+<span class="s2">        .header {</span>
+<span class="s2">            margin-bottom: 20px;</span>
+<span class="s2">        }</span>
+<span class="s2">        .date {</span>
+<span class="s2">            margin-bottom: 30px;</span>
+<span class="s2">        }</span>
+<span class="s2">        .recipient {</span>
+<span class="s2">            margin-bottom: 30px;</span>
+<span class="s2">        }</span>
+<span class="s2">        .salutation {</span>
+<span class="s2">            margin-bottom: 20px;</span>
+<span class="s2">        }</span>
+<span class="s2">        p {</span>
+<span class="s2">            margin-bottom: 15px;</span>
+<span class="s2">            text-align: justify;</span>
+<span class="s2">        }</span>
+<span class="s2">        .closing {</span>
+<span class="s2">            margin-top: 30px;</span>
+<span class="s2">        }</span>
+<span class="s2">        .signature {</span>
+<span class="s2">            margin-top: 40px;</span>
+<span class="s2">        }</span>
+<span class="s2">    &lt;/style&gt;</span>
+<span class="s2">&lt;/head&gt;</span>
+<span class="s2">&lt;body&gt;</span>
+<span class="s2">    &lt;div class=&quot;header&quot;&gt;</span>
+<span class="s2">        &lt;strong&gt;{{ applicant_name }}&lt;/strong&gt;&lt;br&gt;</span>
+<span class="s2">        {</span><span class="si">% i</span><span class="s2">f applicant_address %}{{ applicant_address }}&lt;br&gt;{</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">        {{ applicant_email }}&lt;br&gt;</span>
+<span class="s2">        {</span><span class="si">% i</span><span class="s2">f applicant_phone %}{{ applicant_phone }}&lt;br&gt;{</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">    &lt;/div&gt;</span>
+
+<span class="s2">    &lt;div class=&quot;date&quot;&gt;{{ date }}&lt;/div&gt;</span>
+
+<span class="s2">    &lt;div class=&quot;recipient&quot;&gt;</span>
+<span class="s2">        &lt;strong&gt;{</span><span class="si">% i</span><span class="s2">f hiring_manager_name %}{{ hiring_manager_name }}{</span><span class="si">% e</span><span class="s2">lse %}Hiring Manager{</span><span class="si">% e</span><span class="s2">ndif %}&lt;/strong&gt;&lt;br&gt;</span>
+<span class="s2">        {{ company_name }}</span>
+<span class="s2">    &lt;/div&gt;</span>
+
+<span class="s2">    &lt;div class=&quot;salutation&quot;&gt;</span>
+<span class="s2">        Dear {</span><span class="si">% i</span><span class="s2">f hiring_manager_name %}{{ hiring_manager_name }}{</span><span class="si">% e</span><span class="s2">lse %}Hiring Manager{</span><span class="si">% e</span><span class="s2">ndif %},</span>
+<span class="s2">    &lt;/div&gt;</span>
+
+<span class="s2">    &lt;p&gt;{{ opening_paragraph }}&lt;/p&gt;</span>
+
+<span class="s2">    {</span><span class="si">% f</span><span class="s2">or paragraph in body_paragraphs %}</span>
+<span class="s2">    &lt;p&gt;{{ paragraph }}&lt;/p&gt;</span>
+<span class="s2">    {</span><span class="si">% e</span><span class="s2">ndfor %}</span>
+
+<span class="s2">    &lt;p class=&quot;closing&quot;&gt;{{ closing_paragraph }}&lt;/p&gt;</span>
+
+<span class="s2">    &lt;div class=&quot;signature&quot;&gt;</span>
+<span class="s2">        Sincerely,&lt;br&gt;&lt;br&gt;</span>
+<span class="s2">        {{ applicant_name }}</span>
+<span class="s2">    &lt;/div&gt;</span>
+<span class="s2">&lt;/body&gt;</span>
+<span class="s2">&lt;/html&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">_MARKDOWN_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;# Cover Letter</span>
+
+<span class="s2">**{{ applicant_name }}**</span>
+<span class="s2">{</span><span class="si">% i</span><span class="s2">f applicant_address %}{{ applicant_address }}  {</span><span class="si">% e</span><span class="s2">ndif %}</span>
+<span class="s2">{{ applicant_email }}</span>
+<span class="s2">{</span><span class="si">% i</span><span class="s2">f applicant_phone %}{{ applicant_phone }}  {</span><span class="si">% e</span><span class="s2">ndif %}</span>
+
+<span class="s2">---</span>
+
+<span class="s2">{{ date }}</span>
+
+<span class="s2">**{</span><span class="si">% i</span><span class="s2">f hiring_manager_name %}{{ hiring_manager_name }}{</span><span class="si">% e</span><span class="s2">lse %}Hiring Manager{</span><span class="si">% e</span><span class="s2">ndif %}**</span>
+<span class="s2">{{ company_name }}</span>
+
+<span class="s2">---</span>
+
+<span class="s2">Dear {</span><span class="si">% i</span><span class="s2">f hiring_manager_name %}{{ hiring_manager_name }}{</span><span class="si">% e</span><span class="s2">lse %}Hiring Manager{</span><span class="si">% e</span><span class="s2">ndif %},</span>
+
+<span class="s2">{{ opening_paragraph }}</span>
+
+<span class="s2">{</span><span class="si">% f</span><span class="s2">or paragraph in body_paragraphs %}</span>
+<span class="s2">{{ paragraph }}</span>
+
+<span class="s2">{</span><span class="si">% e</span><span class="s2">ndfor %}</span>
+
+<span class="s2">{{ closing_paragraph }}</span>
+
+<span class="s2">Sincerely,</span>
+
+<span class="s2">{{ applicant_name }}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -3,14 +3,28 @@
    :caption: Contents:
 
    module_docs/hired
+   module_docs/hired/_converters
+   module_docs/hired/ats_checker
    module_docs/hired/base
    module_docs/hired/config
    module_docs/hired/content
+   module_docs/hired/cover_letter
+   module_docs/hired/job_utils
+   module_docs/hired/matching
    module_docs/hired/render
    module_docs/hired/renderers
    module_docs/hired/renderers/html
    module_docs/hired/renderers/rendercv
-   module_docs/hired/renderers/w_rendercv
+   module_docs/hired/resume_agent
+   module_docs/hired/resumejson_pydantic_models
+   module_docs/hired/search
+   module_docs/hired/search/base
+   module_docs/hired/search/facade
+   module_docs/hired/search/registry
+   module_docs/hired/search/sources
+   module_docs/hired/search/sources/adzuna
+   module_docs/hired/search/sources/jobspy
+   module_docs/hired/search/sources/usajobs
    module_docs/hired/tools
+   module_docs/hired/tracking
    module_docs/hired/util
-   module_docs/hired/validators

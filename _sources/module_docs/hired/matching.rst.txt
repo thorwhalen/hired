@@ -1,0 +1,4 @@
+hired.matching
+==============
+.. automodule:: hired.matching
+   :members:

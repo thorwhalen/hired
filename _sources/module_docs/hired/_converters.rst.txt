@@ -1,0 +1,4 @@
+hired._converters
+=================
+.. automodule:: hired._converters
+   :members:

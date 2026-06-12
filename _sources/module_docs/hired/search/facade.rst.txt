@@ -1,0 +1,4 @@
+hired.search.facade
+===================
+.. automodule:: hired.search.facade
+   :members:

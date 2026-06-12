@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.matching &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="hired.render" href="render.html" />
+    <link rel="prev" title="hired.job_utils" href="job_utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.matching</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.matching.JobMatcher"><code class="docutils literal notranslate"><span class="pre">JobMatcher</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.matching.JobMatcher.filter_jobs"><code class="docutils literal notranslate"><span class="pre">JobMatcher.filter_jobs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.matching.JobMatcher.get_recommendations"><code class="docutils literal notranslate"><span class="pre">JobMatcher.get_recommendations()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.matching.JobMatcher.get_top_matches"><code class="docutils literal notranslate"><span class="pre">JobMatcher.get_top_matches()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.matching.JobMatcher.identify_skill_gaps"><code class="docutils literal notranslate"><span class="pre">JobMatcher.identify_skill_gaps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.matching.JobMatcher.score_job"><code class="docutils literal notranslate"><span class="pre">JobMatcher.score_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.matching.JobMatcher.score_jobs"><code class="docutils literal notranslate"><span class="pre">JobMatcher.score_jobs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.matching.MatchScore"><code class="docutils literal notranslate"><span class="pre">MatchScore</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.matching.MatchScore.get_summary"><code class="docutils literal notranslate"><span class="pre">MatchScore.get_summary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.matching.MatchScore.to_dict"><code class="docutils literal notranslate"><span class="pre">MatchScore.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.matching.quick_match"><code class="docutils literal notranslate"><span class="pre">quick_match()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.matching</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/module_docs/hired/matching.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.matching">
+<span id="hired-matching"></span><h1>hired.matching<a class="headerlink" href="#module-hired.matching" title="Link to this heading"></a></h1>
+<p>Job matching and scoring utilities.</p>
+<p>Match candidate profiles against job postings to identify the best opportunities.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.matching.JobMatcher">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.matching.</span></span><span class="sig-name descname"><span class="pre">JobMatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_skills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_keywords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_skills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_salary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_salary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preferred_locations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/matching.html#JobMatcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.JobMatcher" title="Link to this definition"></a></dt>
+<dd><p>Match candidate profiles against job postings.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">matcher</span> <span class="o">=</span> <span class="n">JobMatcher</span><span class="p">(</span><span class="n">candidate_skills</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="s1">&#39;django&#39;</span><span class="p">,</span> <span class="s1">&#39;aws&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">matcher</span><span class="o">.</span><span class="n">score_jobs</span><span class="p">(</span><span class="n">job_results</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_jobs</span> <span class="o">=</span> <span class="n">matcher</span><span class="o">.</span><span class="n">get_top_matches</span><span class="p">(</span><span class="n">job_results</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.matching.JobMatcher.filter_jobs">
+<span class="sig-name descname"><span class="pre">filter_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/matching.html#JobMatcher.filter_jobs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.JobMatcher.filter_jobs" title="Link to this definition"></a></dt>
+<dd><p>Filter jobs that meet minimum score threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jobs</strong> – List of JobResult objects</p></li>
+<li><p><strong>min_score</strong> – Minimum score threshold (0-100)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of JobResult objects that meet threshold</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.matching.JobMatcher.get_recommendations">
+<span class="sig-name descname"><span class="pre">get_recommendations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/matching.html#JobMatcher.get_recommendations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.JobMatcher.get_recommendations" title="Link to this definition"></a></dt>
+<dd><p>Get human-readable recommendations based on job matches.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jobs</strong> – List of JobResult objects</p></li>
+<li><p><strong>top_n</strong> – Number of top jobs to include in recommendations</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Formatted recommendation string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.matching.JobMatcher.get_top_matches">
+<span class="sig-name descname"><span class="pre">get_top_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.matching.MatchScore" title="hired.matching.MatchScore"><span class="pre">MatchScore</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/matching.html#JobMatcher.get_top_matches"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.JobMatcher.get_top_matches" title="Link to this definition"></a></dt>
+<dd><p>Get top N job matches sorted by score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jobs</strong> – List of JobResult objects</p></li>
+<li><p><strong>n</strong> – Number of top matches to return</p></li>
+<li><p><strong>min_score</strong> – Minimum score threshold (0-100)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of MatchScore objects sorted by overall_score descending</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.matching.JobMatcher.identify_skill_gaps">
+<span class="sig-name descname"><span class="pre">identify_skill_gaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/matching.html#JobMatcher.identify_skill_gaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.JobMatcher.identify_skill_gaps" title="Link to this definition"></a></dt>
+<dd><p>Identify skills frequently requested but not possessed by candidate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>jobs</strong> – List of JobResult objects to analyze</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>frequency} for missing skills</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary of {skill</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.matching.JobMatcher.score_job">
+<span class="sig-name descname"><span class="pre">score_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hired.matching.MatchScore" title="hired.matching.MatchScore"><span class="pre">MatchScore</span></a></span></span><a class="reference internal" href="../../_modules/hired/matching.html#JobMatcher.score_job"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.JobMatcher.score_job" title="Link to this definition"></a></dt>
+<dd><p>Score a single job against candidate profile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>job</strong> – JobResult to score</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>MatchScore object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.matching.JobMatcher.score_jobs">
+<span class="sig-name descname"><span class="pre">score_jobs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.matching.MatchScore" title="hired.matching.MatchScore"><span class="pre">MatchScore</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/matching.html#JobMatcher.score_jobs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.JobMatcher.score_jobs" title="Link to this definition"></a></dt>
+<dd><p>Score multiple jobs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>jobs</strong> – List of JobResult objects</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of MatchScore objects</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.matching.MatchScore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.matching.</span></span><span class="sig-name descname"><span class="pre">MatchScore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skill_match_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword_match_score</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matched_skills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_skills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matched_keywords</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compensation_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/matching.html#MatchScore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.MatchScore" title="Link to this definition"></a></dt>
+<dd><p>Score for a job match.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.matching.MatchScore.get_summary">
+<span class="sig-name descname"><span class="pre">get_summary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/matching.html#MatchScore.get_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.MatchScore.get_summary" title="Link to this definition"></a></dt>
+<dd><p>Get human-readable summary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.matching.MatchScore.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/matching.html#MatchScore.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.MatchScore.to_dict" title="Link to this definition"></a></dt>
+<dd><p>Convert to dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.matching.quick_match">
+<span class="sig-prename descclassname"><span class="pre">hired.matching.</span></span><span class="sig-name descname"><span class="pre">quick_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">candidate_skills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="search/base.html#hired.search.base.JobResult" title="hired.search.base.JobResult"><span class="pre">JobResult</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#hired.matching.MatchScore" title="hired.matching.MatchScore"><span class="pre">MatchScore</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/matching.html#quick_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.matching.quick_match" title="Link to this definition"></a></dt>
+<dd><p>Quick utility function to match jobs against candidate skills.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>candidate_skills</strong> – List of candidate’s skills</p></li>
+<li><p><strong>jobs</strong> – List of JobResult objects</p></li>
+<li><p><strong>top_n</strong> – Number of top matches to return</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of top MatchScore objects</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobSources</span><span class="p">,</span> <span class="n">SearchCriteria</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.matching</span><span class="w"> </span><span class="kn">import</span> <span class="n">quick_match</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sources</span> <span class="o">=</span> <span class="n">JobSources</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jobs</span> <span class="o">=</span> <span class="n">sources</span><span class="o">.</span><span class="n">jobspy</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">SearchCriteria</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="s2">&quot;python developer&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">matches</span> <span class="o">=</span> <span class="n">quick_match</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">candidate_skills</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;python&#39;</span><span class="p">,</span> <span class="s1">&#39;django&#39;</span><span class="p">,</span> <span class="s1">&#39;postgresql&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">jobs</span><span class="o">=</span><span class="n">jobs</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">get_summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="job_utils.html" class="btn btn-neutral float-left" title="hired.job_utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="render.html" class="btn btn-neutral float-right" title="hired.render" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

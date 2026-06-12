@@ -1,0 +1,4 @@
+hired.cover_letter
+==================
+.. automodule:: hired.cover_letter
+   :members:

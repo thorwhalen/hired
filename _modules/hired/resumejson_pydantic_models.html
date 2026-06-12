@@ -1,0 +1,459 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.resumejson_pydantic_models &mdash; hired 0.0.10 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.resumejson_pydantic_models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.resumejson_pydantic_models</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Pydantic models for resume json schema</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span> <span class="k">as</span> <span class="n">date_aliased</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">EmailStr</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">RootModel</span><span class="p">,</span> <span class="n">constr</span>
+
+<span class="c1"># Type alias to avoid strict URL validation</span>
+<span class="n">AnyUrl</span> <span class="o">=</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+
+
+<div class="viewcode-block" id="Location">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Location">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Location</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">address</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;To add multiple address lines, use </span><span class="se">\n</span><span class="s1">. For example, 1234 Glücklichkeit Straße</span><span class="se">\n</span><span class="s1">Hinterhaus 5. Etage li.&#39;</span><span class="p">)</span>
+    <span class="n">postalCode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">city</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">countryCode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;code as per ISO-3166-1 ALPHA-2, e.g. US, AU, IN&#39;</span>
+    <span class="p">)</span>
+    <span class="n">region</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;The general region where you live. Can be a US state, or a province, for instance.&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Profile">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Profile">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Profile</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">network</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Facebook or Twitter&#39;</span><span class="p">)</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. neutralthoughts&#39;</span><span class="p">)</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. http://twitter.example.com/neutralthoughts&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Basics">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Basics">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Basics</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Web Developer&#39;</span><span class="p">)</span>
+    <span class="n">image</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;URL (as per RFC 3986) to a image in JPEG or PNG format&#39;</span>
+    <span class="p">)</span>
+    <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. thomas@gmail.com&#39;</span><span class="p">)</span>
+    <span class="n">phone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Phone numbers are stored as strings so use any format you like, e.g. 712-117-2923&#39;</span><span class="p">)</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;URL (as per RFC 3986) to your website, e.g. personal homepage&#39;</span><span class="p">)</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Write a short 2-3 sentence biography about yourself&#39;</span>
+    <span class="p">)</span>
+    <span class="n">location</span><span class="p">:</span> <span class="n">Location</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">profiles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Profile</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify any number of social networks that you participate in&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Certificate">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Certificate">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Certificate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Certified Kubernetes Administrator&#39;</span>
+    <span class="p">)</span>
+    <span class="n">date</span><span class="p">:</span> <span class="n">date_aliased</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. 1989-06-12&#39;</span><span class="p">)</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. http://example.com&#39;</span><span class="p">)</span>
+    <span class="n">issuer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. CNCF&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Skill">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Skill">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Skill</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Web Development&#39;</span><span class="p">)</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Master&#39;</span><span class="p">)</span>
+    <span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;List some keywords pertaining to this skill&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Language">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Language">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Language</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">language</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. English, Spanish&#39;</span><span class="p">)</span>
+    <span class="n">fluency</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Fluent, Beginner&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Interest">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Interest">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Interest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Philosophy&#39;</span><span class="p">)</span>
+    <span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Reference">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Reference">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Reference</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Timothy Cook&#39;</span><span class="p">)</span>
+    <span class="n">reference</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Joe blogs was a great employee, who turned up to work at least once a week. He exceeded my expectations when it came to doing nothing.&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Meta">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Meta">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Meta</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">canonical</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;URL (as per RFC 3986) to latest version of this document&#39;</span>
+    <span class="p">)</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;A version field which follows semver - e.g. v1.0.0&#39;</span>
+    <span class="p">)</span>
+    <span class="n">lastModified</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Using ISO 8601 with YYYY-MM-DDThh:mm:ss&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Iso8601">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Iso8601">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Iso8601</span><span class="p">(</span>
+    <span class="n">RootModel</span><span class="p">[</span>
+        <span class="n">constr</span><span class="p">(</span>
+            <span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;^([1-2][0-9]</span><span class="si">{3}</span><span class="s1">-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]</span><span class="si">{3}</span><span class="s1">-[0-1][0-9]|[1-2][0-9]</span><span class="si">{3}</span><span class="s1">)$&#39;</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">):</span>
+    <span class="n">root</span><span class="p">:</span> <span class="n">constr</span><span class="p">(</span>
+        <span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;^([1-2][0-9]</span><span class="si">{3}</span><span class="s1">-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]</span><span class="si">{3}</span><span class="s1">-[0-1][0-9]|[1-2][0-9]</span><span class="si">{3}</span><span class="s1">)$&#39;</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. 2014-06-29&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="WorkItem">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.WorkItem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">WorkItem</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Facebook&#39;</span><span class="p">)</span>
+    <span class="n">location</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Menlo Park, CA&#39;</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Social Media Company&#39;</span><span class="p">)</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Software Engineer&#39;</span><span class="p">)</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. http://facebook.example.com&#39;</span><span class="p">)</span>
+    <span class="n">startDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">endDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Give an overview of your responsibilities at the company&#39;</span>
+    <span class="p">)</span>
+    <span class="n">highlights</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify multiple accomplishments&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="VolunteerItem">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.VolunteerItem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VolunteerItem</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">organization</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Facebook&#39;</span><span class="p">)</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Software Engineer&#39;</span><span class="p">)</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. http://facebook.example.com&#39;</span><span class="p">)</span>
+    <span class="n">startDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">endDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Give an overview of your responsibilities at the company&#39;</span>
+    <span class="p">)</span>
+    <span class="n">highlights</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify accomplishments and achievements&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="EducationItem">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.EducationItem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EducationItem</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">institution</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Massachusetts Institute of Technology&#39;</span>
+    <span class="p">)</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. http://facebook.example.com&#39;</span><span class="p">)</span>
+    <span class="n">area</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Arts&#39;</span><span class="p">)</span>
+    <span class="n">studyType</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Bachelor&#39;</span><span class="p">)</span>
+    <span class="n">startDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">endDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">score</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;grade point average, e.g. 3.67/4.0&#39;</span><span class="p">)</span>
+    <span class="n">courses</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;List notable courses/subjects&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Award">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Award">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Award</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. One of the 100 greatest minds of the century&#39;</span>
+    <span class="p">)</span>
+    <span class="n">date</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">awarder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Time Magazine&#39;</span><span class="p">)</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. Received for my work with Quantum Physics&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Publication">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Publication">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Publication</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. The World Wide Web&#39;</span><span class="p">)</span>
+    <span class="n">publisher</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. IEEE, Computer Magazine&#39;</span><span class="p">)</span>
+    <span class="n">releaseDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. http://www.computer.org.example.com/csdl/mags/co/1996/10/rx069-abs.html&#39;</span><span class="p">)</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Short summary of publication. e.g. Discussion of the World Wide Web, HTTP, HTML.&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Project">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.Project">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Project</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;allow&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. The World Wide Web&#39;</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Short summary of project. e.g. Collated works of 2017.&#39;</span>
+    <span class="p">)</span>
+    <span class="n">highlights</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify multiple features&#39;</span>
+    <span class="p">)</span>
+    <span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify special elements involved&#39;</span>
+    <span class="p">)</span>
+    <span class="n">startDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">endDate</span><span class="p">:</span> <span class="n">Iso8601</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">url</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;e.g. http://www.computer.org/csdl/mags/co/1996/10/rx069-abs.html&#39;</span><span class="p">)</span>
+    <span class="n">roles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify your role on this project or in company&#39;</span>
+    <span class="p">)</span>
+    <span class="n">entity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Specify the relevant company/entity affiliations e.g. &#39;greenpeace&#39;, &#39;corporationXYZ&#39;&quot;</span><span class="p">)</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot; e.g. &#39;volunteering&#39;, &#39;presentation&#39;, &#39;talk&#39;, &#39;application&#39;, &#39;conference&#39;&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ResumeSchema">
+<a class="viewcode-back" href="../../module_docs/hired/resumejson_pydantic_models.html#hired.ResumeSchema">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResumeSchema</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s1">&#39;forbid&#39;</span><span class="p">)</span>
+    <span class="n">field_schema</span><span class="p">:</span> <span class="n">AnyUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">alias</span><span class="o">=</span><span class="s1">&#39;$schema&#39;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;link to the version of the schema that can validate the resume&#39;</span><span class="p">)</span>
+    <span class="n">basics</span><span class="p">:</span> <span class="n">Basics</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">work</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">WorkItem</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">volunteer</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">VolunteerItem</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">education</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">EducationItem</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">awards</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Award</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify any awards you have received throughout your professional career&#39;</span><span class="p">)</span>
+    <span class="n">certificates</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Certificate</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify any certificates you have received throughout your professional career&#39;</span><span class="p">)</span>
+    <span class="n">publications</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Publication</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify your publications through your career&#39;</span>
+    <span class="p">)</span>
+    <span class="n">skills</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Skill</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;List out your professional skill-set&#39;</span>
+    <span class="p">)</span>
+    <span class="n">languages</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Language</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;List any other languages you speak&#39;</span>
+    <span class="p">)</span>
+    <span class="n">interests</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Interest</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">references</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Reference</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;List references you have received&#39;</span>
+    <span class="p">)</span>
+    <span class="n">projects</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Project</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Specify career projects&#39;</span>
+    <span class="p">)</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Meta</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;The schema version and any other tooling configuration lives here&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright NO COPYRIGHT.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
