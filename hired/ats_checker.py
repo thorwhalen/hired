@@ -22,10 +22,10 @@ class ATSIssue:
 
     def to_dict(self) -> Dict[str, str]:
         return {
-            'category': self.category,
-            'title': self.title,
-            'description': self.description,
-            'suggestion': self.suggestion,
+            "category": self.category,
+            "title": self.title,
+            "description": self.description,
+            "suggestion": self.suggestion,
         }
 
 
@@ -45,22 +45,22 @@ class ATSReport:
 
     def get_critical_issues(self) -> List[ATSIssue]:
         """Get critical issues."""
-        return self.get_issues_by_category('critical')
+        return self.get_issues_by_category("critical")
 
     def get_warnings(self) -> List[ATSIssue]:
         """Get warnings."""
-        return self.get_issues_by_category('warning')
+        return self.get_issues_by_category("warning")
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
-            'overall_score': round(self.overall_score, 1),
-            'keyword_match_score': round(self.keyword_match_score, 1),
-            'matched_keywords': list(self.matched_keywords),
-            'missing_keywords': list(self.missing_keywords),
-            'issues': [issue.to_dict() for issue in self.issues],
-            'critical_count': len(self.get_critical_issues()),
-            'warning_count': len(self.get_warnings()),
+            "overall_score": round(self.overall_score, 1),
+            "keyword_match_score": round(self.keyword_match_score, 1),
+            "matched_keywords": list(self.matched_keywords),
+            "missing_keywords": list(self.missing_keywords),
+            "issues": [issue.to_dict() for issue in self.issues],
+            "critical_count": len(self.get_critical_issues()),
+            "warning_count": len(self.get_warnings()),
         }
 
     def get_summary(self) -> str:
@@ -120,18 +120,30 @@ class ATSChecker:
 
     # Standard section names that ATS systems recognize
     STANDARD_SECTIONS = {
-        'basics', 'summary', 'work', 'work experience', 'experience',
-        'education', 'skills', 'projects', 'certifications', 'awards',
-        'publications', 'volunteer', 'languages', 'interests', 'references'
+        "basics",
+        "summary",
+        "work",
+        "work experience",
+        "experience",
+        "education",
+        "skills",
+        "projects",
+        "certifications",
+        "awards",
+        "publications",
+        "volunteer",
+        "languages",
+        "interests",
+        "references",
     }
 
     # Common problematic elements
     AVOID_ELEMENTS = {
-        'tables': r'<table',
-        'text_boxes': r'<textarea',
-        'headers_footers': None,  # Checked separately
-        'images': r'<img',
-        'fancy_fonts': None,  # Checked separately
+        "tables": r"<table",
+        "text_boxes": r"<textarea",
+        "headers_footers": None,  # Checked separately
+        "images": r"<img",
+        "fancy_fonts": None,  # Checked separately
     }
 
     def __init__(self):
@@ -139,9 +151,7 @@ class ATSChecker:
         pass
 
     def check_resume(
-        self,
-        resume_content: Dict[str, Any],
-        job: Optional[JobResult] = None
+        self, resume_content: Dict[str, Any], job: Optional[JobResult] = None
     ) -> ATSReport:
         """
         Check resume for ATS compatibility.
@@ -182,8 +192,9 @@ class ATSChecker:
         missing_keywords = set()
 
         if job:
-            keyword_score, matched_keywords, missing_keywords, keyword_issues = \
+            keyword_score, matched_keywords, missing_keywords, keyword_issues = (
                 self._check_keywords(resume_content, job)
+            )
             issues.extend(keyword_issues)
 
             # Keyword matching affects overall score
@@ -206,72 +217,86 @@ class ATSChecker:
         penalty = 0.0
 
         # Check for basics section
-        if 'basics' not in resume or not resume['basics']:
-            issues.append(ATSIssue(
-                category='critical',
-                title='Missing Basics Section',
-                description='Resume must have a basics section with contact information.',
-                suggestion='Add a basics section with name, email, and phone number.'
-            ))
+        if "basics" not in resume or not resume["basics"]:
+            issues.append(
+                ATSIssue(
+                    category="critical",
+                    title="Missing Basics Section",
+                    description="Resume must have a basics section with contact information.",
+                    suggestion="Add a basics section with name, email, and phone number.",
+                )
+            )
             penalty += 20.0
 
         # Check for work experience
-        if 'work' not in resume or not resume['work']:
-            issues.append(ATSIssue(
-                category='warning',
-                title='Missing Work Experience',
-                description='No work experience section found.',
-                suggestion='Add work experience entries to demonstrate your background.'
-            ))
+        if "work" not in resume or not resume["work"]:
+            issues.append(
+                ATSIssue(
+                    category="warning",
+                    title="Missing Work Experience",
+                    description="No work experience section found.",
+                    suggestion="Add work experience entries to demonstrate your background.",
+                )
+            )
             penalty += 10.0
 
         # Check for skills section
-        if 'skills' not in resume or not resume['skills']:
-            issues.append(ATSIssue(
-                category='warning',
-                title='Missing Skills Section',
-                description='No skills section found. ATS systems often filter by skills.',
-                suggestion='Add a skills section with relevant technical and soft skills.'
-            ))
+        if "skills" not in resume or not resume["skills"]:
+            issues.append(
+                ATSIssue(
+                    category="warning",
+                    title="Missing Skills Section",
+                    description="No skills section found. ATS systems often filter by skills.",
+                    suggestion="Add a skills section with relevant technical and soft skills.",
+                )
+            )
             penalty += 10.0
 
         return issues, penalty
 
-    def _check_contact_info(self, resume: Dict[str, Any]) -> tuple[List[ATSIssue], float]:
+    def _check_contact_info(
+        self, resume: Dict[str, Any]
+    ) -> tuple[List[ATSIssue], float]:
         """Check contact information completeness."""
         issues = []
         penalty = 0.0
 
-        basics = resume.get('basics', {})
+        basics = resume.get("basics", {})
 
         # Check email
-        if not basics.get('email'):
-            issues.append(ATSIssue(
-                category='critical',
-                title='Missing Email Address',
-                description='Email address is required for ATS processing.',
-                suggestion='Add your professional email address to the basics section.'
-            ))
+        if not basics.get("email"):
+            issues.append(
+                ATSIssue(
+                    category="critical",
+                    title="Missing Email Address",
+                    description="Email address is required for ATS processing.",
+                    suggestion="Add your professional email address to the basics section.",
+                )
+            )
             penalty += 15.0
 
         # Check phone
-        if not basics.get('phone'):
-            issues.append(ATSIssue(
-                category='warning',
-                title='Missing Phone Number',
-                description='Phone number helps ATS systems contact you.',
-                suggestion='Add your phone number to the basics section.'
-            ))
+        if not basics.get("phone"):
+            issues.append(
+                ATSIssue(
+                    category="warning",
+                    title="Missing Phone Number",
+                    description="Phone number helps ATS systems contact you.",
+                    suggestion="Add your phone number to the basics section.",
+                )
+            )
             penalty += 5.0
 
         # Check name
-        if not basics.get('name'):
-            issues.append(ATSIssue(
-                category='critical',
-                title='Missing Name',
-                description='Your name is required.',
-                suggestion='Add your full name to the basics section.'
-            ))
+        if not basics.get("name"):
+            issues.append(
+                ATSIssue(
+                    category="critical",
+                    title="Missing Name",
+                    description="Your name is required.",
+                    suggestion="Add your full name to the basics section.",
+                )
+            )
             penalty += 15.0
 
         return issues, penalty
@@ -285,16 +310,18 @@ class ATSChecker:
         # But we can check for potential issues in the data
 
         # Check for overly long descriptions
-        work_entries = resume.get('work', [])
+        work_entries = resume.get("work", [])
         for i, job in enumerate(work_entries):
-            summary = job.get('summary', '')
+            summary = job.get("summary", "")
             if len(summary) > 1000:
-                issues.append(ATSIssue(
-                    category='info',
-                    title=f'Long Job Description (Entry {i+1})',
-                    description='Very long descriptions may be truncated by ATS.',
-                    suggestion='Keep job descriptions concise (under 500 characters).'
-                ))
+                issues.append(
+                    ATSIssue(
+                        category="info",
+                        title=f"Long Job Description (Entry {i + 1})",
+                        description="Very long descriptions may be truncated by ATS.",
+                        suggestion="Keep job descriptions concise (under 500 characters).",
+                    )
+                )
 
         return issues, penalty
 
@@ -304,55 +331,57 @@ class ATSChecker:
         penalty = 0.0
 
         # Check for quantifiable achievements
-        work_entries = resume.get('work', [])
+        work_entries = resume.get("work", [])
         has_numbers = False
 
         for job in work_entries:
-            highlights = job.get('highlights', [])
-            summary = job.get('summary', '')
+            highlights = job.get("highlights", [])
+            summary = job.get("summary", "")
 
-            combined_text = summary + ' ' + ' '.join(highlights)
+            combined_text = summary + " " + " ".join(highlights)
 
             # Look for numbers, percentages, currency
-            if re.search(r'\d+[%$]?|\$\d+', combined_text):
+            if re.search(r"\d+[%$]?|\$\d+", combined_text):
                 has_numbers = True
                 break
 
         if not has_numbers:
-            issues.append(ATSIssue(
-                category='warning',
-                title='No Quantifiable Achievements',
-                description='Including numbers and metrics makes your resume more compelling.',
-                suggestion='Add metrics like "Increased sales by 25%" or "Managed team of 5".'
-            ))
+            issues.append(
+                ATSIssue(
+                    category="warning",
+                    title="No Quantifiable Achievements",
+                    description="Including numbers and metrics makes your resume more compelling.",
+                    suggestion='Add metrics like "Increased sales by 25%" or "Managed team of 5".',
+                )
+            )
             penalty += 5.0
 
         # Check for action verbs
         if work_entries:
-            weak_verbs = {'responsible for', 'worked on', 'helped with', 'did'}
+            weak_verbs = {"responsible for", "worked on", "helped with", "did"}
             has_weak_verbs = False
 
             for job in work_entries:
-                highlights = job.get('highlights', [])
+                highlights = job.get("highlights", [])
                 for highlight in highlights:
                     if any(verb in highlight.lower() for verb in weak_verbs):
                         has_weak_verbs = True
                         break
 
             if has_weak_verbs:
-                issues.append(ATSIssue(
-                    category='info',
-                    title='Weak Action Verbs',
-                    description='Using stronger action verbs improves impact.',
-                    suggestion='Replace "responsible for" with verbs like "Led", "Developed", "Implemented".'
-                ))
+                issues.append(
+                    ATSIssue(
+                        category="info",
+                        title="Weak Action Verbs",
+                        description="Using stronger action verbs improves impact.",
+                        suggestion='Replace "responsible for" with verbs like "Led", "Developed", "Implemented".',
+                    )
+                )
 
         return issues, penalty
 
     def _check_keywords(
-        self,
-        resume: Dict[str, Any],
-        job: JobResult
+        self, resume: Dict[str, Any], job: JobResult
     ) -> tuple[float, Set[str], Set[str], List[ATSIssue]]:
         """Check keyword matching against job posting."""
         issues = []
@@ -386,19 +415,23 @@ class ATSChecker:
 
         # Add issues for missing important keywords
         if score < 50:
-            issues.append(ATSIssue(
-                category='critical',
-                title='Low Keyword Match',
-                description=f'Only {score:.0f}% of job keywords found in resume.',
-                suggestion=f'Include these keywords: {", ".join(list(missing)[:5])}'
-            ))
+            issues.append(
+                ATSIssue(
+                    category="critical",
+                    title="Low Keyword Match",
+                    description=f"Only {score:.0f}% of job keywords found in resume.",
+                    suggestion=f"Include these keywords: {', '.join(list(missing)[:5])}",
+                )
+            )
         elif score < 70:
-            issues.append(ATSIssue(
-                category='warning',
-                title='Moderate Keyword Match',
-                description=f'{score:.0f}% of job keywords found. Could be improved.',
-                suggestion=f'Consider adding: {", ".join(list(missing)[:5])}'
-            ))
+            issues.append(
+                ATSIssue(
+                    category="warning",
+                    title="Moderate Keyword Match",
+                    description=f"{score:.0f}% of job keywords found. Could be improved.",
+                    suggestion=f"Consider adding: {', '.join(list(missing)[:5])}",
+                )
+            )
 
         return score, matched, missing, issues
 
@@ -407,43 +440,42 @@ class ATSChecker:
         parts = []
 
         # Basics
-        basics = resume.get('basics', {})
-        if basics.get('name'):
-            parts.append(basics['name'])
-        if basics.get('label'):
-            parts.append(basics['label'])
-        if basics.get('summary'):
-            parts.append(basics['summary'])
+        basics = resume.get("basics", {})
+        if basics.get("name"):
+            parts.append(basics["name"])
+        if basics.get("label"):
+            parts.append(basics["label"])
+        if basics.get("summary"):
+            parts.append(basics["summary"])
 
         # Work
-        for job in resume.get('work', []):
-            parts.append(job.get('position', ''))
-            parts.append(job.get('company', ''))
-            parts.append(job.get('summary', ''))
-            parts.extend(job.get('highlights', []))
+        for job in resume.get("work", []):
+            parts.append(job.get("position", ""))
+            parts.append(job.get("company", ""))
+            parts.append(job.get("summary", ""))
+            parts.extend(job.get("highlights", []))
 
         # Skills
-        for skill_group in resume.get('skills', []):
-            parts.append(skill_group.get('name', ''))
-            parts.extend(skill_group.get('keywords', []))
+        for skill_group in resume.get("skills", []):
+            parts.append(skill_group.get("name", ""))
+            parts.extend(skill_group.get("keywords", []))
 
         # Education
-        for edu in resume.get('education', []):
-            parts.append(edu.get('institution', ''))
-            parts.append(edu.get('studyType', ''))
-            parts.append(edu.get('area', ''))
+        for edu in resume.get("education", []):
+            parts.append(edu.get("institution", ""))
+            parts.append(edu.get("studyType", ""))
+            parts.append(edu.get("area", ""))
 
         # Projects
-        for project in resume.get('projects', []):
-            parts.append(project.get('name', ''))
-            parts.append(project.get('description', ''))
+        for project in resume.get("projects", []):
+            parts.append(project.get("name", ""))
+            parts.append(project.get("description", ""))
 
-        return ' '.join(parts)
+        return " ".join(parts)
 
 
 def check_resume_ats(
-    resume_content: Dict[str, Any],
-    job: Optional[JobResult] = None
+    resume_content: Dict[str, Any], job: Optional[JobResult] = None
 ) -> ATSReport:
     """
     Quick utility to check resume ATS compatibility.

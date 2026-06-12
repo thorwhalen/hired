@@ -27,14 +27,14 @@ class AIAgent(Protocol):
 
     def generate_content(
         self, candidate_info: Mapping[str, Any], job_info: Mapping[str, Any]
-    ) -> 'ResumeSchemaExtended': ...
+    ) -> "ResumeSchemaExtended": ...
 
 
 class Renderer(Protocol):
     """Protocol for resume renderers."""
 
     def render(
-        self, content: 'ResumeSchemaExtended', config: 'RenderingConfig'
+        self, content: "ResumeSchemaExtended", config: "RenderingConfig"
     ) -> bytes: ...
 
 
@@ -95,14 +95,14 @@ class ResumeSchemaExtended(ResumeSchema):
     but allows additional fields to be stored for custom sections.
     """
 
-    model_config = ConfigDict(extra='allow')
+    model_config = ConfigDict(extra="allow")
 
 
 @dataclass
 class RenderingConfig:
     """Configuration for resume rendering."""
 
-    format: str = 'pdf'  # pdf, html, latex, docx
-    theme: str = 'default'
+    format: str = "pdf"  # pdf, html, latex, docx
+    theme: str = "default"
     custom_css: str | None = None
     custom_template: str | None = None

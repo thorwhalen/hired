@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 
 def mk_content_for_resume(
     candidate_info_src: Union[ContentSource, str, dict],
-    job_info_src: Union[ContentSource, str, dict, 'JobResult'],
+    job_info_src: Union[ContentSource, str, dict, "JobResult"],
     *,
     agent: Union[Any, None] = None,
     validate: bool = True,
@@ -60,11 +60,12 @@ def mk_content_for_resume(
 
     def _to_source(src):
         # Check if it's a JobResult
-        if hasattr(src, 'title') and hasattr(src, 'source'):
+        if hasattr(src, "title") and hasattr(src, "source"):
             # It's a JobResult, convert to text
             from hired.job_utils import job_to_text
+
             job_text = job_to_text(src)
-            return DictContentSource({'job_description': job_text})
+            return DictContentSource({"job_description": job_text})
         elif isinstance(src, dict):
             return DictContentSource(src)
         elif isinstance(src, str):
@@ -77,7 +78,7 @@ def mk_content_for_resume(
     content = agent.generate_content(candidate, job)
     if validate:
         content_dict = (
-            content.model_dump() if hasattr(content, 'model_dump') else content
+            content.model_dump() if hasattr(content, "model_dump") else content
         )
         assert validate_resume_content_dict(content_dict), "Validation failed"
     return content
@@ -96,7 +97,7 @@ def mk_resume(
     # Normalize and validate in a single place. Accept dicts or pydantic models.
     if isinstance(content, dict):
         content = normalize_and_validate_resume(content, strict=strict)
-    elif hasattr(content, 'model_dump'):
+    elif hasattr(content, "model_dump"):
         # Convert to dict and re-normalize; this will validate and prune None
         content_dict = content.model_dump()
         content = normalize_and_validate_resume(content_dict, strict=strict)
@@ -108,7 +109,7 @@ def mk_resume(
     renderer = _get_renderer_for_format(rendering.format)
     result = renderer.render(content, rendering)
     if output_path:
-        with open(output_path, 'wb') as f:
+        with open(output_path, "wb") as f:
             f.write(result)
     return result
 
@@ -118,7 +119,7 @@ def render_resume_with_template_and_css(
     template_path: Union[str, Path],
     css_path: Union[str, Path, None] = None,
     *,
-    format='pdf',
+    format="pdf",
     strict: bool = False,
 ) -> bytes:
     """Render a resume dict (or pydantic model) to PDF using a specific
@@ -142,7 +143,7 @@ def render_resume_with_template_and_css(
     content = ensure_resume_content_dict(content)
     if isinstance(content, dict):
         content = normalize_and_validate_resume(content, strict=strict)
-    elif hasattr(content, 'model_dump'):
+    elif hasattr(content, "model_dump"):
         content = normalize_and_validate_resume(content.model_dump(), strict=strict)
 
     tpl_path = Path(template_path)
@@ -154,11 +155,11 @@ def render_resume_with_template_and_css(
         css_path = Path(css_path)
         if not css_path.exists():
             raise FileNotFoundError(f"CSS file not found: {css_path}")
-        css_text = css_path.read_text(encoding='utf-8')
+        css_text = css_path.read_text(encoding="utf-8")
 
     rendering = RenderingConfig(
         format=format,
-        theme='default',
+        theme="default",
         custom_template=str(tpl_path),
         custom_css=css_text,
     )

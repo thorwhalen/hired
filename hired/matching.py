@@ -34,15 +34,15 @@ class MatchScore:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
-            'job_title': self.job.title,
-            'company': self.job.company,
-            'overall_score': round(self.overall_score, 1),
-            'skill_match_score': round(self.skill_match_score, 1),
-            'keyword_match_score': round(self.keyword_match_score, 1),
-            'matched_skills': list(self.matched_skills),
-            'missing_skills': list(self.missing_skills),
-            'matched_keywords': list(self.matched_keywords),
-            'job_url': self.job.job_url,
+            "job_title": self.job.title,
+            "company": self.job.company,
+            "overall_score": round(self.overall_score, 1),
+            "skill_match_score": round(self.skill_match_score, 1),
+            "keyword_match_score": round(self.keyword_match_score, 1),
+            "matched_skills": list(self.matched_skills),
+            "missing_skills": list(self.missing_skills),
+            "matched_keywords": list(self.matched_keywords),
+            "job_url": self.job.job_url,
         }
 
     def get_summary(self) -> str:
@@ -55,10 +55,14 @@ class MatchScore:
         ]
 
         if self.matched_skills:
-            lines.append(f"Matched Skills: {', '.join(sorted(self.matched_skills)[:5])}")
+            lines.append(
+                f"Matched Skills: {', '.join(sorted(self.matched_skills)[:5])}"
+            )
 
         if self.missing_skills:
-            lines.append(f"Missing Skills: {', '.join(sorted(self.missing_skills)[:5])}")
+            lines.append(
+                f"Missing Skills: {', '.join(sorted(self.missing_skills)[:5])}"
+            )
 
         return "\n".join(lines)
 
@@ -145,15 +149,19 @@ class JobMatcher:
             if job_max and self.min_salary:
                 compensation_match = job_max >= self.min_salary
             if job_min and self.max_salary:
-                compensation_match = (compensation_match is not False) and (job_min <= self.max_salary)
+                compensation_match = (compensation_match is not False) and (
+                    job_min <= self.max_salary
+                )
 
         # Check location match
         location_match = None
         if self.remote_only:
             location_match = job.is_remote == True
         elif self.preferred_locations and job.location:
-            job_loc_str = (job.location.raw or '').lower()
-            location_match = any(pref in job_loc_str for pref in self.preferred_locations)
+            job_loc_str = (job.location.raw or "").lower()
+            location_match = any(
+                pref in job_loc_str for pref in self.preferred_locations
+            )
 
         # Calculate overall score
         # Weight: 60% skills, 30% keywords, 10% other factors
@@ -170,7 +178,9 @@ class JobMatcher:
             missing_required = self.required_skills - matched_skills
             if missing_required:
                 # Severe penalty for missing required skills
-                overall_score *= (1 - len(missing_required) / max(len(self.required_skills), 1))
+                overall_score *= 1 - len(missing_required) / max(
+                    len(self.required_skills), 1
+                )
 
         # Cap at 100
         overall_score = min(overall_score, 100.0)
@@ -200,10 +210,7 @@ class JobMatcher:
         return [self.score_job(job) for job in jobs]
 
     def get_top_matches(
-        self,
-        jobs: List[JobResult],
-        n: int = 10,
-        min_score: float = 0.0
+        self, jobs: List[JobResult], n: int = 10, min_score: float = 0.0
     ) -> List[MatchScore]:
         """
         Get top N job matches sorted by score.
@@ -222,9 +229,7 @@ class JobMatcher:
         return sorted_scores[:n]
 
     def filter_jobs(
-        self,
-        jobs: List[JobResult],
-        min_score: float = 50.0
+        self, jobs: List[JobResult], min_score: float = 50.0
     ) -> List[JobResult]:
         """
         Filter jobs that meet minimum score threshold.
@@ -297,12 +302,14 @@ class JobMatcher:
                 lines.append(f"   URL: {match.job.job_url}")
 
         if skill_gaps:
-            lines.extend([
-                "",
-                "",
-                "Skills to Consider Learning:",
-                "-" * 50,
-            ])
+            lines.extend(
+                [
+                    "",
+                    "",
+                    "Skills to Consider Learning:",
+                    "-" * 50,
+                ]
+            )
 
             for skill, freq in list(skill_gaps.items())[:10]:
                 pct = (freq / len(jobs)) * 100
@@ -312,9 +319,7 @@ class JobMatcher:
 
 
 def quick_match(
-    candidate_skills: List[str],
-    jobs: List[JobResult],
-    top_n: int = 10
+    candidate_skills: List[str], jobs: List[JobResult], top_n: int = 10
 ) -> List[MatchScore]:
     """
     Quick utility function to match jobs against candidate skills.

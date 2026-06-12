@@ -17,7 +17,7 @@ from hired.base import (
 )
 from hired.util import _load_json_file, load_yaml
 
-DFLT_LLM_MODEL = 'gpt-4o-mini'
+DFLT_LLM_MODEL = "gpt-4o-mini"
 
 
 class FileContentSource:
@@ -27,12 +27,12 @@ class FileContentSource:
         self._path = path
 
     def read(self) -> Mapping[str, Any]:
-        if self._path.endswith('.json'):
+        if self._path.endswith(".json"):
             return _load_json_file(self._path)
-        elif self._path.endswith('.yaml') or self._path.endswith('.yml'):
+        elif self._path.endswith(".yaml") or self._path.endswith(".yml"):
             return load_yaml(self._path)
         else:
-            raise ValueError(f'Unsupported file type: {self._path}')
+            raise ValueError(f"Unsupported file type: {self._path}")
 
 
 class DictContentSource:
@@ -52,7 +52,7 @@ def _extract_relevant_experiences(
     max_items: int = 5,
 ) -> Iterable[dict]:
     # Stub: just return up to max_items from candidate_data['work']
-    return candidate_data.get('work', [])[:max_items]
+    return candidate_data.get("work", [])[:max_items]
 
 
 def _match_skills_to_job(
@@ -65,7 +65,7 @@ def _match_skills_to_job(
 class DefaultAIAgent:
     """Default AI agent implementation (mock)."""
 
-    def __init__(self, *, model: str = 'default', api_key: str | None = None):
+    def __init__(self, *, model: str = "default", api_key: str | None = None):
         self._model = model
         self._api_key = api_key
 
@@ -140,10 +140,13 @@ class LLMResumeAgent:
         response = self.client.chat.completions.create(
             model=self._model,
             messages=[
-                {'role': 'system', 'content': _LLM_SYSTEM_PROMPT},
-                {'role': 'user', 'content': _mk_tailoring_prompt(candidate_info, job_info)},
+                {"role": "system", "content": _LLM_SYSTEM_PROMPT},
+                {
+                    "role": "user",
+                    "content": _mk_tailoring_prompt(candidate_info, job_info),
+                },
             ],
-            response_format={'type': 'json_object'},
+            response_format={"type": "json_object"},
         )
         data = json.loads(response.choices[0].message.content)
         return ResumeSchemaExtended(**data)

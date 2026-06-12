@@ -130,7 +130,7 @@ class ModelRegistry:
         return config or self.workers
 
     @classmethod
-    def default(cls) -> 'ModelRegistry':
+    def default(cls) -> "ModelRegistry":
         """Create default registry with sensible model choices."""
         return cls(
             supervisor=LLMConfig(model="gpt-4", temperature=0.3),
@@ -138,13 +138,13 @@ class ModelRegistry:
         )
 
     @classmethod
-    def fast(cls) -> 'ModelRegistry':
+    def fast(cls) -> "ModelRegistry":
         """Create registry optimized for speed/cost."""
         config = LLMConfig(model="gpt-3.5-turbo", temperature=0.7)
         return cls(supervisor=config, workers=config)
 
     @classmethod
-    def quality(cls) -> 'ModelRegistry':
+    def quality(cls) -> "ModelRegistry":
         """Create registry optimized for quality."""
         config = LLMConfig(model="gpt-4", temperature=0.3)
         return cls(supervisor=config, workers=config)
@@ -305,7 +305,7 @@ class SessionStore(MutableMapping):
         hash_obj = hashlib.sha256(content.encode())
         return hash_obj.hexdigest()[:16]
 
-    def save_session(self, session: 'ResumeSession') -> Path:
+    def save_session(self, session: "ResumeSession") -> Path:
         """
         Save session to persistent storage.
 
@@ -316,33 +316,33 @@ class SessionStore(MutableMapping):
 
         # Create serializable session data
         session_data = {
-            'session_id': session.session_id,
-            'job_info': session.job_info,
-            'candidate_info': session.candidate_info,
-            'mode': session.mode.value,
-            'history': [asdict(turn) for turn in session.history],
-            'state': session.state.snapshot(),
-            'snapshots': [asdict(snap) for snap in session.snapshots],
-            'created_at': session.created_at.isoformat(),
-            'updated_at': datetime.now().isoformat(),
-            'llm_config': asdict(session.llm_config),
-            'name': getattr(session, 'name', None),
+            "session_id": session.session_id,
+            "job_info": session.job_info,
+            "candidate_info": session.candidate_info,
+            "mode": session.mode.value,
+            "history": [asdict(turn) for turn in session.history],
+            "state": session.state.snapshot(),
+            "snapshots": [asdict(snap) for snap in session.snapshots],
+            "created_at": session.created_at.isoformat(),
+            "updated_at": datetime.now().isoformat(),
+            "llm_config": asdict(session.llm_config),
+            "name": getattr(session, "name", None),
         }
 
         # Save with pickle for full object support
-        with open(session_file, 'wb') as f:
+        with open(session_file, "wb") as f:
             pickle.dump(session_data, f)
 
         # Also save JSON version for human readability
         json_file = self.data_dir / f"{session_id}.json"
-        with open(json_file, 'w') as f:
+        with open(json_file, "w") as f:
             json.dump(session_data, f, indent=2, default=str)
 
         return session_file
 
     def load_session(
         self, session_id: str, *, llm_config: LLMConfig | None = None
-    ) -> Optional['ResumeSession']:
+    ) -> Optional["ResumeSession"]:
         """
         Load session from persistent storage.
 
@@ -353,33 +353,33 @@ class SessionStore(MutableMapping):
         if not session_file.exists():
             return None
 
-        with open(session_file, 'rb') as f:
+        with open(session_file, "rb") as f:
             session_data = pickle.load(f)
 
         # Reconstruct session
-        config = llm_config or LLMConfig(**session_data['llm_config'])
+        config = llm_config or LLMConfig(**session_data["llm_config"])
 
         session = ResumeSession(
-            job_info=session_data['job_info'],
-            candidate_info=session_data['candidate_info'],
+            job_info=session_data["job_info"],
+            candidate_info=session_data["candidate_info"],
             llm_config=config,
-            mode=OperationMode(session_data['mode']),
+            mode=OperationMode(session_data["mode"]),
             auto_persist=False,  # Prevent re-persisting during load
-            name=session_data.get('name'),
+            name=session_data.get("name"),
         )
 
         # Restore state
-        session.session_id = session_data['session_id']
-        session.created_at = datetime.fromisoformat(session_data['created_at'])
-        session._state._data = session_data['state']
+        session.session_id = session_data["session_id"]
+        session.created_at = datetime.fromisoformat(session_data["created_at"])
+        session._state._data = session_data["state"]
 
         # Restore history
         session._memory._turns = [
-            Turn(**turn_data) for turn_data in session_data['history']
+            Turn(**turn_data) for turn_data in session_data["history"]
         ]
 
         # Restore optional name
-        session.name = session_data.get('name')
+        session.name = session_data.get("name")
 
         return session
 
@@ -394,12 +394,12 @@ class SessionStore(MutableMapping):
                 with open(json_file) as f:
                     data = json.load(f)
                     yield {
-                        'session_id': data['session_id'],
-                        'created_at': data['created_at'],
-                        'updated_at': data['updated_at'],
-                        'turn_count': len(data['history']),
-                        'mode': data['mode'],
-                        'name': data.get('name'),
+                        "session_id": data["session_id"],
+                        "created_at": data["created_at"],
+                        "updated_at": data["updated_at"],
+                        "turn_count": len(data["history"]),
+                        "mode": data["mode"],
+                        "name": data.get("name"),
                     }
             except Exception:
                 continue
@@ -439,18 +439,18 @@ class SessionStore(MutableMapping):
         else:
             return self.load_session(key)
 
-    def __setitem__(self, key, value: 'ResumeSession') -> None:
+    def __setitem__(self, key, value: "ResumeSession") -> None:
         """s[session_id] = session -> save session, aligning session_id if needed."""
         session_id = key
         if not isinstance(value, ResumeSession):
             raise TypeError("Value must be a ResumeSession instance")
 
         # If the session_id differs, deepcopy and align the id to avoid mutating caller
-        if getattr(value, 'session_id', None) != session_id:
+        if getattr(value, "session_id", None) != session_id:
             new_session = copy.deepcopy(value)
             new_session.session_id = session_id
             # Optionally update created_at to now for the new id
-            new_session.created_at = getattr(new_session, 'created_at', datetime.now())
+            new_session.created_at = getattr(new_session, "created_at", datetime.now())
             self.save_session(new_session)
         else:
             self.save_session(value)
@@ -463,12 +463,12 @@ class SessionStore(MutableMapping):
     def __iter__(self) -> Iterator[str]:
         """Iterate over session ids (so list(s) == s.list_sessions())."""
         for info in self.list_sessions():
-            yield info['session_id']
+            yield info["session_id"]
 
     def __len__(self) -> int:
         return sum(1 for _ in self.list_sessions())
 
-    def add(self, session: 'ResumeSession') -> Path:
+    def add(self, session: "ResumeSession") -> Path:
         """Alias for save_session to behave like a set.add(session)."""
         return self.save_session(session)
 
@@ -526,13 +526,13 @@ class SessionState:
 
     def __init__(self):
         self._data: dict = {
-            'candidate': {},
-            'job': {},
-            'extracted_entities': {},
-            'expansions': {},
-            'distillations': {},
-            'drafts': {},
-            'searches': {},
+            "candidate": {},
+            "job": {},
+            "extracted_entities": {},
+            "expansions": {},
+            "distillations": {},
+            "drafts": {},
+            "searches": {},
         }
 
     def __getitem__(self, key: str):
@@ -627,8 +627,8 @@ class ResumeSession:
         self.name = name
 
         # Initialize state with job and candidate info
-        self._state['candidate']['raw_info'] = candidate_info
-        self._state['job']['raw_info'] = job_info
+        self._state["candidate"]["raw_info"] = candidate_info
+        self._state["job"]["raw_info"] = job_info
 
         # System prompt for resume expert
         self._system_prompt = system_prompt or self._default_system_prompt()
@@ -647,37 +647,37 @@ class ResumeSession:
         hash_obj = hashlib.sha256(content.encode())
         return hash_obj.hexdigest()[:16]
 
-    def _init_expansion_agent(self) -> 'ExpansionAgent':
+    def _init_expansion_agent(self) -> "ExpansionAgent":
         """Initialize expansion agent with appropriate model config."""
         config = (
-            self.model_registry.get_config('expansion')
+            self.model_registry.get_config("expansion")
             if self.model_registry
             else self.llm_config
         )
         return ExpansionAgent(llm_config=config)
 
-    def _init_distillation_agent(self) -> 'DistillationAgent':
+    def _init_distillation_agent(self) -> "DistillationAgent":
         """Initialize distillation agent with appropriate model config."""
         config = (
-            self.model_registry.get_config('distillation')
+            self.model_registry.get_config("distillation")
             if self.model_registry
             else self.llm_config
         )
         return DistillationAgent(llm_config=config)
 
-    def _init_matching_agent(self) -> 'MatchingAgent':
+    def _init_matching_agent(self) -> "MatchingAgent":
         """Initialize matching agent with appropriate model config."""
         config = (
-            self.model_registry.get_config('matching')
+            self.model_registry.get_config("matching")
             if self.model_registry
             else self.llm_config
         )
         return MatchingAgent(llm_config=config)
 
-    def _init_search_agent(self) -> 'SearchAgent':
+    def _init_search_agent(self) -> "SearchAgent":
         """Initialize search agent with appropriate model config."""
         config = (
-            self.model_registry.get_config('search')
+            self.model_registry.get_config("search")
             if self.model_registry
             else self.llm_config
         )
@@ -825,7 +825,7 @@ produce high-quality results."""
             """
             context_dict = {"additional_context": context}
             result = self._expansion_agent.expand(brief_text, context_dict)
-            self._state['expansions'][brief_text] = result
+            self._state["expansions"][brief_text] = result
             return result
 
         @tool
@@ -839,7 +839,7 @@ produce high-quality results."""
                 max_words: Maximum word count for the result
             """
             result = self._distillation_agent.distill(verbose_text, max_words=max_words)
-            self._state['distillations'][verbose_text[:50]] = result
+            self._state["distillations"][verbose_text[:50]] = result
             return result
 
         @tool
@@ -858,7 +858,7 @@ produce high-quality results."""
                     for r in results
                 ]
             )
-            self._state['searches'][company_name] = summary
+            self._state["searches"][company_name] = summary
             return summary
 
         @tool
@@ -881,7 +881,7 @@ produce high-quality results."""
                     for m in matches
                 ]
             )
-            self._state['extracted_entities']['matches'] = matches
+            self._state["extracted_entities"]["matches"] = matches
             return result
 
         @tool
@@ -905,7 +905,7 @@ Job Description:
 Candidate Information:
 {self.candidate_info}
 
-{f'Additional Guidance: {content_guidance}' if content_guidance else ''}
+{f"Additional Guidance: {content_guidance}" if content_guidance else ""}
 
 Accumulated Context:
 {self._format_state_for_prompt()}
@@ -914,7 +914,7 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
 
             # Direct LLM call for generation
             result = self._generate_with_llm(prompt)
-            self._state['drafts'][section_name] = result
+            self._state["drafts"][section_name] = result
             return result
 
         return [
@@ -957,19 +957,19 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         """Format current state for prompt."""
         state_summary = []
 
-        if self._state['expansions']:
+        if self._state["expansions"]:
             state_summary.append(
                 f"Expansions created: {len(self._state['expansions'])}"
             )
-        if self._state['distillations']:
+        if self._state["distillations"]:
             state_summary.append(
                 f"Distillations created: {len(self._state['distillations'])}"
             )
-        if self._state['searches']:
+        if self._state["searches"]:
             state_summary.append(
                 f"Searches performed: {list(self._state['searches'].keys())}"
             )
-        if self._state['drafts']:
+        if self._state["drafts"]:
             state_summary.append(
                 f"Draft sections: {list(self._state['drafts'].keys())}"
             )
@@ -1029,21 +1029,21 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         Includes: session_id, name, created_at (iso), n_turns, mode, model
         """
         return {
-            'session_id': getattr(self, 'session_id', None),
-            'name': getattr(self, 'name', None),
-            'created_at': (
-                getattr(self, 'created_at', None).isoformat()
-                if getattr(self, 'created_at', None)
+            "session_id": getattr(self, "session_id", None),
+            "name": getattr(self, "name", None),
+            "created_at": (
+                getattr(self, "created_at", None).isoformat()
+                if getattr(self, "created_at", None)
                 else None
             ),
-            'n_turns': len(self.history) if self.history is not None else 0,
-            'mode': self.mode.value if getattr(self, 'mode', None) else None,
-            'model': getattr(self.llm_config, 'model', None),
+            "n_turns": len(self.history) if self.history is not None else 0,
+            "mode": self.mode.value if getattr(self, "mode", None) else None,
+            "model": getattr(self.llm_config, "model", None),
         }
 
     def __repr__(self) -> str:
         meta = self.metadata
-        name = f"'{meta['name']}' " if meta.get('name') else ""
+        name = f"'{meta['name']}' " if meta.get("name") else ""
         return (
             f"<ResumeSession {name}id={meta.get('session_id')} "
             f"model={meta.get('model')} turns={meta.get('n_turns')} "
@@ -1077,7 +1077,7 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         *,
         data_dir: Path | None = None,
         llm_config: LLMConfig | None = None,
-    ) -> Optional['ResumeSession']:
+    ) -> Optional["ResumeSession"]:
         """
         Load session from persistent storage.
 
@@ -1143,7 +1143,7 @@ class ExpansionAgent:
 
 Brief text: {brief_text}
 
-Context: {context.get('additional_context', 'N/A')}
+Context: {context.get("additional_context", "N/A")}
 
 Guidelines:
 - Start with a strong action verb
@@ -1300,7 +1300,7 @@ Format as JSON array:
 
             matches = json.loads(response.choices[0].message.content)
             for match in matches:
-                match['model'] = self.llm_config.model
+                match["model"] = self.llm_config.model
                 yield match
 
         except Exception as e:
@@ -1370,7 +1370,7 @@ Focus on information relevant for a job candidate researching this company/topic
 
             results = json.loads(response.choices[0].message.content)
             for result in results:
-                result['model'] = self.llm_config.model
+                result["model"] = self.llm_config.model
                 yield result
 
         except Exception as e:
@@ -1451,8 +1451,8 @@ class ResumeExpertAgent:
             return f"Error executing plan: {execution_result.get('error', 'Unknown error')}"
 
         # Extract final resume from session state
-        if 'resume' in session.state._data.get('drafts', {}):
-            return session.state['drafts']['resume']
+        if "resume" in session.state._data.get("drafts", {}):
+            return session.state["drafts"]["resume"]
 
         # Fallback: get from last generation step
         for step_id in reversed(execution_result.get("completed_steps", [])):
@@ -1692,9 +1692,9 @@ class ResumeExpertAgent:
                         print(f"\nExecute: {step.description}?")
                         response = input("(y/n/skip): ").lower()
 
-                    if response == 'n':
+                    if response == "n":
                         break
-                    elif response == 'skip':
+                    elif response == "skip":
                         completed_steps.add(step.id)
                         continue
 
@@ -1848,7 +1848,9 @@ def _example_manual_usage():
     )
 
     session_quality = ResumeSession(
-        job_info, candidate_info, model_registry=ModelRegistry.quality()  # All GPT-4
+        job_info,
+        candidate_info,
+        model_registry=ModelRegistry.quality(),  # All GPT-4
     )
 
     # Manual mode interaction
@@ -1894,7 +1896,9 @@ def _example_auto_usage():
 
     # Create session (agent will use its own registry if provided)
     session = ResumeSession(
-        job_info, candidate_info, model_registry=registry  # Session uses same registry
+        job_info,
+        candidate_info,
+        model_registry=registry,  # Session uses same registry
     )
 
     # Let agent autonomously create resume

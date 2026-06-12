@@ -21,7 +21,7 @@ class SourceRegistry:
     def register(
         self,
         source: JobSearchSource,
-        source_class: Optional[Type[JobSearchSource]] = None
+        source_class: Optional[Type[JobSearchSource]] = None,
     ) -> None:
         """
         Register a job search source.
@@ -65,9 +65,7 @@ class SourceRegistry:
         """
         if name not in self._sources:
             available = ", ".join(self._sources.keys())
-            raise KeyError(
-                f"Source '{name}' not found. Available sources: {available}"
-            )
+            raise KeyError(f"Source '{name}' not found. Available sources: {available}")
         return self._sources[name]
 
     def list_sources(self) -> List[str]:
@@ -87,8 +85,7 @@ class SourceRegistry:
             List of source names that are configured
         """
         return [
-            name for name, source in self._sources.items()
-            if source.is_configured()
+            name for name, source in self._sources.items() if source.is_configured()
         ]
 
     def list_unconfigured_sources(self) -> List[str]:
@@ -99,8 +96,7 @@ class SourceRegistry:
             List of source names that need configuration
         """
         return [
-            name for name, source in self._sources.items()
-            if not source.is_configured()
+            name for name, source in self._sources.items() if not source.is_configured()
         ]
 
     def get_source_info(self, name: str) -> Dict[str, any]:
@@ -115,11 +111,11 @@ class SourceRegistry:
         """
         source = self.get(name)
         return {
-            'name': source.name,
-            'display_name': source.display_name,
-            'requires_auth': source.requires_auth,
-            'is_configured': source.is_configured(),
-            'setup_instructions': source.get_setup_instructions(),
+            "name": source.name,
+            "display_name": source.display_name,
+            "requires_auth": source.requires_auth,
+            "is_configured": source.is_configured(),
+            "setup_instructions": source.get_setup_instructions(),
         }
 
     def __contains__(self, name: str) -> bool:
@@ -141,8 +137,7 @@ def get_registry() -> SourceRegistry:
 
 
 def register_source(
-    source: JobSearchSource,
-    source_class: Optional[Type[JobSearchSource]] = None
+    source: JobSearchSource, source_class: Optional[Type[JobSearchSource]] = None
 ) -> None:
     """
     Register a source with the global registry.

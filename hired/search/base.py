@@ -11,6 +11,7 @@ from enum import Enum
 
 class JobType(str, Enum):
     """Standardized job types across all sources."""
+
     FULL_TIME = "fulltime"
     PART_TIME = "parttime"
     CONTRACT = "contract"
@@ -23,6 +24,7 @@ class JobType(str, Enum):
 @dataclass
 class CompensationInfo:
     """Compensation information for a job."""
+
     min_amount: Optional[float] = None
     max_amount: Optional[float] = None
     currency: Optional[str] = None
@@ -32,6 +34,7 @@ class CompensationInfo:
 @dataclass
 class LocationInfo:
     """Location information for a job."""
+
     city: Optional[str] = None
     state: Optional[str] = None
     country: Optional[str] = None
@@ -47,6 +50,7 @@ class JobResult:
     This provides a unified interface regardless of which source
     the job was retrieved from.
     """
+
     # Required fields
     title: str
     source: str  # Name of the source (e.g., "indeed", "usajobs")
@@ -75,42 +79,42 @@ class JobResult:
     def to_dict(self) -> Dict[str, Any]:
         """Convert JobResult to dictionary."""
         result = {
-            'title': self.title,
-            'source': self.source,
-            'company': self.company,
-            'company_url': self.company_url,
-            'job_url': self.job_url,
-            'is_remote': self.is_remote,
-            'description': self.description,
-            'job_type': self.job_type.value if self.job_type else None,
-            'skills': self.skills,
-            'benefits': self.benefits,
-            'emails': self.emails,
+            "title": self.title,
+            "source": self.source,
+            "company": self.company,
+            "company_url": self.company_url,
+            "job_url": self.job_url,
+            "is_remote": self.is_remote,
+            "description": self.description,
+            "job_type": self.job_type.value if self.job_type else None,
+            "skills": self.skills,
+            "benefits": self.benefits,
+            "emails": self.emails,
         }
 
         if self.location:
-            result['location'] = {
-                'city': self.location.city,
-                'state': self.location.state,
-                'country': self.location.country,
-                'postal_code': self.location.postal_code,
-                'raw': self.location.raw,
+            result["location"] = {
+                "city": self.location.city,
+                "state": self.location.state,
+                "country": self.location.country,
+                "postal_code": self.location.postal_code,
+                "raw": self.location.raw,
             }
 
         if self.compensation:
-            result['compensation'] = {
-                'min_amount': self.compensation.min_amount,
-                'max_amount': self.compensation.max_amount,
-                'currency': self.compensation.currency,
-                'interval': self.compensation.interval,
+            result["compensation"] = {
+                "min_amount": self.compensation.min_amount,
+                "max_amount": self.compensation.max_amount,
+                "currency": self.compensation.currency,
+                "interval": self.compensation.interval,
             }
 
         if self.date_posted:
-            result['date_posted'] = self.date_posted.isoformat()
+            result["date_posted"] = self.date_posted.isoformat()
         if self.date_updated:
-            result['date_updated'] = self.date_updated.isoformat()
+            result["date_updated"] = self.date_updated.isoformat()
         if self.application_deadline:
-            result['application_deadline'] = self.application_deadline.isoformat()
+            result["application_deadline"] = self.application_deadline.isoformat()
 
         return result
 
@@ -123,6 +127,7 @@ class SearchCriteria:
     Different sources may not support all criteria, but this provides
     a consistent interface for users.
     """
+
     # Required
     query: str  # Free-form text query
 
@@ -159,6 +164,7 @@ class SearchCriteria:
 
 class SourceConfigError(Exception):
     """Raised when a source is not properly configured."""
+
     pass
 
 
@@ -240,6 +246,5 @@ class JobSearchSource(ABC):
         if not self.is_configured():
             instructions = self.get_setup_instructions()
             raise SourceConfigError(
-                f"{self.display_name} is not properly configured.\n\n"
-                f"{instructions}"
+                f"{self.display_name} is not properly configured.\n\n{instructions}"
             )

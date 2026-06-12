@@ -38,8 +38,8 @@ class USAJobsSource(JobSearchSource):
             api_key: USAJobs API key. If not provided, reads from USAJOBS_API_KEY env var.
             email: Email address. If not provided, reads from USAJOBS_EMAIL env var.
         """
-        self._api_key = api_key or os.environ.get('USAJOBS_API_KEY')
-        self._email = email or os.environ.get('USAJOBS_EMAIL')
+        self._api_key = api_key or os.environ.get("USAJOBS_API_KEY")
+        self._email = email or os.environ.get("USAJOBS_EMAIL")
 
     @property
     def name(self) -> str:
@@ -102,17 +102,14 @@ Documentation:
             Exception: For other API errors
         """
         headers = {
-            'Host': 'data.usajobs.gov',
-            'User-Agent': self._email,
-            'Authorization-Key': self._api_key,
+            "Host": "data.usajobs.gov",
+            "User-Agent": self._email,
+            "Authorization-Key": self._api_key,
         }
 
         try:
             response = requests.get(
-                self.API_BASE_URL,
-                params=params,
-                headers=headers,
-                timeout=30
+                self.API_BASE_URL, params=params, headers=headers, timeout=30
             )
 
             if response.status_code == 401:
@@ -134,11 +131,11 @@ Documentation:
         """Map USAJobs position type to our JobType enum."""
         # USAJobs uses numeric codes, but we'll handle string descriptions too
         type_mapping = {
-            'permanent': JobType.FULL_TIME,
-            'term': JobType.CONTRACT,
-            'temporary': JobType.TEMPORARY,
-            'internship': JobType.INTERNSHIP,
-            'recent graduate': JobType.FULL_TIME,
+            "permanent": JobType.FULL_TIME,
+            "term": JobType.CONTRACT,
+            "temporary": JobType.TEMPORARY,
+            "internship": JobType.INTERNSHIP,
+            "recent graduate": JobType.FULL_TIME,
         }
 
         position_lower = position_type.lower()
@@ -154,34 +151,34 @@ Documentation:
             return None
 
         try:
-            min_amount = salary_data.get('MinimumRange')
-            max_amount = salary_data.get('MaximumRange')
+            min_amount = salary_data.get("MinimumRange")
+            max_amount = salary_data.get("MaximumRange")
 
             # Convert string to float if needed
             if isinstance(min_amount, str):
-                min_amount = float(min_amount.replace(',', '').replace('$', ''))
+                min_amount = float(min_amount.replace(",", "").replace("$", ""))
             if isinstance(max_amount, str):
-                max_amount = float(max_amount.replace(',', '').replace('$', ''))
+                max_amount = float(max_amount.replace(",", "").replace("$", ""))
 
             return CompensationInfo(
                 min_amount=min_amount,
                 max_amount=max_amount,
-                currency='USD',
-                interval='yearly'  # USAJobs salaries are typically annual
+                currency="USD",
+                interval="yearly",  # USAJobs salaries are typically annual
             )
         except (ValueError, AttributeError, TypeError):
             return None
 
     def _convert_usajobs_result(self, item: Dict[str, Any]) -> JobResult:
         """Convert a USAJobs result to JobResult."""
-        match_data = item.get('MatchedObjectDescriptor', {})
+        match_data = item.get("MatchedObjectDescriptor", {})
 
         # Extract position info
-        position_title = match_data.get('PositionTitle', 'Unknown')
-        organization = match_data.get('OrganizationName', 'US Government')
+        position_title = match_data.get("PositionTitle", "Unknown")
+        organization = match_data.get("OrganizationName", "US Government")
 
         # Extract location
-        locations = match_data.get('PositionLocation', [])
+        locations = match_data.get("PositionLocation", [])
         location = None
         is_remote = False
 
@@ -189,61 +186,73 @@ Documentation:
             # Use the first location
             loc_data = locations[0] if isinstance(locations, list) else locations
             location = LocationInfo(
-                city=loc_data.get('CityName'),
-                state=loc_data.get('StateProvince'),
-                country=loc_data.get('CountryCode', 'US'),
+                city=loc_data.get("CityName"),
+                state=loc_data.get("StateProvince"),
+                country=loc_data.get("CountryCode", "US"),
             )
 
         # Check for remote work
-        remote_indicator = match_data.get('PositionRemoteIndicator')
-        if remote_indicator or str(match_data.get('PositionOfferingTypeCode', '')).startswith('15'):
+        remote_indicator = match_data.get("PositionRemoteIndicator")
+        if remote_indicator or str(
+            match_data.get("PositionOfferingTypeCode", "")
+        ).startswith("15"):
             is_remote = True
 
         # Extract URLs
-        position_uri = match_data.get('PositionURI', '')
-        apply_uri = match_data.get('ApplyURI', [])
-        job_url = position_uri or (apply_uri[0] if apply_uri else '')
+        position_uri = match_data.get("PositionURI", "")
+        apply_uri = match_data.get("ApplyURI", [])
+        job_url = position_uri or (apply_uri[0] if apply_uri else "")
 
         # Extract salary
-        salary_data = match_data.get('PositionRemuneration', [])
+        salary_data = match_data.get("PositionRemuneration", [])
         compensation = None
         if salary_data:
-            salary_info = salary_data[0] if isinstance(salary_data, list) else salary_data
+            salary_info = (
+                salary_data[0] if isinstance(salary_data, list) else salary_data
+            )
             compensation = self._parse_salary(salary_info)
 
         # Parse dates
         date_posted = None
         application_deadline = None
 
-        pub_start = match_data.get('PublicationStartDate')
+        pub_start = match_data.get("PublicationStartDate")
         if pub_start:
             try:
-                date_posted = datetime.fromisoformat(pub_start.replace('Z', '+00:00'))
+                date_posted = datetime.fromisoformat(pub_start.replace("Z", "+00:00"))
             except (ValueError, AttributeError):
                 pass
 
-        app_close = match_data.get('ApplicationCloseDate')
+        app_close = match_data.get("ApplicationCloseDate")
         if app_close:
             try:
-                application_deadline = datetime.fromisoformat(app_close.replace('Z', '+00:00'))
+                application_deadline = datetime.fromisoformat(
+                    app_close.replace("Z", "+00:00")
+                )
             except (ValueError, AttributeError):
                 pass
 
         # Extract description and qualifications
         description_parts = []
-        if match_data.get('UserArea', {}).get('Details', {}).get('MajorDuties'):
-            description_parts.append(match_data['UserArea']['Details']['MajorDuties'])
-        if match_data.get('QualificationSummary'):
-            description_parts.append('\n\nQualifications:\n' + match_data['QualificationSummary'])
+        if match_data.get("UserArea", {}).get("Details", {}).get("MajorDuties"):
+            description_parts.append(match_data["UserArea"]["Details"]["MajorDuties"])
+        if match_data.get("QualificationSummary"):
+            description_parts.append(
+                "\n\nQualifications:\n" + match_data["QualificationSummary"]
+            )
 
-        description = '\n\n'.join(description_parts) if description_parts else None
+        description = "\n\n".join(description_parts) if description_parts else None
 
         # Job type
-        position_schedule = match_data.get('PositionSchedule', [])
+        position_schedule = match_data.get("PositionSchedule", [])
         job_type = None
         if position_schedule:
-            schedule = position_schedule[0] if isinstance(position_schedule, list) else position_schedule
-            job_type = self._map_job_type(schedule.get('Name', ''))
+            schedule = (
+                position_schedule[0]
+                if isinstance(position_schedule, list)
+                else position_schedule
+            )
+            job_type = self._map_job_type(schedule.get("Name", ""))
 
         return JobResult(
             title=position_title,
@@ -274,28 +283,28 @@ Documentation:
 
         # Build API parameters
         params = {
-            'Keyword': criteria.query,
-            'ResultsPerPage': min(criteria.results_wanted, 500),  # API max is 500
+            "Keyword": criteria.query,
+            "ResultsPerPage": min(criteria.results_wanted, 500),  # API max is 500
         }
 
         # Add location filters
         if criteria.location:
-            params['LocationName'] = criteria.location
+            params["LocationName"] = criteria.location
         elif criteria.city and criteria.state:
-            params['LocationName'] = f"{criteria.city}, {criteria.state}"
+            params["LocationName"] = f"{criteria.city}, {criteria.state}"
 
         # Add posted date filter
         if criteria.posted_within_days:
-            params['DatePosted'] = criteria.posted_within_days
+            params["DatePosted"] = criteria.posted_within_days
 
         # Add remote filter
         if criteria.is_remote:
-            params['RemoteIndicator'] = 'True'
+            params["RemoteIndicator"] = "True"
 
         # Add pagination
         if criteria.offset > 0:
             page = (criteria.offset // criteria.results_wanted) + 1
-            params['Page'] = page
+            params["Page"] = page
 
         # Add any source-specific parameters
         for key, value in criteria.source_params.items():
@@ -306,8 +315,8 @@ Documentation:
         try:
             response_data = self._make_request(params)
 
-            search_result = response_data.get('SearchResult', {})
-            items = search_result.get('SearchResultItems', [])
+            search_result = response_data.get("SearchResult", {})
+            items = search_result.get("SearchResultItems", [])
 
             if not items:
                 return []

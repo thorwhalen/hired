@@ -48,13 +48,13 @@ def _register_default_sources():
     # Only register if not already registered
     registry = get_registry()
 
-    if 'jobspy' not in registry:
+    if "jobspy" not in registry:
         register_source(get_jobspy_source(), JobSpySource)
 
-    if 'usajobs' not in registry:
+    if "usajobs" not in registry:
         register_source(get_usajobs_source(), USAJobsSource)
 
-    if 'adzuna' not in registry:
+    if "adzuna" not in registry:
         register_source(get_adzuna_source(), AdzunaSource)
 
 
@@ -64,26 +64,22 @@ _register_default_sources()
 
 __all__ = [
     # Main user-facing classes
-    'JobSources',
-    'SearchCriteria',
-    'JobResult',
-
+    "JobSources",
+    "SearchCriteria",
+    "JobResult",
     # Base classes for extending
-    'JobSearchSource',
-    'JobType',
-    'LocationInfo',
-    'CompensationInfo',
-
+    "JobSearchSource",
+    "JobType",
+    "LocationInfo",
+    "CompensationInfo",
     # Registry
-    'SourceRegistry',
-    'get_registry',
-    'register_source',
-
+    "SourceRegistry",
+    "get_registry",
+    "register_source",
     # Built-in source classes
-    'JobSpySource',
-    'USAJobsSource',
-    'AdzunaSource',
-
+    "JobSpySource",
+    "USAJobsSource",
+    "AdzunaSource",
     # Exceptions
-    'SourceConfigError',
+    "SourceConfigError",
 ]

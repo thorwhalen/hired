@@ -34,7 +34,7 @@ class AdzunaSource(JobSearchSource):
         self,
         app_id: Optional[str] = None,
         app_key: Optional[str] = None,
-        country: str = "us"
+        country: str = "us",
     ):
         """
         Initialize Adzuna source.
@@ -44,8 +44,8 @@ class AdzunaSource(JobSearchSource):
             app_key: Adzuna app key. If not provided, reads from ADZUNA_APP_KEY env var.
             country: Country code (default: 'us'). Options: us, uk, ca, au, de, fr, etc.
         """
-        self._app_id = app_id or os.environ.get('ADZUNA_APP_ID')
-        self._app_key = app_key or os.environ.get('ADZUNA_APP_KEY')
+        self._app_id = app_id or os.environ.get("ADZUNA_APP_ID")
+        self._app_key = app_key or os.environ.get("ADZUNA_APP_KEY")
         self._country = country
 
     @property
@@ -111,8 +111,8 @@ Documentation:
             Exception: For other API errors
         """
         # Add authentication parameters
-        params['app_id'] = self._app_id
-        params['app_key'] = self._app_key
+        params["app_id"] = self._app_id
+        params["app_key"] = self._app_key
 
         url = f"{self.API_BASE_URL}/{self._country}{endpoint}"
 
@@ -140,12 +140,12 @@ Documentation:
             return None
 
         type_mapping = {
-            'permanent': JobType.FULL_TIME,
-            'full_time': JobType.FULL_TIME,
-            'part_time': JobType.PART_TIME,
-            'contract': JobType.CONTRACT,
-            'temporary': JobType.TEMPORARY,
-            'internship': JobType.INTERNSHIP,
+            "permanent": JobType.FULL_TIME,
+            "full_time": JobType.FULL_TIME,
+            "part_time": JobType.PART_TIME,
+            "contract": JobType.CONTRACT,
+            "temporary": JobType.TEMPORARY,
+            "internship": JobType.INTERNSHIP,
         }
 
         contract_lower = contract_type.lower()
@@ -153,8 +153,8 @@ Documentation:
 
     def _parse_salary(self, result: Dict[str, Any]) -> Optional[CompensationInfo]:
         """Parse Adzuna salary information."""
-        salary_min = result.get('salary_min')
-        salary_max = result.get('salary_max')
+        salary_min = result.get("salary_min")
+        salary_max = result.get("salary_max")
 
         if salary_min is None and salary_max is None:
             return None
@@ -162,20 +162,20 @@ Documentation:
         return CompensationInfo(
             min_amount=salary_min,
             max_amount=salary_max,
-            currency='USD' if self._country == 'us' else None,
-            interval='yearly'
+            currency="USD" if self._country == "us" else None,
+            interval="yearly",
         )
 
     def _parse_location(self, result: Dict[str, Any]) -> Optional[LocationInfo]:
         """Parse Adzuna location information."""
-        location_data = result.get('location', {})
+        location_data = result.get("location", {})
 
         if not location_data:
             return None
 
         # Adzuna provides various location fields
-        display_name = location_data.get('display_name')
-        area = location_data.get('area', [])
+        display_name = location_data.get("display_name")
+        area = location_data.get("area", [])
 
         # Try to parse structured location
         city = None
@@ -201,39 +201,42 @@ Documentation:
     def _convert_adzuna_result(self, result: Dict[str, Any]) -> JobResult:
         """Convert an Adzuna result to JobResult."""
         # Extract basic info
-        title = result.get('title', 'Unknown')
-        company = result.get('company', {}).get('display_name')
-        description = result.get('description', '')
+        title = result.get("title", "Unknown")
+        company = result.get("company", {}).get("display_name")
+        description = result.get("description", "")
 
         # Remove HTML tags from description if present
         if description:
             import re
-            description = re.sub(r'<[^>]+>', '', description)
+
+            description = re.sub(r"<[^>]+>", "", description)
 
         # Parse dates
         date_posted = None
-        created_date = result.get('created')
+        created_date = result.get("created")
         if created_date:
             try:
-                date_posted = datetime.fromisoformat(created_date.replace('Z', '+00:00'))
+                date_posted = datetime.fromisoformat(
+                    created_date.replace("Z", "+00:00")
+                )
             except (ValueError, AttributeError):
                 pass
 
         # Check for remote work
         is_remote = False
-        category_tag = result.get('category', {}).get('tag', '')
-        if 'remote' in category_tag.lower() or 'remote' in description.lower()[:200]:
+        category_tag = result.get("category", {}).get("tag", "")
+        if "remote" in category_tag.lower() or "remote" in description.lower()[:200]:
             is_remote = True
 
         return JobResult(
             title=title,
             source=self.name,
             company=company,
-            job_url=result.get('redirect_url'),
+            job_url=result.get("redirect_url"),
             location=self._parse_location(result),
             is_remote=is_remote,
             description=description,
-            job_type=self._map_job_type(result.get('contract_type')),
+            job_type=self._map_job_type(result.get("contract_type")),
             compensation=self._parse_salary(result),
             date_posted=date_posted,
             raw_data=result,
@@ -253,51 +256,51 @@ Documentation:
 
         # Build API parameters
         params = {
-            'what': criteria.query,
-            'results_per_page': min(criteria.results_wanted, 50),  # API max is 50
-            'page': (criteria.offset // criteria.results_wanted) + 1,
+            "what": criteria.query,
+            "results_per_page": min(criteria.results_wanted, 50),  # API max is 50
+            "page": (criteria.offset // criteria.results_wanted) + 1,
         }
 
         # Add location filter
         if criteria.location:
-            params['where'] = criteria.location
+            params["where"] = criteria.location
         elif criteria.city or criteria.state:
             location_parts = []
             if criteria.city:
                 location_parts.append(criteria.city)
             if criteria.state:
                 location_parts.append(criteria.state)
-            params['where'] = ', '.join(location_parts)
+            params["where"] = ", ".join(location_parts)
 
         # Add distance filter (Adzuna uses miles)
         if criteria.distance_miles:
-            params['distance'] = criteria.distance_miles
+            params["distance"] = criteria.distance_miles
 
         # Add salary filter
         if criteria.min_salary:
-            params['salary_min'] = criteria.min_salary
+            params["salary_min"] = criteria.min_salary
         if criteria.max_salary:
-            params['salary_max'] = criteria.max_salary
+            params["salary_max"] = criteria.max_salary
 
         # Add date filter (Adzuna uses max_days_old)
         if criteria.posted_within_days:
-            params['max_days_old'] = criteria.posted_within_days
+            params["max_days_old"] = criteria.posted_within_days
 
         # Add contract type filter
         if criteria.job_type:
             type_mapping = {
-                JobType.FULL_TIME: 'permanent',
-                JobType.PART_TIME: 'part_time',
-                JobType.CONTRACT: 'contract',
-                JobType.TEMPORARY: 'temporary',
+                JobType.FULL_TIME: "permanent",
+                JobType.PART_TIME: "part_time",
+                JobType.CONTRACT: "contract",
+                JobType.TEMPORARY: "temporary",
             }
             if criteria.job_type in type_mapping:
-                params['contract'] = type_mapping[criteria.job_type]
+                params["contract"] = type_mapping[criteria.job_type]
 
         # Add any source-specific parameters
-        country = criteria.source_params.get('country', self._country)
+        country = criteria.source_params.get("country", self._country)
         for key, value in criteria.source_params.items():
-            if key not in ['country'] and key not in params:
+            if key not in ["country"] and key not in params:
                 params[key] = value
 
         # Make the API request
@@ -307,12 +310,12 @@ Documentation:
             if country != self._country:
                 self._country = country
 
-            response_data = self._make_request('/search/1', params)
+            response_data = self._make_request("/search/1", params)
 
             # Restore original country
             self._country = original_country
 
-            results_data = response_data.get('results', [])
+            results_data = response_data.get("results", [])
 
             if not results_data:
                 return []
