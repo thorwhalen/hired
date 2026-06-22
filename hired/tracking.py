@@ -15,8 +15,19 @@ if TYPE_CHECKING:
     from hired.search.base import JobResult
 
 
-# Default database location
-DEFAULT_DB_PATH = Path.home() / ".hired" / "applications.db"
+# Storage root unification (see misc/docs/DESIGN.md §4). The canonical location
+# is under ~/.local/share/hired/; the pre-unification path is migrated on first
+# use so existing application history is preserved.
+LEGACY_DB_PATH = Path.home() / ".hired" / "applications.db"
+
+
+def _default_db_path() -> Path:
+    """Canonical applications DB path, migrating the legacy ~/.hired/ DB once."""
+    from hired.persistence.base import app_data_dir, migrate_legacy
+
+    target = Path(app_data_dir("applications")) / "applications.db"
+    migrate_legacy(LEGACY_DB_PATH, target)
+    return target
 
 
 @dataclass
@@ -156,7 +167,7 @@ class ApplicationTracker:
         Args:
             db_path: Path to SQLite database. If None, uses default location.
         """
-        self.db_path = db_path or DEFAULT_DB_PATH
+        self.db_path = Path(db_path) if db_path else _default_db_path()
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._init_db()
 

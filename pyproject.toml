@@ -21,6 +21,10 @@ dependencies = [
     "PyYAML>=6.0",
     "requests>=2.28.0",
     "i2",
+    # dol is the SSOT for hired's persistence layer (candidate knowledge base,
+    # alignment reports, application tracking, agent sessions). Pure-Python and
+    # lightweight; no secrets read at import. See misc/docs/DESIGN.md §3-4.
+    "dol",
 ]
 
 [project.license]
