@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.candidate.knowledge_base &mdash; hired 0.0.12 documentation</title>
+  <title>hired.candidate.knowledge_base &mdash; hired 0.0.13 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -24,7 +24,7 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="hired.candidate.workspace" href="workspace.html" />
+    <link rel="next" title="hired.candidate.state" href="state.html" />
     <link rel="prev" title="hired.candidate.ingest" href="ingest.html" /> 
 </head>
 
@@ -65,18 +65,25 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">hired.candidate.knowledge_base</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_fact"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_fact()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_note"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_note()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_source"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_source()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.facts"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.facts()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.jd"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jd()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.jds"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jds()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.record_qa"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.record_qa()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.regenerate_synopsis"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.regenerate_synopsis()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.save_upload"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.save_upload()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.sources"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.sources()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.supersede"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.supersede()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.synopsis"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.synopsis</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.topic"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.topic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.topics"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.topics()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="state.html">hired.candidate.state</a></li>
+<li class="toctree-l1"><a class="reference internal" href="topics.html">hired.candidate.topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workspace.html">hired.candidate.workspace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../content.html">hired.content</a></li>
@@ -165,6 +172,25 @@ interview prep — does <strong>not</strong> live here; it lives in a per-engage
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.add_note">
+<span class="sig-name descname"><span class="pre">add_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="topics.html#hired.candidate.topics.TopicDossier" title="hired.candidate.topics.TopicDossier"><span class="pre">TopicDossier</span></a></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.add_note"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_note" title="Link to this definition"></a></dt>
+<dd><p>Record volunteered info about a subject into its dossier.</p>
+<p><code class="docutils literal notranslate"><span class="pre">text</span></code> is appended to the dossier’s <code class="docutils literal notranslate"><span class="pre">overview.md</span></code>; <code class="docutils literal notranslate"><span class="pre">files</span></code> (a
+<code class="docutils literal notranslate"><span class="pre">{name:</span> <span class="pre">bytes}</span></code> mapping) are attached as detail/media. Returns the
+dossier. This is the “by the way, I also did X” entry point — a single
+sentence or a whole folder both land here.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.add_source">
+<span class="sig-name descname"><span class="pre">add_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.add_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_source" title="Link to this definition"></a></dt>
+<dd><p>Store a raw source (file path or bytes) and record its content digest.</p>
+<p>Returns the source key (its name in the raw store). The digest (in
+<code class="docutils literal notranslate"><span class="pre">state.json</span></code>) lets a later refresh detect new/changed sources without
+re-reading everything. Facts extracted from a source cite it by this key.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.facts">
 <span class="sig-name descname"><span class="pre">facts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.candidate.base.FactCategory" title="hired.candidate.base.FactCategory"><span class="pre">FactCategory</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.candidate.base.FactStatus" title="hired.candidate.base.FactStatus"><span class="pre">FactStatus</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">FactStatus.ASSERTED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_negations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="base.html#hired.candidate.base.Fact" title="hired.candidate.base.Fact"><span class="pre">Fact</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.facts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.facts" title="Link to this definition"></a></dt>
 <dd><p>Iterate facts, optionally filtered by category/tags/status.</p>
@@ -187,8 +213,13 @@ hidden). <code class="docutils literal notranslate"><span class="pre">tags</span
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.record_qa">
-<span class="sig-name descname"><span class="pre">record_qa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.candidate.base.QAEntry" title="hired.candidate.base.QAEntry"><span class="pre">QAEntry</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.record_qa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.record_qa" title="Link to this definition"></a></dt>
-<dd><p>Append a clarifying Q&amp;A exchange to the (append-only) history.</p>
+<span class="sig-name descname"><span class="pre">record_qa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.candidate.base.QAEntry" title="hired.candidate.base.QAEntry"><span class="pre">QAEntry</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">derived_facts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.record_qa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.record_qa" title="Link to this definition"></a></dt>
+<dd><p>Append a clarifying Q&amp;A exchange; optionally distill it into facts.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">derived_facts</span></code> (atomic fact records extracted from the answer) are
+given, they are ingested with <code class="docutils literal notranslate"><span class="pre">SourceKind.QA</span></code> provenance (<code class="docutils literal notranslate"><span class="pre">source_id</span></code>
+= the Q&amp;A id, quotes verified against the answer) and back-linked via the
+entry’s <code class="docutils literal notranslate"><span class="pre">derived_fact_ids</span></code> — so a Q&amp;A answer becomes reusable,
+discoverable knowledge rather than being buried in the history.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -202,7 +233,13 @@ hand-edited — so it can be regenerated at any time without loss.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.save_upload">
 <span class="sig-name descname"><span class="pre">save_upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.save_upload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.save_upload" title="Link to this definition"></a></dt>
-<dd><p>Store a raw uploaded document (CV, bio, publication) by filename.</p>
+<dd><p>Store a raw uploaded document by filename (see <a class="reference internal" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_source" title="hired.candidate.knowledge_base.CandidateKnowledgeBase.add_source"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_source()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.sources">
+<span class="sig-name descname"><span class="pre">sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.sources" title="Link to this definition"></a></dt>
+<dd><p>Keys of all raw sources the candidate has provided.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -217,6 +254,18 @@ hand-edited — so it can be regenerated at any time without loss.</p>
 <dd><p>The last persisted synopsis, regenerating it if absent.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.topic">
+<span class="sig-name descname"><span class="pre">topic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="topics.html#hired.candidate.topics.TopicDossier" title="hired.candidate.topics.TopicDossier"><span class="pre">TopicDossier</span></a></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.topic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.topic" title="Link to this definition"></a></dt>
+<dd><p>Get-or-create the dossier for a subject (overview + optional files).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.topics">
+<span class="sig-name descname"><span class="pre">topics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.topics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.topics" title="Link to this definition"></a></dt>
+<dd><p>Slugs of all topic dossiers.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -226,7 +275,7 @@ hand-edited — so it can be regenerated at any time without loss.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="ingest.html" class="btn btn-neutral float-left" title="hired.candidate.ingest" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="workspace.html" class="btn btn-neutral float-right" title="hired.candidate.workspace" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="state.html" class="btn btn-neutral float-right" title="hired.candidate.state" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

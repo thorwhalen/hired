@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.persistence.base &mdash; hired 0.0.12 documentation</title>
+  <title>hired.persistence.base &mdash; hired 0.0.13 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../../../_static/documentation_options.js?v=9fc46840"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -60,6 +60,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/state.html">hired.candidate.state</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/topics.html">hired.candidate.topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/workspace.html">hired.candidate.workspace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
@@ -307,34 +309,50 @@
 
 
 <span class="c1"># --------------------------------------------------------------------------- #</span>
-<span class="c1"># Single-file accessors (for singletons that are not collections)</span>
+<span class="c1"># Single-file accessors (for singletons that are not collections; cross-module)</span>
 <span class="c1"># --------------------------------------------------------------------------- #</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">_read_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="read_json_file">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.read_json_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read a JSON file, or return ``None`` if it does not exist.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_write_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="write_json_file">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.write_json_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write ``obj`` as indented JSON, creating parent dirs as needed.&quot;&quot;&quot;</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span></div>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_read_text_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+<div class="viewcode-block" id="read_text_file">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.read_text_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_text_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read a text file, or return ``None`` if it does not exist.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_write_text_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="write_text_file">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.write_text_file">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">write_text_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write ``text`` to a file, creating parent dirs as needed.&quot;&quot;&quot;</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="user_base">
@@ -405,19 +423,26 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">qa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">json_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">QA</span><span class="p">))</span>
 
+    <span class="c1"># --- topic dossiers (info/topics/&lt;slug&gt;/) ----------------------------- #</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">topics_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">TOPICS</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">topic_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">TOPICS</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
     <span class="c1"># --- synopsis singleton (info/synopsis.md) ---------------------------- #</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">read_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_read_text_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">SYNOPSIS_FILE</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">read_text_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">SYNOPSIS_FILE</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">write_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_write_text_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">SYNOPSIS_FILE</span><span class="p">),</span> <span class="n">text</span><span class="p">)</span>
+        <span class="n">write_text_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">SYNOPSIS_FILE</span><span class="p">),</span> <span class="n">text</span><span class="p">)</span>
 
     <span class="c1"># --- refresh state singleton (info/state.json) ------------------------ #</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">read_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_read_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">STATE_FILE</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">read_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">STATE_FILE</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">write_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_write_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">STATE_FILE</span><span class="p">),</span> <span class="n">state</span><span class="p">)</span></div>
+        <span class="n">write_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">STATE_FILE</span><span class="p">),</span> <span class="n">state</span><span class="p">)</span></div>
 
 
 
@@ -472,10 +497,10 @@
 
     <span class="c1"># --- engagement meta singleton (jds/&lt;id&gt;/meta.json) ------------------- #</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">read_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_read_json_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">META_FILE</span><span class="p">))</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">read_json_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">META_FILE</span><span class="p">))</span> <span class="ow">or</span> <span class="p">{}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">write_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">_write_json_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">META_FILE</span><span class="p">),</span> <span class="n">meta</span><span class="p">)</span></div>
+        <span class="n">write_json_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">META_FILE</span><span class="p">),</span> <span class="n">meta</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -1,0 +1,4 @@
+hired.candidate.topics
+======================
+.. automodule:: hired.candidate.topics
+   :members:

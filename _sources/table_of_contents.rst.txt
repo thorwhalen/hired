@@ -16,6 +16,8 @@
    module_docs/hired/candidate/base
    module_docs/hired/candidate/ingest
    module_docs/hired/candidate/knowledge_base
+   module_docs/hired/candidate/state
+   module_docs/hired/candidate/topics
    module_docs/hired/candidate/workspace
    module_docs/hired/config
    module_docs/hired/content
