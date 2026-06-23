@@ -51,8 +51,10 @@ def test_soft_refresh_applies_only_pending_sources():
     assert kb.pending_sources() == ["b.txt"]
     report3 = kb.refresh("soft", ingest_fn=_fact_record_for)
     assert len(report3.added_fact_ids) == 1
-    assert [f.statement for f in kb.facts()] == [
-        "derived from a.txt", "derived from b.txt"
+    # fact store iterates in filesystem order (not insertion order) — compare as a set
+    assert sorted(f.statement for f in kb.facts()) == [
+        "derived from a.txt",
+        "derived from b.txt",
     ]
 
 
