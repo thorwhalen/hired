@@ -1,0 +1,293 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.alignment.report &mdash; hired 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.alignment.report</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.alignment.report</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Render an :class:`~hired.alignment.base.AlignmentReport` to Markdown.</span>
+
+<span class="sd">Verdict-first (BLUF), evidence-quoted, banded — deliberately *not* a single</span>
+<span class="sd">false-precision percentage. The four buckets are grouped so the reader sees, in</span>
+<span class="sd">order: what&#39;s strong, what transfers, what&#39;s learnable (with the AI-leverage</span>
+<span class="sd">note), what&#39;s genuinely hard, and what we still need to ask.</span>
+
+<span class="sd">See ``misc/docs/DESIGN.md`` §6, and the research in</span>
+<span class="sd">``misc/docs/research/jd-candidate-matching.md``.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AlignmentReport</span><span class="p">,</span> <span class="n">Bucket</span><span class="p">,</span> <span class="n">RequirementRecord</span>
+
+<span class="n">_BUCKET_HEADINGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">STRONG_MATCH</span><span class="p">:</span> <span class="s1">&#39;✅ Strong match&#39;</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">ADJACENT_TRANSFERABLE</span><span class="p">:</span> <span class="s1">&#39;🔄 Adjacent / transferable&#39;</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">:</span> <span class="s1">&#39;📈 Gap — learnable&#39;</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">:</span> <span class="s1">&#39;⛔ Gap — hard to learn&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">_BUCKET_ORDER</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">STRONG_MATCH</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">ADJACENT_TRANSFERABLE</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_record_line</span><span class="p">(</span><span class="n">rec</span><span class="p">:</span> <span class="n">RequirementRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">requirement</span>
+    <span class="n">lvl</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;(need L</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">required_level</span><span class="si">}</span><span class="s1"> · have L</span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">candidate_level</span><span class="si">}</span><span class="s1">)&#39;</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;- **</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s1">** </span><span class="si">{</span><span class="n">lvl</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">match_type</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s1">&#39;adjacent&#39;</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">adjacency_basis</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  - _transfers from:_ </span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">source_skill</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s2">&quot;—&quot;</span><span class="si">}</span><span class="s1"> — </span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">adjacency_basis</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">,</span> <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">):</span>
+        <span class="n">bits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">closeability</span><span class="p">:</span>
+            <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">closeability</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">time_to_close</span><span class="p">:</span>
+            <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;~</span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">time_to_close</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">ai_leverage</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+            <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;AI-leverage: </span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">ai_leverage</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bits</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  - _close:_ </span><span class="si">{</span><span class="s2">&quot; · &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">evidence</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">evidence</span><span class="o">.</span><span class="n">quote</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  - _evidence:_ &quot;</span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">evidence</span><span class="o">.</span><span class="n">quote</span><span class="si">}</span><span class="s1">&quot;&#39;</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">talking_point</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">  - _talking point:_ </span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">talking_point</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">return</span> <span class="n">line</span>
+
+
+<div class="viewcode-block" id="render_report_markdown">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/report.html#hired.render_report_markdown">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render_report_markdown</span><span class="p">(</span><span class="n">report</span><span class="p">:</span> <span class="n">AlignmentReport</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render the report as a Markdown string.&quot;&quot;&quot;</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">verdict</span>
+    <span class="n">out</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">job_title</span> <span class="ow">or</span> <span class="n">report</span><span class="o">.</span><span class="n">job_id</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;# Alignment: </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">company</span><span class="p">:</span>
+        <span class="n">head</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; — </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">company</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+    <span class="c1"># --- verdict (BLUF) ---------------------------------------------------</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;**Verdict: </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">recommendation</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s1">** &#39;</span>
+        <span class="sa">f</span><span class="s1">&#39;· confidence: </span><span class="si">{</span><span class="n">v</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1"> · fit: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">score_summary</span><span class="o">.</span><span class="n">fit_band</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">headline</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">headline</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">key_reasons</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">reason</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">key_reasons</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;- </span><span class="si">{</span><span class="n">reason</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># --- bucket counts ----------------------------------------------------</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">score_summary</span><span class="o">.</span><span class="n">bucket_counts</span>
+    <span class="k">if</span> <span class="n">counts</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">summary</span> <span class="o">=</span> <span class="s1">&#39; · &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">_BUCKET_HEADINGS</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span>
+        <span class="p">)</span>
+        <span class="n">unknown</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">requirements</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;_Requirements — </span><span class="si">{</span><span class="n">summary</span><span class="si">}</span><span class="s1"> · ❓ needs clarification: </span><span class="si">{</span><span class="n">unknown</span><span class="si">}</span><span class="s1">_&#39;</span><span class="p">)</span>
+
+    <span class="c1"># --- blocking gaps (surface even when verdict=apply) ------------------</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">blocking_gaps</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;## ⛔ Blocking gaps&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">blocking_gaps</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_record_line</span><span class="p">(</span><span class="n">rec</span><span class="p">))</span>
+
+    <span class="c1"># --- per-bucket breakdown --------------------------------------------</span>
+    <span class="n">by_bucket</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Bucket</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">b</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span><span class="p">}</span>
+    <span class="n">unknowns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">requirements</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">unknowns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">by_bucket</span><span class="p">[</span><span class="n">rec</span><span class="o">.</span><span class="n">bucket</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">bucket</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span><span class="p">:</span>
+        <span class="n">recs</span> <span class="o">=</span> <span class="n">by_bucket</span><span class="p">[</span><span class="n">bucket</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">recs</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;## </span><span class="si">{</span><span class="n">_BUCKET_HEADINGS</span><span class="p">[</span><span class="n">bucket</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">recs</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_record_line</span><span class="p">(</span><span class="n">rec</span><span class="p">))</span>
+
+    <span class="c1"># --- clarifications (the questions to ask) ----------------------------</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">clarifications</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;## ❓ Questions to clarify (highest-value first)&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">clarifications</span><span class="p">:</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">question</span> <span class="ow">or</span> <span class="s1">&#39;(question to be drafted)&#39;</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;- </span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">reason</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  - _why:_ </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s1"> (info-gain </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">info_gain</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+
+    <span class="c1"># --- next actions -----------------------------------------------------</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">next_actions</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;## Next actions&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">next_actions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">priority</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">a</span><span class="o">.</span><span class="n">priority</span><span class="si">}</span><span class="s1">. </span><span class="si">{</span><span class="n">a</span><span class="o">.</span><span class="n">action</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">expected_effect</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39; — </span><span class="si">{</span><span class="n">a</span><span class="o">.</span><span class="n">expected_effect</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="c1"># --- interview prep ---------------------------------------------------</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">interview_prep</span>
+    <span class="k">if</span> <span class="n">ip</span><span class="o">.</span><span class="n">summary</span> <span class="ow">or</span> <span class="n">ip</span><span class="o">.</span><span class="n">talking_points</span> <span class="ow">or</span> <span class="n">ip</span><span class="o">.</span><span class="n">proactive_disclosure</span><span class="p">:</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;## Interview prep&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ip</span><span class="o">.</span><span class="n">summary</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">ip</span><span class="o">.</span><span class="n">talking_points</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;- </span><span class="si">{</span><span class="n">tp</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ip</span><span class="o">.</span><span class="n">proactive_disclosure</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;_Proactive disclosure:_ </span><span class="si">{</span><span class="n">ip</span><span class="o">.</span><span class="n">proactive_disclosure</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

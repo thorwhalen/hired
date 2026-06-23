@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.candidate.base &mdash; hired 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.candidate.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.candidate.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Open-world, provenance-first schemas for accumulated candidate knowledge.</span>
+
+<span class="sd">The governing principle (see ``misc/docs/DESIGN.md`` §5): the **absence** of a</span>
+<span class="sd">fact is never a negative claim. Only an explicit fact whose ``match_state`` is</span>
+<span class="sd">``CONTRADICTED`` asserts that the candidate lacks something. Silence is</span>
+<span class="sd">``UNKNOWN`` — a prompt to *ask*, not a gap.</span>
+
+<span class="sd">Every :class:`Fact` carries :class:`Provenance`. When a provenance ``quote`` is</span>
+<span class="sd">drawn from a text source it MUST be a verbatim substring of that source — an</span>
+<span class="sd">anti-hallucination invariant enforced at extraction time.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_new_id</span><span class="p">(</span><span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">12</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_utcnow</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="ConfidenceLevel">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/base.html#hired.candidate.ConfidenceLevel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConfidenceLevel</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calibrated confidence in a claim (qualitative, not a raw probability).&quot;&quot;&quot;</span>
+
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span>
+    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="s1">&#39;medium&#39;</span>
+    <span class="n">LOW</span> <span class="o">=</span> <span class="s1">&#39;low&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="MatchState">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/base.html#hired.candidate.MatchState">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MatchState</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Three-valued epistemic state — the core of the honesty contract.</span>
+
+<span class="sd">    ``UNKNOWN`` is distinct from ``CONTRADICTED``: we have not yet looked, so we</span>
+<span class="sd">    must *ask* rather than assume absence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CONFIRMED</span> <span class="o">=</span> <span class="s1">&#39;confirmed&#39;</span>
+    <span class="n">CONTRADICTED</span> <span class="o">=</span> <span class="s1">&#39;contradicted&#39;</span>
+    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s1">&#39;unknown&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="FactStatus">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/base.html#hired.candidate.FactStatus">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FactStatus</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether a fact is current or has been superseded by a newer one.&quot;&quot;&quot;</span>
+
+    <span class="n">ASSERTED</span> <span class="o">=</span> <span class="s1">&#39;asserted&#39;</span>
+    <span class="n">SUPERSEDED</span> <span class="o">=</span> <span class="s1">&#39;superseded&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="FactCategory">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/base.html#hired.candidate.FactCategory">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FactCategory</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coarse category for retrieval and synopsis grouping.&quot;&quot;&quot;</span>
+
+    <span class="n">SKILL</span> <span class="o">=</span> <span class="s1">&#39;skill&#39;</span>
+    <span class="n">EXPERIENCE</span> <span class="o">=</span> <span class="s1">&#39;experience&#39;</span>
+    <span class="n">EDUCATION</span> <span class="o">=</span> <span class="s1">&#39;education&#39;</span>
+    <span class="n">ACHIEVEMENT</span> <span class="o">=</span> <span class="s1">&#39;achievement&#39;</span>
+    <span class="n">PREFERENCE</span> <span class="o">=</span> <span class="s1">&#39;preference&#39;</span>
+    <span class="n">CREDENTIAL</span> <span class="o">=</span> <span class="s1">&#39;credential&#39;</span>
+    <span class="n">TRAIT</span> <span class="o">=</span> <span class="s1">&#39;trait&#39;</span>
+    <span class="n">OTHER</span> <span class="o">=</span> <span class="s1">&#39;other&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="SourceKind">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/base.html#hired.candidate.SourceKind">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SourceKind</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Where a piece of provenance came from.&quot;&quot;&quot;</span>
+
+    <span class="n">UPLOAD</span> <span class="o">=</span> <span class="s1">&#39;upload&#39;</span>
+    <span class="n">QA</span> <span class="o">=</span> <span class="s1">&#39;qa&#39;</span>
+    <span class="n">INFERRED</span> <span class="o">=</span> <span class="s1">&#39;inferred&#39;</span>
+    <span class="n">EXTERNAL</span> <span class="o">=</span> <span class="s1">&#39;external&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="Provenance">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/base.html#hired.candidate.Provenance">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Provenance</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Where a fact came from, with an optional verbatim supporting quote.&quot;&quot;&quot;</span>
+
+    <span class="n">source_kind</span><span class="p">:</span> <span class="n">SourceKind</span>
+    <span class="n">source_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># e.g. an upload filename or a qa entry id</span>
+    <span class="n">locator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># e.g. &quot;experience[2]&quot; or &quot;page 3&quot;</span>
+    <span class="n">quote</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># verbatim substring of the source when text</span>
+    <span class="n">captured_at</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_utcnow</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Fact">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/base.html#hired.candidate.Fact">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Fact</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One atomic claim about a candidate.</span>
+
+<span class="sd">    Atomicity matters: a fact states a single thing so it can be confirmed,</span>
+<span class="sd">    superseded, or cited independently.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_new_id</span><span class="p">(</span><span class="s1">&#39;fact-&#39;</span><span class="p">))</span>
+    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;me&#39;</span>  <span class="c1"># the candidate this is about (default tenant)</span>
+    <span class="n">category</span><span class="p">:</span> <span class="n">FactCategory</span> <span class="o">=</span> <span class="n">FactCategory</span><span class="o">.</span><span class="n">OTHER</span>
+    <span class="n">statement</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># atomic natural-language claim</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># optional payload</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="n">ConfidenceLevel</span> <span class="o">=</span> <span class="n">ConfidenceLevel</span><span class="o">.</span><span class="n">MEDIUM</span>
+    <span class="c1"># When True, this fact asserts the candidate LACKS something (a real</span>
+    <span class="c1"># negative), as opposed to mere silence. Drives CONTRADICTED downstream.</span>
+    <span class="n">is_negation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">provenance</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Provenance</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">status</span><span class="p">:</span> <span class="n">FactStatus</span> <span class="o">=</span> <span class="n">FactStatus</span><span class="o">.</span><span class="n">ASSERTED</span>
+    <span class="n">supersedes</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># id of the fact this one replaces</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_utcnow</span><span class="p">)</span>
+    <span class="n">updated_at</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_utcnow</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="QAEntry">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/base.html#hired.candidate.QAEntry">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">QAEntry</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One clarifying question asked of the candidate and their answer.</span>
+
+<span class="sd">    Q&amp;A is append-only history; the distilled, updatable projection lives in</span>
+<span class="sd">    :class:`Fact` records (linked via ``derived_fact_ids``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_new_id</span><span class="p">(</span><span class="s1">&#39;qa-&#39;</span><span class="p">))</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">answer</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">asked_for_job</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># job id that motivated the question</span>
+    <span class="n">fills_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># which requirement field the answer informs</span>
+    <span class="n">derived_fact_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">_utcnow</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

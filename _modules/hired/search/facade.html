@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.search.facade &mdash; hired 0.0.10 documentation</title>
+  <title>hired.search.facade &mdash; hired 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,13 +48,26 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
@@ -215,11 +228,7 @@
 
 <div class="viewcode-block" id="JobSources.search">
 <a class="viewcode-back" href="../../../module_docs/hired/search/facade.html#hired.JobSources.search">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">source_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">criteria</span><span class="p">:</span> <span class="n">SearchCriteria</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">criteria</span><span class="p">:</span> <span class="n">SearchCriteria</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Search using a specific source.</span>
 
@@ -240,7 +249,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">criteria</span><span class="p">:</span> <span class="n">SearchCriteria</span><span class="p">,</span>
         <span class="n">sources</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">skip_unconfigured</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">skip_unconfigured</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Search across multiple sources.</span>
@@ -279,7 +288,9 @@
         <span class="c1"># If there were errors, you might want to log them or raise a warning</span>
         <span class="c1"># For now, we&#39;ll just continue and return what we got</span>
         <span class="k">if</span> <span class="n">errors</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
-            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">err</span> <span class="ow">in</span> <span class="n">errors</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+            <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All sources failed:</span><span class="se">\n</span><span class="si">{</span><span class="n">error_msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">results</span></div>
@@ -301,14 +312,14 @@
         <span class="k">for</span> <span class="n">source_name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">all_sources</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_info</span><span class="p">(</span><span class="n">source_name</span><span class="p">)</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✓ Ready&quot;</span> <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;is_configured&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;✗ Needs Setup&quot;</span>
-                <span class="n">auth</span> <span class="o">=</span> <span class="s2">&quot; (requires auth)&quot;</span> <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;requires_auth&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;✓ Ready&quot;</span> <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;is_configured&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;✗ Needs Setup&quot;</span>
+                <span class="n">auth</span> <span class="o">=</span> <span class="s2">&quot; (requires auth)&quot;</span> <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;requires_auth&quot;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
 
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;display_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">source_name</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">status</span><span class="si">}{</span><span class="n">auth</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;is_configured&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;is_configured&quot;</span><span class="p">]:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Setup instructions:&quot;</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;setup_instructions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;setup_instructions&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">):</span>
                         <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
                             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -349,8 +360,10 @@
 <span class="sd">            AttributeError: If source not found</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Avoid recursion for private attributes</span>
-        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; object has no attribute &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; object has no attribute &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -363,9 +376,15 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__dir__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return list of attributes including source names.&quot;&quot;&quot;</span>
         <span class="n">base_attrs</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="s1">&#39;list_available&#39;</span><span class="p">,</span> <span class="s1">&#39;list_unconfigured&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;get_source&#39;</span><span class="p">,</span> <span class="s1">&#39;get_info&#39;</span><span class="p">,</span> <span class="s1">&#39;search&#39;</span><span class="p">,</span> <span class="s1">&#39;search_all&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;print_status&#39;</span><span class="p">,</span> <span class="s1">&#39;keys&#39;</span>
+            <span class="s2">&quot;list&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;list_available&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;list_unconfigured&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;get_source&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;get_info&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;search&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;search_all&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;print_status&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;keys&quot;</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="n">base_attrs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">()</span></div>
 
@@ -378,7 +397,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

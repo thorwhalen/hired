@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.search.base &mdash; hired 0.0.10 documentation</title>
+  <title>hired.search.base &mdash; hired 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,13 +48,26 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
@@ -114,6 +127,7 @@
 <a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.JobType">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">JobType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Standardized job types across all sources.&quot;&quot;&quot;</span>
+
     <span class="n">FULL_TIME</span> <span class="o">=</span> <span class="s2">&quot;fulltime&quot;</span>
     <span class="n">PART_TIME</span> <span class="o">=</span> <span class="s2">&quot;parttime&quot;</span>
     <span class="n">CONTRACT</span> <span class="o">=</span> <span class="s2">&quot;contract&quot;</span>
@@ -129,6 +143,7 @@
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CompensationInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compensation information for a job.&quot;&quot;&quot;</span>
+
     <span class="n">min_amount</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">max_amount</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">currency</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -141,6 +156,7 @@
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">LocationInfo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Location information for a job.&quot;&quot;&quot;</span>
+
     <span class="n">city</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">state</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">country</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -159,6 +175,7 @@
 <span class="sd">    This provides a unified interface regardless of which source</span>
 <span class="sd">    the job was retrieved from.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># Required fields</span>
     <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Name of the source (e.g., &quot;indeed&quot;, &quot;usajobs&quot;)</span>
@@ -189,42 +206,42 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert JobResult to dictionary.&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
-            <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
-            <span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
-            <span class="s1">&#39;company_url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company_url</span><span class="p">,</span>
-            <span class="s1">&#39;job_url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span>
-            <span class="s1">&#39;is_remote&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_remote</span><span class="p">,</span>
-            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
-            <span class="s1">&#39;job_type&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_type</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s1">&#39;skills&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">,</span>
-            <span class="s1">&#39;benefits&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">benefits</span><span class="p">,</span>
-            <span class="s1">&#39;emails&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emails</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+            <span class="s2">&quot;company&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
+            <span class="s2">&quot;company_url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company_url</span><span class="p">,</span>
+            <span class="s2">&quot;job_url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span>
+            <span class="s2">&quot;is_remote&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_remote</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;job_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_type</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_type</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;skills&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">skills</span><span class="p">,</span>
+            <span class="s2">&quot;benefits&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">benefits</span><span class="p">,</span>
+            <span class="s2">&quot;emails&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">emails</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;city&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">city</span><span class="p">,</span>
-                <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
-                <span class="s1">&#39;country&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">country</span><span class="p">,</span>
-                <span class="s1">&#39;postal_code&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">postal_code</span><span class="p">,</span>
-                <span class="s1">&#39;raw&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;city&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">city</span><span class="p">,</span>
+                <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
+                <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">country</span><span class="p">,</span>
+                <span class="s2">&quot;postal_code&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">postal_code</span><span class="p">,</span>
+                <span class="s2">&quot;raw&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">raw</span><span class="p">,</span>
             <span class="p">}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;compensation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">&#39;min_amount&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">min_amount</span><span class="p">,</span>
-                <span class="s1">&#39;max_amount&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">max_amount</span><span class="p">,</span>
-                <span class="s1">&#39;currency&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">currency</span><span class="p">,</span>
-                <span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">interval</span><span class="p">,</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;compensation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;min_amount&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">min_amount</span><span class="p">,</span>
+                <span class="s2">&quot;max_amount&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">max_amount</span><span class="p">,</span>
+                <span class="s2">&quot;currency&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">currency</span><span class="p">,</span>
+                <span class="s2">&quot;interval&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">compensation</span><span class="o">.</span><span class="n">interval</span><span class="p">,</span>
             <span class="p">}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_posted</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;date_posted&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_posted</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;date_posted&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_posted</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_updated</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;date_updated&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_updated</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;date_updated&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_updated</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">application_deadline</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;application_deadline&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">application_deadline</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;application_deadline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">application_deadline</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
 </div>
@@ -241,6 +258,7 @@
 <span class="sd">    Different sources may not support all criteria, but this provides</span>
 <span class="sd">    a consistent interface for users.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="c1"># Required</span>
     <span class="n">query</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Free-form text query</span>
 
@@ -280,6 +298,7 @@
 <a class="viewcode-back" href="../../../module_docs/hired/search/base.html#hired.SourceConfigError">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SourceConfigError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised when a source is not properly configured.&quot;&quot;&quot;</span>
+
     <span class="k">pass</span></div>
 
 
@@ -375,8 +394,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_configured</span><span class="p">():</span>
             <span class="n">instructions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_setup_instructions</span><span class="p">()</span>
             <span class="k">raise</span> <span class="n">SourceConfigError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s2"> is not properly configured.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">instructions</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s2"> is not properly configured.</span><span class="se">\n\n</span><span class="si">{</span><span class="n">instructions</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span></div>
 </div>
 
@@ -389,7 +407,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

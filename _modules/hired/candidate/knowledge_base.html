@@ -1,0 +1,379 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.candidate.knowledge_base &mdash; hired 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.candidate.knowledge_base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.candidate.knowledge_base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The candidate knowledge base: a facade over the per-candidate store mall.</span>
+
+<span class="sd">:class:`CandidateKnowledgeBase` is the domain-driven entry point for accumulating</span>
+<span class="sd">and querying knowledge about one candidate. It wraps the :class:`CandidateMall`</span>
+<span class="sd">stores with validated, intention-revealing methods (``add_fact``, ``facts``,</span>
+<span class="sd">``record_qa``, ``save_upload``, …) and keeps a regenerated, human-readable</span>
+<span class="sd">:meth:`synopsis` projection of the fact store for fast context loading.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Fact</span><span class="p">,</span>
+    <span class="n">FactCategory</span><span class="p">,</span>
+    <span class="n">FactStatus</span><span class="p">,</span>
+    <span class="n">QAEntry</span><span class="p">,</span>
+    <span class="n">_utcnow</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.persistence.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="n">CandidateMall</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.persistence.repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">Repository</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_slug</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A filesystem-safe key from an arbitrary label (company name, subject).&quot;&quot;&quot;</span>
+    <span class="n">keep</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span> <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span> <span class="ow">or</span> <span class="n">c</span> <span class="ow">in</span> <span class="s1">&#39; -_&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39; &#39;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keep</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="ow">or</span> <span class="s1">&#39;untitled&#39;</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_FactRepo</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">Fact</span><span class="p">]):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Fact</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_QARepo</span><span class="p">(</span><span class="n">Repository</span><span class="p">[</span><span class="n">QAEntry</span><span class="p">]):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">QAEntry</span>
+
+
+<div class="viewcode-block" id="CandidateKnowledgeBase">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CandidateKnowledgeBase</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accumulated, open-world knowledge about a single candidate.</span>
+
+<span class="sd">    &gt;&gt;&gt; import tempfile, os</span>
+<span class="sd">    &gt;&gt;&gt; os.environ[&#39;HIRED_DATA_DIR&#39;] = tempfile.mkdtemp()</span>
+<span class="sd">    &gt;&gt;&gt; kb = CandidateKnowledgeBase()                 # default candidate &quot;me&quot;</span>
+<span class="sd">    &gt;&gt;&gt; from hired.candidate.base import Fact, FactCategory</span>
+<span class="sd">    &gt;&gt;&gt; _ = kb.add_fact(Fact(statement=&#39;Built ML pipelines in Python&#39;,</span>
+<span class="sd">    ...                       category=FactCategory.SKILL, tags=[&#39;python&#39;, &#39;ml&#39;]))</span>
+<span class="sd">    &gt;&gt;&gt; [f.statement for f in kb.facts(category=FactCategory.SKILL)]</span>
+<span class="sd">    [&#39;Built ML pipelines in Python&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; [f.statement for f in kb.facts(tags=[&#39;ml&#39;])]</span>
+<span class="sd">    [&#39;Built ML pipelines in Python&#39;]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">mall</span><span class="p">:</span> <span class="n">CandidateMall</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mall</span> <span class="o">=</span> <span class="n">mall</span> <span class="ow">or</span> <span class="n">CandidateMall</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_facts</span> <span class="o">=</span> <span class="n">_FactRepo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;facts&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qa</span> <span class="o">=</span> <span class="n">_QARepo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;qa&#39;</span><span class="p">])</span>
+
+    <span class="c1"># --- facts -------------------------------------------------------------</span>
+<div class="viewcode-block" id="CandidateKnowledgeBase.add_fact">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.add_fact">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_fact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fact</span><span class="p">:</span> <span class="n">Fact</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Persist a fact, returning its id.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_facts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">fact</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_facts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">facts</span><span class="p">:</span> <span class="s1">&#39;Iterator[Fact] | list[Fact]&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">add_fact</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">facts</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_fact</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fact_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Fact</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_facts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fact_id</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CandidateKnowledgeBase.facts">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.facts">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">facts</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">category</span><span class="p">:</span> <span class="n">FactCategory</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">status</span><span class="p">:</span> <span class="n">FactStatus</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">FactStatus</span><span class="o">.</span><span class="n">ASSERTED</span><span class="p">,</span>
+        <span class="n">include_negations</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Fact</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate facts, optionally filtered by category/tags/status.</span>
+
+<span class="sd">        By default only ``ASSERTED`` facts are returned (superseded ones are</span>
+<span class="sd">        hidden). ``tags`` matches facts containing *any* of the given tags.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tagset</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">tags</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">fact</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_facts</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fact</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">status</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">category</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fact</span><span class="o">.</span><span class="n">category</span> <span class="o">!=</span> <span class="n">category</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">tagset</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">tagset</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">fact</span><span class="o">.</span><span class="n">tags</span><span class="p">)):</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">include_negations</span> <span class="ow">and</span> <span class="n">fact</span><span class="o">.</span><span class="n">is_negation</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">yield</span> <span class="n">fact</span></div>
+
+
+<div class="viewcode-block" id="CandidateKnowledgeBase.supersede">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.supersede">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">supersede</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_fact_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">new_fact</span><span class="p">:</span> <span class="n">Fact</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Replace ``old_fact_id`` with ``new_fact`` (invalidate, don&#39;t delete).&quot;&quot;&quot;</span>
+        <span class="n">old</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_facts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">old_fact_id</span><span class="p">)</span>
+        <span class="n">old</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">FactStatus</span><span class="o">.</span><span class="n">SUPERSEDED</span>
+        <span class="n">old</span><span class="o">.</span><span class="n">updated_at</span> <span class="o">=</span> <span class="n">_utcnow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_facts</span><span class="p">[</span><span class="n">old_fact_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">old</span>
+        <span class="n">new_fact</span><span class="o">.</span><span class="n">supersedes</span> <span class="o">=</span> <span class="n">old_fact_id</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_facts</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_fact</span><span class="p">)</span></div>
+
+
+    <span class="c1"># --- Q&amp;A ---------------------------------------------------------------</span>
+<div class="viewcode-block" id="CandidateKnowledgeBase.record_qa">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.record_qa">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">record_qa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">:</span> <span class="n">QAEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a clarifying Q&amp;A exchange to the (append-only) history.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qa</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">qa_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">QAEntry</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_qa</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+
+    <span class="c1"># --- raw uploads -------------------------------------------------------</span>
+<div class="viewcode-block" id="CandidateKnowledgeBase.save_upload">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.save_upload">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Store a raw uploaded document (CV, bio, publication) by filename.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;uploads&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_upload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;uploads&#39;</span><span class="p">][</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">uploads</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;uploads&#39;</span><span class="p">])</span>
+
+    <span class="c1"># --- jobs &amp; reports (keyed by job id) ----------------------------------</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;jobs&#39;</span><span class="p">][</span><span class="n">job_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;jobs&#39;</span><span class="p">][</span><span class="n">job_id</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;jobs&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="CandidateKnowledgeBase.save_report">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.save_report">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">archive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Persist the current alignment report, archiving the prior one first.</span>
+
+<span class="sd">        Archiving (on by default) snapshots any existing report into</span>
+<span class="sd">        ``report_history`` so the alignment-review agent can diff versions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">archive</span> <span class="ow">and</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;reports&#39;</span><span class="p">]:</span>
+            <span class="n">stamp</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;created_at&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_utcnow</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;report_history&#39;</span><span class="p">][</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;reports&#39;</span><span class="p">][</span><span class="n">job_id</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;reports&#39;</span><span class="p">][</span><span class="n">job_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;reports&#39;</span><span class="p">][</span><span class="n">job_id</span><span class="p">]</span>
+
+<div class="viewcode-block" id="CandidateKnowledgeBase.report_versions">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.report_versions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">report_versions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Keys of archived prior versions of a job&#39;s report (chronological).&quot;&quot;&quot;</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s1">/&#39;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;report_history&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">))</span></div>
+
+
+    <span class="c1"># --- company research &amp; interview prep ---------------------------------</span>
+<div class="viewcode-block" id="CandidateKnowledgeBase.save_company_report">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.save_company_report">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_company_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">company</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Persist a company/people research report (keyed by company name).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;company&#39;</span><span class="p">][</span><span class="n">_slug</span><span class="p">(</span><span class="n">company</span><span class="p">)]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_company_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">company</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;company&#39;</span><span class="p">][</span><span class="n">_slug</span><span class="p">(</span><span class="n">company</span><span class="p">)]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">companies</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;company&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="CandidateKnowledgeBase.save_briefing">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.save_briefing">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_briefing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Persist an interview-prep research briefing (keyed by subject/job).&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;interview_prep&#39;</span><span class="p">][</span><span class="n">_slug</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_briefing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;interview_prep&#39;</span><span class="p">][</span><span class="n">_slug</span><span class="p">(</span><span class="n">key</span><span class="p">)]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">briefings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;interview_prep&#39;</span><span class="p">])</span>
+
+    <span class="c1"># --- synopsis (regenerated projection) ---------------------------------</span>
+<div class="viewcode-block" id="CandidateKnowledgeBase.regenerate_synopsis">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/knowledge_base.html#hired.CandidateKnowledgeBase.regenerate_synopsis">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">regenerate_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rebuild and persist a human-readable synopsis from current facts.</span>
+
+<span class="sd">        This is a *projection* — always derived from the fact store, never</span>
+<span class="sd">        hand-edited — so it can be regenerated at any time without loss.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">by_cat</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">fact</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">facts</span><span class="p">():</span>
+            <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;NOT: &#39;</span> <span class="k">if</span> <span class="n">fact</span><span class="o">.</span><span class="n">is_negation</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+            <span class="n">by_cat</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">fact</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;- </span><span class="si">{</span><span class="n">marker</span><span class="si">}{</span><span class="n">fact</span><span class="o">.</span><span class="n">statement</span><span class="si">}</span><span class="s1">  (</span><span class="si">{</span><span class="n">fact</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s1">)&#39;</span>
+            <span class="p">)</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;# Candidate synopsis: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">cat</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">by_cat</span><span class="p">):</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;## </span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">by_cat</span><span class="p">[</span><span class="n">cat</span><span class="p">]))</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;synopsis&#39;</span><span class="p">][</span><span class="s1">&#39;synopsis.md&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="k">return</span> <span class="n">text</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The last persisted synopsis, regenerating it if absent.&quot;&quot;&quot;</span>
+        <span class="n">store</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;synopsis&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;synopsis.md&#39;</span> <span class="ow">in</span> <span class="n">store</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">store</span><span class="p">[</span><span class="s1">&#39;synopsis.md&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regenerate_synopsis</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

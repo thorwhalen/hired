@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.cover_letter &mdash; hired 0.0.10 documentation</title>
+  <title>hired.cover_letter &mdash; hired 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,13 +48,26 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
@@ -155,17 +168,17 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to dictionary for template rendering.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s1">&#39;applicant_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_name</span><span class="p">,</span>
-            <span class="s1">&#39;applicant_email&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_email</span><span class="p">,</span>
-            <span class="s1">&#39;applicant_phone&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_phone</span><span class="p">,</span>
-            <span class="s1">&#39;applicant_address&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_address</span><span class="p">,</span>
-            <span class="s1">&#39;company_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company_name</span><span class="p">,</span>
-            <span class="s1">&#39;position_title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_title</span><span class="p">,</span>
-            <span class="s1">&#39;hiring_manager_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hiring_manager_name</span><span class="p">,</span>
-            <span class="s1">&#39;opening_paragraph&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">opening_paragraph</span><span class="p">,</span>
-            <span class="s1">&#39;body_paragraphs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_paragraphs</span><span class="p">,</span>
-            <span class="s1">&#39;closing_paragraph&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing_paragraph</span><span class="p">,</span>
-            <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
+            <span class="s2">&quot;applicant_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_name</span><span class="p">,</span>
+            <span class="s2">&quot;applicant_email&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_email</span><span class="p">,</span>
+            <span class="s2">&quot;applicant_phone&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_phone</span><span class="p">,</span>
+            <span class="s2">&quot;applicant_address&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant_address</span><span class="p">,</span>
+            <span class="s2">&quot;company_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">company_name</span><span class="p">,</span>
+            <span class="s2">&quot;position_title&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">position_title</span><span class="p">,</span>
+            <span class="s2">&quot;hiring_manager_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hiring_manager_name</span><span class="p">,</span>
+            <span class="s2">&quot;opening_paragraph&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">opening_paragraph</span><span class="p">,</span>
+            <span class="s2">&quot;body_paragraphs&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">body_paragraphs</span><span class="p">,</span>
+            <span class="s2">&quot;closing_paragraph&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">closing_paragraph</span><span class="p">,</span>
+            <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
         <span class="p">}</span></div>
 </div>
 
@@ -175,8 +188,8 @@
 <a class="viewcode-back" href="../../module_docs/hired/cover_letter.html#hired.generate_cover_letter_content">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">generate_cover_letter_content</span><span class="p">(</span>
     <span class="n">candidate_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">job_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="s1">&#39;JobResult&#39;</span><span class="p">,</span>
-    <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;professional&quot;</span>
+    <span class="n">job_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="s2">&quot;JobResult&quot;</span><span class="p">,</span>
+    <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;professional&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CoverLetterData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate cover letter content from candidate and job information.</span>
@@ -196,35 +209,37 @@
 <span class="sd">        ... )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Extract applicant info</span>
-    <span class="n">basics</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;basics&#39;</span><span class="p">,</span> <span class="n">candidate_info</span><span class="p">)</span>
-    <span class="n">applicant_name</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Applicant&#39;</span><span class="p">)</span>
-    <span class="n">applicant_email</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">applicant_phone</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;phone&#39;</span><span class="p">)</span>
+    <span class="n">basics</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;basics&quot;</span><span class="p">,</span> <span class="n">candidate_info</span><span class="p">)</span>
+    <span class="n">applicant_name</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;Applicant&quot;</span><span class="p">)</span>
+    <span class="n">applicant_email</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">applicant_phone</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;phone&quot;</span><span class="p">)</span>
 
     <span class="c1"># Build address if available</span>
-    <span class="n">location</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="p">{})</span>
     <span class="n">applicant_address</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">location</span><span class="p">:</span>
         <span class="n">address_parts</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;address&#39;</span><span class="p">):</span>
-            <span class="n">address_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">location</span><span class="p">[</span><span class="s1">&#39;address&#39;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;city&#39;</span><span class="p">):</span>
-            <span class="n">city_state</span> <span class="o">=</span> <span class="n">location</span><span class="p">[</span><span class="s1">&#39;city&#39;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;address&quot;</span><span class="p">):</span>
+            <span class="n">address_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">location</span><span class="p">[</span><span class="s2">&quot;address&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;city&quot;</span><span class="p">):</span>
+            <span class="n">city_state</span> <span class="o">=</span> <span class="n">location</span><span class="p">[</span><span class="s2">&quot;city&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;region&quot;</span><span class="p">):</span>
                 <span class="n">city_state</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, </span><span class="si">{</span><span class="n">location</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">address_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">city_state</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;postalCode&#39;</span><span class="p">):</span>
-            <span class="n">address_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">location</span><span class="p">[</span><span class="s1">&#39;postalCode&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">location</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;postalCode&quot;</span><span class="p">):</span>
+            <span class="n">address_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">location</span><span class="p">[</span><span class="s2">&quot;postalCode&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">address_parts</span><span class="p">:</span>
-            <span class="n">applicant_address</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">address_parts</span><span class="p">)</span>
+            <span class="n">applicant_address</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">address_parts</span><span class="p">)</span>
 
     <span class="c1"># Extract job info</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">):</span>  <span class="c1"># JobResult</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">):</span>  <span class="c1"># JobResult</span>
         <span class="n">company_name</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">company</span> <span class="ow">or</span> <span class="s2">&quot;the company&quot;</span>
         <span class="n">position_title</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">title</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># dict</span>
-        <span class="n">company_name</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company_name&#39;</span><span class="p">,</span> <span class="s1">&#39;the company&#39;</span><span class="p">))</span>
-        <span class="n">position_title</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;the position&#39;</span><span class="p">))</span>
+        <span class="n">company_name</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;company&quot;</span><span class="p">,</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;company_name&quot;</span><span class="p">,</span> <span class="s2">&quot;the company&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">position_title</span> <span class="o">=</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="n">job_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;the position&quot;</span><span class="p">))</span>
 
     <span class="c1"># Generate content based on tone</span>
     <span class="n">opening</span> <span class="o">=</span> <span class="n">_generate_opening</span><span class="p">(</span><span class="n">applicant_name</span><span class="p">,</span> <span class="n">position_title</span><span class="p">,</span> <span class="n">company_name</span><span class="p">,</span> <span class="n">tone</span><span class="p">)</span>
@@ -246,10 +261,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_generate_opening</span><span class="p">(</span>
-    <span class="n">applicant_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">position_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">company_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">applicant_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">position_title</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">company_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate opening paragraph.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">tone</span> <span class="o">==</span> <span class="s2">&quot;enthusiastic&quot;</span><span class="p">:</span>
@@ -272,19 +284,17 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_generate_body</span><span class="p">(</span>
-    <span class="n">candidate_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">job_info</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
-    <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">candidate_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">job_info</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate body paragraphs.&quot;&quot;&quot;</span>
     <span class="n">paragraphs</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Paragraph 1: Relevant experience</span>
-    <span class="n">work</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;work&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">work</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;work&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="k">if</span> <span class="n">work</span><span class="p">:</span>
         <span class="n">recent_job</span> <span class="o">=</span> <span class="n">work</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">position</span> <span class="o">=</span> <span class="n">recent_job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;my previous role&#39;</span><span class="p">)</span>
-        <span class="n">company</span> <span class="o">=</span> <span class="n">recent_job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="s1">&#39;my previous employer&#39;</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">recent_job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;my previous role&quot;</span><span class="p">)</span>
+        <span class="n">company</span> <span class="o">=</span> <span class="n">recent_job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;company&quot;</span><span class="p">,</span> <span class="s2">&quot;my previous employer&quot;</span><span class="p">)</span>
 
         <span class="n">para1</span> <span class="o">=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;In my current role as </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">company</span><span class="si">}</span><span class="s2">, I have developed strong skills &quot;</span>
@@ -294,11 +304,11 @@
         <span class="n">paragraphs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">para1</span><span class="p">)</span>
 
     <span class="c1"># Paragraph 2: Skills and achievements</span>
-    <span class="n">skills</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;skills&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="n">skills</span> <span class="o">=</span> <span class="n">candidate_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;skills&quot;</span><span class="p">,</span> <span class="p">[])</span>
     <span class="k">if</span> <span class="n">skills</span><span class="p">:</span>
-        <span class="n">skill_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">skills</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)]</span>
+        <span class="n">skill_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">skills</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">skill_names</span><span class="p">:</span>
-            <span class="n">skill_list</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">skill_names</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">skill_list</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">skill_names</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
             <span class="n">para2</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;My technical expertise includes </span><span class="si">{</span><span class="n">skill_list</span><span class="si">}</span><span class="s2">, among other skills. &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;I have successfully applied these skills to deliver impactful results &quot;</span>
@@ -342,8 +352,8 @@
 <a class="viewcode-back" href="../../module_docs/hired/cover_letter.html#hired.render_cover_letter">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">render_cover_letter</span><span class="p">(</span>
     <span class="n">cover_letter_data</span><span class="p">:</span> <span class="n">CoverLetterData</span><span class="p">,</span>
-    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
-    <span class="n">template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="n">template</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Render cover letter to specified format.</span>
@@ -358,9 +368,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">template</span><span class="p">:</span>
         <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;html&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;html&quot;</span><span class="p">:</span>
         <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">_HTML_TEMPLATE</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s1">&#39;markdown&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">format</span> <span class="o">==</span> <span class="s2">&quot;markdown&quot;</span><span class="p">:</span>
         <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">_MARKDOWN_TEMPLATE</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># text</span>
         <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">_TEXT_TEMPLATE</span><span class="p">)</span>
@@ -373,11 +383,11 @@
 <a class="viewcode-back" href="../../module_docs/hired/cover_letter.html#hired.mk_cover_letter">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">mk_cover_letter</span><span class="p">(</span>
     <span class="n">candidate_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-    <span class="n">job_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="s1">&#39;JobResult&#39;</span><span class="p">,</span>
+    <span class="n">job_info</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="s2">&quot;JobResult&quot;</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">tone</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;professional&quot;</span><span class="p">,</span>
-    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
-    <span class="n">output_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate and render a cover letter.</span>
@@ -406,22 +416,27 @@
 <span class="sd">        ... )</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Handle JobResult conversion</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s1">&#39;source&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job_info</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">):</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">hired.job_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">job_to_text</span>
+
         <span class="c1"># Create a dict with the job info for easier processing</span>
         <span class="n">job_dict</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
-            <span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
-            <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;company&quot;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">job_info</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="n">cover_letter_data</span> <span class="o">=</span> <span class="n">generate_cover_letter_content</span><span class="p">(</span><span class="n">candidate_info</span><span class="p">,</span> <span class="n">job_info</span><span class="p">,</span> <span class="n">tone</span><span class="p">)</span>
+        <span class="n">cover_letter_data</span> <span class="o">=</span> <span class="n">generate_cover_letter_content</span><span class="p">(</span>
+            <span class="n">candidate_info</span><span class="p">,</span> <span class="n">job_info</span><span class="p">,</span> <span class="n">tone</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">cover_letter_data</span> <span class="o">=</span> <span class="n">generate_cover_letter_content</span><span class="p">(</span><span class="n">candidate_info</span><span class="p">,</span> <span class="n">job_info</span><span class="p">,</span> <span class="n">tone</span><span class="p">)</span>
+        <span class="n">cover_letter_data</span> <span class="o">=</span> <span class="n">generate_cover_letter_content</span><span class="p">(</span>
+            <span class="n">candidate_info</span><span class="p">,</span> <span class="n">job_info</span><span class="p">,</span> <span class="n">tone</span>
+        <span class="p">)</span>
 
     <span class="n">result</span> <span class="o">=</span> <span class="n">render_cover_letter</span><span class="p">(</span><span class="n">cover_letter_data</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="nb">format</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">output_path</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result</span></div>
@@ -565,7 +580,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -1,0 +1,4 @@
+hired.candidate.ingest
+======================
+.. automodule:: hired.candidate.ingest
+   :members:

@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.alignment.rubric &mdash; hired 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="hired.ats_checker" href="../ats_checker.html" />
+    <link rel="prev" title="hired.alignment.report" href="report.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="report.html">hired.alignment.report</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.alignment.rubric</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.alignment.rubric.apply_ai_leverage"><code class="docutils literal notranslate"><span class="pre">apply_ai_leverage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.alignment.rubric.assign_bucket"><code class="docutils literal notranslate"><span class="pre">assign_bucket()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.alignment.rubric.classify"><code class="docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.alignment.rubric.compute_gap_size"><code class="docutils literal notranslate"><span class="pre">compute_gap_size()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../persistence/repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.alignment.rubric</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/hired/alignment/rubric.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.alignment.rubric">
+<span id="hired-alignment-rubric"></span><h1>hired.alignment.rubric<a class="headerlink" href="#module-hired.alignment.rubric" title="Link to this heading"></a></h1>
+<p>Deterministic bucket assignment — the two-axis rubric in code.</p>
+<p>The <em>judgment</em> (transfer distance, trainability, evidence) is supplied by the
+analyst (Claude or an injected LLM). This module turns those judgments into a
+<a class="reference internal" href="base.html#hired.alignment.base.Bucket" title="hired.alignment.base.Bucket"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bucket</span></code></a> deterministically, so the classification is
+auditable and reproducible. It also applies the <strong>AI-leverage modifier</strong>: a
+candidate who works with armies of AI agents closes <em>codified / knowledge-breadth</em>
+gaps faster — but not <em>tacit-judgment</em> or <em>enduring-aptitude</em> gaps.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">misc/docs/DESIGN.md</span></code> §7.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.rubric.apply_ai_leverage">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.rubric.</span></span><span class="sig-name descname"><span class="pre">apply_ai_leverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">closeability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.alignment.base.Closeability" title="hired.alignment.base.Closeability"><span class="pre">Closeability</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ai_leverage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.alignment.base.AILeverage" title="hired.alignment.base.AILeverage"><span class="pre">AILeverage</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">skill_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.alignment.base.SkillType" title="hired.alignment.base.SkillType"><span class="pre">SkillType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_tacit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#hired.alignment.base.Closeability" title="hired.alignment.base.Closeability"><span class="pre">Closeability</span></a></span></span><a class="reference internal" href="../../../_modules/hired/alignment/rubric.html#apply_ai_leverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.rubric.apply_ai_leverage" title="Link to this definition"></a></dt>
+<dd><p>Soften a <em>codified</em> gap’s closeability by the candidate’s AI leverage.</p>
+<p>Tacit/soft gaps and structurally-hard gaps are never softened — AI agents
+extend <em>breadth of codified knowledge</em>, not judgment or enduring aptitude.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">apply_ai_leverage</span><span class="p">(</span><span class="n">Closeability</span><span class="o">.</span><span class="n">REQUIRES_EXPERIENCE</span><span class="p">,</span> <span class="n">AILeverage</span><span class="o">.</span><span class="n">HIGH</span><span class="p">,</span>
+<span class="gp">... </span>                   <span class="n">skill_type</span><span class="o">=</span><span class="n">SkillType</span><span class="o">.</span><span class="n">TECHNICAL</span><span class="p">)</span>
+<span class="go">&lt;Closeability.LEARNABLE: &#39;learnable&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">apply_ai_leverage</span><span class="p">(</span><span class="n">Closeability</span><span class="o">.</span><span class="n">REQUIRES_EXPERIENCE</span><span class="p">,</span> <span class="n">AILeverage</span><span class="o">.</span><span class="n">HIGH</span><span class="p">,</span>
+<span class="gp">... </span>                   <span class="n">skill_type</span><span class="o">=</span><span class="n">SkillType</span><span class="o">.</span><span class="n">SOFT_SKILL</span><span class="p">)</span>
+<span class="go">&lt;Closeability.REQUIRES_EXPERIENCE: &#39;requires_experience&#39;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.rubric.assign_bucket">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.rubric.</span></span><span class="sig-name descname"><span class="pre">assign_bucket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.alignment.base.RequirementRecord" title="hired.alignment.base.RequirementRecord"><span class="pre">RequirementRecord</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#hired.alignment.base.Bucket" title="hired.alignment.base.Bucket"><span class="pre">Bucket</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/hired/alignment/rubric.html#assign_bucket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.rubric.assign_bucket" title="Link to this definition"></a></dt>
+<dd><p>Assign the alignment bucket for a record, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it should be a
+clarifying question instead.</p>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> when the requirement is <code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code> on an OPEN field — that
+routes to elicitation rather than being scored as a gap (the “don’t assume
+absence” rule). <code class="docutils literal notranslate"><span class="pre">UNKNOWN</span></code> on a CLOSED field is treated as a real gap.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.rubric.classify">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.rubric.</span></span><span class="sig-name descname"><span class="pre">classify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.alignment.base.RequirementRecord" title="hired.alignment.base.RequirementRecord"><span class="pre">RequirementRecord</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#hired.alignment.base.RequirementRecord" title="hired.alignment.base.RequirementRecord"><span class="pre">RequirementRecord</span></a></span></span><a class="reference internal" href="../../../_modules/hired/alignment/rubric.html#classify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.rubric.classify" title="Link to this definition"></a></dt>
+<dd><p>Fill <code class="docutils literal notranslate"><span class="pre">gap_size</span></code> and <code class="docutils literal notranslate"><span class="pre">bucket</span></code> (and <code class="docutils literal notranslate"><span class="pre">needs_clarification</span></code>) in place.</p>
+<p>Returns the same record for convenience.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.rubric.compute_gap_size">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.rubric.</span></span><span class="sig-name descname"><span class="pre">compute_gap_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">required_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">candidate_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../../_modules/hired/alignment/rubric.html#compute_gap_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.rubric.compute_gap_size" title="Link to this definition"></a></dt>
+<dd><p>Residual gap, floored at zero.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="report.html" class="btn btn-neutral float-left" title="hired.alignment.report" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ats_checker.html" class="btn btn-neutral float-right" title="hired.ats_checker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

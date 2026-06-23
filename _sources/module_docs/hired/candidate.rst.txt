@@ -1,0 +1,4 @@
+hired.candidate
+===============
+.. automodule:: hired.candidate
+   :members:

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.matching &mdash; hired 0.0.10 documentation</title>
+  <title>hired.matching &mdash; hired 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,13 +48,26 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired.html">hired</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
@@ -139,15 +152,15 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to dictionary.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s1">&#39;job_title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
-            <span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
-            <span class="s1">&#39;overall_score&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">overall_score</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="s1">&#39;skill_match_score&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_match_score</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="s1">&#39;keyword_match_score&#39;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyword_match_score</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="s1">&#39;matched_skills&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matched_skills</span><span class="p">),</span>
-            <span class="s1">&#39;missing_skills&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_skills</span><span class="p">),</span>
-            <span class="s1">&#39;matched_keywords&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matched_keywords</span><span class="p">),</span>
-            <span class="s1">&#39;job_url&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span>
+            <span class="s2">&quot;job_title&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s2">&quot;company&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">company</span><span class="p">,</span>
+            <span class="s2">&quot;overall_score&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">overall_score</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s2">&quot;skill_match_score&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">skill_match_score</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s2">&quot;keyword_match_score&quot;</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keyword_match_score</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="s2">&quot;matched_skills&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matched_skills</span><span class="p">),</span>
+            <span class="s2">&quot;missing_skills&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_skills</span><span class="p">),</span>
+            <span class="s2">&quot;matched_keywords&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matched_keywords</span><span class="p">),</span>
+            <span class="s2">&quot;job_url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">job_url</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 
@@ -163,10 +176,14 @@
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">matched_skills</span><span class="p">:</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Matched Skills: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matched_skills</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Matched Skills: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matched_skills</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">missing_skills</span><span class="p">:</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing Skills: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_skills</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Missing Skills: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">missing_skills</span><span class="p">)[:</span><span class="mi">5</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 </div>
@@ -259,15 +276,19 @@
             <span class="k">if</span> <span class="n">job_max</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_salary</span><span class="p">:</span>
                 <span class="n">compensation_match</span> <span class="o">=</span> <span class="n">job_max</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_salary</span>
             <span class="k">if</span> <span class="n">job_min</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_salary</span><span class="p">:</span>
-                <span class="n">compensation_match</span> <span class="o">=</span> <span class="p">(</span><span class="n">compensation_match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">job_min</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_salary</span><span class="p">)</span>
+                <span class="n">compensation_match</span> <span class="o">=</span> <span class="p">(</span><span class="n">compensation_match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="n">job_min</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_salary</span>
+                <span class="p">)</span>
 
         <span class="c1"># Check location match</span>
         <span class="n">location_match</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">remote_only</span><span class="p">:</span>
             <span class="n">location_match</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">is_remote</span> <span class="o">==</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">preferred_locations</span> <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
-            <span class="n">job_loc_str</span> <span class="o">=</span> <span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">raw</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-            <span class="n">location_match</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">pref</span> <span class="ow">in</span> <span class="n">job_loc_str</span> <span class="k">for</span> <span class="n">pref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">preferred_locations</span><span class="p">)</span>
+            <span class="n">job_loc_str</span> <span class="o">=</span> <span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">raw</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">location_match</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">pref</span> <span class="ow">in</span> <span class="n">job_loc_str</span> <span class="k">for</span> <span class="n">pref</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">preferred_locations</span>
+            <span class="p">)</span>
 
         <span class="c1"># Calculate overall score</span>
         <span class="c1"># Weight: 60% skills, 30% keywords, 10% other factors</span>
@@ -284,7 +305,9 @@
             <span class="n">missing_required</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_skills</span> <span class="o">-</span> <span class="n">matched_skills</span>
             <span class="k">if</span> <span class="n">missing_required</span><span class="p">:</span>
                 <span class="c1"># Severe penalty for missing required skills</span>
-                <span class="n">overall_score</span> <span class="o">*=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_required</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required_skills</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">overall_score</span> <span class="o">*=</span> <span class="mi">1</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing_required</span><span class="p">)</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required_skills</span><span class="p">),</span> <span class="mi">1</span>
+                <span class="p">)</span>
 
         <span class="c1"># Cap at 100</span>
         <span class="n">overall_score</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">overall_score</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">)</span>
@@ -320,10 +343,7 @@
 <div class="viewcode-block" id="JobMatcher.get_top_matches">
 <a class="viewcode-back" href="../../module_docs/hired/matching.html#hired.JobMatcher.get_top_matches">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_top_matches</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">],</span>
-        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="n">min_score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">min_score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MatchScore</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get top N job matches sorted by score.</span>
@@ -345,9 +365,7 @@
 <div class="viewcode-block" id="JobMatcher.filter_jobs">
 <a class="viewcode-back" href="../../module_docs/hired/matching.html#hired.JobMatcher.filter_jobs">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">filter_jobs</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">],</span>
-        <span class="n">min_score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">50.0</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">],</span> <span class="n">min_score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">50.0</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Filter jobs that meet minimum score threshold.</span>
@@ -426,12 +444,14 @@
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   URL: </span><span class="si">{</span><span class="n">match</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">job_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">skill_gaps</span><span class="p">:</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
-                <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;Skills to Consider Learning:&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">,</span>
-            <span class="p">])</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Skills to Consider Learning:&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
 
             <span class="k">for</span> <span class="n">skill</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">skill_gaps</span><span class="o">.</span><span class="n">items</span><span class="p">())[:</span><span class="mi">10</span><span class="p">]:</span>
                 <span class="n">pct</span> <span class="o">=</span> <span class="p">(</span><span class="n">freq</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">jobs</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
@@ -445,9 +465,7 @@
 <div class="viewcode-block" id="quick_match">
 <a class="viewcode-back" href="../../module_docs/hired/matching.html#hired.quick_match">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">quick_match</span><span class="p">(</span>
-    <span class="n">candidate_skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">],</span>
-    <span class="n">top_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">candidate_skills</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">jobs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">JobResult</span><span class="p">],</span> <span class="n">top_n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MatchScore</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Quick utility function to match jobs against candidate skills.</span>
@@ -488,7 +506,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

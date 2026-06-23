@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.search.sources.adzuna &mdash; hired 0.0.10 documentation</title>
+  <title>hired.search.sources.adzuna &mdash; hired 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,13 +48,26 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired.html">hired</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
@@ -137,7 +150,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">app_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">app_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">country</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;us&quot;</span>
+        <span class="n">country</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;us&quot;</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize Adzuna source.</span>
@@ -147,8 +160,8 @@
 <span class="sd">            app_key: Adzuna app key. If not provided, reads from ADZUNA_APP_KEY env var.</span>
 <span class="sd">            country: Country code (default: &#39;us&#39;). Options: us, uk, ca, au, de, fr, etc.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app_id</span> <span class="o">=</span> <span class="n">app_id</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ADZUNA_APP_ID&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app_key</span> <span class="o">=</span> <span class="n">app_key</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ADZUNA_APP_KEY&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app_id</span> <span class="o">=</span> <span class="n">app_id</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ADZUNA_APP_ID&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_app_key</span> <span class="o">=</span> <span class="n">app_key</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ADZUNA_APP_KEY&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_country</span> <span class="o">=</span> <span class="n">country</span>
 
     <span class="nd">@property</span>
@@ -220,8 +233,8 @@
 <span class="sd">            Exception: For other API errors</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Add authentication parameters</span>
-        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;app_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app_id</span>
-        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;app_key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app_key</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;app_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app_id</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;app_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_app_key</span>
 
         <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">API_BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_country</span><span class="si">}{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span>
 
@@ -249,12 +262,12 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">type_mapping</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;permanent&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
-            <span class="s1">&#39;full_time&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
-            <span class="s1">&#39;part_time&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">PART_TIME</span><span class="p">,</span>
-            <span class="s1">&#39;contract&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">CONTRACT</span><span class="p">,</span>
-            <span class="s1">&#39;temporary&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">TEMPORARY</span><span class="p">,</span>
-            <span class="s1">&#39;internship&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">INTERNSHIP</span><span class="p">,</span>
+            <span class="s2">&quot;permanent&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
+            <span class="s2">&quot;full_time&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
+            <span class="s2">&quot;part_time&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">PART_TIME</span><span class="p">,</span>
+            <span class="s2">&quot;contract&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">CONTRACT</span><span class="p">,</span>
+            <span class="s2">&quot;temporary&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">TEMPORARY</span><span class="p">,</span>
+            <span class="s2">&quot;internship&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">INTERNSHIP</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">contract_lower</span> <span class="o">=</span> <span class="n">contract_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -262,8 +275,8 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_parse_salary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CompensationInfo</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse Adzuna salary information.&quot;&quot;&quot;</span>
-        <span class="n">salary_min</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;salary_min&#39;</span><span class="p">)</span>
-        <span class="n">salary_max</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;salary_max&#39;</span><span class="p">)</span>
+        <span class="n">salary_min</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;salary_min&quot;</span><span class="p">)</span>
+        <span class="n">salary_max</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;salary_max&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">salary_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">salary_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -271,20 +284,20 @@
         <span class="k">return</span> <span class="n">CompensationInfo</span><span class="p">(</span>
             <span class="n">min_amount</span><span class="o">=</span><span class="n">salary_min</span><span class="p">,</span>
             <span class="n">max_amount</span><span class="o">=</span><span class="n">salary_max</span><span class="p">,</span>
-            <span class="n">currency</span><span class="o">=</span><span class="s1">&#39;USD&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_country</span> <span class="o">==</span> <span class="s1">&#39;us&#39;</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">interval</span><span class="o">=</span><span class="s1">&#39;yearly&#39;</span>
+            <span class="n">currency</span><span class="o">=</span><span class="s2">&quot;USD&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_country</span> <span class="o">==</span> <span class="s2">&quot;us&quot;</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">interval</span><span class="o">=</span><span class="s2">&quot;yearly&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_parse_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LocationInfo</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse Adzuna location information.&quot;&quot;&quot;</span>
-        <span class="n">location_data</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">location_data</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="p">{})</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">location_data</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="c1"># Adzuna provides various location fields</span>
-        <span class="n">display_name</span> <span class="o">=</span> <span class="n">location_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;display_name&#39;</span><span class="p">)</span>
-        <span class="n">area</span> <span class="o">=</span> <span class="n">location_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;area&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">display_name</span> <span class="o">=</span> <span class="n">location_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;display_name&quot;</span><span class="p">)</span>
+        <span class="n">area</span> <span class="o">=</span> <span class="n">location_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;area&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
         <span class="c1"># Try to parse structured location</span>
         <span class="n">city</span> <span class="o">=</span> <span class="kc">None</span>
@@ -310,39 +323,42 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_adzuna_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">JobResult</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert an Adzuna result to JobResult.&quot;&quot;&quot;</span>
         <span class="c1"># Extract basic info</span>
-        <span class="n">title</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
-        <span class="n">company</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;company&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;display_name&#39;</span><span class="p">)</span>
-        <span class="n">description</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">)</span>
+        <span class="n">company</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;company&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;display_name&quot;</span><span class="p">)</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
         <span class="c1"># Remove HTML tags from description if present</span>
         <span class="k">if</span> <span class="n">description</span><span class="p">:</span>
             <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
-            <span class="n">description</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;[^&gt;]+&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+
+            <span class="n">description</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;[^&gt;]+&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
 
         <span class="c1"># Parse dates</span>
         <span class="n">date_posted</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">created_date</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">)</span>
+        <span class="n">created_date</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;created&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">created_date</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">date_posted</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">created_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;+00:00&#39;</span><span class="p">))</span>
+                <span class="n">date_posted</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span>
+                    <span class="n">created_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="s2">&quot;+00:00&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
             <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
                 <span class="k">pass</span>
 
         <span class="c1"># Check for remote work</span>
         <span class="n">is_remote</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">category_tag</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tag&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;remote&#39;</span> <span class="ow">in</span> <span class="n">category_tag</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;remote&#39;</span> <span class="ow">in</span> <span class="n">description</span><span class="o">.</span><span class="n">lower</span><span class="p">()[:</span><span class="mi">200</span><span class="p">]:</span>
+        <span class="n">category_tag</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;category&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tag&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;remote&quot;</span> <span class="ow">in</span> <span class="n">category_tag</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;remote&quot;</span> <span class="ow">in</span> <span class="n">description</span><span class="o">.</span><span class="n">lower</span><span class="p">()[:</span><span class="mi">200</span><span class="p">]:</span>
             <span class="n">is_remote</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">return</span> <span class="n">JobResult</span><span class="p">(</span>
             <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
             <span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="n">company</span><span class="o">=</span><span class="n">company</span><span class="p">,</span>
-            <span class="n">job_url</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;redirect_url&#39;</span><span class="p">),</span>
+            <span class="n">job_url</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;redirect_url&quot;</span><span class="p">),</span>
             <span class="n">location</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_location</span><span class="p">(</span><span class="n">result</span><span class="p">),</span>
             <span class="n">is_remote</span><span class="o">=</span><span class="n">is_remote</span><span class="p">,</span>
             <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
-            <span class="n">job_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_map_job_type</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;contract_type&#39;</span><span class="p">)),</span>
+            <span class="n">job_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_map_job_type</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contract_type&quot;</span><span class="p">)),</span>
             <span class="n">compensation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_parse_salary</span><span class="p">(</span><span class="n">result</span><span class="p">),</span>
             <span class="n">date_posted</span><span class="o">=</span><span class="n">date_posted</span><span class="p">,</span>
             <span class="n">raw_data</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
@@ -364,51 +380,51 @@
 
         <span class="c1"># Build API parameters</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;what&#39;</span><span class="p">:</span> <span class="n">criteria</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
-            <span class="s1">&#39;results_per_page&#39;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">results_wanted</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>  <span class="c1"># API max is 50</span>
-            <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">offset</span> <span class="o">//</span> <span class="n">criteria</span><span class="o">.</span><span class="n">results_wanted</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;what&quot;</span><span class="p">:</span> <span class="n">criteria</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+            <span class="s2">&quot;results_per_page&quot;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">results_wanted</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>  <span class="c1"># API max is 50</span>
+            <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">offset</span> <span class="o">//</span> <span class="n">criteria</span><span class="o">.</span><span class="n">results_wanted</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="c1"># Add location filter</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;where&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">location</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;where&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">location</span>
         <span class="k">elif</span> <span class="n">criteria</span><span class="o">.</span><span class="n">city</span> <span class="ow">or</span> <span class="n">criteria</span><span class="o">.</span><span class="n">state</span><span class="p">:</span>
             <span class="n">location_parts</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">city</span><span class="p">:</span>
                 <span class="n">location_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">city</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">state</span><span class="p">:</span>
                 <span class="n">location_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;where&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">location_parts</span><span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;where&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">location_parts</span><span class="p">)</span>
 
         <span class="c1"># Add distance filter (Adzuna uses miles)</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">distance_miles</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">distance_miles</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">distance_miles</span>
 
         <span class="c1"># Add salary filter</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">min_salary</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;salary_min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">min_salary</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;salary_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">min_salary</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">max_salary</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;salary_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">max_salary</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;salary_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">max_salary</span>
 
         <span class="c1"># Add date filter (Adzuna uses max_days_old)</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">posted_within_days</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;max_days_old&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">posted_within_days</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;max_days_old&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">posted_within_days</span>
 
         <span class="c1"># Add contract type filter</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">job_type</span><span class="p">:</span>
             <span class="n">type_mapping</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">:</span> <span class="s1">&#39;permanent&#39;</span><span class="p">,</span>
-                <span class="n">JobType</span><span class="o">.</span><span class="n">PART_TIME</span><span class="p">:</span> <span class="s1">&#39;part_time&#39;</span><span class="p">,</span>
-                <span class="n">JobType</span><span class="o">.</span><span class="n">CONTRACT</span><span class="p">:</span> <span class="s1">&#39;contract&#39;</span><span class="p">,</span>
-                <span class="n">JobType</span><span class="o">.</span><span class="n">TEMPORARY</span><span class="p">:</span> <span class="s1">&#39;temporary&#39;</span><span class="p">,</span>
+                <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">:</span> <span class="s2">&quot;permanent&quot;</span><span class="p">,</span>
+                <span class="n">JobType</span><span class="o">.</span><span class="n">PART_TIME</span><span class="p">:</span> <span class="s2">&quot;part_time&quot;</span><span class="p">,</span>
+                <span class="n">JobType</span><span class="o">.</span><span class="n">CONTRACT</span><span class="p">:</span> <span class="s2">&quot;contract&quot;</span><span class="p">,</span>
+                <span class="n">JobType</span><span class="o">.</span><span class="n">TEMPORARY</span><span class="p">:</span> <span class="s2">&quot;temporary&quot;</span><span class="p">,</span>
             <span class="p">}</span>
             <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">job_type</span> <span class="ow">in</span> <span class="n">type_mapping</span><span class="p">:</span>
-                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;contract&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">type_mapping</span><span class="p">[</span><span class="n">criteria</span><span class="o">.</span><span class="n">job_type</span><span class="p">]</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;contract&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">type_mapping</span><span class="p">[</span><span class="n">criteria</span><span class="o">.</span><span class="n">job_type</span><span class="p">]</span>
 
         <span class="c1"># Add any source-specific parameters</span>
-        <span class="n">country</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">source_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_country</span><span class="p">)</span>
+        <span class="n">country</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">source_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;country&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_country</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">criteria</span><span class="o">.</span><span class="n">source_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
                 <span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="c1"># Make the API request</span>
@@ -418,12 +434,12 @@
             <span class="k">if</span> <span class="n">country</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_country</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_country</span> <span class="o">=</span> <span class="n">country</span>
 
-            <span class="n">response_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s1">&#39;/search/1&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+            <span class="n">response_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="s2">&quot;/search/1&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 
             <span class="c1"># Restore original country</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_country</span> <span class="o">=</span> <span class="n">original_country</span>
 
-            <span class="n">results_data</span> <span class="o">=</span> <span class="n">response_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">results_data</span> <span class="o">=</span> <span class="n">response_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">results_data</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">[]</span>
@@ -467,7 +483,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

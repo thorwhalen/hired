@@ -1,0 +1,4 @@
+hired.alignment.elicitation
+===========================
+.. automodule:: hired.alignment.elicitation
+   :members:

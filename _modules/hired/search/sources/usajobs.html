@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.search.sources.usajobs &mdash; hired 0.0.10 documentation</title>
+  <title>hired.search.sources.usajobs &mdash; hired 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="../../../../_static/documentation_options.js?v=0c446633"></script>
       <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,13 +48,26 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired.html">hired</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
@@ -141,8 +154,8 @@
 <span class="sd">            api_key: USAJobs API key. If not provided, reads from USAJOBS_API_KEY env var.</span>
 <span class="sd">            email: Email address. If not provided, reads from USAJOBS_EMAIL env var.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="o">=</span> <span class="n">api_key</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;USAJOBS_API_KEY&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_email</span> <span class="o">=</span> <span class="n">email</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;USAJOBS_EMAIL&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="o">=</span> <span class="n">api_key</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;USAJOBS_API_KEY&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_email</span> <span class="o">=</span> <span class="n">email</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;USAJOBS_EMAIL&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -211,17 +224,14 @@
 <span class="sd">            Exception: For other API errors</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;Host&#39;</span><span class="p">:</span> <span class="s1">&#39;data.usajobs.gov&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email</span><span class="p">,</span>
-            <span class="s1">&#39;Authorization-Key&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="p">,</span>
+            <span class="s2">&quot;Host&quot;</span><span class="p">:</span> <span class="s2">&quot;data.usajobs.gov&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_email</span><span class="p">,</span>
+            <span class="s2">&quot;Authorization-Key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">API_BASE_URL</span><span class="p">,</span>
-                <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
-                <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
-                <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">API_BASE_URL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
@@ -243,11 +253,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Map USAJobs position type to our JobType enum.&quot;&quot;&quot;</span>
         <span class="c1"># USAJobs uses numeric codes, but we&#39;ll handle string descriptions too</span>
         <span class="n">type_mapping</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;permanent&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
-            <span class="s1">&#39;term&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">CONTRACT</span><span class="p">,</span>
-            <span class="s1">&#39;temporary&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">TEMPORARY</span><span class="p">,</span>
-            <span class="s1">&#39;internship&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">INTERNSHIP</span><span class="p">,</span>
-            <span class="s1">&#39;recent graduate&#39;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
+            <span class="s2">&quot;permanent&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
+            <span class="s2">&quot;term&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">CONTRACT</span><span class="p">,</span>
+            <span class="s2">&quot;temporary&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">TEMPORARY</span><span class="p">,</span>
+            <span class="s2">&quot;internship&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">INTERNSHIP</span><span class="p">,</span>
+            <span class="s2">&quot;recent graduate&quot;</span><span class="p">:</span> <span class="n">JobType</span><span class="o">.</span><span class="n">FULL_TIME</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">position_lower</span> <span class="o">=</span> <span class="n">position_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -263,34 +273,34 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">min_amount</span> <span class="o">=</span> <span class="n">salary_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MinimumRange&#39;</span><span class="p">)</span>
-            <span class="n">max_amount</span> <span class="o">=</span> <span class="n">salary_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MaximumRange&#39;</span><span class="p">)</span>
+            <span class="n">min_amount</span> <span class="o">=</span> <span class="n">salary_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MinimumRange&quot;</span><span class="p">)</span>
+            <span class="n">max_amount</span> <span class="o">=</span> <span class="n">salary_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MaximumRange&quot;</span><span class="p">)</span>
 
             <span class="c1"># Convert string to float if needed</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">min_amount</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">min_amount</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">min_amount</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+                <span class="n">min_amount</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">min_amount</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_amount</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">max_amount</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_amount</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+                <span class="n">max_amount</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_amount</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
 
             <span class="k">return</span> <span class="n">CompensationInfo</span><span class="p">(</span>
                 <span class="n">min_amount</span><span class="o">=</span><span class="n">min_amount</span><span class="p">,</span>
                 <span class="n">max_amount</span><span class="o">=</span><span class="n">max_amount</span><span class="p">,</span>
-                <span class="n">currency</span><span class="o">=</span><span class="s1">&#39;USD&#39;</span><span class="p">,</span>
-                <span class="n">interval</span><span class="o">=</span><span class="s1">&#39;yearly&#39;</span>  <span class="c1"># USAJobs salaries are typically annual</span>
+                <span class="n">currency</span><span class="o">=</span><span class="s2">&quot;USD&quot;</span><span class="p">,</span>
+                <span class="n">interval</span><span class="o">=</span><span class="s2">&quot;yearly&quot;</span><span class="p">,</span>  <span class="c1"># USAJobs salaries are typically annual</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_usajobs_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">JobResult</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a USAJobs result to JobResult.&quot;&quot;&quot;</span>
-        <span class="n">match_data</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MatchedObjectDescriptor&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">match_data</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MatchedObjectDescriptor&quot;</span><span class="p">,</span> <span class="p">{})</span>
 
         <span class="c1"># Extract position info</span>
-        <span class="n">position_title</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PositionTitle&#39;</span><span class="p">,</span> <span class="s1">&#39;Unknown&#39;</span><span class="p">)</span>
-        <span class="n">organization</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;OrganizationName&#39;</span><span class="p">,</span> <span class="s1">&#39;US Government&#39;</span><span class="p">)</span>
+        <span class="n">position_title</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PositionTitle&quot;</span><span class="p">,</span> <span class="s2">&quot;Unknown&quot;</span><span class="p">)</span>
+        <span class="n">organization</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OrganizationName&quot;</span><span class="p">,</span> <span class="s2">&quot;US Government&quot;</span><span class="p">)</span>
 
         <span class="c1"># Extract location</span>
-        <span class="n">locations</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PositionLocation&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">locations</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PositionLocation&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">location</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">is_remote</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -298,61 +308,73 @@
             <span class="c1"># Use the first location</span>
             <span class="n">loc_data</span> <span class="o">=</span> <span class="n">locations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">locations</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">locations</span>
             <span class="n">location</span> <span class="o">=</span> <span class="n">LocationInfo</span><span class="p">(</span>
-                <span class="n">city</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;CityName&#39;</span><span class="p">),</span>
-                <span class="n">state</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;StateProvince&#39;</span><span class="p">),</span>
-                <span class="n">country</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;CountryCode&#39;</span><span class="p">,</span> <span class="s1">&#39;US&#39;</span><span class="p">),</span>
+                <span class="n">city</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CityName&quot;</span><span class="p">),</span>
+                <span class="n">state</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;StateProvince&quot;</span><span class="p">),</span>
+                <span class="n">country</span><span class="o">=</span><span class="n">loc_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;CountryCode&quot;</span><span class="p">,</span> <span class="s2">&quot;US&quot;</span><span class="p">),</span>
             <span class="p">)</span>
 
         <span class="c1"># Check for remote work</span>
-        <span class="n">remote_indicator</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PositionRemoteIndicator&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">remote_indicator</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PositionOfferingTypeCode&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;15&#39;</span><span class="p">):</span>
+        <span class="n">remote_indicator</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PositionRemoteIndicator&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">remote_indicator</span> <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PositionOfferingTypeCode&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;15&quot;</span><span class="p">):</span>
             <span class="n">is_remote</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># Extract URLs</span>
-        <span class="n">position_uri</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PositionURI&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="n">apply_uri</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ApplyURI&#39;</span><span class="p">,</span> <span class="p">[])</span>
-        <span class="n">job_url</span> <span class="o">=</span> <span class="n">position_uri</span> <span class="ow">or</span> <span class="p">(</span><span class="n">apply_uri</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">apply_uri</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">position_uri</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PositionURI&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">apply_uri</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ApplyURI&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">job_url</span> <span class="o">=</span> <span class="n">position_uri</span> <span class="ow">or</span> <span class="p">(</span><span class="n">apply_uri</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">apply_uri</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
         <span class="c1"># Extract salary</span>
-        <span class="n">salary_data</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PositionRemuneration&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">salary_data</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PositionRemuneration&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">compensation</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">salary_data</span><span class="p">:</span>
-            <span class="n">salary_info</span> <span class="o">=</span> <span class="n">salary_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">salary_data</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">salary_data</span>
+            <span class="n">salary_info</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">salary_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">salary_data</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">salary_data</span>
+            <span class="p">)</span>
             <span class="n">compensation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_salary</span><span class="p">(</span><span class="n">salary_info</span><span class="p">)</span>
 
         <span class="c1"># Parse dates</span>
         <span class="n">date_posted</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">application_deadline</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">pub_start</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PublicationStartDate&#39;</span><span class="p">)</span>
+        <span class="n">pub_start</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PublicationStartDate&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pub_start</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">date_posted</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">pub_start</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;+00:00&#39;</span><span class="p">))</span>
+                <span class="n">date_posted</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">pub_start</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="s2">&quot;+00:00&quot;</span><span class="p">))</span>
             <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
                 <span class="k">pass</span>
 
-        <span class="n">app_close</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ApplicationCloseDate&#39;</span><span class="p">)</span>
+        <span class="n">app_close</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ApplicationCloseDate&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">app_close</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">application_deadline</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">app_close</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;+00:00&#39;</span><span class="p">))</span>
+                <span class="n">application_deadline</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span>
+                    <span class="n">app_close</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="s2">&quot;+00:00&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
             <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
                 <span class="k">pass</span>
 
         <span class="c1"># Extract description and qualifications</span>
         <span class="n">description_parts</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;UserArea&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Details&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MajorDuties&#39;</span><span class="p">):</span>
-            <span class="n">description_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match_data</span><span class="p">[</span><span class="s1">&#39;UserArea&#39;</span><span class="p">][</span><span class="s1">&#39;Details&#39;</span><span class="p">][</span><span class="s1">&#39;MajorDuties&#39;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;QualificationSummary&#39;</span><span class="p">):</span>
-            <span class="n">description_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Qualifications:</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">match_data</span><span class="p">[</span><span class="s1">&#39;QualificationSummary&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;UserArea&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Details&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MajorDuties&quot;</span><span class="p">):</span>
+            <span class="n">description_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;UserArea&quot;</span><span class="p">][</span><span class="s2">&quot;Details&quot;</span><span class="p">][</span><span class="s2">&quot;MajorDuties&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;QualificationSummary&quot;</span><span class="p">):</span>
+            <span class="n">description_parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">Qualifications:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">match_data</span><span class="p">[</span><span class="s2">&quot;QualificationSummary&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
 
-        <span class="n">description</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">description_parts</span><span class="p">)</span> <span class="k">if</span> <span class="n">description_parts</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">description_parts</span><span class="p">)</span> <span class="k">if</span> <span class="n">description_parts</span> <span class="k">else</span> <span class="kc">None</span>
 
         <span class="c1"># Job type</span>
-        <span class="n">position_schedule</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PositionSchedule&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">position_schedule</span> <span class="o">=</span> <span class="n">match_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PositionSchedule&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="n">job_type</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">position_schedule</span><span class="p">:</span>
-            <span class="n">schedule</span> <span class="o">=</span> <span class="n">position_schedule</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position_schedule</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">position_schedule</span>
-            <span class="n">job_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_job_type</span><span class="p">(</span><span class="n">schedule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="n">schedule</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">position_schedule</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position_schedule</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+                <span class="k">else</span> <span class="n">position_schedule</span>
+            <span class="p">)</span>
+            <span class="n">job_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_map_job_type</span><span class="p">(</span><span class="n">schedule</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">JobResult</span><span class="p">(</span>
             <span class="n">title</span><span class="o">=</span><span class="n">position_title</span><span class="p">,</span>
@@ -385,28 +407,28 @@
 
         <span class="c1"># Build API parameters</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;Keyword&#39;</span><span class="p">:</span> <span class="n">criteria</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
-            <span class="s1">&#39;ResultsPerPage&#39;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">results_wanted</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span>  <span class="c1"># API max is 500</span>
+            <span class="s2">&quot;Keyword&quot;</span><span class="p">:</span> <span class="n">criteria</span><span class="o">.</span><span class="n">query</span><span class="p">,</span>
+            <span class="s2">&quot;ResultsPerPage&quot;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">results_wanted</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span>  <span class="c1"># API max is 500</span>
         <span class="p">}</span>
 
         <span class="c1"># Add location filters</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">location</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;LocationName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">location</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;LocationName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">location</span>
         <span class="k">elif</span> <span class="n">criteria</span><span class="o">.</span><span class="n">city</span> <span class="ow">and</span> <span class="n">criteria</span><span class="o">.</span><span class="n">state</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;LocationName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">criteria</span><span class="o">.</span><span class="n">city</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">criteria</span><span class="o">.</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;LocationName&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">criteria</span><span class="o">.</span><span class="n">city</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">criteria</span><span class="o">.</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="c1"># Add posted date filter</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">posted_within_days</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;DatePosted&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">posted_within_days</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;DatePosted&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">criteria</span><span class="o">.</span><span class="n">posted_within_days</span>
 
         <span class="c1"># Add remote filter</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">is_remote</span><span class="p">:</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;RemoteIndicator&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;RemoteIndicator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span>
 
         <span class="c1"># Add pagination</span>
         <span class="k">if</span> <span class="n">criteria</span><span class="o">.</span><span class="n">offset</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">page</span> <span class="o">=</span> <span class="p">(</span><span class="n">criteria</span><span class="o">.</span><span class="n">offset</span> <span class="o">//</span> <span class="n">criteria</span><span class="o">.</span><span class="n">results_wanted</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;Page&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;Page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page</span>
 
         <span class="c1"># Add any source-specific parameters</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">criteria</span><span class="o">.</span><span class="n">source_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -417,8 +439,8 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_request</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
-            <span class="n">search_result</span> <span class="o">=</span> <span class="n">response_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SearchResult&#39;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="n">items</span> <span class="o">=</span> <span class="n">search_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SearchResultItems&#39;</span><span class="p">,</span> <span class="p">[])</span>
+            <span class="n">search_result</span> <span class="o">=</span> <span class="n">response_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SearchResult&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="n">search_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;SearchResultItems&quot;</span><span class="p">,</span> <span class="p">[])</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
                 <span class="k">return</span> <span class="p">[]</span>
@@ -462,7 +484,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

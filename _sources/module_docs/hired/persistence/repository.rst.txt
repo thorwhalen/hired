@@ -1,0 +1,4 @@
+hired.persistence.repository
+============================
+.. automodule:: hired.persistence.repository
+   :members:

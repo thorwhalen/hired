@@ -1,0 +1,4 @@
+hired.candidate.knowledge_base
+==============================
+.. automodule:: hired.candidate.knowledge_base
+   :members:

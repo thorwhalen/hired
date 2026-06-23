@@ -4,13 +4,26 @@
 
    module_docs/hired
    module_docs/hired/_converters
+   module_docs/hired/alignment
+   module_docs/hired/alignment/base
+   module_docs/hired/alignment/diff
+   module_docs/hired/alignment/elicitation
+   module_docs/hired/alignment/report
+   module_docs/hired/alignment/rubric
    module_docs/hired/ats_checker
    module_docs/hired/base
+   module_docs/hired/candidate
+   module_docs/hired/candidate/base
+   module_docs/hired/candidate/ingest
+   module_docs/hired/candidate/knowledge_base
    module_docs/hired/config
    module_docs/hired/content
    module_docs/hired/cover_letter
    module_docs/hired/job_utils
    module_docs/hired/matching
+   module_docs/hired/persistence
+   module_docs/hired/persistence/base
+   module_docs/hired/persistence/repository
    module_docs/hired/render
    module_docs/hired/renderers
    module_docs/hired/renderers/html

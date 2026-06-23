@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; hired 0.0.10 documentation</title>
+  <title>Index &mdash; hired 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="_static/documentation_options.js?v=0c446633"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -48,13 +48,26 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired.html">hired</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
@@ -137,6 +150,14 @@
         <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker.add_application">(hired.tracking.ApplicationTracker method)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.add_fact">add_fact() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_fact">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.add_fact">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ConversationMemory.add_turn">add_turn() (hired.resume_agent.ConversationMemory method)</a>
 </li>
       <li><a href="module_docs/hired/search.html#hired.search.AdzunaSource">AdzunaSource (class in hired.search)</a>
@@ -147,18 +168,50 @@
       </ul></li>
       <li><a href="module_docs/hired/base.html#hired.base.AIAgent">AIAgent (class in hired.base)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.AILeverage">AILeverage (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.AILeverage">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.AlignmentReport">AlignmentReport (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.AlignmentReport">(class in hired.alignment)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.AlignmentReport">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/persistence.html#hired.persistence.app_data_dir">app_data_dir() (in module hired.persistence)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/base.html#hired.persistence.base.app_data_dir">(in module hired.persistence.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired.html#hired.Application">Application (class in hired)</a>
 
       <ul>
         <li><a href="module_docs/hired/tracking.html#hired.tracking.Application">(class in hired.tracking)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired.html#hired.ApplicationTracker">ApplicationTracker (class in hired)</a>
 
       <ul>
         <li><a href="module_docs/hired/tracking.html#hired.tracking.ApplicationTracker">(class in hired.tracking)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.apply_ai_leverage">apply_ai_leverage() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/rubric.html#hired.alignment.rubric.apply_ai_leverage">(in module hired.alignment.rubric)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.assign_bucket">assign_bucket() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/rubric.html#hired.alignment.rubric.assign_bucket">(in module hired.alignment.rubric)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/hired.html#hired.ATSChecker">ATSChecker (class in hired)</a>
@@ -185,6 +238,20 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Basics">Basics (class in hired.resumejson_pydantic_models)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.Bucket">Bucket (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Bucket">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/persistence.html#hired.persistence.bytes_store">bytes_store() (in module hired.persistence)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/base.html#hired.persistence.base.bytes_store">(in module hired.persistence.base)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -193,6 +260,20 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.PlanStep.can_execute">can_execute() (hired.resume_agent.PlanStep method)</a>
 </li>
+      <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase">CandidateKnowledgeBase (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase">(class in hired.candidate)</a>
+</li>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase">(class in hired.candidate.knowledge_base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/persistence.html#hired.persistence.CandidateMall">CandidateMall (class in hired.persistence)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/base.html#hired.persistence.base.CandidateMall">(class in hired.persistence.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Certificate">Certificate (class in hired.resumejson_pydantic_models)</a>
 </li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.LLMProvider.chat">chat() (hired.resume_agent.LLMProvider method)</a>
@@ -215,8 +296,34 @@
         <li><a href="module_docs/hired/ats_checker.html#hired.ats_checker.check_resume_ats">(in module hired.ats_checker)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.Clarification">Clarification (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Clarification">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.classify">classify() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.classify">(in module hired.alignment)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/rubric.html#hired.alignment.rubric.classify">(in module hired.alignment.rubric)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.Closeability">Closeability (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Closeability">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.CloseMethod">CloseMethod (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.CloseMethod">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/search.html#hired.search.CompensationInfo">CompensationInfo (class in hired.search)</a>
 
       <ul>
@@ -225,6 +332,18 @@
       </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.LLMProvider.complete">complete() (hired.resume_agent.LLMProvider method)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.compute_gap_size">compute_gap_size() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/rubric.html#hired.alignment.rubric.compute_gap_size">(in module hired.alignment.rubric)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.ConfidenceLevel">ConfidenceLevel (class in hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.ConfidenceLevel">(class in hired.candidate.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/config.html#hired.config.ConfigStore">ConfigStore (class in hired.config)</a>
 </li>
       <li><a href="module_docs/hired/base.html#hired.base.ContentSource">ContentSource (class in hired.base)</a>
@@ -267,6 +386,12 @@
 </li>
       <li><a href="module_docs/hired/content.html#hired.content.DictContentSource">DictContentSource (class in hired.content)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.diff_reports">diff_reports() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/diff.html#hired.alignment.diff.diff_reports">(in module hired.alignment.diff)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired.html#hired.JobSearchSource.display_name">display_name (hired.JobSearchSource property)</a>
 
       <ul>
@@ -307,6 +432,12 @@
 </li>
       <li><a href="module_docs/hired/util.html#hired.util.ensure_resume_content_dict">ensure_resume_content_dict() (in module hired.util)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.Evidence">Evidence (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Evidence">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeExpertAgent.execute_plan">execute_plan() (hired.resume_agent.ResumeExpertAgent method)</a>
 
       <ul>
@@ -357,8 +488,48 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.Fact">Fact (class in hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.Fact">(class in hired.candidate.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.fact_from_record">fact_from_record() (in module hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/ingest.html#hired.candidate.ingest.fact_from_record">(in module hired.candidate.ingest)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.FactCategory">FactCategory (class in hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.FactCategory">(class in hired.candidate.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.facts">facts() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.facts">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.facts">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.FactStatus">FactStatus (class in hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.FactStatus">(class in hired.candidate.base)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ModelRegistry.fast">fast() (hired.resume_agent.ModelRegistry class method)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.FieldCompleteness">FieldCompleteness (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.FieldCompleteness">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/content.html#hired.content.FileContentSource">FileContentSource (class in hired.content)</a>
 </li>
       <li><a href="module_docs/hired.html#hired.JobMatcher.filter_jobs">filter_jobs() (hired.JobMatcher method)</a>
@@ -367,10 +538,14 @@
         <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.filter_jobs">(hired.matching.JobMatcher method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.MatchingAgent.find_matches">find_matches() (hired.resume_agent.MatchingAgent method)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.FitBand">FitBand (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.FitBand">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired.html#hired.Application.from_job_result">from_job_result() (hired.Application class method)</a>
 
       <ul>
@@ -564,6 +739,48 @@
 </li>
       </ul></li>
       <li>
+    hired.alignment
+
+      <ul>
+        <li><a href="module_docs/hired/alignment.html#module-hired.alignment">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.alignment.base
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#module-hired.alignment.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.alignment.diff
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/diff.html#module-hired.alignment.diff">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.alignment.elicitation
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/elicitation.html#module-hired.alignment.elicitation">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.alignment.report
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/report.html#module-hired.alignment.report">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.alignment.rubric
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/rubric.html#module-hired.alignment.rubric">module</a>
+</li>
+      </ul></li>
+      <li>
     hired.ats_checker
 
       <ul>
@@ -575,6 +792,34 @@
 
       <ul>
         <li><a href="module_docs/hired/base.html#module-hired.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.candidate
+
+      <ul>
+        <li><a href="module_docs/hired/candidate.html#module-hired.candidate">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.candidate.base
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#module-hired.candidate.base">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.candidate.ingest
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/ingest.html#module-hired.candidate.ingest">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.candidate.knowledge_base
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#module-hired.candidate.knowledge_base">module</a>
 </li>
       </ul></li>
       <li>
@@ -613,6 +858,29 @@
 </li>
       </ul></li>
       <li>
+    hired.persistence
+
+      <ul>
+        <li><a href="module_docs/hired/persistence.html#module-hired.persistence">module</a>
+</li>
+      </ul></li>
+      <li>
+    hired.persistence.base
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/base.html#module-hired.persistence.base">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    hired.persistence.repository
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/repository.html#module-hired.persistence.repository">module</a>
+</li>
+      </ul></li>
+      <li>
     hired.render
 
       <ul>
@@ -647,8 +915,6 @@
         <li><a href="module_docs/hired/resume_agent.html#module-hired.resume_agent">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     hired.resumejson_pydantic_models
 
@@ -759,8 +1025,26 @@
         <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.identify_skill_gaps">(hired.matching.JobMatcher method)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.info_gain">info_gain() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.info_gain">(in module hired.alignment.elicitation)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.ingest_facts">ingest_facts() (in module hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/ingest.html#hired.candidate.ingest.ingest_facts">(in module hired.candidate.ingest)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Interest">Interest (class in hired.resumejson_pydantic_models)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.InterviewPrep">InterviewPrep (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.InterviewPrep">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired.html#hired.JobSearchSource.is_configured">is_configured() (hired.JobSearchSource method)</a>
 
       <ul>
@@ -783,6 +1067,14 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.is_decision_relevant">is_decision_relevant() (in module hired.alignment.elicitation)</a>
+</li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.is_decision_stable">is_decision_stable() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.is_decision_stable">(in module hired.alignment.elicitation)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry.is_registered">is_registered() (hired.base.RendererRegistry method)</a>
 </li>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Iso8601">Iso8601 (class in hired.resumejson_pydantic_models)</a>
@@ -851,11 +1143,25 @@
         <li><a href="module_docs/hired/search/base.html#hired.search.base.JobType">(class in hired.search.base)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/hired/persistence.html#hired.persistence.json_store">json_store() (in module hired.persistence)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/base.html#hired.persistence.base.json_store">(in module hired.persistence.base)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/persistence.html#hired.persistence.Repository.key_of">key_of() (hired.persistence.Repository method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/repository.html#hired.persistence.repository.Repository.key_of">(hired.persistence.repository.Repository method)</a>
+</li>
+      </ul></li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired.html#hired.JobSources.keys">keys() (hired.JobSources method)</a>
 
@@ -973,12 +1279,30 @@
         <li><a href="module_docs/hired/matching.html#hired.matching.MatchScore">(class in hired.matching)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.MatchState">MatchState (class in hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.MatchState">(class in hired.candidate.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.MatchType">MatchType (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.MatchType">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Meta">Meta (class in hired.resumejson_pydantic_models)</a>
 </li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.metadata">metadata (hired.resume_agent.ResumeSession property)</a>
 
       <ul>
         <li><a href="module_docs/hired.html#hired.ResumeSession.metadata">(hired.ResumeSession property)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/persistence.html#hired.persistence.migrate_legacy">migrate_legacy() (in module hired.persistence)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/base.html#hired.persistence.base.migrate_legacy">(in module hired.persistence.base)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/hired.html#hired.mk_content_for_resume">mk_content_for_resume() (in module hired)</a>
@@ -999,9 +1323,63 @@
         <li><a href="module_docs/hired/tools.html#hired.tools.mk_resume">(in module hired.tools)</a>
 </li>
       </ul></li>
-      <li><a href="module_docs/hired/base.html#hired.base.ResumeSchemaExtended.model_config">model_config (hired.base.ResumeSchemaExtended attribute)</a>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.AlignmentReport.model_config">model_config (hired.alignment.AlignmentReport attribute)</a>
 
       <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.AlignmentReport.model_config">(hired.alignment.base.AlignmentReport attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Clarification.model_config">(hired.alignment.base.Clarification attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Evidence.model_config">(hired.alignment.base.Evidence attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.InterviewPrep.model_config">(hired.alignment.base.InterviewPrep attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.NextAction.model_config">(hired.alignment.base.NextAction attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Requirement.model_config">(hired.alignment.base.Requirement attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.RequirementRecord.model_config">(hired.alignment.base.RequirementRecord attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.ScoreSummary.model_config">(hired.alignment.base.ScoreSummary attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Verdict.model_config">(hired.alignment.base.Verdict attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.Clarification.model_config">(hired.alignment.Clarification attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.Evidence.model_config">(hired.alignment.Evidence attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.InterviewPrep.model_config">(hired.alignment.InterviewPrep attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.NextAction.model_config">(hired.alignment.NextAction attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.Requirement.model_config">(hired.alignment.Requirement attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.RequirementRecord.model_config">(hired.alignment.RequirementRecord attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.ScoreSummary.model_config">(hired.alignment.ScoreSummary attribute)</a>
+</li>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.Verdict.model_config">(hired.alignment.Verdict attribute)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.AlignmentReport.model_config">(hired.AlignmentReport attribute)</a>
+</li>
+        <li><a href="module_docs/hired/base.html#hired.base.ResumeSchemaExtended.model_config">(hired.base.ResumeSchemaExtended attribute)</a>
+</li>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.Fact.model_config">(hired.candidate.base.Fact attribute)</a>
+</li>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.Provenance.model_config">(hired.candidate.base.Provenance attribute)</a>
+</li>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.QAEntry.model_config">(hired.candidate.base.QAEntry attribute)</a>
+</li>
+        <li><a href="module_docs/hired/candidate.html#hired.candidate.Fact.model_config">(hired.candidate.Fact attribute)</a>
+</li>
+        <li><a href="module_docs/hired/candidate.html#hired.candidate.Provenance.model_config">(hired.candidate.Provenance attribute)</a>
+</li>
+        <li><a href="module_docs/hired/candidate.html#hired.candidate.QAEntry.model_config">(hired.candidate.QAEntry attribute)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.Requirement.model_config">(hired.Requirement attribute)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.RequirementRecord.model_config">(hired.RequirementRecord attribute)</a>
+</li>
         <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Award.model_config">(hired.resumejson_pydantic_models.Award attribute)</a>
 </li>
         <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Basics.model_config">(hired.resumejson_pydantic_models.Basics attribute)</a>
@@ -1053,9 +1431,29 @@
 </li>
         <li><a href="module_docs/hired/_converters.html#module-hired._converters">hired._converters</a>
 </li>
+        <li><a href="module_docs/hired/alignment.html#module-hired.alignment">hired.alignment</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#module-hired.alignment.base">hired.alignment.base</a>
+</li>
+        <li><a href="module_docs/hired/alignment/diff.html#module-hired.alignment.diff">hired.alignment.diff</a>
+</li>
+        <li><a href="module_docs/hired/alignment/elicitation.html#module-hired.alignment.elicitation">hired.alignment.elicitation</a>
+</li>
+        <li><a href="module_docs/hired/alignment/report.html#module-hired.alignment.report">hired.alignment.report</a>
+</li>
+        <li><a href="module_docs/hired/alignment/rubric.html#module-hired.alignment.rubric">hired.alignment.rubric</a>
+</li>
         <li><a href="module_docs/hired/ats_checker.html#module-hired.ats_checker">hired.ats_checker</a>
 </li>
         <li><a href="module_docs/hired/base.html#module-hired.base">hired.base</a>
+</li>
+        <li><a href="module_docs/hired/candidate.html#module-hired.candidate">hired.candidate</a>
+</li>
+        <li><a href="module_docs/hired/candidate/base.html#module-hired.candidate.base">hired.candidate.base</a>
+</li>
+        <li><a href="module_docs/hired/candidate/ingest.html#module-hired.candidate.ingest">hired.candidate.ingest</a>
+</li>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#module-hired.candidate.knowledge_base">hired.candidate.knowledge_base</a>
 </li>
         <li><a href="module_docs/hired/config.html#module-hired.config">hired.config</a>
 </li>
@@ -1066,6 +1464,12 @@
         <li><a href="module_docs/hired/job_utils.html#module-hired.job_utils">hired.job_utils</a>
 </li>
         <li><a href="module_docs/hired/matching.html#module-hired.matching">hired.matching</a>
+</li>
+        <li><a href="module_docs/hired/persistence.html#module-hired.persistence">hired.persistence</a>
+</li>
+        <li><a href="module_docs/hired/persistence/base.html#module-hired.persistence.base">hired.persistence.base</a>
+</li>
+        <li><a href="module_docs/hired/persistence/repository.html#module-hired.persistence.repository">hired.persistence.repository</a>
 </li>
         <li><a href="module_docs/hired/render.html#module-hired.render">hired.render</a>
 </li>
@@ -1130,6 +1534,12 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.NextAction">NextAction (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.NextAction">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/util.html#hired.util.normalize_and_validate_resume">normalize_and_validate_resume() (in module hired.util)</a>
 </li>
   </ul></td>
@@ -1158,16 +1568,22 @@
         <li><a href="module_docs/hired/search.html#hired.search.JobSources.print_status">(hired.search.JobSources method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Profile">Profile (class in hired.resumejson_pydantic_models)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Project">Project (class in hired.resumejson_pydantic_models)</a>
 </li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeExpertAgent.propose_plan">propose_plan() (hired.resume_agent.ResumeExpertAgent method)</a>
 
       <ul>
         <li><a href="module_docs/hired.html#hired.ResumeExpertAgent.propose_plan">(hired.ResumeExpertAgent method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.Provenance">Provenance (class in hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.Provenance">(class in hired.candidate.base)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Publication">Publication (class in hired.resumejson_pydantic_models)</a>
@@ -1178,10 +1594,16 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ModelRegistry.quality">quality() (hired.resume_agent.ModelRegistry class method)</a>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.QAEntry">QAEntry (class in hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.QAEntry">(class in hired.candidate.base)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ModelRegistry.quality">quality() (hired.resume_agent.ModelRegistry class method)</a>
+</li>
       <li><a href="module_docs/hired.html#hired.quick_match">quick_match() (in module hired)</a>
 
       <ul>
@@ -1194,8 +1616,36 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.rank_clarifications">rank_clarifications() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.rank_clarifications">(in module hired.alignment.elicitation)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.Recommendation">Recommendation (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Recommendation">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.record_qa">record_qa() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.record_qa">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.record_qa">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Reference">Reference (class in hired.resumejson_pydantic_models)</a>
 </li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.regenerate_synopsis">regenerate_synopsis() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.regenerate_synopsis">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.regenerate_synopsis">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/base.html#hired.base.RendererRegistry.register">register() (hired.base.RendererRegistry method)</a>
 
       <ul>
@@ -1222,6 +1672,14 @@
       </ul></li>
       <li><a href="module_docs/hired/cover_letter.html#hired.cover_letter.render_cover_letter">render_cover_letter() (in module hired.cover_letter)</a>
 </li>
+      <li><a href="module_docs/hired.html#hired.render_report_markdown">render_report_markdown() (in module hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.render_report_markdown">(in module hired.alignment)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/report.html#hired.alignment.report.render_report_markdown">(in module hired.alignment.report)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/tools.html#hired.tools.render_resume_with_template_and_css">render_resume_with_template_and_css() (in module hired.tools)</a>
 </li>
       <li><a href="module_docs/hired/renderers.html#hired.renderers.RenderCVRenderer">RenderCVRenderer (class in hired.renderers)</a>
@@ -1238,6 +1696,44 @@
 
       <ul>
         <li><a href="module_docs/hired/base.html#hired.base.RenderingConfig">(class in hired.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.report_versions">report_versions() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.report_versions">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.report_versions">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/persistence.html#hired.persistence.Repository">Repository (class in hired.persistence)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/repository.html#hired.persistence.repository.Repository">(class in hired.persistence.repository)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.Requirement">Requirement (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.Requirement">(class in hired.alignment)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Requirement">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.RequirementClass">RequirementClass (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.RequirementClass">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired.html#hired.RequirementRecord">RequirementRecord (class in hired)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment.html#hired.alignment.RequirementRecord">(class in hired.alignment)</a>
+</li>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.RequirementRecord">(class in hired.alignment.base)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/hired.html#hired.JobSearchSource.requires_auth">requires_auth (hired.JobSearchSource property)</a>
@@ -1260,8 +1756,6 @@
         <li><a href="module_docs/hired/search.html#hired.search.USAJobsSource.requires_auth">(hired.search.USAJobsSource property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired.html#hired.ResumeContent">ResumeContent (in module hired)</a>
 </li>
       <li><a href="module_docs/hired.html#hired.ResumeExpertAgent">ResumeExpertAgent (class in hired)</a>
@@ -1306,8 +1800,40 @@
         <li><a href="module_docs/hired.html#hired.ResumeSession.save">(hired.ResumeSession method)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.save_briefing">save_briefing() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.save_briefing">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.save_briefing">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.save_company_report">save_company_report() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.save_company_report">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.save_company_report">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.save_report">save_report() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.save_report">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.save_report">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionStore.save_session">save_session() (hired.resume_agent.SessionStore method)</a>
 </li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.save_upload">save_upload() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.save_upload">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.save_upload">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired.html#hired.JobMatcher.score_job">score_job() (hired.JobMatcher method)</a>
 
       <ul>
@@ -1318,6 +1844,12 @@
 
       <ul>
         <li><a href="module_docs/hired/matching.html#hired.matching.JobMatcher.score_jobs">(hired.matching.JobMatcher method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.ScoreSummary">ScoreSummary (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.ScoreSummary">(class in hired.alignment.base)</a>
 </li>
       </ul></li>
       <li><a href="module_docs/hired.html#hired.JobSearchSource.search">search() (hired.JobSearchSource method)</a>
@@ -1374,8 +1906,20 @@
 </li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionStore">SessionStore (class in hired.resume_agent)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.should_ask">should_ask() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.should_ask">(in module hired.alignment.elicitation)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Skill">Skill (class in hired.resumejson_pydantic_models)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.SkillType">SkillType (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.SkillType">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.SessionState.snapshot">snapshot() (hired.resume_agent.SessionState method)</a>
 </li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.snapshots">snapshots (hired.resume_agent.ResumeSession property)</a>
@@ -1386,6 +1930,12 @@
       </ul></li>
       <li><a href="module_docs/hired/search.html#hired.search.SourceConfigError">SourceConfigError</a>, <a href="module_docs/hired/search/base.html#hired.search.base.SourceConfigError">[1]</a>
 </li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.SourceKind">SourceKind (class in hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/base.html#hired.candidate.base.SourceKind">(class in hired.candidate.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/search.html#hired.search.SourceRegistry">SourceRegistry (class in hired.search)</a>
 
       <ul>
@@ -1398,12 +1948,34 @@
         <li><a href="module_docs/hired.html#hired.ResumeSession.state">(hired.ResumeSession property)</a>
 </li>
       </ul></li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.summarize_diff">summarize_diff() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/diff.html#hired.alignment.diff.summarize_diff">(in module hired.alignment.diff)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ConversationMemory.summarize_old_turns">summarize_old_turns() (hired.resume_agent.ConversationMemory method)</a>
 </li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.supersede">supersede() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.supersede">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.supersede">(hired.CandidateKnowledgeBase method)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.ResumeSession.switch_mode">switch_mode() (hired.resume_agent.ResumeSession method)</a>
 
       <ul>
         <li><a href="module_docs/hired.html#hired.ResumeSession.switch_mode">(hired.ResumeSession method)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase.synopsis">synopsis (hired.candidate.CandidateKnowledgeBase property)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.synopsis">(hired.candidate.knowledge_base.CandidateKnowledgeBase property)</a>
+</li>
+        <li><a href="module_docs/hired.html#hired.CandidateKnowledgeBase.synopsis">(hired.CandidateKnowledgeBase property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1412,8 +1984,20 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/persistence.html#hired.persistence.text_store">text_store() (in module hired.persistence)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/persistence/base.html#hired.persistence.base.text_store">(in module hired.persistence.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/renderers/html.html#hired.renderers.html.ThemeRegistry">ThemeRegistry (class in hired.renderers.html)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.TimeToClose">TimeToClose (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.TimeToClose">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired.html#hired.Application.to_dict">to_dict() (hired.Application method)</a>
 
       <ul>
@@ -1460,6 +2044,12 @@
       </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.Plan.to_markdown">to_markdown() (hired.resume_agent.Plan method)</a>
 </li>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.Transferability">Transferability (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Transferability">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resume_agent.html#hired.resume_agent.Turn">Turn (class in hired.resume_agent)</a>
 </li>
   </ul></td>
@@ -1512,10 +2102,22 @@
         <li><a href="module_docs/hired/search.html#hired.search.JobSearchSource.validate_configured">(hired.search.JobSearchSource method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="module_docs/hired/util.html#hired.util.validate_resume_content_dict">validate_resume_content_dict() (in module hired.util)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="module_docs/hired/alignment.html#hired.alignment.Verdict">Verdict (class in hired.alignment)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/alignment/base.html#hired.alignment.base.Verdict">(class in hired.alignment.base)</a>
+</li>
+      </ul></li>
+      <li><a href="module_docs/hired/candidate.html#hired.candidate.verify_quote">verify_quote() (in module hired.candidate)</a>
+
+      <ul>
+        <li><a href="module_docs/hired/candidate/ingest.html#hired.candidate.ingest.verify_quote">(in module hired.candidate.ingest)</a>
+</li>
+      </ul></li>
       <li><a href="module_docs/hired/resumejson_pydantic_models.html#hired.resumejson_pydantic_models.VolunteerItem">VolunteerItem (class in hired.resumejson_pydantic_models)</a>
 </li>
   </ul></td>
@@ -1538,7 +2140,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

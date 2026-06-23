@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to hired’s documentation! &mdash; hired 0.0.10 documentation</title>
+  <title>Welcome to hired’s documentation! &mdash; hired 0.0.11 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=a83ce22a"></script>
+      <script src="_static/documentation_options.js?v=0c446633"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -50,13 +50,26 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired.html">hired</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers.html">hired.renderers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
@@ -108,8 +121,10 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired.html">hired</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.ATSChecker"><code class="docutils literal notranslate"><span class="pre">ATSChecker</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.ATSReport"><code class="docutils literal notranslate"><span class="pre">ATSReport</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.AlignmentReport"><code class="docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.Application"><code class="docutils literal notranslate"><span class="pre">Application</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.ApplicationTracker"><code class="docutils literal notranslate"><span class="pre">ApplicationTracker</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.CandidateKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.CoverLetterData"><code class="docutils literal notranslate"><span class="pre">CoverLetterData</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.DefaultAIAgent"><code class="docutils literal notranslate"><span class="pre">DefaultAIAgent</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.JobAnalyzer"><code class="docutils literal notranslate"><span class="pre">JobAnalyzer</span></code></a></li>
@@ -122,6 +137,8 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.LLMResumeAgent"><code class="docutils literal notranslate"><span class="pre">LLMResumeAgent</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.MatchScore"><code class="docutils literal notranslate"><span class="pre">MatchScore</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.RenderingConfig"><code class="docutils literal notranslate"><span class="pre">RenderingConfig</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.Requirement"><code class="docutils literal notranslate"><span class="pre">Requirement</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.RequirementRecord"><code class="docutils literal notranslate"><span class="pre">RequirementRecord</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.ResumeContent"><code class="docutils literal notranslate"><span class="pre">ResumeContent</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.ResumeExpertAgent"><code class="docutils literal notranslate"><span class="pre">ResumeExpertAgent</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.ResumeSchema"><code class="docutils literal notranslate"><span class="pre">ResumeSchema</span></code></a></li>
@@ -129,6 +146,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.ResumeSession"><code class="docutils literal notranslate"><span class="pre">ResumeSession</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.SearchCriteria"><code class="docutils literal notranslate"><span class="pre">SearchCriteria</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.check_resume_ats"><code class="docutils literal notranslate"><span class="pre">check_resume_ats()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.classify"><code class="docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.extract_job_keywords"><code class="docutils literal notranslate"><span class="pre">extract_job_keywords()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.generate_cover_letter_content"><code class="docutils literal notranslate"><span class="pre">generate_cover_letter_content()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.get_job_skills"><code class="docutils literal notranslate"><span class="pre">get_job_skills()</span></code></a></li>
@@ -137,11 +155,95 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.mk_cover_letter"><code class="docutils literal notranslate"><span class="pre">mk_cover_letter()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.mk_resume"><code class="docutils literal notranslate"><span class="pre">mk_resume()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.quick_match"><code class="docutils literal notranslate"><span class="pre">quick_match()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.render_report_markdown"><code class="docutils literal notranslate"><span class="pre">render_report_markdown()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/_converters.html">hired._converters</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/_converters.html#hired._converters.ensure_dict"><code class="docutils literal notranslate"><span class="pre">ensure_dict()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/_converters.html#hired._converters.register_std_config_converters"><code class="docutils literal notranslate"><span class="pre">register_std_config_converters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment.html">hired.alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.AILeverage"><code class="docutils literal notranslate"><span class="pre">AILeverage</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.AlignmentReport"><code class="docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.Bucket"><code class="docutils literal notranslate"><span class="pre">Bucket</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.Clarification"><code class="docutils literal notranslate"><span class="pre">Clarification</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.CloseMethod"><code class="docutils literal notranslate"><span class="pre">CloseMethod</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.Closeability"><code class="docutils literal notranslate"><span class="pre">Closeability</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.Evidence"><code class="docutils literal notranslate"><span class="pre">Evidence</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.FieldCompleteness"><code class="docutils literal notranslate"><span class="pre">FieldCompleteness</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.FitBand"><code class="docutils literal notranslate"><span class="pre">FitBand</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.InterviewPrep"><code class="docutils literal notranslate"><span class="pre">InterviewPrep</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.MatchType"><code class="docutils literal notranslate"><span class="pre">MatchType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.NextAction"><code class="docutils literal notranslate"><span class="pre">NextAction</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.Recommendation"><code class="docutils literal notranslate"><span class="pre">Recommendation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.Requirement"><code class="docutils literal notranslate"><span class="pre">Requirement</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.RequirementClass"><code class="docutils literal notranslate"><span class="pre">RequirementClass</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.RequirementRecord"><code class="docutils literal notranslate"><span class="pre">RequirementRecord</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.ScoreSummary"><code class="docutils literal notranslate"><span class="pre">ScoreSummary</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.SkillType"><code class="docutils literal notranslate"><span class="pre">SkillType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.TimeToClose"><code class="docutils literal notranslate"><span class="pre">TimeToClose</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.Transferability"><code class="docutils literal notranslate"><span class="pre">Transferability</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.Verdict"><code class="docutils literal notranslate"><span class="pre">Verdict</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.apply_ai_leverage"><code class="docutils literal notranslate"><span class="pre">apply_ai_leverage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.assign_bucket"><code class="docutils literal notranslate"><span class="pre">assign_bucket()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.classify"><code class="docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.compute_gap_size"><code class="docutils literal notranslate"><span class="pre">compute_gap_size()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.diff_reports"><code class="docutils literal notranslate"><span class="pre">diff_reports()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.info_gain"><code class="docutils literal notranslate"><span class="pre">info_gain()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.is_decision_stable"><code class="docutils literal notranslate"><span class="pre">is_decision_stable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.rank_clarifications"><code class="docutils literal notranslate"><span class="pre">rank_clarifications()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.render_report_markdown"><code class="docutils literal notranslate"><span class="pre">render_report_markdown()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.should_ask"><code class="docutils literal notranslate"><span class="pre">should_ask()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment.html#hired.alignment.summarize_diff"><code class="docutils literal notranslate"><span class="pre">summarize_diff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/base.html">hired.alignment.base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.AILeverage"><code class="docutils literal notranslate"><span class="pre">AILeverage</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.AlignmentReport"><code class="docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.Bucket"><code class="docutils literal notranslate"><span class="pre">Bucket</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.Clarification"><code class="docutils literal notranslate"><span class="pre">Clarification</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.CloseMethod"><code class="docutils literal notranslate"><span class="pre">CloseMethod</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.Closeability"><code class="docutils literal notranslate"><span class="pre">Closeability</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.Evidence"><code class="docutils literal notranslate"><span class="pre">Evidence</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.FieldCompleteness"><code class="docutils literal notranslate"><span class="pre">FieldCompleteness</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.FitBand"><code class="docutils literal notranslate"><span class="pre">FitBand</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.InterviewPrep"><code class="docutils literal notranslate"><span class="pre">InterviewPrep</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.MatchType"><code class="docutils literal notranslate"><span class="pre">MatchType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.NextAction"><code class="docutils literal notranslate"><span class="pre">NextAction</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.Recommendation"><code class="docutils literal notranslate"><span class="pre">Recommendation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.Requirement"><code class="docutils literal notranslate"><span class="pre">Requirement</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.RequirementClass"><code class="docutils literal notranslate"><span class="pre">RequirementClass</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.RequirementRecord"><code class="docutils literal notranslate"><span class="pre">RequirementRecord</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.ScoreSummary"><code class="docutils literal notranslate"><span class="pre">ScoreSummary</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.SkillType"><code class="docutils literal notranslate"><span class="pre">SkillType</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.TimeToClose"><code class="docutils literal notranslate"><span class="pre">TimeToClose</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.Transferability"><code class="docutils literal notranslate"><span class="pre">Transferability</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/base.html#hired.alignment.base.Verdict"><code class="docutils literal notranslate"><span class="pre">Verdict</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/diff.html">hired.alignment.diff</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/diff.html#hired.alignment.diff.diff_reports"><code class="docutils literal notranslate"><span class="pre">diff_reports()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/diff.html#hired.alignment.diff.summarize_diff"><code class="docutils literal notranslate"><span class="pre">summarize_diff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.info_gain"><code class="docutils literal notranslate"><span class="pre">info_gain()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.is_decision_relevant"><code class="docutils literal notranslate"><span class="pre">is_decision_relevant()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.is_decision_stable"><code class="docutils literal notranslate"><span class="pre">is_decision_stable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.rank_clarifications"><code class="docutils literal notranslate"><span class="pre">rank_clarifications()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/elicitation.html#hired.alignment.elicitation.should_ask"><code class="docutils literal notranslate"><span class="pre">should_ask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/report.html">hired.alignment.report</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/report.html#hired.alignment.report.render_report_markdown"><code class="docutils literal notranslate"><span class="pre">render_report_markdown()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/rubric.html#hired.alignment.rubric.apply_ai_leverage"><code class="docutils literal notranslate"><span class="pre">apply_ai_leverage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/rubric.html#hired.alignment.rubric.assign_bucket"><code class="docutils literal notranslate"><span class="pre">assign_bucket()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/rubric.html#hired.alignment.rubric.classify"><code class="docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/alignment/rubric.html#hired.alignment.rubric.compute_gap_size"><code class="docutils literal notranslate"><span class="pre">compute_gap_size()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/ats_checker.html">hired.ats_checker</a><ul>
@@ -160,6 +262,42 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/base.html#hired.base.ResumeSchemaExtended"><code class="docutils literal notranslate"><span class="pre">ResumeSchemaExtended</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/base.html#hired.base.get_renderer_registry"><code class="docutils literal notranslate"><span class="pre">get_renderer_registry()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/base.html#hired.base.register_renderer"><code class="docutils literal notranslate"><span class="pre">register_renderer()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate.html">hired.candidate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.CandidateKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.ConfidenceLevel"><code class="docutils literal notranslate"><span class="pre">ConfidenceLevel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.Fact"><code class="docutils literal notranslate"><span class="pre">Fact</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.FactCategory"><code class="docutils literal notranslate"><span class="pre">FactCategory</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.FactStatus"><code class="docutils literal notranslate"><span class="pre">FactStatus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.MatchState"><code class="docutils literal notranslate"><span class="pre">MatchState</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.Provenance"><code class="docutils literal notranslate"><span class="pre">Provenance</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.QAEntry"><code class="docutils literal notranslate"><span class="pre">QAEntry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.SourceKind"><code class="docutils literal notranslate"><span class="pre">SourceKind</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.fact_from_record"><code class="docutils literal notranslate"><span class="pre">fact_from_record()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.ingest_facts"><code class="docutils literal notranslate"><span class="pre">ingest_facts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.verify_quote"><code class="docutils literal notranslate"><span class="pre">verify_quote()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/base.html">hired.candidate.base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.ConfidenceLevel"><code class="docutils literal notranslate"><span class="pre">ConfidenceLevel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.Fact"><code class="docutils literal notranslate"><span class="pre">Fact</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.FactCategory"><code class="docutils literal notranslate"><span class="pre">FactCategory</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.FactStatus"><code class="docutils literal notranslate"><span class="pre">FactStatus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.MatchState"><code class="docutils literal notranslate"><span class="pre">MatchState</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.Provenance"><code class="docutils literal notranslate"><span class="pre">Provenance</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.QAEntry"><code class="docutils literal notranslate"><span class="pre">QAEntry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.SourceKind"><code class="docutils literal notranslate"><span class="pre">SourceKind</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/ingest.html#hired.candidate.ingest.fact_from_record"><code class="docutils literal notranslate"><span class="pre">fact_from_record()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/ingest.html#hired.candidate.ingest.ingest_facts"><code class="docutils literal notranslate"><span class="pre">ingest_facts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/ingest.html#hired.candidate.ingest.verify_quote"><code class="docutils literal notranslate"><span class="pre">verify_quote()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/config.html">hired.config</a><ul>
@@ -191,6 +329,29 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/matching.html#hired.matching.JobMatcher"><code class="docutils literal notranslate"><span class="pre">JobMatcher</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/matching.html#hired.matching.MatchScore"><code class="docutils literal notranslate"><span class="pre">MatchScore</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/matching.html#hired.matching.quick_match"><code class="docutils literal notranslate"><span class="pre">quick_match()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence.html">hired.persistence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.CandidateMall"><code class="docutils literal notranslate"><span class="pre">CandidateMall</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.Repository"><code class="docutils literal notranslate"><span class="pre">Repository</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.app_data_dir"><code class="docutils literal notranslate"><span class="pre">app_data_dir()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.bytes_store"><code class="docutils literal notranslate"><span class="pre">bytes_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.json_store"><code class="docutils literal notranslate"><span class="pre">json_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.migrate_legacy"><code class="docutils literal notranslate"><span class="pre">migrate_legacy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.text_store"><code class="docutils literal notranslate"><span class="pre">text_store()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/base.html">hired.persistence.base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.CandidateMall"><code class="docutils literal notranslate"><span class="pre">CandidateMall</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.app_data_dir"><code class="docutils literal notranslate"><span class="pre">app_data_dir()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.bytes_store"><code class="docutils literal notranslate"><span class="pre">bytes_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.json_store"><code class="docutils literal notranslate"><span class="pre">json_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.migrate_legacy"><code class="docutils literal notranslate"><span class="pre">migrate_legacy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.text_store"><code class="docutils literal notranslate"><span class="pre">text_store()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/repository.html">hired.persistence.repository</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/repository.html#hired.persistence.repository.Repository"><code class="docutils literal notranslate"><span class="pre">Repository</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/render.html">hired.render</a></li>
@@ -333,8 +494,8 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<p>Release: 0.0.10</p>
-<p>Last change: Jun 12, 2026</p>
+<p>Release: 0.0.11</p>
+<p>Last change: Jun 23, 2026</p>
 </section>
 
 
@@ -347,7 +508,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright NO COPYRIGHT.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

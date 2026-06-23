@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.alignment.base &mdash; hired 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.alignment.base</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.alignment.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Schemas for JD-vs-candidate alignment analysis.</span>
+
+<span class="sd">A job description is decomposed into :class:`Requirement` records; each is</span>
+<span class="sd">analysed into a :class:`RequirementRecord` carrying a three-valued</span>
+<span class="sd">:class:`~hired.candidate.base.MatchState`, a :class:`Bucket`, grounding</span>
+<span class="sd">:class:`Evidence`, and the fields the elicitation loop needs. The whole analysis</span>
+<span class="sd">is an :class:`AlignmentReport` — verdict-first, evidence-quoted, banded (never a</span>
+<span class="sd">single false-precision percentage).</span>
+
+<span class="sd">See ``misc/docs/DESIGN.md`` §6.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfidenceLevel</span><span class="p">,</span> <span class="n">MatchState</span><span class="p">,</span> <span class="n">_new_id</span>
+
+<span class="c1"># Re-export so callers can get the match-state enum from either domain.</span>
+<span class="n">__all_reexport__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MatchState&#39;</span><span class="p">,</span> <span class="s1">&#39;ConfidenceLevel&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Bucket">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.Bucket">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Bucket</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The four alignment buckets.&quot;&quot;&quot;</span>
+
+    <span class="n">STRONG_MATCH</span> <span class="o">=</span> <span class="s1">&#39;strong_match&#39;</span>
+    <span class="n">ADJACENT_TRANSFERABLE</span> <span class="o">=</span> <span class="s1">&#39;adjacent_transferable&#39;</span>
+    <span class="n">GAP_LEARNABLE</span> <span class="o">=</span> <span class="s1">&#39;gap_learnable&#39;</span>
+    <span class="n">GAP_HARD</span> <span class="o">=</span> <span class="s1">&#39;gap_hard&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="MatchType">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.MatchType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MatchType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How the candidate&#39;s background relates to the requirement (Axis A).&quot;&quot;&quot;</span>
+
+    <span class="n">DIRECT</span> <span class="o">=</span> <span class="s1">&#39;direct&#39;</span>
+    <span class="n">ADJACENT</span> <span class="o">=</span> <span class="s1">&#39;adjacent&#39;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="RequirementClass">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.RequirementClass">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RequirementClass</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How decision-critical a requirement is.&quot;&quot;&quot;</span>
+
+    <span class="n">GATE_KEEPER</span> <span class="o">=</span> <span class="s1">&#39;gate_keeper&#39;</span>  <span class="c1"># hard filter; failing it can block</span>
+    <span class="n">DIFFERENTIATOR</span> <span class="o">=</span> <span class="s1">&#39;differentiator&#39;</span>  <span class="c1"># strongly weighted</span>
+    <span class="n">VALUE_ADD</span> <span class="o">=</span> <span class="s1">&#39;value_add&#39;</span>  <span class="c1"># nice-to-have</span></div>
+
+
+
+<div class="viewcode-block" id="SkillType">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.SkillType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SkillType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">TECHNICAL</span> <span class="o">=</span> <span class="s1">&#39;technical&#39;</span>
+    <span class="n">DOMAIN_KNOWLEDGE</span> <span class="o">=</span> <span class="s1">&#39;domain_knowledge&#39;</span>
+    <span class="n">SOFT_SKILL</span> <span class="o">=</span> <span class="s1">&#39;soft_skill&#39;</span>
+    <span class="n">CREDENTIAL</span> <span class="o">=</span> <span class="s1">&#39;credential&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="Closeability">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.Closeability">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Closeability</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How hard a gap is to close (Axis B), after the AI-leverage modifier.&quot;&quot;&quot;</span>
+
+    <span class="n">QUICK_WIN</span> <span class="o">=</span> <span class="s1">&#39;quick_win&#39;</span>
+    <span class="n">LEARNABLE</span> <span class="o">=</span> <span class="s1">&#39;learnable&#39;</span>
+    <span class="n">REQUIRES_EXPERIENCE</span> <span class="o">=</span> <span class="s1">&#39;requires_experience&#39;</span>
+    <span class="n">STRUCTURALLY_HARD</span> <span class="o">=</span> <span class="s1">&#39;structurally_hard&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="CloseMethod">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.CloseMethod">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CloseMethod</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">COURSE</span> <span class="o">=</span> <span class="s1">&#39;course&#39;</span>
+    <span class="n">CERTIFICATION</span> <span class="o">=</span> <span class="s1">&#39;certification&#39;</span>
+    <span class="n">PRACTICE_PROJECT</span> <span class="o">=</span> <span class="s1">&#39;practice_project&#39;</span>
+    <span class="n">ON_THE_JOB</span> <span class="o">=</span> <span class="s1">&#39;on_the_job&#39;</span>
+    <span class="n">CREDENTIAL</span> <span class="o">=</span> <span class="s1">&#39;credential&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="TimeToClose">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.TimeToClose">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TimeToClose</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">DAYS</span> <span class="o">=</span> <span class="s1">&#39;days&#39;</span>
+    <span class="n">WEEKS</span> <span class="o">=</span> <span class="s1">&#39;weeks&#39;</span>
+    <span class="n">MONTHS</span> <span class="o">=</span> <span class="s1">&#39;months&#39;</span>
+    <span class="n">YEARS</span> <span class="o">=</span> <span class="s1">&#39;years&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="Transferability">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.Transferability">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Transferability</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">DIRECT</span> <span class="o">=</span> <span class="s1">&#39;direct&#39;</span>
+    <span class="n">CONTEXTUAL</span> <span class="o">=</span> <span class="s1">&#39;contextual&#39;</span>
+    <span class="n">FOUNDATIONAL</span> <span class="o">=</span> <span class="s1">&#39;foundational&#39;</span>
+    <span class="n">LIMITED</span> <span class="o">=</span> <span class="s1">&#39;limited&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="AILeverage">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.AILeverage">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AILeverage</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How much the candidate&#39;s standing AI-agent capability lowers the ramp.</span>
+
+<span class="sd">    Applies to *codified / knowledge-breadth* gaps, not tacit-judgment or</span>
+<span class="sd">    enduring-aptitude gaps (those it cannot rescue).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">HIGH</span> <span class="o">=</span> <span class="s1">&#39;high&#39;</span>
+    <span class="n">MEDIUM</span> <span class="o">=</span> <span class="s1">&#39;medium&#39;</span>
+    <span class="n">LOW</span> <span class="o">=</span> <span class="s1">&#39;low&#39;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="FieldCompleteness">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.FieldCompleteness">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FieldCompleteness</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Local closed-world flag: may a missing value be read as a real negative?&quot;&quot;&quot;</span>
+
+    <span class="n">OPEN</span> <span class="o">=</span> <span class="s1">&#39;open&#39;</span>  <span class="c1"># missing -&gt; UNKNOWN (ask)</span>
+    <span class="n">CLOSED</span> <span class="o">=</span> <span class="s1">&#39;closed&#39;</span>  <span class="c1"># missing -&gt; CONTRADICTED (sound to treat as absent)</span></div>
+
+
+
+<div class="viewcode-block" id="Recommendation">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.Recommendation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Recommendation</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">APPLY</span> <span class="o">=</span> <span class="s1">&#39;apply&#39;</span>
+    <span class="n">STRETCH</span> <span class="o">=</span> <span class="s1">&#39;stretch&#39;</span>
+    <span class="n">DO_NOT_APPLY</span> <span class="o">=</span> <span class="s1">&#39;do_not_apply&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="FitBand">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.FitBand">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FitBand</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="n">POOR</span> <span class="o">=</span> <span class="s1">&#39;poor&#39;</span>
+    <span class="n">WEAK</span> <span class="o">=</span> <span class="s1">&#39;weak&#39;</span>
+    <span class="n">FAIR</span> <span class="o">=</span> <span class="s1">&#39;fair&#39;</span>
+    <span class="n">GOOD</span> <span class="o">=</span> <span class="s1">&#39;good&#39;</span>
+    <span class="n">GREAT</span> <span class="o">=</span> <span class="s1">&#39;great&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="Requirement">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.Requirement">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Requirement</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One atomic requirement extracted verbatim from a job description.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">_new_id</span><span class="p">(</span><span class="s1">&#39;req-&#39;</span><span class="p">))</span>
+    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># verbatim from the JD</span>
+    <span class="n">skill_type</span><span class="p">:</span> <span class="n">SkillType</span> <span class="o">=</span> <span class="n">SkillType</span><span class="o">.</span><span class="n">TECHNICAL</span>
+    <span class="n">requirement_class</span><span class="p">:</span> <span class="n">RequirementClass</span> <span class="o">=</span> <span class="n">RequirementClass</span><span class="o">.</span><span class="n">DIFFERENTIATOR</span>
+    <span class="n">required_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># 0-5 (see DESIGN §6)</span></div>
+
+
+
+<div class="viewcode-block" id="Evidence">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.Evidence">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Evidence</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A verbatim grounding span for a match judgment.&quot;&quot;&quot;</span>
+
+    <span class="n">quote</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">source_document_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">locator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="RequirementRecord">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.RequirementRecord">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RequirementRecord</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The analysis of one requirement against the candidate&#39;s knowledge.&quot;&quot;&quot;</span>
+
+    <span class="n">requirement</span><span class="p">:</span> <span class="n">Requirement</span>
+
+    <span class="c1"># --- match state (the honesty core) -----------------------------------</span>
+    <span class="n">match_state</span><span class="p">:</span> <span class="n">MatchState</span> <span class="o">=</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span>
+    <span class="n">field_completeness</span><span class="p">:</span> <span class="n">FieldCompleteness</span> <span class="o">=</span> <span class="n">FieldCompleteness</span><span class="o">.</span><span class="n">OPEN</span>
+    <span class="n">bucket</span><span class="p">:</span> <span class="n">Bucket</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># None while UNKNOWN / unresolved</span>
+    <span class="n">match_type</span><span class="p">:</span> <span class="n">MatchType</span> <span class="o">=</span> <span class="n">MatchType</span><span class="o">.</span><span class="n">NONE</span>
+    <span class="n">candidate_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 0-5</span>
+    <span class="n">gap_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># max(required - candidate, 0)</span>
+
+    <span class="c1"># --- adjacency (when match_type == ADJACENT) --------------------------</span>
+    <span class="n">source_skill</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">adjacency_basis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">transferability</span><span class="p">:</span> <span class="n">Transferability</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># --- closeability (gap buckets) ---------------------------------------</span>
+    <span class="n">closeability</span><span class="p">:</span> <span class="n">Closeability</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">close_method</span><span class="p">:</span> <span class="n">CloseMethod</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">time_to_close</span><span class="p">:</span> <span class="n">TimeToClose</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ai_leverage</span><span class="p">:</span> <span class="n">AILeverage</span> <span class="o">=</span> <span class="n">AILeverage</span><span class="o">.</span><span class="n">NONE</span>
+
+    <span class="c1"># --- evidence + confidence (every record) -----------------------------</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="n">ConfidenceLevel</span> <span class="o">=</span> <span class="n">ConfidenceLevel</span><span class="o">.</span><span class="n">LOW</span>
+    <span class="n">uncertainty_reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">evidence</span><span class="p">:</span> <span class="n">Evidence</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># --- prioritization + loop --------------------------------------------</span>
+    <span class="n">impact</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># 1-5 decision criticality</span>
+    <span class="n">info_gain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># expected info gain wrt the verdict</span>
+    <span class="n">needs_clarification</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">talking_point</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="Clarification">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.Clarification">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Clarification</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A question to ask the candidate to resolve a decision-relevant unknown.&quot;&quot;&quot;</span>
+
+    <span class="n">requirement_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">question</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">fills_field</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># which record field the answer would populate</span>
+    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">info_gain</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+
+
+
+<div class="viewcode-block" id="NextAction">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.NextAction">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NextAction</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">action</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">addresses</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># requirement id</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">expected_effect</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="Verdict">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.Verdict">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Verdict</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">recommendation</span><span class="p">:</span> <span class="n">Recommendation</span>
+    <span class="n">confidence</span><span class="p">:</span> <span class="n">ConfidenceLevel</span> <span class="o">=</span> <span class="n">ConfidenceLevel</span><span class="o">.</span><span class="n">MEDIUM</span>
+    <span class="n">confidence_basis</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">headline</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">key_reasons</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># &lt;= 5</span>
+    <span class="n">has_blocking_gaps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="ScoreSummary">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.ScoreSummary">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScoreSummary</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">fit_band</span><span class="p">:</span> <span class="n">FitBand</span> <span class="o">=</span> <span class="n">FitBand</span><span class="o">.</span><span class="n">FAIR</span>
+    <span class="n">bucket_counts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">ats_readability</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="InterviewPrep">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.InterviewPrep">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">InterviewPrep</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">summary</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">talking_points</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">story_library</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># STAR/CARLA stories</span>
+    <span class="n">proactive_disclosure</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="AlignmentReport">
+<a class="viewcode-back" href="../../../module_docs/hired/alignment/base.html#hired.AlignmentReport">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AlignmentReport</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A complete, verdict-first alignment analysis for one JD.&quot;&quot;&quot;</span>
+
+    <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">job_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">company</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">created_at</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">verdict</span><span class="p">:</span> <span class="n">Verdict</span>
+    <span class="n">score_summary</span><span class="p">:</span> <span class="n">ScoreSummary</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ScoreSummary</span><span class="p">)</span>
+    <span class="n">requirements</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">blocking_gaps</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">next_actions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">NextAction</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">interview_prep</span><span class="p">:</span> <span class="n">InterviewPrep</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">InterviewPrep</span><span class="p">)</span>
+    <span class="n">clarifications</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Clarification</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

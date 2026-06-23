@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.candidate.ingest &mdash; hired 0.0.11 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="hired.candidate.knowledge_base" href="knowledge_base.html" />
+    <link rel="prev" title="hired.candidate.base" href="base.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/rubric.html">hired.alignment.rubric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.candidate.base</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.candidate.ingest</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.candidate.ingest.fact_from_record"><code class="docutils literal notranslate"><span class="pre">fact_from_record()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.candidate.ingest.ingest_facts"><code class="docutils literal notranslate"><span class="pre">ingest_facts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.candidate.ingest.verify_quote"><code class="docutils literal notranslate"><span class="pre">verify_quote()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../persistence/repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.candidate.ingest</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/hired/candidate/ingest.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.candidate.ingest">
+<span id="hired-candidate-ingest"></span><h1>hired.candidate.ingest<a class="headerlink" href="#module-hired.candidate.ingest" title="Link to this heading"></a></h1>
+<p>Turn extracted atomic-fact records into persisted, provenance-bearing facts.</p>
+<p>The <em>intelligence</em> of extraction (reading a CV/bio/publication and proposing
+atomic claims) is supplied externally — by the <code class="docutils literal notranslate"><span class="pre">hired-profile-ingest</span></code> subagent
+in interactive use, or an injected LLM in autonomous use. This module is the
+deterministic glue: it validates those proposals into <code class="xref py py-class docutils literal notranslate"><span class="pre">Fact</span></code> objects,
+enforces the provenance-quote invariant, and persists them.</p>
+<p>A <em>record</em> is a lightweight dict:</p>
+<p><a href="#id1"><span class="problematic" id="id2">``</span></a>`
+{“statement”: “…”, “category”: “skill”, “tags”: [“python”],</p>
+<blockquote>
+<div><p>“confidence”: “high”, “quote”: “…”, “locator”: “experience[1]”,
+“is_negation”: false}</p>
+</div></blockquote>
+<p><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.candidate.ingest.fact_from_record">
+<span class="sig-prename descclassname"><span class="pre">hired.candidate.ingest.</span></span><span class="sig-name descname"><span class="pre">fact_from_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.candidate.base.SourceKind" title="hired.candidate.base.SourceKind"><span class="pre">SourceKind</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="base.html#hired.candidate.base.Fact" title="hired.candidate.base.Fact"><span class="pre">Fact</span></a></span></span><a class="reference internal" href="../../../_modules/hired/candidate/ingest.html#fact_from_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.ingest.fact_from_record" title="Link to this definition"></a></dt>
+<dd><p>Build a (not-yet-persisted) <code class="xref py py-class docutils literal notranslate"><span class="pre">Fact</span></code> from a record dict.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.candidate.ingest.ingest_facts">
+<span class="sig-prename descclassname"><span class="pre">hired.candidate.ingest.</span></span><span class="sig-name descname"><span class="pre">ingest_facts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase" title="hired.candidate.knowledge_base.CandidateKnowledgeBase"><span class="pre">CandidateKnowledgeBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">records</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_kind</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="base.html#hired.candidate.base.SourceKind" title="hired.candidate.base.SourceKind"><span class="pre">SourceKind</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_unverified_quotes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/ingest.html#ingest_facts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.ingest.ingest_facts" title="Link to this definition"></a></dt>
+<dd><p>Validate, quote-check, and persist fact records; return persisted ids.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">source_text</span></code> is given, each record’s <code class="docutils literal notranslate"><span class="pre">quote</span></code> is checked to be a
+verbatim substring. Unverified quotes are dropped (the fact is still kept,
+but without the spurious quote) unless <code class="docutils literal notranslate"><span class="pre">drop_unverified_quotes</span></code> is False,
+in which case a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> is raised — useful for strict pipelines.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.candidate.ingest.verify_quote">
+<span class="sig-prename descclassname"><span class="pre">hired.candidate.ingest.</span></span><span class="sig-name descname"><span class="pre">verify_quote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quote</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/hired/candidate/ingest.html#verify_quote"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.ingest.verify_quote" title="Link to this definition"></a></dt>
+<dd><p>True if <code class="docutils literal notranslate"><span class="pre">quote</span></code> is a verbatim substring of <code class="docutils literal notranslate"><span class="pre">source_text</span></code>.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">None</span></code> quote (no quote claimed) always verifies. When no source text is
+available to check against, we cannot disprove it, so it verifies too — the
+invariant only bites when we <em>can</em> check.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="base.html" class="btn btn-neutral float-left" title="hired.candidate.base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="knowledge_base.html" class="btn btn-neutral float-right" title="hired.candidate.knowledge_base" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
