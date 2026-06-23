@@ -37,11 +37,12 @@ def test_add_source_from_path(tmp_path):
     from hired.candidate import CandidateKnowledgeBase
 
     p = tmp_path / "bio.md"
-    p.write_text("# Bio\nThor builds ML systems.")
+    # write exact bytes so the assertion is newline-stable across platforms
+    p.write_bytes(b"# Bio\nThor builds ML systems.")
     kb = CandidateKnowledgeBase()
     key = kb.add_source(str(p))
     assert key == "bio.md"
-    assert kb.get_source("bio.md").decode() == "# Bio\nThor builds ML systems."
+    assert kb.get_source("bio.md") == b"# Bio\nThor builds ML systems."
 
 
 def test_save_upload_alias_still_works():
