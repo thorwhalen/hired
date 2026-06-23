@@ -181,9 +181,9 @@ def migrate_user_to_v2(
         for jd_id in touched_jds:
             meta_path = os.path.join(base, JDS_DIR, jd_id, META_FILE)
             if not os.path.exists(meta_path):
-                from hired.persistence.base import _write_json_file
+                from hired.persistence.base import write_json_file
 
-                _write_json_file(
+                write_json_file(
                     meta_path,
                     {
                         "jd_id": jd_id,

@@ -17,6 +17,8 @@ A *record* is a lightweight dict:
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from hired.candidate.base import (
     ConfidenceLevel,
     Fact,
@@ -24,7 +26,9 @@ from hired.candidate.base import (
     Provenance,
     SourceKind,
 )
-from hired.candidate.knowledge_base import CandidateKnowledgeBase
+
+if TYPE_CHECKING:  # avoid an import cycle (knowledge_base imports ingest_facts)
+    from hired.candidate.knowledge_base import CandidateKnowledgeBase
 
 
 def verify_quote(quote: str | None, source_text: str | None) -> bool:

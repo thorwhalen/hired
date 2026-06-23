@@ -20,11 +20,16 @@ from hired.candidate.base import (
 )
 from hired.candidate.knowledge_base import CandidateKnowledgeBase
 from hired.candidate.workspace import JDWorkspace
+from hired.candidate.topics import TopicDossier
+from hired.candidate.state import RefreshState, SourceDigest
 from hired.candidate.ingest import ingest_facts, fact_from_record, verify_quote
 
 __all__ = [
     "CandidateKnowledgeBase",
     "JDWorkspace",
+    "TopicDossier",
+    "RefreshState",
+    "SourceDigest",
     "Fact",
     "QAEntry",
     "Provenance",
