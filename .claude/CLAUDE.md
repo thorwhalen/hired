@@ -21,8 +21,9 @@ tracking).
   storage: `app_data_dir`, codec store factories, `UserStore`/`JDStore`, `Repository`,
   `migrate`), `candidate/` (open-world `Fact`/`QAEntry` schemas + `CandidateKnowledgeBase`
   (user-level) + `JDWorkspace` (per-engagement) + document ingest + `state` (per-source
-  digests) + `topics` (subject dossiers); cross-session knowledge via `add_source`,
-  `record_qa(derived_facts=…)`, `add_note`), `alignment/`
+  digests) + `topics` (subject dossiers) + `refresh` (soft/hard, `ingest_fn`-driven);
+  cross-session knowledge via `add_source`, `record_qa(derived_facts=…)`, `add_note`,
+  `refresh`/`needs_refresh`), `alignment/`
   (`Requirement`/`RequirementRecord`/
   `AlignmentReport` + the deterministic two-axis rubric with the AI-leverage
   modifier + elicitation ranking + markdown report). **Intelligence is external**

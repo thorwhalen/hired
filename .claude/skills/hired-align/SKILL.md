@@ -80,6 +80,33 @@ sentence or a whole folder of files/media — capture it as a topic dossier:
 `kb.add_note("subject", "the note", files={"name": data})`. The synopsis links each
 topic so you know where deeper detail lives; extract facts from it as usual.
 
+### Keeping knowledge fresh (soft / hard refresh)
+
+At the start of a session, check whether anything needs re-reading:
+
+```python
+if kb.needs_refresh():
+    pending = kb.refresh("soft").pending      # list of RefreshItem (source/qa), nothing written
+```
+
+For each pending item, extract fact records (delegate a source to
+**`hired-profile-ingest`**; for an undistilled Q&A, extract from the answer).
+**Preview, get approval, then apply** — passing your extracted records back through
+an `ingest_fn` so the package supersedes stale facts, updates `state.json`, and
+regenerates the synopsis:
+
+```python
+records_by_key = {item.key: extracted_records_for(item) for item in pending}
+preview = kb.refresh("soft", ingest_fn=lambda it: records_by_key.get(it.key, []), apply=False)
+# show preview.proposals to the user; on approval:
+kb.refresh("soft", ingest_fn=lambda it: records_by_key.get(it.key, []))   # applies
+```
+
+Use **soft** for the everyday "a source changed / new Q&A" case (only changed/new
+items are re-read; a changed source's stale facts are superseded). Use **hard** as a
+periodic rebuild: every source is re-derived and its prior facts reconciled by
+supersession. Always confirm proposed changes with the candidate before applying.
+
 ## Step 2 — Analyze a JD
 
 1. Save the JD into the engagement (`ws.save_job(job_id, {...})`) and decompose it
