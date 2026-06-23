@@ -26,10 +26,16 @@ about the candidate* (cross-JD, reusable) and *work on a specific company's role
 ``MutableMapping`` facade; file extensions live only on the filesystem side, applied by
 :mod:`dol` key codecs, and values are dicts in Python / JSON on disk via value codecs:
 
-- :func:`json_store` — :class:`dol.Jsons`: bare-id keys, ``<id>.json`` files, dict values.
-- :func:`markdown_store` — bare keys, ``<key>.md`` files, ``str`` values (``.md`` only).
+- :func:`json_store` — ``JsonFiles`` + a ``.json`` key codec: bare-id keys, ``<id>.json``
+  files, dict values.
+- :func:`markdown_store` — ``TextFiles`` + a ``.md`` key codec: bare keys, ``<key>.md``
+  files, ``str`` values.
 - :func:`bytes_store` — :class:`dol.Files`: keys are real filenames (extension kept, as
   the extension is the meaningful domain key for an upload like ``cv.pdf``).
+
+The key codec uses only dol's core ``wrap_kvs`` (not ``affix_key_codec``/``filt_iter``,
+which has a Windows-specific bug in dol 0.3.x) and normalizes path separators, so stores
+behave identically on POSIX and Windows.
 
 :class:`UserStore` groups the user-level stores; :class:`JDStore` groups one engagement's
 stores. Singletons (``synopsis.md``, ``state.json``, ``meta.json``) are single files —
@@ -44,7 +50,7 @@ import shutil
 from collections.abc import MutableMapping
 from functools import cached_property
 
-from dol import Files, Jsons, KeyCodecs, TextFiles, filt_iter, mk_dirs_if_missing
+from dol import Files, JsonFiles, TextFiles, mk_dirs_if_missing, wrap_kvs
 
 DFLT_USER = "me"
 _ENV_VAR = "HIRED_DATA_DIR"
@@ -130,25 +136,37 @@ def app_data_dir(*subpaths: str, make: bool = True) -> str:
 # --------------------------------------------------------------------------- #
 # Store factories (codec-bearing: extensions on the filesystem side only)
 # --------------------------------------------------------------------------- #
+def _suffix_key_store(base_store, suffix: str) -> MutableMapping:
+    """Add a filename ``suffix`` on the filesystem side; keep keys extension-less.
+
+    Uses only dol's core ``wrap_kvs`` (no ``affix_key_codec``/``filt_iter`` stack,
+    which has a Windows-specific bug in dol 0.3.x) so behavior is identical across
+    platforms. Path separators are normalized to ``/`` on read, so nested keys
+    (e.g. ``"job/stamp"``) round-trip the same on POSIX and Windows.
+    """
+    n = len(suffix)
+    return wrap_kvs(
+        base_store,
+        id_of_key=lambda k: k.replace("/", os.sep) + suffix,
+        key_of_id=lambda p: (p[:-n] if p.endswith(suffix) else p).replace(os.sep, "/"),
+    )
+
+
 def json_store(rootdir: str) -> MutableMapping:
     """A ``MutableMapping`` of JSON-able values: bare-id keys, ``<id>.json`` files.
 
-    Missing intermediate directories are created on write, so nested keys
-    (e.g. ``"job/stamp"``) work transparently.
+    Built on ``JsonFiles`` (dict↔JSON value codec) + a ``.json`` key codec. Missing
+    intermediate directories are created on write, so nested keys (e.g. ``"job/stamp"``)
+    work transparently.
     """
     os.makedirs(rootdir, exist_ok=True)
-    return mk_dirs_if_missing(Jsons(rootdir))
+    return mk_dirs_if_missing(_suffix_key_store(JsonFiles(rootdir), ".json"))
 
 
 def markdown_store(rootdir: str) -> MutableMapping:
-    """A ``MutableMapping`` of ``str`` values: bare keys, ``<key>.md`` files.
-
-    Only ``.md`` files are visible (so a directory holding both markdown and
-    other artifacts exposes just the markdown view).
-    """
+    """A ``MutableMapping`` of ``str`` values: bare keys, ``<key>.md`` files."""
     os.makedirs(rootdir, exist_ok=True)
-    base = filt_iter.suffixes(".md")(TextFiles(rootdir))
-    return mk_dirs_if_missing(KeyCodecs.suffixed(".md")(base))
+    return mk_dirs_if_missing(_suffix_key_store(TextFiles(rootdir), ".md"))
 
 
 def bytes_store(rootdir: str) -> MutableMapping:

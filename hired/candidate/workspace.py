@@ -64,7 +64,8 @@ class JDWorkspace:
         ``report_history`` so the alignment-review agent can diff versions.
         """
         if archive and job_id in self.store.reports:
-            stamp = data.get("created_at") or _utcnow()
+            # ':' is invalid in Windows filenames, so sanitize the ISO timestamp key
+            stamp = (data.get("created_at") or _utcnow()).replace(":", "-")
             self.store.report_history[f"{job_id}/{stamp}"] = self.store.reports[job_id]
         self.store.reports[job_id] = data
 
