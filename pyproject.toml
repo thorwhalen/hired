@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "hired"
-version = "0.0.12"
+version = "0.0.13"
 description = "\nStreamline the job application process for job seekers - with AI obvs!"
 readme = "README.md"
 requires-python = ">=3.10"
