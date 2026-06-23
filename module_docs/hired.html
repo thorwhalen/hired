@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired &mdash; hired 0.0.11 documentation</title>
+  <title>hired &mdash; hired 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -86,12 +86,10 @@
 <li class="toctree-l2"><a class="reference internal" href="#hired.CandidateKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.add_fact"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_fact()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.facts"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.facts()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.jd"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.jds"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jds()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.record_qa"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.record_qa()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.regenerate_synopsis"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.regenerate_synopsis()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.report_versions"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.report_versions()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.save_briefing"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.save_briefing()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.save_company_report"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.save_company_report()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.save_report"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.save_report()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.save_upload"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.save_upload()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.supersede"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.supersede()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.synopsis"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.synopsis</span></code></a></li>
@@ -102,6 +100,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.DefaultAIAgent"><code class="docutils literal notranslate"><span class="pre">DefaultAIAgent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.JDWorkspace"><code class="docutils literal notranslate"><span class="pre">JDWorkspace</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hired.JDWorkspace.report_versions"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.report_versions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.JDWorkspace.save_briefing"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_briefing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.JDWorkspace.save_company_report"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_company_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.JDWorkspace.save_report"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_report()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.JobAnalyzer"><code class="docutils literal notranslate"><span class="pre">JobAnalyzer</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#hired.JobAnalyzer.extract_keywords"><code class="docutils literal notranslate"><span class="pre">JobAnalyzer.extract_keywords()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.JobAnalyzer.extract_requirements"><code class="docutils literal notranslate"><span class="pre">JobAnalyzer.extract_requirements()</span></code></a></li>
@@ -221,6 +226,7 @@
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/base.html">hired.candidate.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/ingest.html">hired.candidate.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/candidate/workspace.html">hired.candidate.workspace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/cover_letter.html">hired.cover_letter</a></li>
@@ -228,6 +234,7 @@
 <li class="toctree-l1"><a class="reference internal" href="hired/matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/persistence.html">hired.persistence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/persistence/migrate.html">hired.persistence.migrate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/renderers.html">hired.renderers</a></li>
@@ -565,8 +572,8 @@ Import the main user-facing functions and classes.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.CandidateKnowledgeBase">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.</span></span><span class="sig-name descname"><span class="pre">CandidateKnowledgeBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">mall</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/persistence/base.html#hired.persistence.base.CandidateMall" title="hired.persistence.base.CandidateMall"><span class="pre">CandidateMall</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase" title="Link to this definition"></a></dt>
-<dd><p>Accumulated, open-world knowledge about a single candidate.</p>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.</span></span><span class="sig-name descname"><span class="pre">CandidateKnowledgeBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/persistence/base.html#hired.persistence.base.UserStore" title="hired.persistence.base.UserStore"><span class="pre">UserStore</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase" title="Link to this definition"></a></dt>
+<dd><p>Accumulated, open-world knowledge about a single candidate (user-level).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HIRED_DATA_DIR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">kb</span> <span class="o">=</span> <span class="n">CandidateKnowledgeBase</span><span class="p">()</span>                 <span class="c1"># default candidate &quot;me&quot;</span>
@@ -594,6 +601,19 @@ hidden). <code class="docutils literal notranslate"><span class="pre">tags</span
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.jd">
+<span class="sig-name descname"><span class="pre">jd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jd_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="hired/candidate/workspace.html#hired.candidate.workspace.JDWorkspace" title="hired.candidate.workspace.JDWorkspace"><span class="pre">JDWorkspace</span></a></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.jd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.jd" title="Link to this definition"></a></dt>
+<dd><p>Get-or-create the workspace for an engagement (1+ JDs of one company).</p>
+<p><code class="docutils literal notranslate"><span class="pre">company</span></code> / <code class="docutils literal notranslate"><span class="pre">label</span></code> are recorded in the engagement’s <code class="docutils literal notranslate"><span class="pre">meta</span></code> when given.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.jds">
+<span class="sig-name descname"><span class="pre">jds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.jds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.jds" title="Link to this definition"></a></dt>
+<dd><p>Ids of all engagements for this candidate.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.record_qa">
 <span class="sig-name descname"><span class="pre">record_qa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/candidate/base.html#hired.candidate.base.QAEntry" title="hired.candidate.base.QAEntry"><span class="pre">QAEntry</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.record_qa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.record_qa" title="Link to this definition"></a></dt>
 <dd><p>Append a clarifying Q&amp;A exchange to the (append-only) history.</p>
@@ -605,32 +625,6 @@ hidden). <code class="docutils literal notranslate"><span class="pre">tags</span
 <dd><p>Rebuild and persist a human-readable synopsis from current facts.</p>
 <p>This is a <em>projection</em> — always derived from the fact store, never
 hand-edited — so it can be regenerated at any time without loss.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.report_versions">
-<span class="sig-name descname"><span class="pre">report_versions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.report_versions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.report_versions" title="Link to this definition"></a></dt>
-<dd><p>Keys of archived prior versions of a job’s report (chronological).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.save_briefing">
-<span class="sig-name descname"><span class="pre">save_briefing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.save_briefing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.save_briefing" title="Link to this definition"></a></dt>
-<dd><p>Persist an interview-prep research briefing (keyed by subject/job).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.save_company_report">
-<span class="sig-name descname"><span class="pre">save_company_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.save_company_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.save_company_report" title="Link to this definition"></a></dt>
-<dd><p>Persist a company/people research report (keyed by company name).</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.save_report">
-<span class="sig-name descname"><span class="pre">save_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.save_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.save_report" title="Link to this definition"></a></dt>
-<dd><p>Persist the current alignment report, archiving the prior one first.</p>
-<p>Archiving (on by default) snapshots any existing report into
-<code class="docutils literal notranslate"><span class="pre">report_history</span></code> so the alignment-review agent can diff versions.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -669,6 +663,50 @@ hand-edited — so it can be regenerated at any time without loss.</p>
 <dt class="sig sig-object py" id="hired.DefaultAIAgent">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.</span></span><span class="sig-name descname"><span class="pre">DefaultAIAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/content.html#DefaultAIAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.DefaultAIAgent" title="Link to this definition"></a></dt>
 <dd><p>Default AI agent implementation (mock).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.JDWorkspace">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.</span></span><span class="sig-name descname"><span class="pre">JDWorkspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jd_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/persistence/base.html#hired.persistence.base.JDStore" title="hired.persistence.base.JDStore"><span class="pre">JDStore</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.JDWorkspace" title="Link to this definition"></a></dt>
+<dd><p>Reports, company research, interview-prep briefings, and parsed jobs for one engagement.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HIRED_DATA_DIR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate</span><span class="w"> </span><span class="kn">import</span> <span class="n">CandidateKnowledgeBase</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kb</span> <span class="o">=</span> <span class="n">CandidateKnowledgeBase</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span> <span class="o">=</span> <span class="n">kb</span><span class="o">.</span><span class="n">jd</span><span class="p">(</span><span class="s1">&#39;acme&#39;</span><span class="p">,</span> <span class="n">company</span><span class="o">=</span><span class="s1">&#39;Acme, Inc.&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Acme roles&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span><span class="o">.</span><span class="n">save_report</span><span class="p">(</span><span class="s1">&#39;staff-ds&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;verdict&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;recommendation&#39;</span><span class="p">:</span> <span class="s1">&#39;apply&#39;</span><span class="p">}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span><span class="o">.</span><span class="n">get_report</span><span class="p">(</span><span class="s1">&#39;staff-ds&#39;</span><span class="p">)[</span><span class="s1">&#39;verdict&#39;</span><span class="p">][</span><span class="s1">&#39;recommendation&#39;</span><span class="p">]</span>
+<span class="go">&#39;apply&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ws</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;company&#39;</span><span class="p">]</span>
+<span class="go">&#39;Acme, Inc.&#39;</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.JDWorkspace.report_versions">
+<span class="sig-name descname"><span class="pre">report_versions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.report_versions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.JDWorkspace.report_versions" title="Link to this definition"></a></dt>
+<dd><p>Keys of archived prior versions of a job’s report (chronological).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.JDWorkspace.save_briefing">
+<span class="sig-name descname"><span class="pre">save_briefing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_briefing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.JDWorkspace.save_briefing" title="Link to this definition"></a></dt>
+<dd><p>Persist an interview-prep research briefing (keyed by subject/job).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.JDWorkspace.save_company_report">
+<span class="sig-name descname"><span class="pre">save_company_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_company_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.JDWorkspace.save_company_report" title="Link to this definition"></a></dt>
+<dd><p>Persist a company/people research report (keyed by company name).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.JDWorkspace.save_report">
+<span class="sig-name descname"><span class="pre">save_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.JDWorkspace.save_report" title="Link to this definition"></a></dt>
+<dd><p>Persist the current alignment report, archiving the prior one first.</p>
+<p>Archiving (on by default) snapshots any existing report into
+<code class="docutils literal notranslate"><span class="pre">report_history</span></code> so the alignment-review agent can diff versions.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">

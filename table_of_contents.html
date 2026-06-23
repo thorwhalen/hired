@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>&lt;no title&gt; &mdash; hired 0.0.11 documentation</title>
+  <title>&lt;no title&gt; &mdash; hired 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=0c446633"></script>
+      <script src="_static/documentation_options.js?v=3bbcec59"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -61,6 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/workspace.html">hired.candidate.workspace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
@@ -68,6 +69,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence.html">hired.persistence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/migrate.html">hired.persistence.migrate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/renderers.html">hired.renderers</a></li>
@@ -124,6 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.CandidateKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.CoverLetterData"><code class="docutils literal notranslate"><span class="pre">CoverLetterData</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.DefaultAIAgent"><code class="docutils literal notranslate"><span class="pre">DefaultAIAgent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.JDWorkspace"><code class="docutils literal notranslate"><span class="pre">JDWorkspace</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.JobAnalyzer"><code class="docutils literal notranslate"><span class="pre">JobAnalyzer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.JobMatcher"><code class="docutils literal notranslate"><span class="pre">JobMatcher</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired.html#hired.JobResult"><code class="docutils literal notranslate"><span class="pre">JobResult</span></code></a></li>
@@ -267,12 +270,14 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.Fact"><code class="docutils literal notranslate"><span class="pre">Fact</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.FactCategory"><code class="docutils literal notranslate"><span class="pre">FactCategory</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.FactStatus"><code class="docutils literal notranslate"><span class="pre">FactStatus</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.JDWorkspace"><code class="docutils literal notranslate"><span class="pre">JDWorkspace</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.MatchState"><code class="docutils literal notranslate"><span class="pre">MatchState</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.Provenance"><code class="docutils literal notranslate"><span class="pre">Provenance</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.QAEntry"><code class="docutils literal notranslate"><span class="pre">QAEntry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.SourceKind"><code class="docutils literal notranslate"><span class="pre">SourceKind</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.fact_from_record"><code class="docutils literal notranslate"><span class="pre">fact_from_record()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.ingest_facts"><code class="docutils literal notranslate"><span class="pre">ingest_facts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.slug"><code class="docutils literal notranslate"><span class="pre">slug()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.verify_quote"><code class="docutils literal notranslate"><span class="pre">verify_quote()</span></code></a></li>
 </ul>
 </li>
@@ -285,6 +290,7 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.Provenance"><code class="docutils literal notranslate"><span class="pre">Provenance</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.QAEntry"><code class="docutils literal notranslate"><span class="pre">QAEntry</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.SourceKind"><code class="docutils literal notranslate"><span class="pre">SourceKind</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/base.html#hired.candidate.base.slug"><code class="docutils literal notranslate"><span class="pre">slug()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a><ul>
@@ -295,6 +301,10 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/workspace.html">hired.candidate.workspace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/workspace.html#hired.candidate.workspace.JDWorkspace"><code class="docutils literal notranslate"><span class="pre">JDWorkspace</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/config.html">hired.config</a><ul>
@@ -329,22 +339,37 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence.html">hired.persistence</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.CandidateMall"><code class="docutils literal notranslate"><span class="pre">CandidateMall</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.JDStore"><code class="docutils literal notranslate"><span class="pre">JDStore</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.Repository"><code class="docutils literal notranslate"><span class="pre">Repository</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.UserStore"><code class="docutils literal notranslate"><span class="pre">UserStore</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.app_data_dir"><code class="docutils literal notranslate"><span class="pre">app_data_dir()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.bytes_store"><code class="docutils literal notranslate"><span class="pre">bytes_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.ensure_v2"><code class="docutils literal notranslate"><span class="pre">ensure_v2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.is_legacy_layout"><code class="docutils literal notranslate"><span class="pre">is_legacy_layout()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.json_store"><code class="docutils literal notranslate"><span class="pre">json_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.list_jds"><code class="docutils literal notranslate"><span class="pre">list_jds()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.markdown_store"><code class="docutils literal notranslate"><span class="pre">markdown_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.migrate_legacy"><code class="docutils literal notranslate"><span class="pre">migrate_legacy()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.text_store"><code class="docutils literal notranslate"><span class="pre">text_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.migrate_user_to_v2"><code class="docutils literal notranslate"><span class="pre">migrate_user_to_v2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence.html#hired.persistence.user_base"><code class="docutils literal notranslate"><span class="pre">user_base()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/base.html">hired.persistence.base</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.CandidateMall"><code class="docutils literal notranslate"><span class="pre">CandidateMall</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.JDStore"><code class="docutils literal notranslate"><span class="pre">JDStore</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.UserStore"><code class="docutils literal notranslate"><span class="pre">UserStore</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.app_data_dir"><code class="docutils literal notranslate"><span class="pre">app_data_dir()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.bytes_store"><code class="docutils literal notranslate"><span class="pre">bytes_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.json_store"><code class="docutils literal notranslate"><span class="pre">json_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.list_jds"><code class="docutils literal notranslate"><span class="pre">list_jds()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.markdown_store"><code class="docutils literal notranslate"><span class="pre">markdown_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.migrate_legacy"><code class="docutils literal notranslate"><span class="pre">migrate_legacy()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.text_store"><code class="docutils literal notranslate"><span class="pre">text_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/base.html#hired.persistence.base.user_base"><code class="docutils literal notranslate"><span class="pre">user_base()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/migrate.html">hired.persistence.migrate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/migrate.html#hired.persistence.migrate.ensure_v2"><code class="docutils literal notranslate"><span class="pre">ensure_v2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/migrate.html#hired.persistence.migrate.is_legacy_layout"><code class="docutils literal notranslate"><span class="pre">is_legacy_layout()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/persistence/migrate.html#hired.persistence.migrate.migrate_user_to_v2"><code class="docutils literal notranslate"><span class="pre">migrate_user_to_v2()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/persistence/repository.html">hired.persistence.repository</a><ul>

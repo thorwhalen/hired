@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.alignment.rubric &mdash; hired 0.0.11 documentation</title>
+  <title>hired.alignment.rubric &mdash; hired 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -60,6 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/workspace.html">hired.candidate.workspace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
@@ -67,6 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/migrate.html">hired.persistence.migrate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
@@ -179,11 +181,17 @@
         <span class="k">return</span> <span class="n">closeability</span>
     <span class="k">if</span> <span class="n">closeability</span> <span class="o">==</span> <span class="n">Closeability</span><span class="o">.</span><span class="n">STRUCTURALLY_HARD</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">closeability</span>  <span class="c1"># genuinely hard (aptitude/credential) — unmoved</span>
-    <span class="n">steps</span> <span class="o">=</span> <span class="p">{</span><span class="n">AILeverage</span><span class="o">.</span><span class="n">HIGH</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">AILeverage</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">AILeverage</span><span class="o">.</span><span class="n">LOW</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">AILeverage</span><span class="o">.</span><span class="n">NONE</span><span class="p">:</span> <span class="mi">0</span><span class="p">}[</span>
-        <span class="n">ai_leverage</span>
-    <span class="p">]</span>
+    <span class="n">steps</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">AILeverage</span><span class="o">.</span><span class="n">HIGH</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">AILeverage</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">AILeverage</span><span class="o">.</span><span class="n">LOW</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">AILeverage</span><span class="o">.</span><span class="n">NONE</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">}[</span><span class="n">ai_leverage</span><span class="p">]</span>
     <span class="c1"># MEDIUM only softens the already-learnable tiers, not requires_experience.</span>
-    <span class="k">if</span> <span class="n">ai_leverage</span> <span class="o">==</span> <span class="n">AILeverage</span><span class="o">.</span><span class="n">MEDIUM</span> <span class="ow">and</span> <span class="n">closeability</span> <span class="o">==</span> <span class="n">Closeability</span><span class="o">.</span><span class="n">REQUIRES_EXPERIENCE</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">ai_leverage</span> <span class="o">==</span> <span class="n">AILeverage</span><span class="o">.</span><span class="n">MEDIUM</span>
+        <span class="ow">and</span> <span class="n">closeability</span> <span class="o">==</span> <span class="n">Closeability</span><span class="o">.</span><span class="n">REQUIRES_EXPERIENCE</span>
+    <span class="p">):</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">if</span> <span class="n">steps</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">closeability</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_SOFTENABLE</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">closeability</span>
@@ -205,7 +213,10 @@
     <span class="n">state</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">match_state</span>
 
     <span class="c1"># UNKNOWN on an open field =&gt; not a bucket; ask the candidate.</span>
-    <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">field_completeness</span> <span class="o">==</span> <span class="n">FieldCompleteness</span><span class="o">.</span><span class="n">OPEN</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span>
+        <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">field_completeness</span> <span class="o">==</span> <span class="n">FieldCompleteness</span><span class="o">.</span><span class="n">OPEN</span>
+    <span class="p">):</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="c1"># Strong match: direct, and the candidate meets the required level.</span>
@@ -219,7 +230,10 @@
     <span class="c1"># Adjacent/transferable: a related skill partially covers it.</span>
     <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">match_type</span> <span class="o">==</span> <span class="n">MatchType</span><span class="o">.</span><span class="n">ADJACENT</span> <span class="ow">and</span> <span class="n">state</span> <span class="o">!=</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">CONTRADICTED</span><span class="p">:</span>
         <span class="c1"># If the adjacent skill already meets the level, it&#39;s effectively strong.</span>
-        <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">CONFIRMED</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">candidate_level</span> <span class="o">&gt;=</span> <span class="n">record</span><span class="o">.</span><span class="n">requirement</span><span class="o">.</span><span class="n">required_level</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">CONFIRMED</span>
+            <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">candidate_level</span> <span class="o">&gt;=</span> <span class="n">record</span><span class="o">.</span><span class="n">requirement</span><span class="o">.</span><span class="n">required_level</span>
+        <span class="p">):</span>
             <span class="k">return</span> <span class="n">Bucket</span><span class="o">.</span><span class="n">STRONG_MATCH</span>
         <span class="k">return</span> <span class="n">Bucket</span><span class="o">.</span><span class="n">ADJACENT_TRANSFERABLE</span>
 

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.persistence.base &mdash; hired 0.0.11 documentation</title>
+  <title>hired.persistence.base &mdash; hired 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -14,7 +14,7 @@
   
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -60,6 +60,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/workspace.html">hired.candidate.workspace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
@@ -67,6 +68,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/migrate.html">hired.persistence.migrate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
@@ -112,7 +114,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for hired.persistence.base</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Canonical data root, store factories, and the candidate store-of-stores.</span>
+<span></span><span class="sd">&quot;&quot;&quot;Canonical data root, filesystem codecs, and the two-level candidate layout.</span>
 
 <span class="sd">The canonical root is resolved by :func:`app_data_dir`, honoring (in order):</span>
 
@@ -120,23 +122,84 @@
 <span class="sd">2. ``$XDG_DATA_HOME/hired`` (the XDG Base Directory spec),</span>
 <span class="sd">3. ``~/.local/share/hired`` (the XDG default).</span>
 
-<span class="sd">Leaf stores are ``MutableMapping`` views: :func:`json_store` for structured</span>
-<span class="sd">records, :func:`bytes_store` for raw uploads, :func:`text_store` for</span>
-<span class="sd">human-readable projections. :class:`CandidateMall` groups the per-candidate</span>
-<span class="sd">stores and resolves the default candidate (``&quot;me&quot;``).</span>
+<span class="sd">**Storage v2 — two-level layout.** Per-candidate data is split into *what is true</span>
+<span class="sd">about the candidate* (cross-JD, reusable) and *work on a specific company&#39;s role(s)*::</span>
+
+<span class="sd">    users/&lt;user&gt;/</span>
+<span class="sd">      user/                      # the candidate — single source of truth</span>
+<span class="sd">        raw/                     # raw sources the user provided (bytes; real filenames)</span>
+<span class="sd">        info/                    # agent-maintained, operable knowledge (agent CRUDs here)</span>
+<span class="sd">          facts/  &lt;id&gt;.json</span>
+<span class="sd">          qa/     &lt;id&gt;.json</span>
+<span class="sd">          topics/ &lt;topic&gt;/...    # per-subject dossiers (Phase 2)</span>
+<span class="sd">          synopsis.md            # regenerated overview (singleton)</span>
+<span class="sd">          state.json             # refresh bookkeeping (Phase 3)</span>
+<span class="sd">      jds/&lt;jd_id&gt;/               # one engagement = 1+ related JDs of the same company</span>
+<span class="sd">        meta.json</span>
+<span class="sd">        jobs/ reports/ report_history/ company/ interview_prep/   (&lt;key&gt;.json)</span>
+
+<span class="sd">**Codecs (the extension fix).** Keys stay domain-oriented and *extension-less* on the</span>
+<span class="sd">``MutableMapping`` facade; file extensions live only on the filesystem side, applied by</span>
+<span class="sd">:mod:`dol` key codecs, and values are dicts in Python / JSON on disk via value codecs:</span>
+
+<span class="sd">- :func:`json_store` — ``JsonFiles`` + a ``.json`` key codec: bare-id keys, ``&lt;id&gt;.json``</span>
+<span class="sd">  files, dict values.</span>
+<span class="sd">- :func:`markdown_store` — ``TextFiles`` + a ``.md`` key codec: bare keys, ``&lt;key&gt;.md``</span>
+<span class="sd">  files, ``str`` values.</span>
+<span class="sd">- :func:`bytes_store` — :class:`dol.Files`: keys are real filenames (extension kept, as</span>
+<span class="sd">  the extension is the meaningful domain key for an upload like ``cv.pdf``).</span>
+
+<span class="sd">The key codec uses only dol&#39;s core ``wrap_kvs`` (not ``affix_key_codec``/``filt_iter``,</span>
+<span class="sd">which has a Windows-specific bug in dol 0.3.x) and normalizes path separators, so stores</span>
+<span class="sd">behave identically on POSIX and Windows.</span>
+
+<span class="sd">:class:`UserStore` groups the user-level stores; :class:`JDStore` groups one engagement&#39;s</span>
+<span class="sd">stores. Singletons (``synopsis.md``, ``state.json``, ``meta.json``) are single files —</span>
+<span class="sd">their accessors carry the extension in the path, never in a store key.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableMapping</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">Files</span><span class="p">,</span> <span class="n">JsonFiles</span><span class="p">,</span> <span class="n">TextFiles</span><span class="p">,</span> <span class="n">mk_dirs_if_missing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dol</span><span class="w"> </span><span class="kn">import</span> <span class="n">Files</span><span class="p">,</span> <span class="n">JsonFiles</span><span class="p">,</span> <span class="n">TextFiles</span><span class="p">,</span> <span class="n">mk_dirs_if_missing</span><span class="p">,</span> <span class="n">wrap_kvs</span>
 
-<span class="n">DFLT_USER</span> <span class="o">=</span> <span class="s1">&#39;me&#39;</span>
-<span class="n">_ENV_VAR</span> <span class="o">=</span> <span class="s1">&#39;HIRED_DATA_DIR&#39;</span>
+<span class="n">DFLT_USER</span> <span class="o">=</span> <span class="s2">&quot;me&quot;</span>
+<span class="n">_ENV_VAR</span> <span class="o">=</span> <span class="s2">&quot;HIRED_DATA_DIR&quot;</span>
+
+<span class="c1"># --- layout names (single source of truth; no magic strings) --------------- #</span>
+<span class="n">USERS_DIR</span> <span class="o">=</span> <span class="s2">&quot;users&quot;</span>
+<span class="n">USER_DIR</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>  <span class="c1"># users/&lt;user&gt;/user/   (the candidate themselves)</span>
+<span class="n">INFO_DIR</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span>  <span class="c1"># users/&lt;user&gt;/user/info/</span>
+<span class="n">RAW_DIR</span> <span class="o">=</span> <span class="s2">&quot;raw&quot;</span>  <span class="c1"># users/&lt;user&gt;/user/raw/</span>
+<span class="n">JDS_DIR</span> <span class="o">=</span> <span class="s2">&quot;jds&quot;</span>  <span class="c1"># users/&lt;user&gt;/jds/</span>
+
+<span class="c1"># user-level info collections (json stores under user/info/&lt;kind&gt;/)</span>
+<span class="n">FACTS</span> <span class="o">=</span> <span class="s2">&quot;facts&quot;</span>
+<span class="n">QA</span> <span class="o">=</span> <span class="s2">&quot;qa&quot;</span>
+<span class="n">TOPICS</span> <span class="o">=</span> <span class="s2">&quot;topics&quot;</span>  <span class="c1"># Phase 2 (dossier subtree)</span>
+
+<span class="c1"># user-level singletons (single files under user/info/)</span>
+<span class="n">SYNOPSIS_FILE</span> <span class="o">=</span> <span class="s2">&quot;synopsis.md&quot;</span>
+<span class="n">STATE_FILE</span> <span class="o">=</span> <span class="s2">&quot;state.json&quot;</span>  <span class="c1"># Phase 3</span>
+
+<span class="c1"># per-engagement collections (json stores under jds/&lt;jd_id&gt;/&lt;kind&gt;/)</span>
+<span class="n">JOBS</span> <span class="o">=</span> <span class="s2">&quot;jobs&quot;</span>
+<span class="n">REPORTS</span> <span class="o">=</span> <span class="s2">&quot;reports&quot;</span>
+<span class="n">REPORT_HISTORY</span> <span class="o">=</span> <span class="s2">&quot;report_history&quot;</span>
+<span class="n">COMPANY</span> <span class="o">=</span> <span class="s2">&quot;company&quot;</span>
+<span class="n">INTERVIEW_PREP</span> <span class="o">=</span> <span class="s2">&quot;interview_prep&quot;</span>
+
+<span class="c1"># per-engagement singleton</span>
+<span class="n">META_FILE</span> <span class="o">=</span> <span class="s2">&quot;meta.json&quot;</span>
+
+<span class="c1"># The json-store kinds at each level (used by migration + tests as the SSOT).</span>
+<span class="n">USER_INFO_JSON_KINDS</span> <span class="o">=</span> <span class="p">(</span><span class="n">FACTS</span><span class="p">,</span> <span class="n">QA</span><span class="p">)</span>
+<span class="n">JD_JSON_KINDS</span> <span class="o">=</span> <span class="p">(</span><span class="n">JOBS</span><span class="p">,</span> <span class="n">REPORTS</span><span class="p">,</span> <span class="n">REPORT_HISTORY</span><span class="p">,</span> <span class="n">COMPANY</span><span class="p">,</span> <span class="n">INTERVIEW_PREP</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="migrate_legacy">
@@ -148,6 +211,8 @@
 <span class="sd">    (file or directory) so historical data is preserved when storage roots are</span>
 <span class="sd">    unified. No-op otherwise. Returns True iff a copy happened.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
     <span class="n">legacy</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">legacy_path</span><span class="p">),</span> <span class="n">Path</span><span class="p">(</span><span class="n">target_path</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">target</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">legacy</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">return</span> <span class="kc">False</span>
@@ -177,11 +242,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_ENV_VAR</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">base</span><span class="p">:</span>
-        <span class="n">xdg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;XDG_DATA_HOME&#39;</span><span class="p">)</span>
+        <span class="n">xdg</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;XDG_DATA_HOME&quot;</span><span class="p">)</span>
         <span class="n">base</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">xdg</span><span class="p">,</span> <span class="s1">&#39;hired&#39;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">xdg</span><span class="p">,</span> <span class="s2">&quot;hired&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">xdg</span>
-            <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">),</span> <span class="s1">&#39;.local&#39;</span><span class="p">,</span> <span class="s1">&#39;share&#39;</span><span class="p">,</span> <span class="s1">&#39;hired&#39;</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">),</span> <span class="s2">&quot;.local&quot;</span><span class="p">,</span> <span class="s2">&quot;share&quot;</span><span class="p">,</span> <span class="s2">&quot;hired&quot;</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="o">*</span><span class="n">subpaths</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">make</span><span class="p">:</span>
@@ -190,115 +255,227 @@
 
 
 
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># Store factories (codec-bearing: extensions on the filesystem side only)</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_suffix_key_store</span><span class="p">(</span><span class="n">base_store</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a filename ``suffix`` on the filesystem side; keep keys extension-less.</span>
+
+<span class="sd">    Uses only dol&#39;s core ``wrap_kvs`` (no ``affix_key_codec``/``filt_iter`` stack,</span>
+<span class="sd">    which has a Windows-specific bug in dol 0.3.x) so behavior is identical across</span>
+<span class="sd">    platforms. Path separators are normalized to ``/`` on read, so nested keys</span>
+<span class="sd">    (e.g. ``&quot;job/stamp&quot;``) round-trip the same on POSIX and Windows.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrap_kvs</span><span class="p">(</span>
+        <span class="n">base_store</span><span class="p">,</span>
+        <span class="n">id_of_key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">k</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">,</span>
+        <span class="n">key_of_id</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="n">p</span><span class="p">[:</span><span class="o">-</span><span class="n">n</span><span class="p">]</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span> <span class="k">else</span> <span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+
 <div class="viewcode-block" id="json_store">
 <a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.json_store">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">json_store</span><span class="p">(</span><span class="n">rootdir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``MutableMapping`` of JSON-serializable values, one file per key.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``MutableMapping`` of JSON-able values: bare-id keys, ``&lt;id&gt;.json`` files.</span>
 
-<span class="sd">    Missing intermediate directories are created on write, so nested keys</span>
-<span class="sd">    (e.g. ``&quot;a/b&quot;``) work transparently.</span>
+<span class="sd">    Built on ``JsonFiles`` (dict↔JSON value codec) + a ``.json`` key codec. Missing</span>
+<span class="sd">    intermediate directories are created on write, so nested keys (e.g. ``&quot;job/stamp&quot;``)</span>
+<span class="sd">    work transparently.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">JsonFiles</span><span class="p">(</span><span class="n">rootdir</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">_suffix_key_store</span><span class="p">(</span><span class="n">JsonFiles</span><span class="p">(</span><span class="n">rootdir</span><span class="p">),</span> <span class="s2">&quot;.json&quot;</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="markdown_store">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.markdown_store">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">markdown_store</span><span class="p">(</span><span class="n">rootdir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``MutableMapping`` of ``str`` values: bare keys, ``&lt;key&gt;.md`` files.&quot;&quot;&quot;</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">_suffix_key_store</span><span class="p">(</span><span class="n">TextFiles</span><span class="p">(</span><span class="n">rootdir</span><span class="p">),</span> <span class="s2">&quot;.md&quot;</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="bytes_store">
 <a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.bytes_store">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">bytes_store</span><span class="p">(</span><span class="n">rootdir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``MutableMapping`` of raw ``bytes`` values (for uploads).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``MutableMapping`` of raw ``bytes``; keys are real filenames (extension kept).&quot;&quot;&quot;</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">Files</span><span class="p">(</span><span class="n">rootdir</span><span class="p">))</span></div>
 
 
 
-<div class="viewcode-block" id="text_store">
-<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.text_store">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">text_store</span><span class="p">(</span><span class="n">rootdir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A ``MutableMapping`` of ``str`` values (for human-readable projections).&quot;&quot;&quot;</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">rootdir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">mk_dirs_if_missing</span><span class="p">(</span><span class="n">TextFiles</span><span class="p">(</span><span class="n">rootdir</span><span class="p">))</span></div>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># Single-file accessors (for singletons that are not collections)</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_write_json_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_read_text_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_write_text_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="user_base">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.user_base">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">user_base</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filesystem base for a candidate: ``&lt;root&gt;`` or ``&lt;data&gt;/users/&lt;user&gt;``.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">app_data_dir</span><span class="p">(</span><span class="n">USERS_DIR</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></div>
 
 
 
-<span class="c1"># The per-candidate sub-stores and the factory that builds each kind. Keeping</span>
-<span class="c1"># this as data (not hardcoded properties) keeps the mall open for extension.</span>
-<span class="n">_STORE_KINDS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;uploads&#39;</span><span class="p">:</span> <span class="s1">&#39;bytes&#39;</span><span class="p">,</span>  <span class="c1"># raw documents (CVs, bios, publications)</span>
-    <span class="s1">&#39;facts&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>  <span class="c1"># atomic, open-world candidate facts</span>
-    <span class="s1">&#39;qa&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>  <span class="c1"># clarifying Q&amp;A history</span>
-    <span class="s1">&#39;jobs&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>  <span class="c1"># JDs + parsed requirements</span>
-    <span class="s1">&#39;reports&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>  <span class="c1"># current alignment report per job</span>
-    <span class="s1">&#39;report_history&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>  <span class="c1"># archived prior report versions (for refresh diffs)</span>
-    <span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>  <span class="c1"># company / people research reports</span>
-    <span class="s1">&#39;interview_prep&#39;</span><span class="p">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>  <span class="c1"># interview-prep research briefings</span>
-    <span class="s1">&#39;synopsis&#39;</span><span class="p">:</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>  <span class="c1"># regenerated human-readable projection of facts</span>
-<span class="p">}</span>
-<span class="n">_STORE_FACTORIES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;json&#39;</span><span class="p">:</span> <span class="n">json_store</span><span class="p">,</span> <span class="s1">&#39;bytes&#39;</span><span class="p">:</span> <span class="n">bytes_store</span><span class="p">,</span> <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">text_store</span><span class="p">}</span>
+<div class="viewcode-block" id="list_jds">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.list_jds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_jds</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Engagement ids under ``users/&lt;user&gt;/jds/`` (sorted; empty if none).&quot;&quot;&quot;</span>
+    <span class="n">jds_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">user_base</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">),</span> <span class="n">JDS_DIR</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">jds_dir</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">jds_dir</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="CandidateMall">
-<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.CandidateMall">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">CandidateMall</span><span class="p">(</span><span class="n">MutableMapping</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A store-of-stores for one candidate&#39;s data kinds.</span>
 
-<span class="sd">    ``mall[&#39;facts&#39;]`` is the facts store; ``mall[&#39;facts&#39;, key]`` is a shorthand</span>
-<span class="sd">    for ``mall[&#39;facts&#39;][key]``. Data lives under</span>
-<span class="sd">    ``&lt;root&gt;/users/&lt;user&gt;/&lt;kind&gt;/``.</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># Store-of-stores: user level and engagement level</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<div class="viewcode-block" id="UserStore">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.UserStore">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UserStore</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-candidate cross-JD storage: raw sources + agent-maintained ``info``.</span>
+
+<span class="sd">    ``raw`` is a bytes store; ``facts`` and ``qa`` are json stores; ``synopsis``</span>
+<span class="sd">    is a single markdown file accessed via :meth:`read_synopsis` /</span>
+<span class="sd">    :meth:`write_synopsis`.</span>
 
 <span class="sd">    &gt;&gt;&gt; import tempfile, os</span>
 <span class="sd">    &gt;&gt;&gt; os.environ[&#39;HIRED_DATA_DIR&#39;] = tempfile.mkdtemp()</span>
-<span class="sd">    &gt;&gt;&gt; mall = CandidateMall()           # default user &quot;me&quot;</span>
-<span class="sd">    &gt;&gt;&gt; sorted(mall.keys())</span>
-<span class="sd">    [&#39;company&#39;, &#39;facts&#39;, &#39;interview_prep&#39;, &#39;jobs&#39;, &#39;qa&#39;, &#39;report_history&#39;, &#39;reports&#39;, &#39;synopsis&#39;, &#39;uploads&#39;]</span>
-<span class="sd">    &gt;&gt;&gt; mall[&#39;facts&#39;][&#39;f1&#39;] = {&#39;statement&#39;: &#39;knows Python&#39;}</span>
-<span class="sd">    &gt;&gt;&gt; mall[&#39;facts&#39;, &#39;f1&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; us = UserStore()                       # default user &quot;me&quot;</span>
+<span class="sd">    &gt;&gt;&gt; us.facts[&#39;f1&#39;] = {&#39;statement&#39;: &#39;knows Python&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; us.facts[&#39;f1&#39;]</span>
 <span class="sd">    {&#39;statement&#39;: &#39;knows Python&#39;}</span>
+<span class="sd">    &gt;&gt;&gt; us.raw[&#39;cv.pdf&#39;] = b&#39;%PDF-1.4&#39;</span>
+<span class="sd">    &gt;&gt;&gt; us.raw[&#39;cv.pdf&#39;]</span>
+<span class="sd">    b&#39;%PDF-1.4&#39;</span>
+<span class="sd">    &gt;&gt;&gt; us.write_synopsis(&#39;# me&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; us.read_synopsis()</span>
+<span class="sd">    &#39;# me&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">root</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MutableMapping</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_kind_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="ow">or</span> <span class="n">app_data_dir</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">base</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">user_base</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>  <span class="c1"># mall[&#39;facts&#39;, &#39;f1&#39;] -&gt; mall[&#39;facts&#39;][&#39;f1&#39;]</span>
-            <span class="n">kind</span><span class="p">,</span> <span class="n">inner</span> <span class="o">=</span> <span class="n">key</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">kind</span><span class="p">][</span><span class="n">inner</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_STORE_KINDS</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unknown store kind </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2">. Available: </span><span class="si">{</span><span class="nb">sorted</span><span class="p">(</span><span class="n">_STORE_KINDS</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span>
-            <span class="n">factory</span> <span class="o">=</span> <span class="n">_STORE_FACTORIES</span><span class="p">[</span><span class="n">_STORE_KINDS</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_kind_dir</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">parts</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">USER_DIR</span><span class="p">,</span> <span class="n">INFO_DIR</span><span class="p">,</span> <span class="o">*</span><span class="n">parts</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">kind</span><span class="p">,</span> <span class="n">inner</span> <span class="o">=</span> <span class="n">key</span>
-            <span class="bp">self</span><span class="p">[</span><span class="n">kind</span><span class="p">][</span><span class="n">inner</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-            <span class="k">return</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s1">&#39;Assign to a sub-store, not the mall: use mall[kind][key] = value&#39;</span>
-        <span class="p">)</span>
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">raw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">bytes_store</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">USER_DIR</span><span class="p">,</span> <span class="n">RAW_DIR</span><span class="p">))</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">kind</span><span class="p">,</span> <span class="n">inner</span> <span class="o">=</span> <span class="n">key</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="p">[</span><span class="n">kind</span><span class="p">][</span><span class="n">inner</span><span class="p">]</span>
-            <span class="k">return</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Delete from a sub-store: del mall[kind][key]&#39;</span><span class="p">)</span>
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">facts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">FACTS</span><span class="p">))</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">_STORE_KINDS</span><span class="p">)</span>
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qa</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json_store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">QA</span><span class="p">))</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">_STORE_KINDS</span><span class="p">)</span></div>
+    <span class="c1"># --- synopsis singleton (info/synopsis.md) ---------------------------- #</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_read_text_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">SYNOPSIS_FILE</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_synopsis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_write_text_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">SYNOPSIS_FILE</span><span class="p">),</span> <span class="n">text</span><span class="p">)</span>
+
+    <span class="c1"># --- refresh state singleton (info/state.json) ------------------------ #</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_read_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">STATE_FILE</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_write_json_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">STATE_FILE</span><span class="p">),</span> <span class="n">state</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="JDStore">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/base.html#hired.persistence.JDStore">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">JDStore</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Per-engagement storage under ``users/&lt;user&gt;/jds/&lt;jd_id&gt;/``.</span>
+
+<span class="sd">    An engagement is one *or a group of* related JDs of the same company; it</span>
+<span class="sd">    holds the parsed jobs, alignment reports (+ archived history), company</span>
+<span class="sd">    research, and interview-prep briefings for that company&#39;s role(s).</span>
+
+<span class="sd">    &gt;&gt;&gt; import tempfile, os</span>
+<span class="sd">    &gt;&gt;&gt; os.environ[&#39;HIRED_DATA_DIR&#39;] = tempfile.mkdtemp()</span>
+<span class="sd">    &gt;&gt;&gt; jd = JDStore(&#39;me&#39;, &#39;acme&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; jd.reports[&#39;role-1&#39;] = {&#39;verdict&#39;: {&#39;recommendation&#39;: &#39;apply&#39;}}</span>
+<span class="sd">    &gt;&gt;&gt; jd.reports[&#39;role-1&#39;][&#39;verdict&#39;][&#39;recommendation&#39;]</span>
+<span class="sd">    &#39;apply&#39;</span>
+<span class="sd">    &gt;&gt;&gt; jd.write_meta({&#39;company&#39;: &#39;Acme&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; jd.read_meta()[&#39;company&#39;]</span>
+<span class="sd">    &#39;Acme&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">jd_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jd_id</span> <span class="o">=</span> <span class="n">jd_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">root</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">base</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">user_base</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_root</span><span class="p">),</span> <span class="n">JDS_DIR</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">jd_id</span><span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json_store</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">JOBS</span><span class="p">))</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reports</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json_store</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">REPORTS</span><span class="p">))</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">report_history</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json_store</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">REPORT_HISTORY</span><span class="p">))</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">company</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json_store</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">COMPANY</span><span class="p">))</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">interview_prep</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MutableMapping</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">json_store</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">INTERVIEW_PREP</span><span class="p">))</span>
+
+    <span class="c1"># --- engagement meta singleton (jds/&lt;id&gt;/meta.json) ------------------- #</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_read_json_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">META_FILE</span><span class="p">))</span> <span class="ow">or</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_write_json_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="n">META_FILE</span><span class="p">),</span> <span class="n">meta</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.persistence.migrate &mdash; hired 0.0.12 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="hired.persistence.repository" href="repository.html" />
+    <link rel="prev" title="hired.persistence.base" href="base.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../alignment/rubric.html">hired.alignment.rubric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../candidate/workspace.html">hired.candidate.workspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="base.html">hired.persistence.base</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hired.persistence.migrate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.migrate.ensure_v2"><code class="docutils literal notranslate"><span class="pre">ensure_v2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.migrate.is_legacy_layout"><code class="docutils literal notranslate"><span class="pre">is_legacy_layout()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.migrate.migrate_user_to_v2"><code class="docutils literal notranslate"><span class="pre">migrate_user_to_v2()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hired.persistence.migrate</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/module_docs/hired/persistence/migrate.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hired.persistence.migrate">
+<span id="hired-persistence-migrate"></span><h1>hired.persistence.migrate<a class="headerlink" href="#module-hired.persistence.migrate" title="Link to this heading"></a></h1>
+<p>One-time migration of legacy flat per-user data to the Storage v2 layout.</p>
+<p>Storage v1 kept every store kind flat under <code class="docutils literal notranslate"><span class="pre">users/&lt;user&gt;/&lt;kind&gt;/</span></code> with
+<em>extension-less</em> files. Storage v2 (see <a class="reference internal" href="base.html#module-hired.persistence.base" title="hired.persistence.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.persistence.base</span></code></a>) splits the
+data into a cross-JD <code class="docutils literal notranslate"><span class="pre">user/</span></code> subtree and per-engagement <code class="docutils literal notranslate"><span class="pre">jds/&lt;jd_id&gt;/</span></code>
+subtrees, and gives every file a proper extension.</p>
+<p>This module moves the data once, idempotently:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">facts/</span></code> <code class="docutils literal notranslate"><span class="pre">qa/</span></code>           → <code class="docutils literal notranslate"><span class="pre">user/info/&lt;kind&gt;/&lt;name&gt;.json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uploads/</span></code>                 → <code class="docutils literal notranslate"><span class="pre">user/raw/&lt;name&gt;</span></code>        (filename kept)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">synopsis/synopsis.md</span></code>     → <code class="docutils literal notranslate"><span class="pre">user/info/synopsis.md</span></code></p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">jobs/</span></code> <code class="docutils literal notranslate"><span class="pre">reports/</span></code> <code class="docutils literal notranslate"><span class="pre">report_history/</span></code> <code class="docutils literal notranslate"><span class="pre">company/</span></code> <code class="docutils literal notranslate"><span class="pre">interview_prep/</span></code></dt><dd><p>→ <code class="docutils literal notranslate"><span class="pre">jds/&lt;jd_id&gt;/&lt;kind&gt;/&lt;rel&gt;.json</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Engagements are grouped by company <strong>when company research seeds the slugs</strong>: if a
+<code class="docutils literal notranslate"><span class="pre">company/&lt;slug&gt;</span></code> entry exists (or a prior partial run already created
+<code class="docutils literal notranslate"><span class="pre">jds/&lt;slug&gt;/</span></code>), all items whose key equals <code class="docutils literal notranslate"><span class="pre">&lt;slug&gt;</span></code> or starts with <code class="docutils literal notranslate"><span class="pre">&lt;slug&gt;-</span></code>
+land in that company’s single workspace (so a company’s several role reports + its
+shared research + prep stay together). Without any such seed, each top-level key
+becomes its own engagement; pass a custom <code class="docutils literal notranslate"><span class="pre">company_of</span></code> to force grouping.</p>
+<p>The migration is <strong>resumable</strong>: it is gated on “any legacy directory remains”, moves
+files individually, refuses to overwrite an existing destination, and removes the
+empty legacy directories only after every move succeeds. So an interrupted run
+(crash, disk-full) is simply re-run — already-moved files are skipped and the
+remaining ones complete. The <em>intelligence</em> of the package is unaffected — this is
+deterministic file plumbing, run automatically via <a class="reference internal" href="#hired.persistence.migrate.ensure_v2" title="hired.persistence.migrate.ensure_v2"><code class="xref py py-func docutils literal notranslate"><span class="pre">ensure_v2()</span></code></a> on first v2
+access, or explicitly (with <a class="reference internal" href="#hired.persistence.migrate.migrate_user_to_v2" title="hired.persistence.migrate.migrate_user_to_v2"><code class="xref py py-func docutils literal notranslate"><span class="pre">migrate_user_to_v2()</span></code></a>, optionally <code class="docutils literal notranslate"><span class="pre">dry_run=True</span></code>).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.migrate.ensure_v2">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.migrate.</span></span><span class="sig-name descname"><span class="pre">ensure_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/hired/persistence/migrate.html#ensure_v2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.migrate.ensure_v2" title="Link to this definition"></a></dt>
+<dd><p>Migrate the user to v2 if a legacy layout is detected. Returns True if migrated.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.migrate.is_legacy_layout">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.migrate.</span></span><span class="sig-name descname"><span class="pre">is_legacy_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/hired/persistence/migrate.html#is_legacy_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.migrate.is_legacy_layout" title="Link to this definition"></a></dt>
+<dd><p>True iff any legacy v1 flat directory remains for this user.</p>
+<p>Gated on the <em>presence of legacy dirs</em>, not on the existence of <code class="docutils literal notranslate"><span class="pre">user/</span></code> — a
+fully-migrated user has had its legacy dirs removed, so this returns False;
+a partially-migrated (interrupted) user still has some, so a re-run resumes.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.migrate.migrate_user_to_v2">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.migrate.</span></span><span class="sig-name descname"><span class="pre">migrate_user_to_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_of</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/hired/persistence/migrate.html#migrate_user_to_v2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.migrate.migrate_user_to_v2" title="Link to this definition"></a></dt>
+<dd><p>Migrate one user’s flat v1 data to the v2 layout. Returns the move plan.</p>
+<p>Idempotent: a no-op (empty plan) if the user is already on v2 or has no
+legacy data. With <code class="docutils literal notranslate"><span class="pre">dry_run=True</span></code> nothing is moved — the returned
+<code class="docutils literal notranslate"><span class="pre">[(src,</span> <span class="pre">dst),</span> <span class="pre">...]</span></code> plan can be inspected first.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="base.html" class="btn btn-neutral float-left" title="hired.persistence.base" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="repository.html" class="btn btn-neutral float-right" title="hired.persistence.repository" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

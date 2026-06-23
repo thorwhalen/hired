@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.persistence.migrate &mdash; hired 0.0.12 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=3bbcec59"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/workspace.html">hired.candidate.workspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/migrate.html">hired.persistence.migrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.persistence.migrate</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.persistence.migrate</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;One-time migration of legacy flat per-user data to the Storage v2 layout.</span>
+
+<span class="sd">Storage v1 kept every store kind flat under ``users/&lt;user&gt;/&lt;kind&gt;/`` with</span>
+<span class="sd">*extension-less* files. Storage v2 (see :mod:`hired.persistence.base`) splits the</span>
+<span class="sd">data into a cross-JD ``user/`` subtree and per-engagement ``jds/&lt;jd_id&gt;/``</span>
+<span class="sd">subtrees, and gives every file a proper extension.</span>
+
+<span class="sd">This module moves the data once, idempotently:</span>
+
+<span class="sd">- ``facts/`` ``qa/``           → ``user/info/&lt;kind&gt;/&lt;name&gt;.json``</span>
+<span class="sd">- ``uploads/``                 → ``user/raw/&lt;name&gt;``        (filename kept)</span>
+<span class="sd">- ``synopsis/synopsis.md``     → ``user/info/synopsis.md``</span>
+<span class="sd">- ``jobs/`` ``reports/`` ``report_history/`` ``company/`` ``interview_prep/``</span>
+<span class="sd">                               → ``jds/&lt;jd_id&gt;/&lt;kind&gt;/&lt;rel&gt;.json``</span>
+
+<span class="sd">Engagements are grouped by company **when company research seeds the slugs**: if a</span>
+<span class="sd">``company/&lt;slug&gt;`` entry exists (or a prior partial run already created</span>
+<span class="sd">``jds/&lt;slug&gt;/``), all items whose key equals ``&lt;slug&gt;`` or starts with ``&lt;slug&gt;-``</span>
+<span class="sd">land in that company&#39;s single workspace (so a company&#39;s several role reports + its</span>
+<span class="sd">shared research + prep stay together). Without any such seed, each top-level key</span>
+<span class="sd">becomes its own engagement; pass a custom ``company_of`` to force grouping.</span>
+
+<span class="sd">The migration is **resumable**: it is gated on &quot;any legacy directory remains&quot;, moves</span>
+<span class="sd">files individually, refuses to overwrite an existing destination, and removes the</span>
+<span class="sd">empty legacy directories only after every move succeeds. So an interrupted run</span>
+<span class="sd">(crash, disk-full) is simply re-run — already-moved files are skipped and the</span>
+<span class="sd">remaining ones complete. The *intelligence* of the package is unaffected — this is</span>
+<span class="sd">deterministic file plumbing, run automatically via :func:`ensure_v2` on first v2</span>
+<span class="sd">access, or explicitly (with :func:`migrate_user_to_v2`, optionally ``dry_run=True``).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.persistence.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">COMPANY</span><span class="p">,</span>
+    <span class="n">INFO_DIR</span><span class="p">,</span>
+    <span class="n">JD_JSON_KINDS</span><span class="p">,</span>
+    <span class="n">JDS_DIR</span><span class="p">,</span>
+    <span class="n">META_FILE</span><span class="p">,</span>
+    <span class="n">RAW_DIR</span><span class="p">,</span>
+    <span class="n">SYNOPSIS_FILE</span><span class="p">,</span>
+    <span class="n">USER_DIR</span><span class="p">,</span>
+    <span class="n">USER_INFO_JSON_KINDS</span><span class="p">,</span>
+    <span class="n">DFLT_USER</span><span class="p">,</span>
+    <span class="n">user_base</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">_LEGACY_UPLOADS</span> <span class="o">=</span> <span class="s2">&quot;uploads&quot;</span>
+<span class="n">_LEGACY_SYNOPSIS</span> <span class="o">=</span> <span class="s2">&quot;synopsis&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_utcnow</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_files_under</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield (posix-relpath, fullpath) for non-hidden files under ``root``.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">dirpath</span><span class="p">,</span> <span class="n">_dirs</span><span class="p">,</span> <span class="n">names</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>  <span class="c1"># skip .DS_Store and friends</span>
+                <span class="k">continue</span>
+            <span class="n">full</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">rel</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">full</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sep</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">rel</span><span class="p">,</span> <span class="n">full</span>
+
+
+<span class="n">_LEGACY_MARKERS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="o">*</span><span class="n">USER_INFO_JSON_KINDS</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">JD_JSON_KINDS</span><span class="p">,</span>
+    <span class="n">_LEGACY_UPLOADS</span><span class="p">,</span>
+    <span class="n">_LEGACY_SYNOPSIS</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="is_legacy_layout">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/migrate.html#hired.persistence.is_legacy_layout">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_legacy_layout</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True iff any legacy v1 flat directory remains for this user.</span>
+
+<span class="sd">    Gated on the *presence of legacy dirs*, not on the existence of ``user/`` — a</span>
+<span class="sd">    fully-migrated user has had its legacy dirs removed, so this returns False;</span>
+<span class="sd">    a partially-migrated (interrupted) user still has some, so a re-run resumes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">user_base</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_LEGACY_MARKERS</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_company_of</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build the key→engagement grouper, seeded from company research + existing engagements.</span>
+
+<span class="sd">    Seeding from both legacy ``company/`` keys and already-created ``jds/`` ids makes</span>
+<span class="sd">    the grouping stable across a resumed migration (the prior run&#39;s ``jds/&lt;slug&gt;/``</span>
+<span class="sd">    reveal the intended grouping even if ``company/`` was already moved).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">seeds</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">COMPANY</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">JDS_DIR</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+            <span class="n">seeds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))</span>
+    <span class="n">companies</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">company_of</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">companies</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">c</span> <span class="ow">or</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">c</span>
+        <span class="k">return</span> <span class="n">key</span>
+
+    <span class="k">return</span> <span class="n">company_of</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_move</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">plan</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Refuse to collapse two sources onto one destination (silent data loss), and</span>
+    <span class="c1"># refuse to overwrite a pre-existing file. On a resumed run already-moved</span>
+    <span class="c1"># sources are gone (so never re-yielded), so a hit here is a genuine collision.</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">d</span> <span class="o">==</span> <span class="n">dst</span> <span class="k">for</span> <span class="n">_s</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">plan</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">dry_run</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;migration destination collision: </span><span class="si">{</span><span class="n">dst</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">plan</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">dry_run</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">dst</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="migrate_user_to_v2">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/migrate.html#hired.persistence.migrate_user_to_v2">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">migrate_user_to_v2</span><span class="p">(</span>
+    <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">company_of</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Migrate one user&#39;s flat v1 data to the v2 layout. Returns the move plan.</span>
+
+<span class="sd">    Idempotent: a no-op (empty plan) if the user is already on v2 or has no</span>
+<span class="sd">    legacy data. With ``dry_run=True`` nothing is moved — the returned</span>
+<span class="sd">    ``[(src, dst), ...]`` plan can be inspected first.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">user_base</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_legacy_layout</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="n">company_of</span> <span class="o">=</span> <span class="n">company_of</span> <span class="ow">or</span> <span class="n">_default_company_of</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">USER_DIR</span><span class="p">,</span> <span class="n">INFO_DIR</span><span class="p">)</span>
+    <span class="n">plan</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">touched_jds</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="c1"># user/info/&lt;kind&gt;/&lt;name&gt;.json  (facts, qa)</span>
+    <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">USER_INFO_JSON_KINDS</span><span class="p">:</span>
+        <span class="n">src_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">kind</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rel</span><span class="p">,</span> <span class="n">full</span> <span class="ow">in</span> <span class="n">_files_under</span><span class="p">(</span><span class="n">src_dir</span><span class="p">):</span>
+            <span class="n">_move</span><span class="p">(</span>
+                <span class="n">full</span><span class="p">,</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">rel</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">),</span>
+                <span class="n">dry_run</span><span class="o">=</span><span class="n">dry_run</span><span class="p">,</span>
+                <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="c1"># user/raw/&lt;name&gt;  (uploads keep their real filename + extension)</span>
+    <span class="k">for</span> <span class="n">rel</span><span class="p">,</span> <span class="n">full</span> <span class="ow">in</span> <span class="n">_files_under</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">_LEGACY_UPLOADS</span><span class="p">)):</span>
+        <span class="n">_move</span><span class="p">(</span>
+            <span class="n">full</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">USER_DIR</span><span class="p">,</span> <span class="n">RAW_DIR</span><span class="p">,</span> <span class="n">rel</span><span class="p">),</span> <span class="n">dry_run</span><span class="o">=</span><span class="n">dry_run</span><span class="p">,</span> <span class="n">plan</span><span class="o">=</span><span class="n">plan</span>
+        <span class="p">)</span>
+
+    <span class="c1"># user/info/synopsis.md  (legacy synopsis/synopsis.md)</span>
+    <span class="k">for</span> <span class="n">rel</span><span class="p">,</span> <span class="n">full</span> <span class="ow">in</span> <span class="n">_files_under</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">_LEGACY_SYNOPSIS</span><span class="p">)):</span>
+        <span class="c1"># the canonical file maps to info/synopsis.md; anything else keeps its own</span>
+        <span class="c1"># relative name so two sources never collapse onto synopsis.md</span>
+        <span class="n">dst_name</span> <span class="o">=</span> <span class="n">SYNOPSIS_FILE</span> <span class="k">if</span> <span class="n">rel</span> <span class="o">==</span> <span class="n">SYNOPSIS_FILE</span> <span class="k">else</span> <span class="n">rel</span>
+        <span class="n">_move</span><span class="p">(</span><span class="n">full</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">dst_name</span><span class="p">),</span> <span class="n">dry_run</span><span class="o">=</span><span class="n">dry_run</span><span class="p">,</span> <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">)</span>
+
+    <span class="c1"># jds/&lt;jd_id&gt;/&lt;kind&gt;/&lt;rel&gt;.json  (jobs, reports, report_history, company, interview_prep)</span>
+    <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">JD_JSON_KINDS</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">rel</span><span class="p">,</span> <span class="n">full</span> <span class="ow">in</span> <span class="n">_files_under</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">kind</span><span class="p">)):</span>
+            <span class="n">jd_id</span> <span class="o">=</span> <span class="n">company_of</span><span class="p">(</span><span class="n">rel</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">touched_jds</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">jd_id</span><span class="p">)</span>
+            <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">JDS_DIR</span><span class="p">,</span> <span class="n">jd_id</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">rel</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">)</span>
+            <span class="n">_move</span><span class="p">(</span><span class="n">full</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="n">dry_run</span><span class="p">,</span> <span class="n">plan</span><span class="o">=</span><span class="n">plan</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dry_run</span><span class="p">:</span>
+        <span class="c1"># engagement meta + remove now-empty legacy dirs</span>
+        <span class="k">for</span> <span class="n">jd_id</span> <span class="ow">in</span> <span class="n">touched_jds</span><span class="p">:</span>
+            <span class="n">meta_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">JDS_DIR</span><span class="p">,</span> <span class="n">jd_id</span><span class="p">,</span> <span class="n">META_FILE</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">meta_path</span><span class="p">):</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">hired.persistence.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">_write_json_file</span>
+
+                <span class="n">_write_json_file</span><span class="p">(</span>
+                    <span class="n">meta_path</span><span class="p">,</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;jd_id&quot;</span><span class="p">:</span> <span class="n">jd_id</span><span class="p">,</span>
+                        <span class="s2">&quot;company&quot;</span><span class="p">:</span> <span class="n">jd_id</span><span class="p">,</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">jd_id</span><span class="p">,</span>
+                        <span class="s2">&quot;created&quot;</span><span class="p">:</span> <span class="n">_utcnow</span><span class="p">(),</span>
+                        <span class="s2">&quot;migrated_from&quot;</span><span class="p">:</span> <span class="s2">&quot;v1-flat&quot;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">)</span>
+        <span class="k">for</span> <span class="n">kind</span> <span class="ow">in</span> <span class="n">_LEGACY_MARKERS</span><span class="p">:</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="n">kind</span><span class="p">),</span> <span class="n">ignore_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">plan</span></div>
+
+
+
+<div class="viewcode-block" id="ensure_v2">
+<a class="viewcode-back" href="../../../module_docs/hired/persistence/migrate.html#hired.persistence.ensure_v2">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ensure_v2</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Migrate the user to v2 if a legacy layout is detected. Returns True if migrated.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_legacy_layout</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">):</span>
+        <span class="n">migrate_user_to_v2</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

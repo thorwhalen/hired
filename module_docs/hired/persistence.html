@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired.persistence &mdash; hired 0.0.11 documentation</title>
+  <title>hired.persistence &mdash; hired 0.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=0c446633"></script>
+      <script src="../../_static/documentation_options.js?v=3bbcec59"></script>
       <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -63,25 +63,33 @@
 <li class="toctree-l1"><a class="reference internal" href="candidate/base.html">hired.candidate.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="candidate/ingest.html">hired.candidate.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="candidate/workspace.html">hired.candidate.workspace</a></li>
 <li class="toctree-l1"><a class="reference internal" href="config.html">hired.config</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content.html">hired.content</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cover_letter.html">hired.cover_letter</a></li>
 <li class="toctree-l1"><a class="reference internal" href="job_utils.html">hired.job_utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="matching.html">hired.matching</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">hired.persistence</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.CandidateMall"><code class="docutils literal notranslate"><span class="pre">CandidateMall</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.JDStore"><code class="docutils literal notranslate"><span class="pre">JDStore</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.persistence.Repository"><code class="docutils literal notranslate"><span class="pre">Repository</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#hired.persistence.Repository.key_of"><code class="docutils literal notranslate"><span class="pre">Repository.key_of()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.UserStore"><code class="docutils literal notranslate"><span class="pre">UserStore</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.persistence.app_data_dir"><code class="docutils literal notranslate"><span class="pre">app_data_dir()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.persistence.bytes_store"><code class="docutils literal notranslate"><span class="pre">bytes_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.ensure_v2"><code class="docutils literal notranslate"><span class="pre">ensure_v2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.is_legacy_layout"><code class="docutils literal notranslate"><span class="pre">is_legacy_layout()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.persistence.json_store"><code class="docutils literal notranslate"><span class="pre">json_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.list_jds"><code class="docutils literal notranslate"><span class="pre">list_jds()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.markdown_store"><code class="docutils literal notranslate"><span class="pre">markdown_store()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hired.persistence.migrate_legacy"><code class="docutils literal notranslate"><span class="pre">migrate_legacy()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.text_store"><code class="docutils literal notranslate"><span class="pre">text_store()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.migrate_user_to_v2"><code class="docutils literal notranslate"><span class="pre">migrate_user_to_v2()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hired.persistence.user_base"><code class="docutils literal notranslate"><span class="pre">user_base()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="persistence/migrate.html">hired.persistence.migrate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="persistence/repository.html">hired.persistence.repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="render.html">hired.render</a></li>
 <li class="toctree-l1"><a class="reference internal" href="renderers.html">hired.renderers</a></li>
@@ -128,27 +136,30 @@
              
   <section id="module-hired.persistence">
 <span id="hired-persistence"></span><h1>hired.persistence<a class="headerlink" href="#module-hired.persistence" title="Link to this heading"></a></h1>
-<p>dol-based persistence foundation for hired.</p>
+<p>dol-based persistence foundation for hired (Storage v2).</p>
 <p>All hired persistence lives <strong>outside the repository</strong> under a single canonical
 data root (<code class="docutils literal notranslate"><span class="pre">~/.local/share/hired/</span></code> by default, overridable via <code class="docutils literal notranslate"><span class="pre">HIRED_DATA_DIR</span></code>).
-Stores are <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> views over the filesystem (via <code class="xref py py-mod docutils literal notranslate"><span class="pre">dol</span></code>), and
-domain repositories wrap them with validated, intention-revealing methods.</p>
-<p>See <code class="docutils literal notranslate"><span class="pre">misc/docs/DESIGN.md</span></code> §3-4 for the full layout and rationale.</p>
+Stores are <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> views over the filesystem (via <code class="xref py py-mod docutils literal notranslate"><span class="pre">dol</span></code>) with
+filesystem codecs that keep keys extension-less while writing properly-extensioned
+files. Per-candidate data is split two levels deep: a cross-JD <code class="docutils literal notranslate"><span class="pre">user/</span></code> subtree
+(<a class="reference internal" href="#hired.persistence.UserStore" title="hired.persistence.UserStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserStore</span></code></a>) and per-engagement <code class="docutils literal notranslate"><span class="pre">jds/&lt;jd_id&gt;/</span></code> subtrees (<a class="reference internal" href="#hired.persistence.JDStore" title="hired.persistence.JDStore"><code class="xref py py-class docutils literal notranslate"><span class="pre">JDStore</span></code></a>).</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">misc/docs/DESIGN.md</span></code> §4 for the full layout and rationale.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="hired.persistence.CandidateMall">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">CandidateMall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/persistence/base.html#CandidateMall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.CandidateMall" title="Link to this definition"></a></dt>
-<dd><p>A store-of-stores for one candidate’s data kinds.</p>
-<p><code class="docutils literal notranslate"><span class="pre">mall['facts']</span></code> is the facts store; <code class="docutils literal notranslate"><span class="pre">mall['facts',</span> <span class="pre">key]</span></code> is a shorthand
-for <code class="docutils literal notranslate"><span class="pre">mall['facts'][key]</span></code>. Data lives under
-<code class="docutils literal notranslate"><span class="pre">&lt;root&gt;/users/&lt;user&gt;/&lt;kind&gt;/</span></code>.</p>
+<dt class="sig sig-object py" id="hired.persistence.JDStore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">JDStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jd_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/persistence/base.html#JDStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.JDStore" title="Link to this definition"></a></dt>
+<dd><p>Per-engagement storage under <code class="docutils literal notranslate"><span class="pre">users/&lt;user&gt;/jds/&lt;jd_id&gt;/</span></code>.</p>
+<p>An engagement is one <em>or a group of</em> related JDs of the same company; it
+holds the parsed jobs, alignment reports (+ archived history), company
+research, and interview-prep briefings for that company’s role(s).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HIRED_DATA_DIR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mall</span> <span class="o">=</span> <span class="n">CandidateMall</span><span class="p">()</span>           <span class="c1"># default user &quot;me&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">sorted</span><span class="p">(</span><span class="n">mall</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="go">[&#39;company&#39;, &#39;facts&#39;, &#39;interview_prep&#39;, &#39;jobs&#39;, &#39;qa&#39;, &#39;report_history&#39;, &#39;reports&#39;, &#39;synopsis&#39;, &#39;uploads&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;facts&#39;</span><span class="p">][</span><span class="s1">&#39;f1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;statement&#39;</span><span class="p">:</span> <span class="s1">&#39;knows Python&#39;</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mall</span><span class="p">[</span><span class="s1">&#39;facts&#39;</span><span class="p">,</span> <span class="s1">&#39;f1&#39;</span><span class="p">]</span>
-<span class="go">{&#39;statement&#39;: &#39;knows Python&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jd</span> <span class="o">=</span> <span class="n">JDStore</span><span class="p">(</span><span class="s1">&#39;me&#39;</span><span class="p">,</span> <span class="s1">&#39;acme&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jd</span><span class="o">.</span><span class="n">reports</span><span class="p">[</span><span class="s1">&#39;role-1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;verdict&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;recommendation&#39;</span><span class="p">:</span> <span class="s1">&#39;apply&#39;</span><span class="p">}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jd</span><span class="o">.</span><span class="n">reports</span><span class="p">[</span><span class="s1">&#39;role-1&#39;</span><span class="p">][</span><span class="s1">&#39;verdict&#39;</span><span class="p">][</span><span class="s1">&#39;recommendation&#39;</span><span class="p">]</span>
+<span class="go">&#39;apply&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jd</span><span class="o">.</span><span class="n">write_meta</span><span class="p">({</span><span class="s1">&#39;company&#39;</span><span class="p">:</span> <span class="s1">&#39;Acme&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jd</span><span class="o">.</span><span class="n">read_meta</span><span class="p">()[</span><span class="s1">&#39;company&#39;</span><span class="p">]</span>
+<span class="go">&#39;Acme&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -165,6 +176,29 @@ JSON-able dicts; models are validated on the way in and out.</p>
 <dd><p>Derive the storage key for an item (defaults to its <code class="docutils literal notranslate"><span class="pre">id</span></code> field).</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.persistence.UserStore">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">UserStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/hired/persistence/base.html#UserStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.UserStore" title="Link to this definition"></a></dt>
+<dd><p>Per-candidate cross-JD storage: raw sources + agent-maintained <code class="docutils literal notranslate"><span class="pre">info</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">raw</span></code> is a bytes store; <code class="docutils literal notranslate"><span class="pre">facts</span></code> and <code class="docutils literal notranslate"><span class="pre">qa</span></code> are json stores; <code class="docutils literal notranslate"><span class="pre">synopsis</span></code>
+is a single markdown file accessed via <code class="xref py py-meth docutils literal notranslate"><span class="pre">read_synopsis()</span></code> /
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">write_synopsis()</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;HIRED_DATA_DIR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span> <span class="o">=</span> <span class="n">UserStore</span><span class="p">()</span>                       <span class="c1"># default user &quot;me&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span><span class="o">.</span><span class="n">facts</span><span class="p">[</span><span class="s1">&#39;f1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;statement&#39;</span><span class="p">:</span> <span class="s1">&#39;knows Python&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span><span class="o">.</span><span class="n">facts</span><span class="p">[</span><span class="s1">&#39;f1&#39;</span><span class="p">]</span>
+<span class="go">{&#39;statement&#39;: &#39;knows Python&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="s1">&#39;cv.pdf&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;%PDF-1.4&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="s1">&#39;cv.pdf&#39;</span><span class="p">]</span>
+<span class="go">b&#39;%PDF-1.4&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span><span class="o">.</span><span class="n">write_synopsis</span><span class="p">(</span><span class="s1">&#39;# me&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span><span class="o">.</span><span class="n">read_synopsis</span><span class="p">()</span>
+<span class="go">&#39;# me&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -186,15 +220,43 @@ JSON-able dicts; models are validated on the way in and out.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="hired.persistence.bytes_store">
 <span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">bytes_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span></span></span><a class="reference internal" href="../../_modules/hired/persistence/base.html#bytes_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.bytes_store" title="Link to this definition"></a></dt>
-<dd><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of raw <code class="docutils literal notranslate"><span class="pre">bytes</span></code> values (for uploads).</p>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of raw <code class="docutils literal notranslate"><span class="pre">bytes</span></code>; keys are real filenames (extension kept).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.ensure_v2">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">ensure_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/persistence/migrate.html#ensure_v2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.ensure_v2" title="Link to this definition"></a></dt>
+<dd><p>Migrate the user to v2 if a legacy layout is detected. Returns True if migrated.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.is_legacy_layout">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">is_legacy_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/hired/persistence/migrate.html#is_legacy_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.is_legacy_layout" title="Link to this definition"></a></dt>
+<dd><p>True iff any legacy v1 flat directory remains for this user.</p>
+<p>Gated on the <em>presence of legacy dirs</em>, not on the existence of <code class="docutils literal notranslate"><span class="pre">user/</span></code> — a
+fully-migrated user has had its legacy dirs removed, so this returns False;
+a partially-migrated (interrupted) user still has some, so a re-run resumes.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hired.persistence.json_store">
 <span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">json_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span></span></span><a class="reference internal" href="../../_modules/hired/persistence/base.html#json_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.json_store" title="Link to this definition"></a></dt>
-<dd><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of JSON-serializable values, one file per key.</p>
-<p>Missing intermediate directories are created on write, so nested keys
-(e.g. <code class="docutils literal notranslate"><span class="pre">&quot;a/b&quot;</span></code>) work transparently.</p>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of JSON-able values: bare-id keys, <code class="docutils literal notranslate"><span class="pre">&lt;id&gt;.json</span></code> files.</p>
+<p>Built on <code class="docutils literal notranslate"><span class="pre">JsonFiles</span></code> (dict↔JSON value codec) + a <code class="docutils literal notranslate"><span class="pre">.json</span></code> key codec. Missing
+intermediate directories are created on write, so nested keys (e.g. <code class="docutils literal notranslate"><span class="pre">&quot;job/stamp&quot;</span></code>)
+work transparently.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.list_jds">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">list_jds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/persistence/base.html#list_jds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.list_jds" title="Link to this definition"></a></dt>
+<dd><p>Engagement ids under <code class="docutils literal notranslate"><span class="pre">users/&lt;user&gt;/jds/</span></code> (sorted; empty if none).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.markdown_store">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">markdown_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span></span></span><a class="reference internal" href="../../_modules/hired/persistence/base.html#markdown_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.markdown_store" title="Link to this definition"></a></dt>
+<dd><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code> values: bare keys, <code class="docutils literal notranslate"><span class="pre">&lt;key&gt;.md</span></code> files.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -207,9 +269,18 @@ unified. No-op otherwise. Returns True iff a copy happened.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="hired.persistence.text_store">
-<span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">text_store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rootdir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MutableMapping</span></span></span><a class="reference internal" href="../../_modules/hired/persistence/base.html#text_store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.text_store" title="Link to this definition"></a></dt>
-<dd><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code> values (for human-readable projections).</p>
+<dt class="sig sig-object py" id="hired.persistence.migrate_user_to_v2">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">migrate_user_to_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company_of</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/hired/persistence/migrate.html#migrate_user_to_v2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.migrate_user_to_v2" title="Link to this definition"></a></dt>
+<dd><p>Migrate one user’s flat v1 data to the v2 layout. Returns the move plan.</p>
+<p>Idempotent: a no-op (empty plan) if the user is already on v2 or has no
+legacy data. With <code class="docutils literal notranslate"><span class="pre">dry_run=True</span></code> nothing is moved — the returned
+<code class="docutils literal notranslate"><span class="pre">[(src,</span> <span class="pre">dst),</span> <span class="pre">...]</span></code> plan can be inspected first.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.user_base">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.</span></span><span class="sig-name descname"><span class="pre">user_base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/hired/persistence/base.html#user_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.user_base" title="Link to this definition"></a></dt>
+<dd><p>Filesystem base for a candidate: <code class="docutils literal notranslate"><span class="pre">&lt;root&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;data&gt;/users/&lt;user&gt;</span></code>.</p>
 </dd></dl>
 
 </section>

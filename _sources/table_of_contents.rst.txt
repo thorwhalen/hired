@@ -16,6 +16,7 @@
    module_docs/hired/candidate/base
    module_docs/hired/candidate/ingest
    module_docs/hired/candidate/knowledge_base
+   module_docs/hired/candidate/workspace
    module_docs/hired/config
    module_docs/hired/content
    module_docs/hired/cover_letter
@@ -23,6 +24,7 @@
    module_docs/hired/matching
    module_docs/hired/persistence
    module_docs/hired/persistence/base
+   module_docs/hired/persistence/migrate
    module_docs/hired/persistence/repository
    module_docs/hired/render
    module_docs/hired/renderers
