@@ -29,6 +29,11 @@ from hired.candidate.base import (
     slug,
 )
 from hired.candidate.ingest import ingest_facts
+from hired.candidate.refresh import RefreshReport
+from hired.candidate.refresh import needs_refresh as _needs_refresh
+from hired.candidate.refresh import pending_qa as _pending_qa
+from hired.candidate.refresh import pending_sources as _pending_sources
+from hired.candidate.refresh import refresh as _refresh
 from hired.candidate.state import SourceDigest, load_state, save_state, sha256_hex
 from hired.candidate.topics import TopicDossier
 from hired.candidate.workspace import JDWorkspace
@@ -157,10 +162,16 @@ class CandidateKnowledgeBase:
             raise TypeError("add_source expects an existing file path or bytes")
         self._store.raw[name] = data
         state = load_state(self._store)
-        state.sources[name] = SourceDigest(
-            key=name, sha256=sha256_hex(data), size=len(data)
-        )
-        save_state(self._store, state)
+        # Record a digest only for a NEW source. For an existing one, leave the
+        # prior digest intact: its sha256 still reflects the last *ingested*
+        # content, so the now-differing bytes are detected as "changed" by
+        # pending_sources(), and its fact_ids survive so a refresh can supersede
+        # the stale facts. (A fresh source's ingested_at is None → also pending.)
+        if name not in state.sources:
+            state.sources[name] = SourceDigest(
+                key=name, sha256=sha256_hex(data), size=len(data)
+            )
+            save_state(self._store, state)
         return name
 
     def get_source(self, name: str) -> bytes:
@@ -209,6 +220,30 @@ class CandidateKnowledgeBase:
         if not os.path.isdir(tdir):
             return []
         return sorted(n for n in os.listdir(tdir) if not n.startswith("."))
+
+    # --- refresh (keep info current as sources change / Q&A accrues) -------
+    def pending_sources(self) -> list[str]:
+        """Raw sources new, changed, or not yet distilled into facts."""
+        return _pending_sources(self)
+
+    def pending_qa(self) -> list[QAEntry]:
+        """Q&A entries not yet distilled into facts."""
+        return _pending_qa(self)
+
+    def needs_refresh(self) -> bool:
+        """True when uningested source/Q&A material exists (refresh warranted)."""
+        return _needs_refresh(self)
+
+    def refresh(
+        self, mode: str = "soft", *, ingest_fn=None, apply: bool = True
+    ) -> RefreshReport:
+        """Refresh ``info`` from changed sources + undistilled Q&A.
+
+        ``ingest_fn(item)`` supplies extraction (intelligence is external); with
+        ``apply=False`` the result is a non-destructive preview. See
+        :mod:`hired.candidate.refresh`.
+        """
+        return _refresh(self, mode, ingest_fn=ingest_fn, apply=apply)
 
     # --- engagements (per-JD workspaces) -----------------------------------
     def jd(

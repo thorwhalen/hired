@@ -124,6 +124,16 @@ files=…)` records volunteered info into a topic dossier (`overview.md` + optio
 files/media) for any subject — a sentence or a whole folder — and the synopsis indexes
 the topics so the agent knows where deeper detail lives.
 
+**Refresh (soft / hard).** `kb.needs_refresh()` / `kb.pending_sources()` /
+`kb.pending_qa()` detect uningested or changed material (via the `state.json`
+digests). `kb.refresh(mode, *, ingest_fn=None, apply=True)` is the deterministic
+driver: **soft** re-reads only new/changed sources + undistilled Q&A (superseding a
+changed source's stale facts); **hard** re-derives *every* source and reconciles by
+supersession. `ingest_fn(item)` supplies the extraction *intelligence* (external —
+skill or injected LLM), and `apply=False` returns a non-destructive preview of the
+proposed changes for the candidate to validate before anything is written — so
+import-safety holds and the candidate stays in the loop.
+
 **Facades.** `UserStore` groups the user-level stores; `JDStore` groups one
 engagement's stores. `CandidateKnowledgeBase` is the user-level domain facade
 (`add_fact`, `facts`, `record_qa`, `add_source`, `add_note`, `topic`, `synopsis`);
