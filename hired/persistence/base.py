@@ -204,9 +204,13 @@ def read_text_file(path: str):
 
 
 def write_text_file(path: str, text: str) -> None:
-    """Write ``text`` to a file, creating parent dirs as needed."""
+    """Write ``text`` to a file, creating parent dirs as needed.
+
+    Uses ``newline=""`` so stored files keep ``\\n`` verbatim on every platform
+    (no ``\\r\\n`` translation on Windows), keeping the data store consistent.
+    """
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w") as f:
+    with open(path, "w", newline="") as f:
         f.write(text)
 
 
