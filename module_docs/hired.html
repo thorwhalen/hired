@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>hired &mdash; hired 0.0.14 documentation</title>
+  <title>hired &mdash; hired 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=544df88d"></script>
+      <script src="../_static/documentation_options.js?v=f0357c94"></script>
       <script src="../_static/doctools.js?v=fd6eb6e6"></script>
       <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="../_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -90,7 +90,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.facts"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.facts()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.jd"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jd()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.jds"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.needs_refresh"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.needs_refresh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.pending_qa"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.pending_qa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.pending_sources"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.pending_sources()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.record_qa"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.record_qa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.refresh"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.refresh()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.regenerate_synopsis"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.regenerate_synopsis()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.save_upload"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.save_upload()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#hired.CandidateKnowledgeBase.sources"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.sources()</span></code></a></li>
@@ -231,6 +235,7 @@
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/base.html">hired.candidate.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/ingest.html">hired.candidate.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hired/candidate/refresh.html">hired.candidate.refresh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/state.html">hired.candidate.state</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/topics.html">hired.candidate.topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hired/candidate/workspace.html">hired.candidate.workspace</a></li>
@@ -640,6 +645,24 @@ hidden). <code class="docutils literal notranslate"><span class="pre">tags</span
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.needs_refresh">
+<span class="sig-name descname"><span class="pre">needs_refresh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.needs_refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.needs_refresh" title="Link to this definition"></a></dt>
+<dd><p>True when uningested source/Q&amp;A material exists (refresh warranted).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.pending_qa">
+<span class="sig-name descname"><span class="pre">pending_qa</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hired/candidate/base.html#hired.candidate.base.QAEntry" title="hired.candidate.base.QAEntry"><span class="pre">QAEntry</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.pending_qa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.pending_qa" title="Link to this definition"></a></dt>
+<dd><p>Q&amp;A entries not yet distilled into facts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.pending_sources">
+<span class="sig-name descname"><span class="pre">pending_sources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.pending_sources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.pending_sources" title="Link to this definition"></a></dt>
+<dd><p>Raw sources new, changed, or not yet distilled into facts.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.record_qa">
 <span class="sig-name descname"><span class="pre">record_qa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hired/candidate/base.html#hired.candidate.base.QAEntry" title="hired.candidate.base.QAEntry"><span class="pre">QAEntry</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">derived_facts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.record_qa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.record_qa" title="Link to this definition"></a></dt>
 <dd><p>Append a clarifying Q&amp;A exchange; optionally distill it into facts.</p>
@@ -648,6 +671,15 @@ given, they are ingested with <code class="docutils literal notranslate"><span c
 = the Q&amp;A id, quotes verified against the answer) and back-linked via the
 entry’s <code class="docutils literal notranslate"><span class="pre">derived_fact_ids</span></code> — so a Q&amp;A answer becomes reusable,
 discoverable knowledge rather than being buried in the history.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.CandidateKnowledgeBase.refresh">
+<span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'soft'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">ingest_fn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="hired/candidate/refresh.html#hired.candidate.refresh.RefreshReport" title="hired.candidate.refresh.RefreshReport"><span class="pre">RefreshReport</span></a></span></span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.CandidateKnowledgeBase.refresh" title="Link to this definition"></a></dt>
+<dd><p>Refresh <code class="docutils literal notranslate"><span class="pre">info</span></code> from changed sources + undistilled Q&amp;A.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ingest_fn(item)</span></code> supplies extraction (intelligence is external); with
+<code class="docutils literal notranslate"><span class="pre">apply=False</span></code> the result is a non-destructive preview. See
+<a class="reference internal" href="hired/candidate/refresh.html#module-hired.candidate.refresh" title="hired.candidate.refresh"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.candidate.refresh</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to hired’s documentation! &mdash; hired 0.0.14 documentation</title>
+  <title>Welcome to hired’s documentation! &mdash; hired 0.0.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -15,7 +15,7 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=544df88d"></script>
+      <script src="_static/documentation_options.js?v=f0357c94"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
       <script src="_static/toggleprompt.js?v=d7ede5d2"></script>
@@ -62,6 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/refresh.html">hired.candidate.refresh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/state.html">hired.candidate.state</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/topics.html">hired.candidate.topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/workspace.html">hired.candidate.workspace</a></li>
@@ -279,12 +280,17 @@
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.MatchState"><code class="docutils literal notranslate"><span class="pre">MatchState</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.Provenance"><code class="docutils literal notranslate"><span class="pre">Provenance</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.QAEntry"><code class="docutils literal notranslate"><span class="pre">QAEntry</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.RefreshItem"><code class="docutils literal notranslate"><span class="pre">RefreshItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.RefreshProposal"><code class="docutils literal notranslate"><span class="pre">RefreshProposal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.RefreshReport"><code class="docutils literal notranslate"><span class="pre">RefreshReport</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.RefreshState"><code class="docutils literal notranslate"><span class="pre">RefreshState</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.SourceDigest"><code class="docutils literal notranslate"><span class="pre">SourceDigest</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.SourceKind"><code class="docutils literal notranslate"><span class="pre">SourceKind</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.TopicDossier"><code class="docutils literal notranslate"><span class="pre">TopicDossier</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.fact_from_record"><code class="docutils literal notranslate"><span class="pre">fact_from_record()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.ingest_facts"><code class="docutils literal notranslate"><span class="pre">ingest_facts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.needs_refresh"><code class="docutils literal notranslate"><span class="pre">needs_refresh()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.refresh"><code class="docutils literal notranslate"><span class="pre">refresh()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.slug"><code class="docutils literal notranslate"><span class="pre">slug()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate.html#hired.candidate.verify_quote"><code class="docutils literal notranslate"><span class="pre">verify_quote()</span></code></a></li>
 </ul>
@@ -309,6 +315,16 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/refresh.html">hired.candidate.refresh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/refresh.html#hired.candidate.refresh.RefreshItem"><code class="docutils literal notranslate"><span class="pre">RefreshItem</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/refresh.html#hired.candidate.refresh.RefreshProposal"><code class="docutils literal notranslate"><span class="pre">RefreshProposal</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/refresh.html#hired.candidate.refresh.RefreshReport"><code class="docutils literal notranslate"><span class="pre">RefreshReport</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/refresh.html#hired.candidate.refresh.needs_refresh"><code class="docutils literal notranslate"><span class="pre">needs_refresh()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/refresh.html#hired.candidate.refresh.pending_qa"><code class="docutils literal notranslate"><span class="pre">pending_qa()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/refresh.html#hired.candidate.refresh.pending_sources"><code class="docutils literal notranslate"><span class="pre">pending_sources()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_docs/hired/candidate/refresh.html#hired.candidate.refresh.refresh"><code class="docutils literal notranslate"><span class="pre">refresh()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="module_docs/hired/candidate/state.html">hired.candidate.state</a><ul>
@@ -540,7 +556,7 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<p>Release: 0.0.14</p>
+<p>Release: 0.0.15</p>
 <p>Last change: Jun 23, 2026</p>
 </section>
 

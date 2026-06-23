@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hired.candidate.refresh &mdash; hired 0.0.15 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=f0357c94"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/toggleprompt.js?v=d7ede5d2"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            hired
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired.html">hired</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/_converters.html">hired._converters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment.html">hired.alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/base.html">hired.alignment.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/diff.html">hired.alignment.diff</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/elicitation.html">hired.alignment.elicitation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/report.html">hired.alignment.report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/alignment/rubric.html">hired.alignment.rubric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/ats_checker.html">hired.ats_checker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/base.html">hired.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate.html">hired.candidate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/base.html">hired.candidate.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/ingest.html">hired.candidate.ingest</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/knowledge_base.html">hired.candidate.knowledge_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/refresh.html">hired.candidate.refresh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/state.html">hired.candidate.state</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/topics.html">hired.candidate.topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/candidate/workspace.html">hired.candidate.workspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/config.html">hired.config</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/content.html">hired.content</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/cover_letter.html">hired.cover_letter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/job_utils.html">hired.job_utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/matching.html">hired.matching</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence.html">hired.persistence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/base.html">hired.persistence.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/migrate.html">hired.persistence.migrate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/persistence/repository.html">hired.persistence.repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/render.html">hired.render</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers.html">hired.renderers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/html.html">hired.renderers.html</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/renderers/rendercv.html">hired.renderers.rendercv</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resume_agent.html">hired.resume_agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/resumejson_pydantic_models.html">hired.resumejson_pydantic_models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search.html">hired.search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/base.html">hired.search.base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/facade.html">hired.search.facade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/registry.html">hired.search.registry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources.html">hired.search.sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/adzuna.html">hired.search.sources.adzuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/jobspy.html">hired.search.sources.jobspy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/search/sources/usajobs.html">hired.search.sources.usajobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tools.html">hired.tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/tracking.html">hired.tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_docs/hired/util.html">hired.util</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">hired</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hired.candidate.refresh</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hired.candidate.refresh</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Soft/hard refresh of the candidate&#39;s ``info`` from changed sources + new Q&amp;A.</span>
+
+<span class="sd">The package provides the **deterministic mechanism** — detect what changed (via the</span>
+<span class="sd">per-source digests in ``state.json``), drive (re)extraction through an injected</span>
+<span class="sd">``ingest_fn``, apply the results (supersede stale source-derived facts, add fresh</span>
+<span class="sd">ones, update the ledger, regenerate the synopsis) — while the **intelligence**</span>
+<span class="sd">(actually reading a document/answer and proposing atomic facts) stays external, so</span>
+<span class="sd">the import-safety contract holds. A skill or an injected LLM supplies ``ingest_fn``.</span>
+
+<span class="sd">Two modes:</span>
+
+<span class="sd">- **soft** (default): only *new or changed* sources, plus Q&amp;A entries not yet</span>
+<span class="sd">  distilled, are (re)read. A changed source&#39;s prior facts are superseded; a new</span>
+<span class="sd">  source&#39;s facts are simply added.</span>
+<span class="sd">- **hard**: *every* source is re-derived from scratch and reconciled by superseding</span>
+<span class="sd">  the facts previously derived from each source. Use for a periodic rebuild.</span>
+
+<span class="sd">Pass ``apply=False`` to get a non-destructive :class:`RefreshReport` of what *would*</span>
+<span class="sd">change (proposals) so the candidate can validate before anything is written.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">FactStatus</span><span class="p">,</span> <span class="n">SourceKind</span><span class="p">,</span> <span class="n">_utcnow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">ingest_facts</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.state</span><span class="w"> </span><span class="kn">import</span> <span class="n">SourceDigest</span><span class="p">,</span> <span class="n">load_state</span><span class="p">,</span> <span class="n">save_state</span><span class="p">,</span> <span class="n">sha256_hex</span>
+
+<span class="n">SOURCE</span> <span class="o">=</span> <span class="s2">&quot;source&quot;</span>
+<span class="n">QA</span> <span class="o">=</span> <span class="s2">&quot;qa&quot;</span>
+
+
+<div class="viewcode-block" id="RefreshItem">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/refresh.html#hired.candidate.RefreshItem">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefreshItem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;One unit of pending work for a refresh: a changed source or an undistilled Q&amp;A.&quot;&quot;&quot;</span>
+
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># SOURCE | QA</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># source filename or qa id</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">str</span>  <span class="c1"># raw bytes (source) or answer text (qa)</span></div>
+
+
+
+<div class="viewcode-block" id="RefreshProposal">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/refresh.html#hired.candidate.RefreshProposal">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefreshProposal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Proposed fact records for one item (returned when ``apply=False``).&quot;&quot;&quot;</span>
+
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">records</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="RefreshReport">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/refresh.html#hired.candidate.RefreshReport">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RefreshReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Outcome (or preview) of a refresh.&quot;&quot;&quot;</span>
+
+    <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">applied</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">pending</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RefreshItem</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">proposals</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RefreshProposal</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">added_fact_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">superseded_fact_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">applied</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2"> refresh: +</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">added_fact_ids</span><span class="p">)</span><span class="si">}</span><span class="s2"> facts, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;superseded </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">superseded_fact_ids</span><span class="p">)</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;from </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pending</span><span class="p">)</span><span class="si">}</span><span class="s2"> item(s)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2"> refresh (preview): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proposals</span><span class="p">)</span><span class="si">}</span><span class="s2"> proposal(s) &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;across </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pending</span><span class="p">)</span><span class="si">}</span><span class="s2"> pending item(s) — nothing written&quot;</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_as_text</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Best-effort text for the quote invariant (None if not decodable).&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">content</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="pending_sources">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/refresh.html#hired.candidate.pending_sources">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pending_sources</span><span class="p">(</span><span class="n">kb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raw source keys that are new, changed, or never ingested into facts.&quot;&quot;&quot;</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">load_state</span><span class="p">(</span><span class="n">kb</span><span class="o">.</span><span class="n">_store</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kb</span><span class="o">.</span><span class="n">sources</span><span class="p">():</span>
+        <span class="n">digest</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">digest</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">digest</span><span class="o">.</span><span class="n">ingested_at</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># never recorded, or recorded but never ingested</span>
+        <span class="k">elif</span> <span class="n">sha256_hex</span><span class="p">(</span><span class="n">kb</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="o">!=</span> <span class="n">digest</span><span class="o">.</span><span class="n">sha256</span><span class="p">:</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># content changed since last ingest</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="pending_qa">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/refresh.html#hired.candidate.pending_qa">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pending_qa</span><span class="p">(</span><span class="n">kb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Q&amp;A entries not yet distilled into facts (no ``derived_fact_ids``).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">q</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">kb</span><span class="o">.</span><span class="n">qa_entries</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">q</span><span class="o">.</span><span class="n">derived_fact_ids</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="needs_refresh">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/refresh.html#hired.candidate.needs_refresh">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">needs_refresh</span><span class="p">(</span><span class="n">kb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True when there is uningested source/Q&amp;A material — a refresh is warranted.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pending_sources</span><span class="p">(</span><span class="n">kb</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">bool</span><span class="p">(</span><span class="n">pending_qa</span><span class="p">(</span><span class="n">kb</span><span class="p">))</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_collect</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">RefreshItem</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;hard&quot;</span><span class="p">:</span>
+        <span class="n">source_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">kb</span><span class="o">.</span><span class="n">sources</span><span class="p">())</span>
+    <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;soft&quot;</span><span class="p">:</span>
+        <span class="n">source_keys</span> <span class="o">=</span> <span class="n">pending_sources</span><span class="p">(</span><span class="n">kb</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mode must be &#39;soft&#39; or &#39;hard&#39;, got </span><span class="si">{</span><span class="n">mode</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">RefreshItem</span><span class="p">(</span><span class="n">SOURCE</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">kb</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">source_keys</span><span class="p">]</span>
+    <span class="n">items</span> <span class="o">+=</span> <span class="p">[</span><span class="n">RefreshItem</span><span class="p">(</span><span class="n">QA</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">answer</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">pending_qa</span><span class="p">(</span><span class="n">kb</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">items</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_supersede</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">fact_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mark the given (still-asserted) facts superseded; return those changed.&quot;&quot;&quot;</span>
+    <span class="n">changed</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">fid</span> <span class="ow">in</span> <span class="n">fact_ids</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fact</span> <span class="o">=</span> <span class="n">kb</span><span class="o">.</span><span class="n">get_fact</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">fact</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">FactStatus</span><span class="o">.</span><span class="n">ASSERTED</span><span class="p">:</span>
+            <span class="n">fact</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">FactStatus</span><span class="o">.</span><span class="n">SUPERSEDED</span>
+            <span class="n">fact</span><span class="o">.</span><span class="n">updated_at</span> <span class="o">=</span> <span class="n">_utcnow</span><span class="p">()</span>
+            <span class="n">kb</span><span class="o">.</span><span class="n">_facts</span><span class="p">[</span><span class="n">fid</span><span class="p">]</span> <span class="o">=</span> <span class="n">fact</span>
+            <span class="n">changed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">changed</span>
+
+
+<div class="viewcode-block" id="refresh">
+<a class="viewcode-back" href="../../../module_docs/hired/candidate/refresh.html#hired.candidate.refresh">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span>
+    <span class="n">kb</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;soft&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">ingest_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">apply</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RefreshReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Refresh ``info`` from changed sources + undistilled Q&amp;A. See module docstring.</span>
+
+<span class="sd">    ``ingest_fn(item: RefreshItem) -&gt; list[dict]`` supplies the extraction</span>
+<span class="sd">    intelligence (records are the usual ``{&quot;statement&quot;, &quot;category&quot;, &quot;quote&quot;, …}``</span>
+<span class="sd">    dicts). With ``ingest_fn=None`` the report just lists the pending items (the</span>
+<span class="sd">    caller does extraction). With ``apply=False`` the records are returned as</span>
+<span class="sd">    proposals and nothing is written.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="n">_collect</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+    <span class="n">report</span> <span class="o">=</span> <span class="n">RefreshReport</span><span class="p">(</span>
+        <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">applied</span><span class="o">=</span><span class="n">apply</span> <span class="ow">and</span> <span class="n">ingest_fn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="n">pending</span><span class="o">=</span><span class="n">items</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ingest_fn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">report</span>  <span class="c1"># discovery only; caller will extract</span>
+
+    <span class="n">state</span> <span class="o">=</span> <span class="n">load_state</span><span class="p">(</span><span class="n">kb</span><span class="o">.</span><span class="n">_store</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="n">ingest_fn</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">apply</span><span class="p">:</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">proposals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RefreshProposal</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">records</span><span class="p">))</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">SOURCE</span><span class="p">:</span>
+            <span class="n">prior</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">prior</span> <span class="ow">and</span> <span class="n">prior</span><span class="o">.</span><span class="n">fact_ids</span>
+            <span class="p">):</span>  <span class="c1"># changed/hard re-derive → supersede stale facts</span>
+                <span class="n">report</span><span class="o">.</span><span class="n">superseded_fact_ids</span> <span class="o">+=</span> <span class="n">_supersede</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">prior</span><span class="o">.</span><span class="n">fact_ids</span><span class="p">)</span>
+            <span class="n">new_ids</span> <span class="o">=</span> <span class="n">ingest_facts</span><span class="p">(</span>
+                <span class="n">kb</span><span class="p">,</span>
+                <span class="n">records</span><span class="p">,</span>
+                <span class="n">source_kind</span><span class="o">=</span><span class="n">SourceKind</span><span class="o">.</span><span class="n">UPLOAD</span><span class="p">,</span>
+                <span class="n">source_id</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+                <span class="n">source_text</span><span class="o">=</span><span class="n">_as_text</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">content</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">added_fact_ids</span> <span class="o">+=</span> <span class="n">new_ids</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">content</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
+                <span class="k">else</span> <span class="n">item</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourceDigest</span><span class="p">(</span>
+                <span class="n">key</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+                <span class="n">sha256</span><span class="o">=</span><span class="n">sha256_hex</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+                <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+                <span class="n">ingested_at</span><span class="o">=</span><span class="n">_utcnow</span><span class="p">(),</span>
+                <span class="n">fact_ids</span><span class="o">=</span><span class="n">new_ids</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># QA</span>
+            <span class="n">new_ids</span> <span class="o">=</span> <span class="n">ingest_facts</span><span class="p">(</span>
+                <span class="n">kb</span><span class="p">,</span>
+                <span class="n">records</span><span class="p">,</span>
+                <span class="n">source_kind</span><span class="o">=</span><span class="n">SourceKind</span><span class="o">.</span><span class="n">QA</span><span class="p">,</span>
+                <span class="n">source_id</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+                <span class="n">source_text</span><span class="o">=</span><span class="n">_as_text</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">content</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">added_fact_ids</span> <span class="o">+=</span> <span class="n">new_ids</span>
+            <span class="n">_backlink_qa</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">new_ids</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">applied</span><span class="p">:</span>
+        <span class="n">stamp</span> <span class="o">=</span> <span class="n">_utcnow</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;hard&quot;</span><span class="p">:</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">last_hard_refresh</span> <span class="o">=</span> <span class="n">stamp</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">last_soft_refresh</span> <span class="o">=</span> <span class="n">stamp</span>
+        <span class="n">save_state</span><span class="p">(</span><span class="n">kb</span><span class="o">.</span><span class="n">_store</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">kb</span><span class="o">.</span><span class="n">regenerate_synopsis</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">report</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_backlink_qa</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">qa_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fact_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Record derived fact ids on the Q&amp;A entry so its answer stays discoverable.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">kb</span><span class="o">.</span><span class="n">qa_entries</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">qa_id</span><span class="p">:</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">derived_fact_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">derived_fact_ids</span><span class="p">)</span> <span class="o">+</span> <span class="n">fact_ids</span>
+            <span class="n">kb</span><span class="o">.</span><span class="n">_qa</span><span class="p">[</span><span class="n">qa_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span>
+            <span class="k">return</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
