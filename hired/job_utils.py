@@ -29,20 +29,78 @@ class JobAnalyzer:
 
     # Common skill keywords (can be extended)
     TECH_SKILLS = {
-        'python', 'java', 'javascript', 'typescript', 'c++', 'c#', 'ruby', 'go', 'rust',
-        'react', 'angular', 'vue', 'node', 'django', 'flask', 'spring', 'express',
-        'aws', 'azure', 'gcp', 'docker', 'kubernetes', 'terraform', 'jenkins',
-        'sql', 'postgresql', 'mysql', 'mongodb', 'redis', 'elasticsearch',
-        'git', 'ci/cd', 'agile', 'scrum', 'jira', 'linux', 'bash',
-        'ml', 'ai', 'machine learning', 'deep learning', 'tensorflow', 'pytorch',
-        'data science', 'analytics', 'tableau', 'power bi', 'spark', 'hadoop',
-        'rest', 'graphql', 'microservices', 'api', 'backend', 'frontend',
+        "python",
+        "java",
+        "javascript",
+        "typescript",
+        "c++",
+        "c#",
+        "ruby",
+        "go",
+        "rust",
+        "react",
+        "angular",
+        "vue",
+        "node",
+        "django",
+        "flask",
+        "spring",
+        "express",
+        "aws",
+        "azure",
+        "gcp",
+        "docker",
+        "kubernetes",
+        "terraform",
+        "jenkins",
+        "sql",
+        "postgresql",
+        "mysql",
+        "mongodb",
+        "redis",
+        "elasticsearch",
+        "git",
+        "ci/cd",
+        "agile",
+        "scrum",
+        "jira",
+        "linux",
+        "bash",
+        "ml",
+        "ai",
+        "machine learning",
+        "deep learning",
+        "tensorflow",
+        "pytorch",
+        "data science",
+        "analytics",
+        "tableau",
+        "power bi",
+        "spark",
+        "hadoop",
+        "rest",
+        "graphql",
+        "microservices",
+        "api",
+        "backend",
+        "frontend",
     }
 
     SOFT_SKILLS = {
-        'leadership', 'communication', 'collaboration', 'teamwork', 'problem-solving',
-        'critical thinking', 'project management', 'mentoring', 'coaching',
-        'strategic thinking', 'analytical', 'creative', 'adaptable', 'organized',
+        "leadership",
+        "communication",
+        "collaboration",
+        "teamwork",
+        "problem-solving",
+        "critical thinking",
+        "project management",
+        "mentoring",
+        "coaching",
+        "strategic thinking",
+        "analytical",
+        "creative",
+        "adaptable",
+        "organized",
     }
 
     def __init__(self, job: JobResult):
@@ -71,7 +129,7 @@ class JobAnalyzer:
         if self.job.skills:
             parts.extend(self.job.skills)
 
-        return ' '.join(parts)
+        return " ".join(parts)
 
     def extract_skills(self, include_soft_skills: bool = True) -> Set[str]:
         """
@@ -88,14 +146,14 @@ class JobAnalyzer:
         # Check technical skills
         for skill in self.TECH_SKILLS:
             # Use word boundaries to avoid partial matches
-            pattern = r'\b' + re.escape(skill) + r'\b'
+            pattern = r"\b" + re.escape(skill) + r"\b"
             if re.search(pattern, self._text_lower):
                 found_skills.add(skill)
 
         # Check soft skills if requested
         if include_soft_skills:
             for skill in self.SOFT_SKILLS:
-                pattern = r'\b' + re.escape(skill) + r'\b'
+                pattern = r"\b" + re.escape(skill) + r"\b"
                 if re.search(pattern, self._text_lower):
                     found_skills.add(skill)
 
@@ -122,22 +180,24 @@ class JobAnalyzer:
 
         # Find requirements sections
         patterns = [
-            r'(?:requirements?|qualifications?|what we\'re looking for):?\s*\n+((?:[-•*]\s*.+\n?)+)',
-            r'(?:required|must have):?\s*\n+((?:[-•*]\s*.+\n?)+)',
-            r'(?:responsibilities|you will):?\s*\n+((?:[-•*]\s*.+\n?)+)',
+            r"(?:requirements?|qualifications?|what we\'re looking for):?\s*\n+((?:[-•*]\s*.+\n?)+)",
+            r"(?:required|must have):?\s*\n+((?:[-•*]\s*.+\n?)+)",
+            r"(?:responsibilities|you will):?\s*\n+((?:[-•*]\s*.+\n?)+)",
         ]
 
         for pattern in patterns:
-            matches = re.finditer(pattern, self.job.description, re.IGNORECASE | re.MULTILINE)
+            matches = re.finditer(
+                pattern, self.job.description, re.IGNORECASE | re.MULTILINE
+            )
             for match in matches:
                 bullet_text = match.group(1)
                 # Split by bullets and clean
-                bullets = re.split(r'\n[-•*]\s*', bullet_text)
+                bullets = re.split(r"\n[-•*]\s*", bullet_text)
                 requirements.extend(b.strip() for b in bullets if b.strip())
 
         # If no structured requirements found, look for years of experience
         if not requirements:
-            exp_pattern = r'(\d+\+?\s*(?:years?|yrs?)\s+(?:of\s+)?experience)'
+            exp_pattern = r"(\d+\+?\s*(?:years?|yrs?)\s+(?:of\s+)?experience)"
             exp_matches = re.findall(exp_pattern, desc_lower)
             requirements.extend(exp_matches)
 
@@ -155,15 +215,56 @@ class JobAnalyzer:
         """
         # Remove common words
         stop_words = {
-            'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
-            'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'be',
-            'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
-            'would', 'should', 'could', 'may', 'might', 'can', 'this', 'that',
-            'these', 'those', 'we', 'you', 'they', 'our', 'your', 'their',
+            "the",
+            "a",
+            "an",
+            "and",
+            "or",
+            "but",
+            "in",
+            "on",
+            "at",
+            "to",
+            "for",
+            "of",
+            "with",
+            "by",
+            "from",
+            "as",
+            "is",
+            "was",
+            "are",
+            "were",
+            "be",
+            "been",
+            "being",
+            "have",
+            "has",
+            "had",
+            "do",
+            "does",
+            "did",
+            "will",
+            "would",
+            "should",
+            "could",
+            "may",
+            "might",
+            "can",
+            "this",
+            "that",
+            "these",
+            "those",
+            "we",
+            "you",
+            "they",
+            "our",
+            "your",
+            "their",
         }
 
         # Tokenize and count
-        words = re.findall(r'\b[a-z]{3,}\b', self._text_lower)
+        words = re.findall(r"\b[a-z]{3,}\b", self._text_lower)
         word_freq = {}
 
         for word in words:
@@ -241,14 +342,14 @@ class JobAnalyzer:
             Dictionary with job summary
         """
         return {
-            'title': self.job.title,
-            'company': self.job.company,
-            'location': _format_location(self.job.location) or None,
-            'is_remote': self.job.is_remote,
-            'skills': list(self.extract_skills()),
-            'requirements': self.extract_requirements(),
-            'keywords': self.extract_keywords(),
-            'job_url': self.job.job_url,
+            "title": self.job.title,
+            "company": self.job.company,
+            "location": _format_location(self.job.location) or None,
+            "is_remote": self.job.is_remote,
+            "skills": list(self.extract_skills()),
+            "requirements": self.extract_requirements(),
+            "keywords": self.extract_keywords(),
+            "job_url": self.job.job_url,
         }
 
 

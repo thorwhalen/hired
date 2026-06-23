@@ -67,7 +67,7 @@ class RenderCVRenderer(Renderer):
 
             # Create temporary JSON file for input
             json_resume_path = temp_path / "resume.json"
-            with open(json_resume_path, 'w') as f:
+            with open(json_resume_path, "w") as f:
                 import json
 
                 json.dump(json_resume, f, indent=2)
@@ -86,7 +86,7 @@ class RenderCVRenderer(Renderer):
                 else:
                     # Try to fix common issues and retry
                     json_resume = self._fix_common_conversion_issues(json_resume)
-                    with open(json_resume_path, 'w') as f:
+                    with open(json_resume_path, "w") as f:
                         import json
 
                         json.dump(json_resume, f, indent=2)
@@ -130,52 +130,52 @@ class RenderCVRenderer(Renderer):
         # Convert Pydantic model to dict
         content_dict = (
             content.model_dump(exclude_none=True)
-            if hasattr(content, 'model_dump')
+            if hasattr(content, "model_dump")
             else content
         )
 
         # Extract basics section
-        basics = content_dict.get('basics', {})
+        basics = content_dict.get("basics", {})
         basics = self._ensure_basics_complete(basics)
 
         # Build JSON Resume structure
         json_resume = {
             "basics": basics,
-            "work": self._ensure_work_complete(content_dict.get('work', [])),
+            "work": self._ensure_work_complete(content_dict.get("work", [])),
             "education": self._ensure_education_complete(
-                content_dict.get('education', [])
+                content_dict.get("education", [])
             ),
         }
 
         # Add optional sections if present
         optional_sections = [
-            'volunteer',
-            'awards',
-            'certificates',
-            'publications',
-            'skills',
-            'languages',
-            'interests',
-            'references',
-            'projects',
+            "volunteer",
+            "awards",
+            "certificates",
+            "publications",
+            "skills",
+            "languages",
+            "interests",
+            "references",
+            "projects",
         ]
 
         for section_name in optional_sections:
             if section_name in content_dict:
                 section_data = content_dict[section_name]
-                if section_name == 'publications':
+                if section_name == "publications":
                     json_resume[section_name] = self._ensure_publications_complete(
                         section_data or []
                     )
-                elif section_name == 'projects':
+                elif section_name == "projects":
                     json_resume[section_name] = self._ensure_projects_complete(
                         section_data or []
                     )
-                elif section_name == 'skills':
+                elif section_name == "skills":
                     json_resume[section_name] = self._ensure_skills_complete(
                         section_data or []
                     )
-                elif section_name == 'awards':
+                elif section_name == "awards":
                     json_resume[section_name] = self._ensure_awards_complete(
                         section_data or []
                     )
@@ -185,10 +185,10 @@ class RenderCVRenderer(Renderer):
         # Handle any extra sections (not in standard JSON Resume schema)
         for section_name, section_data in content_dict.items():
             if section_name not in [
-                'basics',
-                'work',
-                'education',
-            ] + optional_sections + ['field_schema', 'meta']:
+                "basics",
+                "work",
+                "education",
+            ] + optional_sections + ["field_schema", "meta"]:
                 json_resume[section_name] = section_data
                 self.warnings.append(
                     f"Unknown section '{section_name}' may not render correctly"
@@ -206,11 +206,11 @@ class RenderCVRenderer(Renderer):
 
         # Required fields with defaults
         required_fields = {
-            'name': 'Professional Name',
-            'email': 'professional@email.com',
-            'phone': '+1-555-000-0000',
-            'summary': 'Professional summary to be filled in.',
-            'url': 'https://example.com',
+            "name": "Professional Name",
+            "email": "professional@email.com",
+            "phone": "+1-555-000-0000",
+            "summary": "Professional summary to be filled in.",
+            "url": "https://example.com",
         }
 
         for field, default_value in required_fields.items():
@@ -224,11 +224,11 @@ class RenderCVRenderer(Renderer):
                     )
 
         # Ensure location exists
-        if 'location' not in basics:
-            basics['location'] = {
-                'city': 'City',
-                'countryCode': 'US',
-                'region': 'State',
+        if "location" not in basics:
+            basics["location"] = {
+                "city": "City",
+                "countryCode": "US",
+                "region": "State",
             }
             self.warnings.append("Missing location in basics, using default location")
 
@@ -239,29 +239,29 @@ class RenderCVRenderer(Renderer):
 
         for i, work in enumerate(work_entries):
             # Required fields for work entries
-            if 'name' not in work and 'company' not in work:
+            if "name" not in work and "company" not in work:
                 if self.strict_validation:
                     raise ValueError(f"Work entry {i} missing company/name field")
                 else:
-                    work['name'] = work.get('company', 'Company Name')
+                    work["name"] = work.get("company", "Company Name")
                     self.warnings.append(
                         f"Work entry {i} missing company name, using default"
                     )
 
-            if 'position' not in work:
+            if "position" not in work:
                 if self.strict_validation:
                     raise ValueError(f"Work entry {i} missing position field")
                 else:
-                    work['position'] = 'Position Title'
+                    work["position"] = "Position Title"
                     self.warnings.append(
                         f"Work entry {i} missing position, using default"
                     )
 
-            if 'startDate' not in work:
+            if "startDate" not in work:
                 if self.strict_validation:
                     raise ValueError(f"Work entry {i} missing startDate field")
                 else:
-                    work['startDate'] = '2020-01-01'
+                    work["startDate"] = "2020-01-01"
                     self.warnings.append(
                         f"Work entry {i} missing startDate, using default"
                     )
@@ -274,11 +274,11 @@ class RenderCVRenderer(Renderer):
         for i, edu in enumerate(education_entries):
             # Required fields for education entries
             required_fields = {
-                'institution': 'Educational Institution',
-                'area': 'Field of Study',
-                'studyType': 'Degree Type',
-                'startDate': '2020-01-01',
-                'endDate': '2024-12-31',
+                "institution": "Educational Institution",
+                "area": "Field of Study",
+                "studyType": "Degree Type",
+                "startDate": "2020-01-01",
+                "endDate": "2024-12-31",
             }
 
             for field, default_value in required_fields.items():
@@ -302,30 +302,30 @@ class RenderCVRenderer(Renderer):
         fixed_resume = copy.deepcopy(json_resume)
 
         # Fix empty arrays that cause issues
-        for section in ['work', 'education', 'skills', 'projects']:
+        for section in ["work", "education", "skills", "projects"]:
             if section in fixed_resume and not fixed_resume[section]:
                 # Add a minimal entry to prevent conversion errors
-                if section == 'work':
+                if section == "work":
                     fixed_resume[section] = [
                         {
-                            'name': 'Example Company',
-                            'position': 'Position Title',
-                            'startDate': '2020-01-01',
-                            'endDate': '2023-12-31',
-                            'summary': 'Professional experience to be filled in.',
+                            "name": "Example Company",
+                            "position": "Position Title",
+                            "startDate": "2020-01-01",
+                            "endDate": "2023-12-31",
+                            "summary": "Professional experience to be filled in.",
                         }
                     ]
                     self.warnings.append(
                         "Added example work entry to prevent conversion errors"
                     )
-                elif section == 'education':
+                elif section == "education":
                     fixed_resume[section] = [
                         {
-                            'institution': 'Educational Institution',
-                            'area': 'Field of Study',
-                            'studyType': 'Degree',
-                            'startDate': '2020-01-01',
-                            'endDate': '2024-12-31',
+                            "institution": "Educational Institution",
+                            "area": "Field of Study",
+                            "studyType": "Degree",
+                            "startDate": "2020-01-01",
+                            "endDate": "2024-12-31",
                         }
                     ]
                     self.warnings.append(
@@ -340,10 +340,10 @@ class RenderCVRenderer(Renderer):
         for i, pub in enumerate(publications):
             # Required fields for publications
             required_fields = {
-                'name': 'Publication Title',
-                'publisher': 'Publisher Name',
-                'releaseDate': '2023-01-01',  # This is what was missing!
-                'url': 'https://example.com',
+                "name": "Publication Title",
+                "publisher": "Publisher Name",
+                "releaseDate": "2023-01-01",  # This is what was missing!
+                "url": "https://example.com",
             }
 
             for field, default_value in required_fields.items():
@@ -364,10 +364,10 @@ class RenderCVRenderer(Renderer):
         for i, proj in enumerate(projects):
             # Required fields for projects
             required_fields = {
-                'name': 'Project Name',
-                'description': 'Project description to be filled in.',
-                'startDate': '2023-01-01',
-                'endDate': '2023-12-31',
+                "name": "Project Name",
+                "description": "Project description to be filled in.",
+                "startDate": "2023-01-01",
+                "endDate": "2023-12-31",
             }
 
             for field, default_value in required_fields.items():
@@ -387,17 +387,17 @@ class RenderCVRenderer(Renderer):
 
         for i, skill in enumerate(skills):
             # Required fields for skills
-            if 'name' not in skill:
+            if "name" not in skill:
                 if self.strict_validation:
                     raise ValueError(f"Skill entry {i} missing name field")
                 else:
-                    skill['name'] = 'Skill Category'
+                    skill["name"] = "Skill Category"
                     self.warnings.append(
                         f"Skill entry {i} missing 'name', using default: 'Skill Category'"
                     )
 
-            if 'keywords' not in skill:
-                skill['keywords'] = []  # Empty list is acceptable for keywords
+            if "keywords" not in skill:
+                skill["keywords"] = []  # Empty list is acceptable for keywords
 
         return skills
 
@@ -407,9 +407,9 @@ class RenderCVRenderer(Renderer):
         for i, award in enumerate(awards):
             # Required fields for awards
             required_fields = {
-                'title': 'Award Title',
-                'date': '2023-01-01',
-                'awarder': 'Awarding Organization',
+                "title": "Award Title",
+                "date": "2023-01-01",
+                "awarder": "Awarding Organization",
             }
 
             for field, default_value in required_fields.items():

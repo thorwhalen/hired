@@ -37,7 +37,7 @@ class ConfigStore(ABCMutableMapping):
 
 
 def get_default_config() -> ConfigStore:
-    return ConfigStore({'format': 'pdf', 'theme': 'default'})
+    return ConfigStore({"format": "pdf", "theme": "default"})
 
 
 def load_config(path: str) -> ConfigStore:

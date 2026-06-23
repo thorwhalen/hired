@@ -50,24 +50,24 @@ class CoverLetterData:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for template rendering."""
         return {
-            'applicant_name': self.applicant_name,
-            'applicant_email': self.applicant_email,
-            'applicant_phone': self.applicant_phone,
-            'applicant_address': self.applicant_address,
-            'company_name': self.company_name,
-            'position_title': self.position_title,
-            'hiring_manager_name': self.hiring_manager_name,
-            'opening_paragraph': self.opening_paragraph,
-            'body_paragraphs': self.body_paragraphs,
-            'closing_paragraph': self.closing_paragraph,
-            'date': self.date,
+            "applicant_name": self.applicant_name,
+            "applicant_email": self.applicant_email,
+            "applicant_phone": self.applicant_phone,
+            "applicant_address": self.applicant_address,
+            "company_name": self.company_name,
+            "position_title": self.position_title,
+            "hiring_manager_name": self.hiring_manager_name,
+            "opening_paragraph": self.opening_paragraph,
+            "body_paragraphs": self.body_paragraphs,
+            "closing_paragraph": self.closing_paragraph,
+            "date": self.date,
         }
 
 
 def generate_cover_letter_content(
     candidate_info: Dict[str, Any],
-    job_info: Dict[str, Any] | 'JobResult',
-    tone: str = "professional"
+    job_info: Dict[str, Any] | "JobResult",
+    tone: str = "professional",
 ) -> CoverLetterData:
     """
     Generate cover letter content from candidate and job information.
@@ -87,35 +87,37 @@ def generate_cover_letter_content(
         ... )
     """
     # Extract applicant info
-    basics = candidate_info.get('basics', candidate_info)
-    applicant_name = basics.get('name', 'Applicant')
-    applicant_email = basics.get('email', '')
-    applicant_phone = basics.get('phone')
+    basics = candidate_info.get("basics", candidate_info)
+    applicant_name = basics.get("name", "Applicant")
+    applicant_email = basics.get("email", "")
+    applicant_phone = basics.get("phone")
 
     # Build address if available
-    location = basics.get('location', {})
+    location = basics.get("location", {})
     applicant_address = None
     if location:
         address_parts = []
-        if location.get('address'):
-            address_parts.append(location['address'])
-        if location.get('city'):
-            city_state = location['city']
-            if location.get('region'):
+        if location.get("address"):
+            address_parts.append(location["address"])
+        if location.get("city"):
+            city_state = location["city"]
+            if location.get("region"):
                 city_state += f", {location['region']}"
             address_parts.append(city_state)
-        if location.get('postalCode'):
-            address_parts.append(location['postalCode'])
+        if location.get("postalCode"):
+            address_parts.append(location["postalCode"])
         if address_parts:
-            applicant_address = ', '.join(address_parts)
+            applicant_address = ", ".join(address_parts)
 
     # Extract job info
-    if hasattr(job_info, 'title'):  # JobResult
+    if hasattr(job_info, "title"):  # JobResult
         company_name = job_info.company or "the company"
         position_title = job_info.title
     else:  # dict
-        company_name = job_info.get('company', job_info.get('company_name', 'the company'))
-        position_title = job_info.get('title', job_info.get('position', 'the position'))
+        company_name = job_info.get(
+            "company", job_info.get("company_name", "the company")
+        )
+        position_title = job_info.get("title", job_info.get("position", "the position"))
 
     # Generate content based on tone
     opening = _generate_opening(applicant_name, position_title, company_name, tone)
@@ -136,10 +138,7 @@ def generate_cover_letter_content(
 
 
 def _generate_opening(
-    applicant_name: str,
-    position_title: str,
-    company_name: str,
-    tone: str
+    applicant_name: str, position_title: str, company_name: str, tone: str
 ) -> str:
     """Generate opening paragraph."""
     if tone == "enthusiastic":
@@ -162,19 +161,17 @@ def _generate_opening(
 
 
 def _generate_body(
-    candidate_info: Dict[str, Any],
-    job_info: Any,
-    tone: str
+    candidate_info: Dict[str, Any], job_info: Any, tone: str
 ) -> list[str]:
     """Generate body paragraphs."""
     paragraphs = []
 
     # Paragraph 1: Relevant experience
-    work = candidate_info.get('work', [])
+    work = candidate_info.get("work", [])
     if work:
         recent_job = work[0]
-        position = recent_job.get('position', 'my previous role')
-        company = recent_job.get('company', 'my previous employer')
+        position = recent_job.get("position", "my previous role")
+        company = recent_job.get("company", "my previous employer")
 
         para1 = (
             f"In my current role as {position} at {company}, I have developed strong skills "
@@ -184,11 +181,11 @@ def _generate_body(
         paragraphs.append(para1)
 
     # Paragraph 2: Skills and achievements
-    skills = candidate_info.get('skills', [])
+    skills = candidate_info.get("skills", [])
     if skills:
-        skill_names = [s.get('name') for s in skills if s.get('name')]
+        skill_names = [s.get("name") for s in skills if s.get("name")]
         if skill_names:
-            skill_list = ', '.join(skill_names[:3])
+            skill_list = ", ".join(skill_names[:3])
             para2 = (
                 f"My technical expertise includes {skill_list}, among other skills. "
                 f"I have successfully applied these skills to deliver impactful results "
@@ -230,8 +227,8 @@ def _generate_closing(tone: str) -> str:
 
 def render_cover_letter(
     cover_letter_data: CoverLetterData,
-    format: str = 'text',
-    template: Optional[str] = None
+    format: str = "text",
+    template: Optional[str] = None,
 ) -> str:
     """
     Render cover letter to specified format.
@@ -246,9 +243,9 @@ def render_cover_letter(
     """
     if template:
         jinja_template = jinja2.Template(template)
-    elif format == 'html':
+    elif format == "html":
         jinja_template = jinja2.Template(_HTML_TEMPLATE)
-    elif format == 'markdown':
+    elif format == "markdown":
         jinja_template = jinja2.Template(_MARKDOWN_TEMPLATE)
     else:  # text
         jinja_template = jinja2.Template(_TEXT_TEMPLATE)
@@ -258,11 +255,11 @@ def render_cover_letter(
 
 def mk_cover_letter(
     candidate_info: Dict[str, Any],
-    job_info: Dict[str, Any] | 'JobResult',
+    job_info: Dict[str, Any] | "JobResult",
     *,
     tone: str = "professional",
-    format: str = 'text',
-    output_path: Optional[str] = None
+    format: str = "text",
+    output_path: Optional[str] = None,
 ) -> str:
     """
     Generate and render a cover letter.
@@ -291,22 +288,27 @@ def mk_cover_letter(
         ... )
     """
     # Handle JobResult conversion
-    if hasattr(job_info, 'title') and hasattr(job_info, 'source'):
+    if hasattr(job_info, "title") and hasattr(job_info, "source"):
         from hired.job_utils import job_to_text
+
         # Create a dict with the job info for easier processing
         job_dict = {
-            'title': job_info.title,
-            'company': job_info.company,
-            'description': job_info.description,
+            "title": job_info.title,
+            "company": job_info.company,
+            "description": job_info.description,
         }
-        cover_letter_data = generate_cover_letter_content(candidate_info, job_info, tone)
+        cover_letter_data = generate_cover_letter_content(
+            candidate_info, job_info, tone
+        )
     else:
-        cover_letter_data = generate_cover_letter_content(candidate_info, job_info, tone)
+        cover_letter_data = generate_cover_letter_content(
+            candidate_info, job_info, tone
+        )
 
     result = render_cover_letter(cover_letter_data, format=format)
 
     if output_path:
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(result)
 
     return result

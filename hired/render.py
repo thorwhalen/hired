@@ -29,13 +29,13 @@ def _initialize_default_renderers():
     registry = get_renderer_registry()
 
     # Register HTML renderer for html and pdf formats
-    registry.register('html', HTMLRenderer)
-    registry.register('pdf', HTMLRenderer)
+    registry.register("html", HTMLRenderer)
+    registry.register("pdf", HTMLRenderer)
 
     # Register RenderCV renderer if available
     if RENDERCV_AVAILABLE:
-        registry.register('pdf-rendercv', RenderCVRenderer)
-        registry.register('rendercv', RenderCVRenderer)
+        registry.register("pdf-rendercv", RenderCVRenderer)
+        registry.register("rendercv", RenderCVRenderer)
 
 
 def _get_renderer_for_format(format: str) -> Renderer:
@@ -50,9 +50,9 @@ def _get_renderer_for_format(format: str) -> Renderer:
         return registry.get_renderer(format)
     except KeyError:
         # Fallback for backwards compatibility
-        if format in ('pdf', 'html'):
+        if format in ("pdf", "html"):
             return HTMLRenderer()
-        raise NotImplementedError(f'Format {format} not supported')
+        raise NotImplementedError(f"Format {format} not supported")
 
 
 # NOTE: do not register renderers at import time to avoid surprising side

@@ -53,72 +53,72 @@ ResumeContent = ResumeSchemaExtended
 
 __all__ = [
     # Resume generation
-    'mk_content_for_resume',
-    'mk_resume',
-    'load_config',
-    'get_default_config',
-    'ResumeContent',  # Backward compatibility alias
-    'ResumeSchema',
-    'ResumeSchemaExtended',
-    'RenderingConfig',
+    "mk_content_for_resume",
+    "mk_resume",
+    "load_config",
+    "get_default_config",
+    "ResumeContent",  # Backward compatibility alias
+    "ResumeSchema",
+    "ResumeSchemaExtended",
+    "RenderingConfig",
     # Job search
-    'JobSources',
-    'SearchCriteria',
-    'JobResult',
-    'JobSearchSource',
-    'JobType',
+    "JobSources",
+    "SearchCriteria",
+    "JobResult",
+    "JobSearchSource",
+    "JobType",
     # Job matching
-    'JobMatcher',
-    'MatchScore',
-    'quick_match',
+    "JobMatcher",
+    "MatchScore",
+    "quick_match",
     # ATS checking
-    'ATSChecker',
-    'ATSReport',
-    'check_resume_ats',
+    "ATSChecker",
+    "ATSReport",
+    "check_resume_ats",
     # Cover letters
-    'mk_cover_letter',
-    'CoverLetterData',
-    'generate_cover_letter_content',
+    "mk_cover_letter",
+    "CoverLetterData",
+    "generate_cover_letter_content",
     # Application tracking
-    'ApplicationTracker',
-    'Application',
+    "ApplicationTracker",
+    "Application",
     # Job utilities
-    'JobAnalyzer',
-    'job_to_text',
-    'extract_job_keywords',
-    'get_job_skills',
+    "JobAnalyzer",
+    "job_to_text",
+    "extract_job_keywords",
+    "get_job_skills",
     # AI content agents
-    'DefaultAIAgent',
-    'LLMResumeAgent',
+    "DefaultAIAgent",
+    "LLMResumeAgent",
     # Conversational resume agent (lazily loaded — see __getattr__)
-    'ResumeSession',
-    'ResumeExpertAgent',
-    'LLMConfig',
+    "ResumeSession",
+    "ResumeExpertAgent",
+    "LLMConfig",
     # Candidate knowledge base (lazily loaded — see __getattr__)
-    'CandidateKnowledgeBase',
+    "CandidateKnowledgeBase",
     # JD alignment analysis (lazily loaded — see __getattr__)
-    'AlignmentReport',
-    'Requirement',
-    'RequirementRecord',
-    'classify',
-    'render_report_markdown',
+    "AlignmentReport",
+    "Requirement",
+    "RequirementRecord",
+    "classify",
+    "render_report_markdown",
 ]
 
 # The conversational agent lives in the large `hired.resume_agent` module. Expose
 # its surface lazily (PEP 562) so a plain `import hired` stays light and pulls it
 # in only when actually used.
-_LAZY_FROM_RESUME_AGENT = {'ResumeSession', 'ResumeExpertAgent', 'LLMConfig'}
+_LAZY_FROM_RESUME_AGENT = {"ResumeSession", "ResumeExpertAgent", "LLMConfig"}
 
 # The candidate-knowledge and alignment subsystems are also exposed lazily: a
 # plain `import hired` does not need to pull in their schemas/stores until used.
 # (Their full surfaces live in `hired.candidate` and `hired.alignment`.)
-_LAZY_FROM_CANDIDATE = {'CandidateKnowledgeBase'}
+_LAZY_FROM_CANDIDATE = {"CandidateKnowledgeBase"}
 _LAZY_FROM_ALIGNMENT = {
-    'AlignmentReport',
-    'Requirement',
-    'RequirementRecord',
-    'classify',
-    'render_report_markdown',
+    "AlignmentReport",
+    "Requirement",
+    "RequirementRecord",
+    "classify",
+    "render_report_markdown",
 }
 
 
@@ -126,11 +126,11 @@ def __getattr__(name):
     import importlib
 
     if name in _LAZY_FROM_RESUME_AGENT:
-        return getattr(importlib.import_module('hired.resume_agent'), name)
+        return getattr(importlib.import_module("hired.resume_agent"), name)
     if name in _LAZY_FROM_CANDIDATE:
-        return getattr(importlib.import_module('hired.candidate'), name)
+        return getattr(importlib.import_module("hired.candidate"), name)
     if name in _LAZY_FROM_ALIGNMENT:
-        return getattr(importlib.import_module('hired.alignment'), name)
+        return getattr(importlib.import_module("hired.alignment"), name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 

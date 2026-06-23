@@ -15,13 +15,14 @@ import yaml  # pip install PyYAML
 from hired._converters import ensure_dict
 from hired.resumejson_pydantic_models import ResumeSchema
 
-proj_files = files('hired')
-data_files = files('hired') / 'data'
-themes_files = data_files / 'themes'
+proj_files = files("hired")
+data_files = files("hired") / "data"
+themes_files = data_files / "themes"
+
 
 def _load_json_file(path: str) -> dict:
     """Load a JSON file from the given path."""
-    with open(path, encoding='utf-8') as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -29,13 +30,13 @@ try:
     import toml
 
     def _load_toml_file(path: str) -> dict:
-        with open(path, encoding='utf-8') as f:
+        with open(path, encoding="utf-8") as f:
             return toml.load(f)
 
 except ImportError:
 
     def _load_toml_file(path: str) -> dict:
-        raise ImportError('toml is required for TOML support')
+        raise ImportError("toml is required for TOML support")
 
 
 def load_yaml(yaml_path: str):
@@ -53,7 +54,7 @@ def dump_yaml(d: dict, yaml_path: str):
     Dumps a dictionary to a YAML file using PyYAML,
     preserving key order and using a readable block style.
     """
-    with open(yaml_path, 'w') as file:
+    with open(yaml_path, "w") as file:
         # sort_keys=False is crucial to prevent alphabetical sorting.
         # default_flow_style=False ensures a readable, multi-line format.
         yaml.dump(d, file, sort_keys=False, default_flow_style=False)
@@ -95,8 +96,8 @@ def extract_friendly_errors(error_obj: ValidationErrorType, schema=None, data=No
     """
     if isinstance(error_obj, PydanticValidationError):
         for error in error_obj.errors():
-            field = error['loc'][0]
-            message = error['msg']
+            field = error["loc"][0]
+            message = error["msg"]
             yield field, message
     elif isinstance(error_obj, JsonSchemaValidationError):
         # The jsonschema.exceptions.ValidationError object might only represent the first error.
@@ -116,7 +117,7 @@ def validation_friendly_errors_string(
     schema=None,
     data=None,
 ) -> str:
-    return '\n'.join(
+    return "\n".join(
         f"Error in field '{field}': {message}"
         for field, message in extract_friendly_errors(error_obj, schema, data)
     )
@@ -131,7 +132,7 @@ def ensure_resume_content_dict(content_src: ResumeSource) -> ResumeDict:
         content_src = str(content_src.expanduser())
     if isinstance(content_src, str):
         if os.path.exists(content_src):
-            with open(content_src, encoding='utf-8') as f:
+            with open(content_src, encoding="utf-8") as f:
                 content = json.load(f)
         else:
             try:
@@ -169,7 +170,7 @@ def normalize_and_validate_resume(raw: Mapping, *, strict: bool = True):
 
     # Make a shallow dict to ensure we mutate a copy
     if not isinstance(raw, Mapping):
-        raise TypeError('raw must be a mapping')
+        raise TypeError("raw must be a mapping")
 
     pruned = _prune_none(dict(raw))
 
@@ -237,11 +238,11 @@ def validate_resume_content_dict(content: dict, *, raise_errors=True) -> ResumeD
 # Functions that manage resources
 
 
-schemas_files = data_files / 'schemas'
-resume_jsons_files = data_files / 'resume_jsons'
-resume_json_example = resume_jsons_files / 'test_resume.json'
+schemas_files = data_files / "schemas"
+resume_jsons_files = data_files / "resume_jsons"
+resume_json_example = resume_jsons_files / "test_resume.json"
 
-DFLT_RESUME_SCHEMA_PATH = str(schemas_files / 'resume_schema.json')
+DFLT_RESUME_SCHEMA_PATH = str(schemas_files / "resume_schema.json")
 DFLT_SCHEMA_URL = (
     "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json"
 )
@@ -265,63 +266,63 @@ def refresh_resume_schema():
         # because of UrlAny that was created.
 
         # Check if AnyUrl is imported - if not, no changes needed
-        if 'AnyUrl' not in code:
+        if "AnyUrl" not in code:
             return code
 
         # Remove AnyUrl from imports, handling various import patterns
         # Pattern 1: from pydantic import AnyUrl, ...
         code = re.sub(
-            r'from pydantic import ([^,\n]*,\s*)?AnyUrl(,\s*[^,\n]*)?',
-            r'from pydantic import \1\2',
+            r"from pydantic import ([^,\n]*,\s*)?AnyUrl(,\s*[^,\n]*)?",
+            r"from pydantic import \1\2",
             code,
         )
 
         # Pattern 2: from pydantic import ..., AnyUrl
         code = re.sub(
-            r'(from pydantic import [^,\n]*),\s*AnyUrl\s*$',
-            r'\1',
+            r"(from pydantic import [^,\n]*),\s*AnyUrl\s*$",
+            r"\1",
             code,
             flags=re.MULTILINE,
         )
 
         # Pattern 3: from pydantic import AnyUrl only
-        code = re.sub(r'from pydantic import AnyUrl\n', '', code)
+        code = re.sub(r"from pydantic import AnyUrl\n", "", code)
 
         # Clean up any leftover commas from import removal
-        code = re.sub(r'from pydantic import\s*,', 'from pydantic import', code)
-        code = re.sub(r',\s*,', ',', code)
-        code = re.sub(r',\s*\)', ')', code)
+        code = re.sub(r"from pydantic import\s*,", "from pydantic import", code)
+        code = re.sub(r",\s*,", ",", code)
+        code = re.sub(r",\s*\)", ")", code)
 
         # Add the type alias definition after the imports
-        lines = code.split('\n')
+        lines = code.split("\n")
         import_end_idx = 0
         for i, line in enumerate(lines):
             if line.strip().startswith(
-                ('from ', 'import ')
-            ) and not line.strip().startswith('# '):
+                ("from ", "import ")
+            ) and not line.strip().startswith("# "):
                 import_end_idx = i
 
         # Insert the type alias after imports
-        lines.insert(import_end_idx + 1, '')
-        lines.insert(import_end_idx + 2, '# Type alias to avoid strict URL validation')
-        lines.insert(import_end_idx + 3, 'AnyUrl = Optional[str]')
-        lines.insert(import_end_idx + 4, '')
+        lines.insert(import_end_idx + 1, "")
+        lines.insert(import_end_idx + 2, "# Type alias to avoid strict URL validation")
+        lines.insert(import_end_idx + 3, "AnyUrl = Optional[str]")
+        lines.insert(import_end_idx + 4, "")
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
-    print('Get the schema (dict) from the url')
+    print("Get the schema (dict) from the url")
     new_schema = ensure_dict(DFLT_SCHEMA_URL)
-    print('Make pydantic models (code) from it')
+    print("Make pydantic models (code) from it")
     new_schema_code = pydantic_model_to_code(
         new_schema, egress_transform=fix_anyurl_transform
     )
-    print('Replace the code that is in resumejson_pydantic_models.py')
-    (proj_files / 'resumejson_pydantic_models.py').write_text(
+    print("Replace the code that is in resumejson_pydantic_models.py")
+    (proj_files / "resumejson_pydantic_models.py").write_text(
         f'"""Pydantic models for resume json schema\n"""\n{new_schema_code}'
     )
 
     print("Writing the schema in the schema file (for reference)...")
     Path(DFLT_RESUME_SCHEMA_PATH).write_text(json.dumps(new_schema))
 
-    print('Refresh test json')
+    print("Refresh test json")
     Path(resume_json_example).write_text(json.dumps(url_to_jdict(DFLT_TEST_RESUME_URL)))

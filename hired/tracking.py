@@ -51,7 +51,9 @@ class Application:
     cover_letter_path: Optional[str] = None
 
     # Status tracking
-    status: str = "draft"  # draft, applied, interview, offer, rejected, accepted, withdrawn
+    status: str = (
+        "draft"  # draft, applied, interview, offer, rejected, accepted, withdrawn
+    )
     applied_date: Optional[str] = None
 
     # Timeline
@@ -86,26 +88,26 @@ class Application:
         # Parse JSON fields
         if self.contacts:
             try:
-                data['contacts'] = json.loads(self.contacts)
+                data["contacts"] = json.loads(self.contacts)
             except json.JSONDecodeError:
-                data['contacts'] = []
+                data["contacts"] = []
 
         if self.interview_dates:
             try:
-                data['interview_dates'] = json.loads(self.interview_dates)
+                data["interview_dates"] = json.loads(self.interview_dates)
             except json.JSONDecodeError:
-                data['interview_dates'] = []
+                data["interview_dates"] = []
 
         if self.source_data:
             try:
-                data['source_data'] = json.loads(self.source_data)
+                data["source_data"] = json.loads(self.source_data)
             except json.JSONDecodeError:
-                data['source_data'] = {}
+                data["source_data"] = {}
 
         return data
 
     @classmethod
-    def from_job_result(cls, job: 'JobResult', **kwargs) -> 'Application':
+    def from_job_result(cls, job: "JobResult", **kwargs) -> "Application":
         """
         Create an Application from a JobResult.
 
@@ -132,7 +134,7 @@ class Application:
             salary_range=salary_range,
             source=job.source,
             source_data=json.dumps(job.raw_data) if job.raw_data else "",
-            **kwargs
+            **kwargs,
         )
 
 
@@ -215,11 +217,7 @@ class ApplicationTracker:
         conn.commit()
         conn.close()
 
-    def add_application(
-        self,
-        job: Optional['JobResult'] = None,
-        **kwargs
-    ) -> int:
+    def add_application(self, job: Optional["JobResult"] = None, **kwargs) -> int:
         """
         Add a new application.
 
@@ -255,20 +253,37 @@ class ApplicationTracker:
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO applications (
                 job_title, company, job_url, location, salary_range,
                 resume_path, cover_letter_path, status, applied_date,
                 created_at, updated_at, follow_up_date, last_contact_date,
                 notes, contacts, interview_dates, match_score, source, source_data
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (
-            app.job_title, app.company, app.job_url, app.location, app.salary_range,
-            app.resume_path, app.cover_letter_path, app.status, app.applied_date,
-            app.created_at, app.updated_at, app.follow_up_date, app.last_contact_date,
-            app.notes, app.contacts, app.interview_dates, app.match_score,
-            app.source, app.source_data
-        ))
+        """,
+            (
+                app.job_title,
+                app.company,
+                app.job_url,
+                app.location,
+                app.salary_range,
+                app.resume_path,
+                app.cover_letter_path,
+                app.status,
+                app.applied_date,
+                app.created_at,
+                app.updated_at,
+                app.follow_up_date,
+                app.last_contact_date,
+                app.notes,
+                app.contacts,
+                app.interview_dates,
+                app.match_score,
+                app.source,
+                app.source_data,
+            ),
+        )
 
         app_id = cursor.lastrowid
         conn.commit()
@@ -302,7 +317,7 @@ class ApplicationTracker:
         self,
         status: Optional[str] = None,
         company: Optional[str] = None,
-        limit: Optional[int] = None
+        limit: Optional[int] = None,
     ) -> List[Application]:
         """
         Get applications with optional filtering.
@@ -343,10 +358,7 @@ class ApplicationTracker:
         return [Application(**dict(row)) for row in rows]
 
     def update_status(
-        self,
-        app_id: int,
-        status: str,
-        notes: Optional[str] = None
+        self, app_id: int, status: str, notes: Optional[str] = None
     ) -> bool:
         """
         Update application status.
@@ -359,20 +371,17 @@ class ApplicationTracker:
         Returns:
             True if updated, False if not found
         """
-        updates = {
-            'status': status,
-            'updated_at': datetime.now().isoformat()
-        }
+        updates = {"status": status, "updated_at": datetime.now().isoformat()}
 
         if status == "applied" and not self.get_application(app_id).applied_date:
-            updates['applied_date'] = datetime.now().isoformat()
+            updates["applied_date"] = datetime.now().isoformat()
 
         if notes:
             app = self.get_application(app_id)
             if app:
                 existing_notes = app.notes or ""
                 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-                updates['notes'] = f"{existing_notes}\n[{timestamp}] {notes}".strip()
+                updates["notes"] = f"{existing_notes}\n[{timestamp}] {notes}".strip()
 
         return self.update_application(app_id, **updates)
 
@@ -390,7 +399,7 @@ class ApplicationTracker:
         if not kwargs:
             return False
 
-        kwargs['updated_at'] = datetime.now().isoformat()
+        kwargs["updated_at"] = datetime.now().isoformat()
 
         set_clause = ", ".join(f"{key} = ?" for key in kwargs.keys())
         values = list(kwargs.values())
@@ -399,10 +408,7 @@ class ApplicationTracker:
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
 
-        cursor.execute(
-            f"UPDATE applications SET {set_clause} WHERE id = ?",
-            values
-        )
+        cursor.execute(f"UPDATE applications SET {set_clause} WHERE id = ?", values)
 
         rows_affected = cursor.rowcount
         conn.commit()
@@ -452,12 +458,20 @@ class ApplicationTracker:
         by_status = dict(cursor.fetchall())
 
         # Response rate (if applied, how many got responses)
-        applied = by_status.get('applied', 0) + by_status.get('interview', 0) + \
-                  by_status.get('offer', 0) + by_status.get('accepted', 0) + \
-                  by_status.get('rejected', 0)
+        applied = (
+            by_status.get("applied", 0)
+            + by_status.get("interview", 0)
+            + by_status.get("offer", 0)
+            + by_status.get("accepted", 0)
+            + by_status.get("rejected", 0)
+        )
 
-        responses = by_status.get('interview', 0) + by_status.get('offer', 0) + \
-                   by_status.get('accepted', 0) + by_status.get('rejected', 0)
+        responses = (
+            by_status.get("interview", 0)
+            + by_status.get("offer", 0)
+            + by_status.get("accepted", 0)
+            + by_status.get("rejected", 0)
+        )
 
         response_rate = (responses / applied * 100) if applied > 0 else 0
 
@@ -472,10 +486,10 @@ class ApplicationTracker:
         conn.close()
 
         return {
-            'total_applications': total,
-            'by_status': by_status,
-            'response_rate': round(response_rate, 1),
-            'avg_days_to_response': round(avg_days, 1),
+            "total_applications": total,
+            "by_status": by_status,
+            "response_rate": round(response_rate, 1),
+            "avg_days_to_response": round(avg_days, 1),
         }
 
     def get_follow_ups_due(self, days: int = 7) -> List[Application]:
@@ -494,13 +508,16 @@ class ApplicationTracker:
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
 
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT * FROM applications
             WHERE follow_up_date IS NOT NULL
             AND follow_up_date <= ?
             AND status NOT IN ('rejected', 'accepted', 'withdrawn')
             ORDER BY follow_up_date
-        """, (cutoff_date,))
+        """,
+            (cutoff_date,),
+        )
 
         rows = cursor.fetchall()
         conn.close()
@@ -518,18 +535,26 @@ class ApplicationTracker:
 
         applications = self.get_applications()
 
-        with open(output_path, 'w', newline='', encoding='utf-8') as f:
+        with open(output_path, "w", newline="", encoding="utf-8") as f:
             if not applications:
                 return
 
             fieldnames = [
-                'id', 'job_title', 'company', 'location', 'salary_range',
-                'status', 'applied_date', 'job_url', 'match_score', 'notes'
+                "id",
+                "job_title",
+                "company",
+                "location",
+                "salary_range",
+                "status",
+                "applied_date",
+                "job_url",
+                "match_score",
+                "notes",
             ]
 
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
 
             for app in applications:
-                row = {field: getattr(app, field, '') for field in fieldnames}
+                row = {field: getattr(app, field, "") for field in fieldnames}
                 writer.writerow(row)

@@ -95,11 +95,7 @@ class JobSources:
         """
         return self._registry.get_source_info(name)
 
-    def search(
-        self,
-        source_name: str,
-        criteria: SearchCriteria
-    ) -> List[JobResult]:
+    def search(self, source_name: str, criteria: SearchCriteria) -> List[JobResult]:
         """
         Search using a specific source.
 
@@ -117,7 +113,7 @@ class JobSources:
         self,
         criteria: SearchCriteria,
         sources: Optional[List[str]] = None,
-        skip_unconfigured: bool = True
+        skip_unconfigured: bool = True,
     ) -> List[JobResult]:
         """
         Search across multiple sources.
@@ -156,7 +152,9 @@ class JobSources:
         # If there were errors, you might want to log them or raise a warning
         # For now, we'll just continue and return what we got
         if errors and not results:
-            error_msg = "\n".join([f"  - {name}: {err}" for name, err in errors.items()])
+            error_msg = "\n".join(
+                [f"  - {name}: {err}" for name, err in errors.items()]
+            )
             raise Exception(f"All sources failed:\n{error_msg}")
 
         return results
@@ -175,14 +173,14 @@ class JobSources:
         for source_name in sorted(all_sources):
             try:
                 info = self.get_info(source_name)
-                status = "✓ Ready" if info['is_configured'] else "✗ Needs Setup"
-                auth = " (requires auth)" if info['requires_auth'] else ""
+                status = "✓ Ready" if info["is_configured"] else "✗ Needs Setup"
+                auth = " (requires auth)" if info["requires_auth"] else ""
 
                 print(f"\n{info['display_name']} ({source_name}): {status}{auth}")
 
-                if not info['is_configured']:
+                if not info["is_configured"]:
                     print(f"\nSetup instructions:")
-                    for line in info['setup_instructions'].split('\n'):
+                    for line in info["setup_instructions"].split("\n"):
                         if line.strip():
                             print(f"  {line}")
 
@@ -219,8 +217,10 @@ class JobSources:
             AttributeError: If source not found
         """
         # Avoid recursion for private attributes
-        if name.startswith('_'):
-            raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
+        if name.startswith("_"):
+            raise AttributeError(
+                f"'{type(self).__name__}' object has no attribute '{name}'"
+            )
 
         try:
             return self.get_source(name)
@@ -233,8 +233,14 @@ class JobSources:
     def __dir__(self):
         """Return list of attributes including source names."""
         base_attrs = [
-            'list', 'list_available', 'list_unconfigured',
-            'get_source', 'get_info', 'search', 'search_all',
-            'print_status', 'keys'
+            "list",
+            "list_available",
+            "list_unconfigured",
+            "get_source",
+            "get_info",
+            "search",
+            "search_all",
+            "print_status",
+            "keys",
         ]
         return base_attrs + self.list()

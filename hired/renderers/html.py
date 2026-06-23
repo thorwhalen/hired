@@ -35,7 +35,7 @@ class ThemeRegistry(ABCMapping):
             # Derive path relative to hired package
             import hired
 
-            themes_path = os.path.join(os.path.dirname(hired.__file__), 'themes')
+            themes_path = os.path.join(os.path.dirname(hired.__file__), "themes")
         # Base themes path (packaged)
         packaged_themes = themes_path
 
@@ -57,16 +57,16 @@ class ThemeRegistry(ABCMapping):
         self._themes_path = search_paths if len(search_paths) > 1 else search_paths[0]
 
         self._themes = {
-            'default': {'template': 'default.html', 'css': ''},
-            'minimal': {'template': 'minimal.html', 'css': ''},
+            "default": {"template": "default.html", "css": ""},
+            "minimal": {"template": "minimal.html", "css": ""},
         }
 
         # Auto-discover subdirectories under extra themes paths and register simple themes.
         candidate_names = [
-            'default.html',
-            'index.html',
-            'Header.j2.md',
-            'Preamble.j2.typ',
+            "default.html",
+            "index.html",
+            "Header.j2.md",
+            "Preamble.j2.typ",
         ]
         for base in search_paths or []:
             try:
@@ -83,10 +83,10 @@ class ThemeRegistry(ABCMapping):
                         if found:
                             # Register theme with a template path relative to the base
                             rel_template = os.path.join(entry, found)
-                            self._themes[entry] = {'template': rel_template, 'css': ''}
+                            self._themes[entry] = {"template": rel_template, "css": ""}
                         else:
                             # Register folder name with empty template as a placeholder
-                            self._themes[entry] = {'template': '', 'css': ''}
+                            self._themes[entry] = {"template": "", "css": ""}
             except Exception:
                 # ignore directories we cannot list
                 pass
@@ -94,13 +94,13 @@ class ThemeRegistry(ABCMapping):
         # Attempt to load stylesheet content for discovered themes.
         # We look for common filenames inside the theme folder (styles.css, style.css)
         # or a sibling CSS named after the template (e.g. default.css).
-        css_candidates = ['styles.css', 'style.css']
+        css_candidates = ["styles.css", "style.css"]
         for tname, meta in list(self._themes.items()):
-            tpl = meta.get('template', '')
+            tpl = meta.get("template", "")
             if not tpl:
                 # nothing to locate
                 continue
-            loaded_css = ''
+            loaded_css = ""
             # If template is in a folder (folder/index.html), prefer folder/styles.css
             parts = tpl.split(os.path.sep)
             if len(parts) > 1:
@@ -111,10 +111,10 @@ class ThemeRegistry(ABCMapping):
                             css_path = os.path.join(base, folder, css_name)
                             if os.path.exists(css_path):
                                 try:
-                                    with open(css_path, encoding='utf-8') as cf:
+                                    with open(css_path, encoding="utf-8") as cf:
                                         loaded_css = cf.read()
                                 except Exception:
-                                    loaded_css = ''
+                                    loaded_css = ""
                                 break
                         if loaded_css:
                             break
@@ -130,10 +130,10 @@ class ThemeRegistry(ABCMapping):
                             css_path = os.path.join(base, css_name)
                             if os.path.exists(css_path):
                                 try:
-                                    with open(css_path, encoding='utf-8') as cf:
+                                    with open(css_path, encoding="utf-8") as cf:
                                         loaded_css = cf.read()
                                 except Exception:
-                                    loaded_css = ''
+                                    loaded_css = ""
                                 break
                         if loaded_css:
                             break
@@ -142,7 +142,7 @@ class ThemeRegistry(ABCMapping):
 
             # Store CSS text (possibly empty) into theme metadata
             try:
-                self._themes[tname]['css'] = loaded_css or ''
+                self._themes[tname]["css"] = loaded_css or ""
             except Exception:
                 pass
 
@@ -187,7 +187,7 @@ class HTMLRenderer:
         self._themes = theme_registry or ThemeRegistry()
         self._env = Environment(
             loader=FileSystemLoader(self._themes.themes_path),
-            autoescape=select_autoescape(['html', 'xml']),
+            autoescape=select_autoescape(["html", "xml"]),
         )
 
     # ------------------ Public API ------------------ #
@@ -202,13 +202,13 @@ class HTMLRenderer:
         # Choose CSS: prefer custom_css if provided
         css = (
             config.custom_css
-            if getattr(config, 'custom_css', None)
-            else theme.get('css', '')
+            if getattr(config, "custom_css", None)
+            else theme.get("css", "")
         )
 
-        if config.format == 'pdf':
+        if config.format == "pdf":
             return self._html_to_pdf(html, css)
-        return html.encode('utf-8')
+        return html.encode("utf-8")
 
     # ------------------ HTML rendering ------------------ #
     def _render_to_html(
@@ -217,11 +217,11 @@ class HTMLRenderer:
         ctx = self._build_context(content)
 
         # If a custom_template path is provided, and it exists, load it.
-        ctpl = getattr(config, 'custom_template', None)
+        ctpl = getattr(config, "custom_template", None)
         if ctpl:
             # If it's a file path, load its contents and render from string
             if os.path.exists(ctpl):
-                with open(ctpl, encoding='utf-8') as f:
+                with open(ctpl, encoding="utf-8") as f:
                     template_text = f.read()
                 template = self._env.from_string(template_text)
                 return template.render(**ctx)
@@ -234,20 +234,20 @@ class HTMLRenderer:
                     # Fall through to theme template
                     pass
 
-        template = self._env.get_template(theme['template'])
+        template = self._env.get_template(theme["template"])
         return template.render(**ctx)
 
     def _build_context(self, content: Any) -> dict:  # content is ResumeSchema
         # Convert pydantic model to dict, handling the new schema structure
         content_dict = (
             content.model_dump(exclude_none=True)
-            if hasattr(content, 'model_dump')
+            if hasattr(content, "model_dump")
             else content
         )
 
-        basics = content_dict.get('basics', {})
-        work = content_dict.get('work', [])
-        education = content_dict.get('education', [])
+        basics = content_dict.get("basics", {})
+        work = content_dict.get("work", [])
+        education = content_dict.get("education", [])
 
         # Filter out empty work and education entries
         work = [w for w in work if not _is_empty_section(w)]
@@ -255,20 +255,20 @@ class HTMLRenderer:
 
         # Handle extra sections (anything not in the core schema)
         core_sections = {
-            'basics',
-            'work',
-            'education',
-            'volunteer',
-            'awards',
-            'certificates',
-            'publications',
-            'skills',
-            'languages',
-            'interests',
-            'references',
-            'projects',
-            'meta',
-            'field_schema',
+            "basics",
+            "work",
+            "education",
+            "volunteer",
+            "awards",
+            "certificates",
+            "publications",
+            "skills",
+            "languages",
+            "interests",
+            "references",
+            "projects",
+            "meta",
+            "field_schema",
         }
         extra_sections = list(
             _iter_extra_sections(
@@ -277,10 +277,10 @@ class HTMLRenderer:
         )
 
         return {
-            'basics': basics,
-            'work': work,
-            'education': education,
-            'extra_sections': extra_sections,
+            "basics": basics,
+            "work": work,
+            "education": education,
+            "extra_sections": extra_sections,
         }
 
     # ------------------ PDF conversion ------------------ #
@@ -297,7 +297,7 @@ def _is_empty_section(value: Any) -> bool:
     if value is None:
         return True
     if isinstance(value, str):
-        return value.strip() == ''
+        return value.strip() == ""
     if isinstance(value, (list, tuple, set)):
         return all(_is_empty_section(v) for v in value)
     if isinstance(value, dict):
@@ -310,7 +310,7 @@ def _iter_extra_sections(extra: Mapping[str, Any]) -> Iterable[dict]:
         if _is_empty_section(value):
             continue
         section_id = name
-        title = name.replace('_', ' ').title()
+        title = name.replace("_", " ").title()
         # Normalize to HTML snippet
         if isinstance(value, str):
             html_fragment = f"<p>{value}</p>"
@@ -318,28 +318,28 @@ def _iter_extra_sections(extra: Mapping[str, Any]) -> Iterable[dict]:
             items = [v for v in value if not _is_empty_section(v)]
             if not items:
                 continue
-            html_fragment = '<ul>' + ''.join(f'<li>{v}</li>' for v in items) + '</ul>'
+            html_fragment = "<ul>" + "".join(f"<li>{v}</li>" for v in items) + "</ul>"
         elif isinstance(value, dict):
             kv_pairs = {k: v for k, v in value.items() if not _is_empty_section(v)}
             if not kv_pairs:
                 continue
             html_fragment = (
-                '<dl>'
-                + ''.join(f'<dt>{k}</dt><dd>{v}</dd>' for k, v in kv_pairs.items())
-                + '</dl>'
+                "<dl>"
+                + "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in kv_pairs.items())
+                + "</dl>"
             )
         else:
             html_fragment = f"<pre>{html_mod.escape(repr(value))}</pre>"
-        yield {'id': section_id, 'title': title, 'html': html_fragment}
+        yield {"id": section_id, "title": title, "html": html_fragment}
 
 
 def _extract_text_from_html(html: str) -> str:
     # Remove tags
-    txt = re.sub(r'<[^>]+>', ' ', html)
+    txt = re.sub(r"<[^>]+>", " ", html)
     # Unescape entities
     txt = html_mod.unescape(txt)
     # Collapse whitespace
-    txt = re.sub(r'\s+', ' ', txt).strip()
+    txt = re.sub(r"\s+", " ", txt).strip()
     return txt[:4000]  # keep it bounded
 
 
@@ -349,10 +349,10 @@ def _build_minimal_pdf(text: str) -> bytes:
     Not layout-aware; wraps at ~90 chars manually.
     """
     # Escape parentheses and backslashes
-    safe = text.replace('\\', r'\\').replace('(', r'\(').replace(')', r'\)')
+    safe = text.replace("\\", r"\\").replace("(", r"\(").replace(")", r"\)")
     # Wrap lines
     width = 90
-    lines = [safe[i : i + width] for i in range(0, len(safe), width)] or ['']
+    lines = [safe[i : i + width] for i in range(0, len(safe), width)] or [""]
     # PDF content stream commands: start text, move for each line
     y = 720
     line_gap = 14
@@ -364,14 +364,14 @@ def _build_minimal_pdf(text: str) -> bytes:
             break
         parts.append(f"T* ({line} ) Tj")
     parts.append("ET")
-    stream_text = ' '.join(parts)
-    stream_bytes = stream_text.encode('utf-8')
+    stream_text = " ".join(parts)
+    stream_bytes = stream_text.encode("utf-8")
 
     objects = []  # (number, bytes)
 
     def obj(n: int, body: str | bytes) -> bytes:
         if isinstance(body, str):
-            body = body.encode('utf-8')
+            body = body.encode("utf-8")
         return f"{n} 0 obj\n".encode() + body + b"\nendobj\n"
 
     # 1 Catalog, 2 Pages, 3 Page, 4 Font, 5 Contents
