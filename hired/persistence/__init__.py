@@ -19,11 +19,11 @@ from hired.persistence.base import (
 from hired.persistence.repository import Repository
 
 __all__ = [
-    'app_data_dir',
-    'json_store',
-    'bytes_store',
-    'text_store',
-    'migrate_legacy',
-    'CandidateMall',
-    'Repository',
+    "app_data_dir",
+    "json_store",
+    "bytes_store",
+    "text_store",
+    "migrate_legacy",
+    "CandidateMall",
+    "Repository",
 ]

@@ -40,33 +40,33 @@ def verify_quote(quote: str | None, source_text: str | None) -> bool:
 
 
 def _normalize(s: str) -> str:
-    return ' '.join(s.split()).lower()
+    return " ".join(s.split()).lower()
 
 
 def fact_from_record(
     record: dict,
     *,
     source_kind: SourceKind,
-    source_id: str = '',
-    subject: str = 'me',
+    source_id: str = "",
+    subject: str = "me",
 ) -> Fact:
     """Build a (not-yet-persisted) :class:`Fact` from a record dict."""
-    quote = record.get('quote')
+    quote = record.get("quote")
     prov = Provenance(
         source_kind=source_kind,
-        source_id=record.get('source_id', source_id),
-        locator=record.get('locator', ''),
+        source_id=record.get("source_id", source_id),
+        locator=record.get("locator", ""),
         quote=quote,
     )
     return Fact(
         subject=subject,
-        category=FactCategory(record.get('category', 'other')),
-        statement=record['statement'],
-        value=record.get('value'),
-        confidence=ConfidenceLevel(record.get('confidence', 'medium')),
-        is_negation=bool(record.get('is_negation', False)),
+        category=FactCategory(record.get("category", "other")),
+        statement=record["statement"],
+        value=record.get("value"),
+        confidence=ConfidenceLevel(record.get("confidence", "medium")),
+        is_negation=bool(record.get("is_negation", False)),
         provenance=[prov],
-        tags=list(record.get('tags', [])),
+        tags=list(record.get("tags", [])),
     )
 
 
@@ -75,7 +75,7 @@ def ingest_facts(
     records: list[dict],
     *,
     source_kind: SourceKind,
-    source_id: str = '',
+    source_id: str = "",
     source_text: str | None = None,
     drop_unverified_quotes: bool = True,
 ) -> list[str]:
@@ -88,12 +88,12 @@ def ingest_facts(
     """
     ids: list[str] = []
     for record in records:
-        if not verify_quote(record.get('quote'), source_text):
+        if not verify_quote(record.get("quote"), source_text):
             if drop_unverified_quotes:
-                record = {**record, 'quote': None}
+                record = {**record, "quote": None}
             else:
                 raise ValueError(
-                    f'Quote not found verbatim in source: {record.get("quote")!r}'
+                    f"Quote not found verbatim in source: {record.get('quote')!r}"
                 )
         fact = fact_from_record(record, source_kind=source_kind, source_id=source_id)
         ids.append(kb.add_fact(fact))

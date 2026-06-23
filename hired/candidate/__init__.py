@@ -21,16 +21,16 @@ from hired.candidate.knowledge_base import CandidateKnowledgeBase
 from hired.candidate.ingest import ingest_facts, fact_from_record, verify_quote
 
 __all__ = [
-    'CandidateKnowledgeBase',
-    'Fact',
-    'QAEntry',
-    'Provenance',
-    'FactCategory',
-    'FactStatus',
-    'SourceKind',
-    'ConfidenceLevel',
-    'MatchState',
-    'ingest_facts',
-    'fact_from_record',
-    'verify_quote',
+    "CandidateKnowledgeBase",
+    "Fact",
+    "QAEntry",
+    "Provenance",
+    "FactCategory",
+    "FactStatus",
+    "SourceKind",
+    "ConfidenceLevel",
+    "MatchState",
+    "ingest_facts",
+    "fact_from_record",
+    "verify_quote",
 ]

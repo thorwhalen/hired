@@ -24,8 +24,8 @@ from hired.persistence.repository import Repository
 
 def _slug(text: str) -> str:
     """A filesystem-safe key from an arbitrary label (company name, subject)."""
-    keep = ''.join(c if (c.isalnum() or c in ' -_') else ' ' for c in text)
-    return '-'.join(keep.lower().split()) or 'untitled'
+    keep = "".join(c if (c.isalnum() or c in " -_") else " " for c in text)
+    return "-".join(keep.lower().split()) or "untitled"
 
 
 class _FactRepo(Repository[Fact]):
@@ -54,15 +54,15 @@ class CandidateKnowledgeBase:
     def __init__(self, user: str = DFLT_USER, *, mall: CandidateMall | None = None):
         self.user = user
         self.mall = mall or CandidateMall(user)
-        self._facts = _FactRepo(self.mall['facts'])
-        self._qa = _QARepo(self.mall['qa'])
+        self._facts = _FactRepo(self.mall["facts"])
+        self._qa = _QARepo(self.mall["qa"])
 
     # --- facts -------------------------------------------------------------
     def add_fact(self, fact: Fact) -> str:
         """Persist a fact, returning its id."""
         return self._facts.add(fact)
 
-    def add_facts(self, facts: 'Iterator[Fact] | list[Fact]') -> list[str]:
+    def add_facts(self, facts: "Iterator[Fact] | list[Fact]") -> list[str]:
         return [self.add_fact(f) for f in facts]
 
     def get_fact(self, fact_id: str) -> Fact:
@@ -113,23 +113,23 @@ class CandidateKnowledgeBase:
     # --- raw uploads -------------------------------------------------------
     def save_upload(self, name: str, data: bytes) -> None:
         """Store a raw uploaded document (CV, bio, publication) by filename."""
-        self.mall['uploads'][name] = data
+        self.mall["uploads"][name] = data
 
     def get_upload(self, name: str) -> bytes:
-        return self.mall['uploads'][name]
+        return self.mall["uploads"][name]
 
     def uploads(self) -> list[str]:
-        return list(self.mall['uploads'])
+        return list(self.mall["uploads"])
 
     # --- jobs & reports (keyed by job id) ----------------------------------
     def save_job(self, job_id: str, data: dict) -> None:
-        self.mall['jobs'][job_id] = data
+        self.mall["jobs"][job_id] = data
 
     def get_job(self, job_id: str) -> dict:
-        return self.mall['jobs'][job_id]
+        return self.mall["jobs"][job_id]
 
     def jobs(self) -> list[str]:
-        return list(self.mall['jobs'])
+        return list(self.mall["jobs"])
 
     def save_report(self, job_id: str, data: dict, *, archive: bool = True) -> None:
         """Persist the current alignment report, archiving the prior one first.
@@ -137,39 +137,41 @@ class CandidateKnowledgeBase:
         Archiving (on by default) snapshots any existing report into
         ``report_history`` so the alignment-review agent can diff versions.
         """
-        if archive and job_id in self.mall['reports']:
-            stamp = data.get('created_at') or _utcnow()
-            self.mall['report_history'][f'{job_id}/{stamp}'] = self.mall['reports'][job_id]
-        self.mall['reports'][job_id] = data
+        if archive and job_id in self.mall["reports"]:
+            stamp = data.get("created_at") or _utcnow()
+            self.mall["report_history"][f"{job_id}/{stamp}"] = self.mall["reports"][
+                job_id
+            ]
+        self.mall["reports"][job_id] = data
 
     def get_report(self, job_id: str) -> dict:
-        return self.mall['reports'][job_id]
+        return self.mall["reports"][job_id]
 
     def report_versions(self, job_id: str) -> list[str]:
         """Keys of archived prior versions of a job's report (chronological)."""
-        prefix = f'{job_id}/'
-        return sorted(k for k in self.mall['report_history'] if k.startswith(prefix))
+        prefix = f"{job_id}/"
+        return sorted(k for k in self.mall["report_history"] if k.startswith(prefix))
 
     # --- company research & interview prep ---------------------------------
     def save_company_report(self, company: str, data: dict) -> None:
         """Persist a company/people research report (keyed by company name)."""
-        self.mall['company'][_slug(company)] = data
+        self.mall["company"][_slug(company)] = data
 
     def get_company_report(self, company: str) -> dict:
-        return self.mall['company'][_slug(company)]
+        return self.mall["company"][_slug(company)]
 
     def companies(self) -> list[str]:
-        return list(self.mall['company'])
+        return list(self.mall["company"])
 
     def save_briefing(self, key: str, data: dict) -> None:
         """Persist an interview-prep research briefing (keyed by subject/job)."""
-        self.mall['interview_prep'][_slug(key)] = data
+        self.mall["interview_prep"][_slug(key)] = data
 
     def get_briefing(self, key: str) -> dict:
-        return self.mall['interview_prep'][_slug(key)]
+        return self.mall["interview_prep"][_slug(key)]
 
     def briefings(self) -> list[str]:
-        return list(self.mall['interview_prep'])
+        return list(self.mall["interview_prep"])
 
     # --- synopsis (regenerated projection) ---------------------------------
     def regenerate_synopsis(self) -> str:
@@ -180,23 +182,23 @@ class CandidateKnowledgeBase:
         """
         by_cat: dict[str, list[str]] = {}
         for fact in self.facts():
-            marker = 'NOT: ' if fact.is_negation else ''
+            marker = "NOT: " if fact.is_negation else ""
             by_cat.setdefault(fact.category.value, []).append(
-                f'- {marker}{fact.statement}  ({fact.confidence.value})'
+                f"- {marker}{fact.statement}  ({fact.confidence.value})"
             )
-        lines = [f'# Candidate synopsis: {self.user}', '']
+        lines = [f"# Candidate synopsis: {self.user}", ""]
         for cat in sorted(by_cat):
-            lines.append(f'## {cat}')
+            lines.append(f"## {cat}")
             lines.extend(sorted(by_cat[cat]))
-            lines.append('')
-        text = '\n'.join(lines).rstrip() + '\n'
-        self.mall['synopsis']['synopsis.md'] = text
+            lines.append("")
+        text = "\n".join(lines).rstrip() + "\n"
+        self.mall["synopsis"]["synopsis.md"] = text
         return text
 
     @property
     def synopsis(self) -> str:
         """The last persisted synopsis, regenerating it if absent."""
-        store = self.mall['synopsis']
-        if 'synopsis.md' in store:
-            return store['synopsis.md']
+        store = self.mall["synopsis"]
+        if "synopsis.md" in store:
+            return store["synopsis.md"]
         return self.regenerate_synopsis()

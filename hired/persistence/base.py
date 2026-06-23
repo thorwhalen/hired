@@ -21,8 +21,8 @@ from pathlib import Path
 
 from dol import Files, JsonFiles, TextFiles, mk_dirs_if_missing
 
-DFLT_USER = 'me'
-_ENV_VAR = 'HIRED_DATA_DIR'
+DFLT_USER = "me"
+_ENV_VAR = "HIRED_DATA_DIR"
 
 
 def migrate_legacy(legacy_path, target_path) -> bool:
@@ -58,11 +58,11 @@ def app_data_dir(*subpaths: str, make: bool = True) -> str:
     """
     base = os.environ.get(_ENV_VAR)
     if not base:
-        xdg = os.environ.get('XDG_DATA_HOME')
+        xdg = os.environ.get("XDG_DATA_HOME")
         base = (
-            os.path.join(xdg, 'hired')
+            os.path.join(xdg, "hired")
             if xdg
-            else os.path.join(os.path.expanduser('~'), '.local', 'share', 'hired')
+            else os.path.join(os.path.expanduser("~"), ".local", "share", "hired")
         )
     path = os.path.join(base, *subpaths)
     if make:
@@ -95,17 +95,17 @@ def text_store(rootdir: str) -> MutableMapping:
 # The per-candidate sub-stores and the factory that builds each kind. Keeping
 # this as data (not hardcoded properties) keeps the mall open for extension.
 _STORE_KINDS: dict[str, str] = {
-    'uploads': 'bytes',  # raw documents (CVs, bios, publications)
-    'facts': 'json',  # atomic, open-world candidate facts
-    'qa': 'json',  # clarifying Q&A history
-    'jobs': 'json',  # JDs + parsed requirements
-    'reports': 'json',  # current alignment report per job
-    'report_history': 'json',  # archived prior report versions (for refresh diffs)
-    'company': 'json',  # company / people research reports
-    'interview_prep': 'json',  # interview-prep research briefings
-    'synopsis': 'text',  # regenerated human-readable projection of facts
+    "uploads": "bytes",  # raw documents (CVs, bios, publications)
+    "facts": "json",  # atomic, open-world candidate facts
+    "qa": "json",  # clarifying Q&A history
+    "jobs": "json",  # JDs + parsed requirements
+    "reports": "json",  # current alignment report per job
+    "report_history": "json",  # archived prior report versions (for refresh diffs)
+    "company": "json",  # company / people research reports
+    "interview_prep": "json",  # interview-prep research briefings
+    "synopsis": "text",  # regenerated human-readable projection of facts
 }
-_STORE_FACTORIES = {'json': json_store, 'bytes': bytes_store, 'text': text_store}
+_STORE_FACTORIES = {"json": json_store, "bytes": bytes_store, "text": text_store}
 
 
 class CandidateMall(MutableMapping):
@@ -131,7 +131,7 @@ class CandidateMall(MutableMapping):
         self._cache: dict[str, MutableMapping] = {}
 
     def _kind_dir(self, kind: str) -> str:
-        base = self._root or app_data_dir('users', self.user)
+        base = self._root or app_data_dir("users", self.user)
         return os.path.join(base, kind)
 
     def __getitem__(self, key):
@@ -153,7 +153,7 @@ class CandidateMall(MutableMapping):
             self[kind][inner] = value
             return
         raise TypeError(
-            'Assign to a sub-store, not the mall: use mall[kind][key] = value'
+            "Assign to a sub-store, not the mall: use mall[kind][key] = value"
         )
 
     def __delitem__(self, key):
@@ -161,7 +161,7 @@ class CandidateMall(MutableMapping):
             kind, inner = key
             del self[kind][inner]
             return
-        raise TypeError('Delete from a sub-store: del mall[kind][key]')
+        raise TypeError("Delete from a sub-store: del mall[kind][key]")
 
     def __iter__(self):
         return iter(_STORE_KINDS)
