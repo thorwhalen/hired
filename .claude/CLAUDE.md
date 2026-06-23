@@ -103,12 +103,16 @@ python -m pytest hired/ tests/ --doctest-modules -q   # core-dep run
 
 ## Agent tooling (skills & subagents)
 
+Real skill files live in top-level `skills/<name>/`; `.claude/skills/<name>` are
+relative symlinks into them (so Claude Code finds them and `gh skill` can discover/
+install them). Subagents stay in `.claude/agents/`.
+
 - **Skill `hired-usage`** — end-user resume/search/match/ATS/cover-letter/tracking.
 - **Skill `hired-dev`** — developing the package (import-safety, extension points).
-- **Skill `hired-align`** (`.claude/skills/hired-align/`) — orchestrates the
+- **Skill `hired-align`** (`skills/hired-align/`) — orchestrates the
   candidate-knowledge + JD-alignment workflow (ingest → classify → ask → refresh →
   report). The operational guide for the epic-#4 subsystem.
-- **Skill `hired-interview-prep`** (`.claude/skills/hired-interview-prep/`) — prep for
+- **Skill `hired-interview-prep`** (`skills/hired-interview-prep/`) — prep for
   a headhunter call / interview: refresh report → research company → gap-focused study
   briefings that anchor JD terminology to the candidate's own experience.
 - **Subagent `hired-profile-ingest`** — raw documents → atomic, provenance-bearing facts.
