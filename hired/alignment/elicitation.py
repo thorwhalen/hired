@@ -87,9 +87,9 @@ def rank_clarifications(
         out.append(
             Clarification(
                 requirement_id=r.requirement.id,
-                question='',  # filled by the analyst
-                reason=f'{r.requirement.requirement_class.value} requirement is '
-                f'unknown; resolving it could move the verdict',
+                question="",  # filled by the analyst
+                reason=f"{r.requirement.requirement_class.value} requirement is "
+                f"unknown; resolving it could move the verdict",
                 info_gain=r.info_gain,
             )
         )

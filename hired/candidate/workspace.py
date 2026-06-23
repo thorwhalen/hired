@@ -64,8 +64,8 @@ class JDWorkspace:
         ``report_history`` so the alignment-review agent can diff versions.
         """
         if archive and job_id in self.store.reports:
-            stamp = data.get('created_at') or _utcnow()
-            self.store.report_history[f'{job_id}/{stamp}'] = self.store.reports[job_id]
+            stamp = data.get("created_at") or _utcnow()
+            self.store.report_history[f"{job_id}/{stamp}"] = self.store.reports[job_id]
         self.store.reports[job_id] = data
 
     def get_report(self, job_id: str) -> dict:
@@ -76,7 +76,7 @@ class JDWorkspace:
 
     def report_versions(self, job_id: str) -> list[str]:
         """Keys of archived prior versions of a job's report (chronological)."""
-        prefix = f'{job_id}/'
+        prefix = f"{job_id}/"
         return sorted(k for k in self.store.report_history if k.startswith(prefix))
 
     # --- company research --------------------------------------------------

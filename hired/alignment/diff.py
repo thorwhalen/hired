@@ -17,8 +17,8 @@ from typing import Any
 def _req_index(report: dict) -> dict[str, dict]:
     """Map requirement text -> its record, for matching across versions."""
     out: dict[str, dict] = {}
-    for rec in report.get('requirements', []):
-        text = (rec.get('requirement') or {}).get('text', '')
+    for rec in report.get("requirements", []):
+        text = (rec.get("requirement") or {}).get("text", "")
         if text:
             out[text] = rec
     return out
@@ -26,8 +26,8 @@ def _req_index(report: dict) -> dict[str, dict]:
 
 def _bucket(rec: dict | None) -> str:
     if rec is None:
-        return 'absent'
-    return rec.get('bucket') or 'needs_clarification'
+        return "absent"
+    return rec.get("bucket") or "needs_clarification"
 
 
 def diff_reports(old: dict, new: dict) -> dict[str, Any]:
@@ -48,25 +48,33 @@ def diff_reports(old: dict, new: dict) -> dict[str, Any]:
     for text in oi.keys() & ni.keys():
         ob, nb = _bucket(oi[text]), _bucket(ni[text])
         if ob != nb:
-            bucket_changes.append({'requirement': text, 'from': ob, 'to': nb})
+            bucket_changes.append({"requirement": text, "from": ob, "to": nb})
 
-    ov = (old.get('verdict') or {})
-    nv = (new.get('verdict') or {})
-    old_clar = {c.get('question', '') for c in old.get('clarifications', []) if c.get('question')}
-    new_clar = {c.get('question', '') for c in new.get('clarifications', []) if c.get('question')}
+    ov = old.get("verdict") or {}
+    nv = new.get("verdict") or {}
+    old_clar = {
+        c.get("question", "")
+        for c in old.get("clarifications", [])
+        if c.get("question")
+    }
+    new_clar = {
+        c.get("question", "")
+        for c in new.get("clarifications", [])
+        if c.get("question")
+    }
 
     return {
-        'verdict_changed': ov.get('recommendation') != nv.get('recommendation'),
-        'verdict_old': ov.get('recommendation'),
-        'verdict_new': nv.get('recommendation'),
-        'fit_old': (old.get('score_summary') or {}).get('fit_band'),
-        'fit_new': (new.get('score_summary') or {}).get('fit_band'),
-        'bucket_changes': sorted(bucket_changes, key=lambda d: d['requirement']),
-        'added': sorted(ni.keys() - oi.keys()),
-        'removed': sorted(oi.keys() - ni.keys()),
-        'clarifications_resolved': sorted(old_clar - new_clar),
-        'n_changes': len(bucket_changes)
-        + int(ov.get('recommendation') != nv.get('recommendation'))
+        "verdict_changed": ov.get("recommendation") != nv.get("recommendation"),
+        "verdict_old": ov.get("recommendation"),
+        "verdict_new": nv.get("recommendation"),
+        "fit_old": (old.get("score_summary") or {}).get("fit_band"),
+        "fit_new": (new.get("score_summary") or {}).get("fit_band"),
+        "bucket_changes": sorted(bucket_changes, key=lambda d: d["requirement"]),
+        "added": sorted(ni.keys() - oi.keys()),
+        "removed": sorted(oi.keys() - ni.keys()),
+        "clarifications_resolved": sorted(old_clar - new_clar),
+        "n_changes": len(bucket_changes)
+        + int(ov.get("recommendation") != nv.get("recommendation"))
         + len(ni.keys() ^ oi.keys()),
     }
 
@@ -74,16 +82,16 @@ def diff_reports(old: dict, new: dict) -> dict[str, Any]:
 def summarize_diff(diff: dict) -> str:
     """A short human-readable summary of :func:`diff_reports` output."""
     lines = []
-    if diff['verdict_changed']:
+    if diff["verdict_changed"]:
         lines.append(f"Verdict: {diff['verdict_old']} → {diff['verdict_new']}")
-    if diff['fit_old'] != diff['fit_new']:
+    if diff["fit_old"] != diff["fit_new"]:
         lines.append(f"Fit band: {diff['fit_old']} → {diff['fit_new']}")
-    for ch in diff['bucket_changes']:
+    for ch in diff["bucket_changes"]:
         lines.append(f"• {ch['from']} → {ch['to']}: {ch['requirement']}")
-    for t in diff['added']:
+    for t in diff["added"]:
         lines.append(f"+ new requirement: {t}")
-    for t in diff['removed']:
+    for t in diff["removed"]:
         lines.append(f"- dropped requirement: {t}")
-    for q in diff['clarifications_resolved']:
+    for q in diff["clarifications_resolved"]:
         lines.append(f"✓ resolved question: {q}")
-    return '\n'.join(lines) if lines else 'No material changes.'
+    return "\n".join(lines) if lines else "No material changes."

@@ -60,11 +60,17 @@ def apply_ai_leverage(
         return closeability
     if closeability == Closeability.STRUCTURALLY_HARD:
         return closeability  # genuinely hard (aptitude/credential) — unmoved
-    steps = {AILeverage.HIGH: 1, AILeverage.MEDIUM: 1, AILeverage.LOW: 0, AILeverage.NONE: 0}[
-        ai_leverage
-    ]
+    steps = {
+        AILeverage.HIGH: 1,
+        AILeverage.MEDIUM: 1,
+        AILeverage.LOW: 0,
+        AILeverage.NONE: 0,
+    }[ai_leverage]
     # MEDIUM only softens the already-learnable tiers, not requires_experience.
-    if ai_leverage == AILeverage.MEDIUM and closeability == Closeability.REQUIRES_EXPERIENCE:
+    if (
+        ai_leverage == AILeverage.MEDIUM
+        and closeability == Closeability.REQUIRES_EXPERIENCE
+    ):
         steps = 0
     if steps == 0 or closeability not in _SOFTENABLE:
         return closeability
@@ -83,7 +89,10 @@ def assign_bucket(record: RequirementRecord) -> Bucket | None:
     state = record.match_state
 
     # UNKNOWN on an open field => not a bucket; ask the candidate.
-    if state == MatchState.UNKNOWN and record.field_completeness == FieldCompleteness.OPEN:
+    if (
+        state == MatchState.UNKNOWN
+        and record.field_completeness == FieldCompleteness.OPEN
+    ):
         return None
 
     # Strong match: direct, and the candidate meets the required level.
@@ -97,7 +106,10 @@ def assign_bucket(record: RequirementRecord) -> Bucket | None:
     # Adjacent/transferable: a related skill partially covers it.
     if record.match_type == MatchType.ADJACENT and state != MatchState.CONTRADICTED:
         # If the adjacent skill already meets the level, it's effectively strong.
-        if state == MatchState.CONFIRMED and record.candidate_level >= record.requirement.required_level:
+        if (
+            state == MatchState.CONFIRMED
+            and record.candidate_level >= record.requirement.required_level
+        ):
             return Bucket.STRONG_MATCH
         return Bucket.ADJACENT_TRANSFERABLE
 

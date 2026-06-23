@@ -65,7 +65,7 @@ class CandidateKnowledgeBase:
         """Persist a fact, returning its id."""
         return self._facts.add(fact)
 
-    def add_facts(self, facts: 'Iterator[Fact] | list[Fact]') -> list[str]:
+    def add_facts(self, facts: "Iterator[Fact] | list[Fact]") -> list[str]:
         return [self.add_fact(f) for f in facts]
 
     def get_fact(self, fact_id: str) -> Fact:
@@ -125,7 +125,9 @@ class CandidateKnowledgeBase:
         return list(self._store.raw)
 
     # --- engagements (per-JD workspaces) -----------------------------------
-    def jd(self, jd_id: str, *, company: str | None = None, label: str | None = None) -> JDWorkspace:
+    def jd(
+        self, jd_id: str, *, company: str | None = None, label: str | None = None
+    ) -> JDWorkspace:
         """Get-or-create the workspace for an engagement (1+ JDs of one company).
 
         ``company`` / ``label`` are recorded in the engagement's ``meta`` when given.
@@ -148,16 +150,16 @@ class CandidateKnowledgeBase:
         """
         by_cat: dict[str, list[str]] = {}
         for fact in self.facts():
-            marker = 'NOT: ' if fact.is_negation else ''
+            marker = "NOT: " if fact.is_negation else ""
             by_cat.setdefault(fact.category.value, []).append(
-                f'- {marker}{fact.statement}  ({fact.confidence.value})'
+                f"- {marker}{fact.statement}  ({fact.confidence.value})"
             )
-        lines = [f'# Candidate synopsis: {self.user}', '']
+        lines = [f"# Candidate synopsis: {self.user}", ""]
         for cat in sorted(by_cat):
-            lines.append(f'## {cat}')
+            lines.append(f"## {cat}")
             lines.extend(sorted(by_cat[cat]))
-            lines.append('')
-        text = '\n'.join(lines).rstrip() + '\n'
+            lines.append("")
+        text = "\n".join(lines).rstrip() + "\n"
         self._store.write_synopsis(text)
         return text
 

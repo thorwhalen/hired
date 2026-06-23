@@ -12,7 +12,7 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 
-M = TypeVar('M', bound=BaseModel)
+M = TypeVar("M", bound=BaseModel)
 
 
 class Repository(Generic[M]):
@@ -28,18 +28,18 @@ class Repository(Generic[M]):
         self._store = store
         if model is not None:
             self.model = model
-        if not getattr(self, 'model', None):
-            raise TypeError('Repository requires a `model` class.')
+        if not getattr(self, "model", None):
+            raise TypeError("Repository requires a `model` class.")
 
     # --- subclasses may override ------------------------------------------
     def key_of(self, item: M) -> str:
         """Derive the storage key for an item (defaults to its ``id`` field)."""
-        return getattr(item, 'id')
+        return getattr(item, "id")
 
     # --- core CRUD ---------------------------------------------------------
     def add(self, item: M) -> str:
         key = self.key_of(item)
-        self._store[key] = item.model_dump(mode='json')
+        self._store[key] = item.model_dump(mode="json")
         return key
 
     def get(self, key: str) -> M:
@@ -49,7 +49,7 @@ class Repository(Generic[M]):
         return self.get(key)
 
     def __setitem__(self, key: str, item: M) -> None:
-        self._store[key] = item.model_dump(mode='json')
+        self._store[key] = item.model_dump(mode="json")
 
     def __delitem__(self, key: str) -> None:
         del self._store[key]

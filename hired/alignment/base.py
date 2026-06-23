@@ -19,70 +19,70 @@ from pydantic import BaseModel, Field
 from hired.candidate.base import ConfidenceLevel, MatchState, _new_id
 
 # Re-export so callers can get the match-state enum from either domain.
-__all_reexport__ = ['MatchState', 'ConfidenceLevel']
+__all_reexport__ = ["MatchState", "ConfidenceLevel"]
 
 
 class Bucket(str, Enum):
     """The four alignment buckets."""
 
-    STRONG_MATCH = 'strong_match'
-    ADJACENT_TRANSFERABLE = 'adjacent_transferable'
-    GAP_LEARNABLE = 'gap_learnable'
-    GAP_HARD = 'gap_hard'
+    STRONG_MATCH = "strong_match"
+    ADJACENT_TRANSFERABLE = "adjacent_transferable"
+    GAP_LEARNABLE = "gap_learnable"
+    GAP_HARD = "gap_hard"
 
 
 class MatchType(str, Enum):
     """How the candidate's background relates to the requirement (Axis A)."""
 
-    DIRECT = 'direct'
-    ADJACENT = 'adjacent'
-    NONE = 'none'
+    DIRECT = "direct"
+    ADJACENT = "adjacent"
+    NONE = "none"
 
 
 class RequirementClass(str, Enum):
     """How decision-critical a requirement is."""
 
-    GATE_KEEPER = 'gate_keeper'  # hard filter; failing it can block
-    DIFFERENTIATOR = 'differentiator'  # strongly weighted
-    VALUE_ADD = 'value_add'  # nice-to-have
+    GATE_KEEPER = "gate_keeper"  # hard filter; failing it can block
+    DIFFERENTIATOR = "differentiator"  # strongly weighted
+    VALUE_ADD = "value_add"  # nice-to-have
 
 
 class SkillType(str, Enum):
-    TECHNICAL = 'technical'
-    DOMAIN_KNOWLEDGE = 'domain_knowledge'
-    SOFT_SKILL = 'soft_skill'
-    CREDENTIAL = 'credential'
+    TECHNICAL = "technical"
+    DOMAIN_KNOWLEDGE = "domain_knowledge"
+    SOFT_SKILL = "soft_skill"
+    CREDENTIAL = "credential"
 
 
 class Closeability(str, Enum):
     """How hard a gap is to close (Axis B), after the AI-leverage modifier."""
 
-    QUICK_WIN = 'quick_win'
-    LEARNABLE = 'learnable'
-    REQUIRES_EXPERIENCE = 'requires_experience'
-    STRUCTURALLY_HARD = 'structurally_hard'
+    QUICK_WIN = "quick_win"
+    LEARNABLE = "learnable"
+    REQUIRES_EXPERIENCE = "requires_experience"
+    STRUCTURALLY_HARD = "structurally_hard"
 
 
 class CloseMethod(str, Enum):
-    COURSE = 'course'
-    CERTIFICATION = 'certification'
-    PRACTICE_PROJECT = 'practice_project'
-    ON_THE_JOB = 'on_the_job'
-    CREDENTIAL = 'credential'
+    COURSE = "course"
+    CERTIFICATION = "certification"
+    PRACTICE_PROJECT = "practice_project"
+    ON_THE_JOB = "on_the_job"
+    CREDENTIAL = "credential"
 
 
 class TimeToClose(str, Enum):
-    DAYS = 'days'
-    WEEKS = 'weeks'
-    MONTHS = 'months'
-    YEARS = 'years'
+    DAYS = "days"
+    WEEKS = "weeks"
+    MONTHS = "months"
+    YEARS = "years"
 
 
 class Transferability(str, Enum):
-    DIRECT = 'direct'
-    CONTEXTUAL = 'contextual'
-    FOUNDATIONAL = 'foundational'
-    LIMITED = 'limited'
+    DIRECT = "direct"
+    CONTEXTUAL = "contextual"
+    FOUNDATIONAL = "foundational"
+    LIMITED = "limited"
 
 
 class AILeverage(str, Enum):
@@ -92,37 +92,37 @@ class AILeverage(str, Enum):
     enduring-aptitude gaps (those it cannot rescue).
     """
 
-    HIGH = 'high'
-    MEDIUM = 'medium'
-    LOW = 'low'
-    NONE = 'none'
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+    NONE = "none"
 
 
 class FieldCompleteness(str, Enum):
     """Local closed-world flag: may a missing value be read as a real negative?"""
 
-    OPEN = 'open'  # missing -> UNKNOWN (ask)
-    CLOSED = 'closed'  # missing -> CONTRADICTED (sound to treat as absent)
+    OPEN = "open"  # missing -> UNKNOWN (ask)
+    CLOSED = "closed"  # missing -> CONTRADICTED (sound to treat as absent)
 
 
 class Recommendation(str, Enum):
-    APPLY = 'apply'
-    STRETCH = 'stretch'
-    DO_NOT_APPLY = 'do_not_apply'
+    APPLY = "apply"
+    STRETCH = "stretch"
+    DO_NOT_APPLY = "do_not_apply"
 
 
 class FitBand(str, Enum):
-    POOR = 'poor'
-    WEAK = 'weak'
-    FAIR = 'fair'
-    GOOD = 'good'
-    GREAT = 'great'
+    POOR = "poor"
+    WEAK = "weak"
+    FAIR = "fair"
+    GOOD = "good"
+    GREAT = "great"
 
 
 class Requirement(BaseModel):
     """One atomic requirement extracted verbatim from a job description."""
 
-    id: str = Field(default_factory=lambda: _new_id('req-'))
+    id: str = Field(default_factory=lambda: _new_id("req-"))
     text: str  # verbatim from the JD
     skill_type: SkillType = SkillType.TECHNICAL
     requirement_class: RequirementClass = RequirementClass.DIFFERENTIATOR
@@ -133,8 +133,8 @@ class Evidence(BaseModel):
     """A verbatim grounding span for a match judgment."""
 
     quote: str
-    source_document_id: str = ''
-    locator: str = ''
+    source_document_id: str = ""
+    locator: str = ""
 
 
 class RequirementRecord(BaseModel):
@@ -178,23 +178,23 @@ class Clarification(BaseModel):
 
     requirement_id: str
     question: str
-    fills_field: str = ''  # which record field the answer would populate
-    reason: str = ''
+    fills_field: str = ""  # which record field the answer would populate
+    reason: str = ""
     info_gain: float = 0.0
 
 
 class NextAction(BaseModel):
     action: str
-    addresses: str = ''  # requirement id
+    addresses: str = ""  # requirement id
     priority: int = 1
-    expected_effect: str = ''
+    expected_effect: str = ""
 
 
 class Verdict(BaseModel):
     recommendation: Recommendation
     confidence: ConfidenceLevel = ConfidenceLevel.MEDIUM
-    confidence_basis: str = ''
-    headline: str = ''
+    confidence_basis: str = ""
+    headline: str = ""
     key_reasons: list[str] = Field(default_factory=list)  # <= 5
     has_blocking_gaps: bool = False
 
@@ -206,19 +206,19 @@ class ScoreSummary(BaseModel):
 
 
 class InterviewPrep(BaseModel):
-    summary: str = ''
+    summary: str = ""
     talking_points: list[str] = Field(default_factory=list)
     story_library: list[dict] = Field(default_factory=list)  # STAR/CARLA stories
-    proactive_disclosure: str = ''
+    proactive_disclosure: str = ""
 
 
 class AlignmentReport(BaseModel):
     """A complete, verdict-first alignment analysis for one JD."""
 
     job_id: str
-    job_title: str = ''
-    company: str = ''
-    created_at: str = ''
+    job_title: str = ""
+    company: str = ""
+    created_at: str = ""
     verdict: Verdict
     score_summary: ScoreSummary = Field(default_factory=ScoreSummary)
     requirements: list[RequirementRecord] = Field(default_factory=list)

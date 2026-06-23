@@ -46,34 +46,34 @@ from functools import cached_property
 
 from dol import Files, Jsons, KeyCodecs, TextFiles, filt_iter, mk_dirs_if_missing
 
-DFLT_USER = 'me'
-_ENV_VAR = 'HIRED_DATA_DIR'
+DFLT_USER = "me"
+_ENV_VAR = "HIRED_DATA_DIR"
 
 # --- layout names (single source of truth; no magic strings) --------------- #
-USERS_DIR = 'users'
-USER_DIR = 'user'  # users/<user>/user/   (the candidate themselves)
-INFO_DIR = 'info'  # users/<user>/user/info/
-RAW_DIR = 'raw'  # users/<user>/user/raw/
-JDS_DIR = 'jds'  # users/<user>/jds/
+USERS_DIR = "users"
+USER_DIR = "user"  # users/<user>/user/   (the candidate themselves)
+INFO_DIR = "info"  # users/<user>/user/info/
+RAW_DIR = "raw"  # users/<user>/user/raw/
+JDS_DIR = "jds"  # users/<user>/jds/
 
 # user-level info collections (json stores under user/info/<kind>/)
-FACTS = 'facts'
-QA = 'qa'
-TOPICS = 'topics'  # Phase 2 (dossier subtree)
+FACTS = "facts"
+QA = "qa"
+TOPICS = "topics"  # Phase 2 (dossier subtree)
 
 # user-level singletons (single files under user/info/)
-SYNOPSIS_FILE = 'synopsis.md'
-STATE_FILE = 'state.json'  # Phase 3
+SYNOPSIS_FILE = "synopsis.md"
+STATE_FILE = "state.json"  # Phase 3
 
 # per-engagement collections (json stores under jds/<jd_id>/<kind>/)
-JOBS = 'jobs'
-REPORTS = 'reports'
-REPORT_HISTORY = 'report_history'
-COMPANY = 'company'
-INTERVIEW_PREP = 'interview_prep'
+JOBS = "jobs"
+REPORTS = "reports"
+REPORT_HISTORY = "report_history"
+COMPANY = "company"
+INTERVIEW_PREP = "interview_prep"
 
 # per-engagement singleton
-META_FILE = 'meta.json'
+META_FILE = "meta.json"
 
 # The json-store kinds at each level (used by migration + tests as the SSOT).
 USER_INFO_JSON_KINDS = (FACTS, QA)
@@ -115,11 +115,11 @@ def app_data_dir(*subpaths: str, make: bool = True) -> str:
     """
     base = os.environ.get(_ENV_VAR)
     if not base:
-        xdg = os.environ.get('XDG_DATA_HOME')
+        xdg = os.environ.get("XDG_DATA_HOME")
         base = (
-            os.path.join(xdg, 'hired')
+            os.path.join(xdg, "hired")
             if xdg
-            else os.path.join(os.path.expanduser('~'), '.local', 'share', 'hired')
+            else os.path.join(os.path.expanduser("~"), ".local", "share", "hired")
         )
     path = os.path.join(base, *subpaths)
     if make:
@@ -147,8 +147,8 @@ def markdown_store(rootdir: str) -> MutableMapping:
     other artifacts exposes just the markdown view).
     """
     os.makedirs(rootdir, exist_ok=True)
-    base = filt_iter.suffixes('.md')(TextFiles(rootdir))
-    return mk_dirs_if_missing(KeyCodecs.suffixed('.md')(base))
+    base = filt_iter.suffixes(".md")(TextFiles(rootdir))
+    return mk_dirs_if_missing(KeyCodecs.suffixed(".md")(base))
 
 
 def bytes_store(rootdir: str) -> MutableMapping:
@@ -170,7 +170,7 @@ def _read_json_file(path: str):
 
 def _write_json_file(path: str, obj) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, 'w') as f:
+    with open(path, "w") as f:
         json.dump(obj, f, indent=4)
 
 
@@ -184,7 +184,7 @@ def _read_text_file(path: str):
 
 def _write_text_file(path: str, text: str) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, 'w') as f:
+    with open(path, "w") as f:
         f.write(text)
 
 
@@ -198,7 +198,7 @@ def list_jds(user: str = DFLT_USER, *, root: str | None = None) -> list[str]:
     jds_dir = os.path.join(user_base(user, root=root), JDS_DIR)
     if not os.path.isdir(jds_dir):
         return []
-    return sorted(n for n in os.listdir(jds_dir) if not n.startswith('.'))
+    return sorted(n for n in os.listdir(jds_dir) if not n.startswith("."))
 
 
 # --------------------------------------------------------------------------- #

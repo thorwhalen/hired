@@ -49,8 +49,8 @@ from hired.persistence.base import (
     user_base,
 )
 
-_LEGACY_UPLOADS = 'uploads'
-_LEGACY_SYNOPSIS = 'synopsis'
+_LEGACY_UPLOADS = "uploads"
+_LEGACY_SYNOPSIS = "synopsis"
 
 
 def _utcnow() -> str:
@@ -61,14 +61,19 @@ def _files_under(root: str):
     """Yield (posix-relpath, fullpath) for non-hidden files under ``root``."""
     for dirpath, _dirs, names in os.walk(root):
         for name in names:
-            if name.startswith('.'):  # skip .DS_Store and friends
+            if name.startswith("."):  # skip .DS_Store and friends
                 continue
             full = os.path.join(dirpath, name)
-            rel = os.path.relpath(full, root).replace(os.sep, '/')
+            rel = os.path.relpath(full, root).replace(os.sep, "/")
             yield rel, full
 
 
-_LEGACY_MARKERS = (*USER_INFO_JSON_KINDS, *JD_JSON_KINDS, _LEGACY_UPLOADS, _LEGACY_SYNOPSIS)
+_LEGACY_MARKERS = (
+    *USER_INFO_JSON_KINDS,
+    *JD_JSON_KINDS,
+    _LEGACY_UPLOADS,
+    _LEGACY_SYNOPSIS,
+)
 
 
 def is_legacy_layout(user: str = DFLT_USER, *, root: str | None = None) -> bool:
@@ -92,12 +97,12 @@ def _default_company_of(base: str):
     seeds: set[str] = set()
     for d in (os.path.join(base, COMPANY), os.path.join(base, JDS_DIR)):
         if os.path.isdir(d):
-            seeds.update(n for n in os.listdir(d) if not n.startswith('.'))
+            seeds.update(n for n in os.listdir(d) if not n.startswith("."))
     companies = sorted(seeds, key=len, reverse=True)
 
     def company_of(key: str) -> str:
         for c in companies:
-            if key == c or key.startswith(c + '-'):
+            if key == c or key.startswith(c + "-"):
                 return c
         return key
 
@@ -109,7 +114,7 @@ def _move(src: str, dst: str, *, dry_run: bool, plan: list) -> None:
     # refuse to overwrite a pre-existing file. On a resumed run already-moved
     # sources are gone (so never re-yielded), so a hit here is a genuine collision.
     if any(d == dst for _s, d in plan) or (not dry_run and os.path.exists(dst)):
-        raise ValueError(f'migration destination collision: {dst!r}')
+        raise ValueError(f"migration destination collision: {dst!r}")
     plan.append((src, dst))
     if dry_run:
         return
@@ -143,11 +148,18 @@ def migrate_user_to_v2(
     for kind in USER_INFO_JSON_KINDS:
         src_dir = os.path.join(base, kind)
         for rel, full in _files_under(src_dir):
-            _move(full, os.path.join(info, kind, rel + '.json'), dry_run=dry_run, plan=plan)
+            _move(
+                full,
+                os.path.join(info, kind, rel + ".json"),
+                dry_run=dry_run,
+                plan=plan,
+            )
 
     # user/raw/<name>  (uploads keep their real filename + extension)
     for rel, full in _files_under(os.path.join(base, _LEGACY_UPLOADS)):
-        _move(full, os.path.join(base, USER_DIR, RAW_DIR, rel), dry_run=dry_run, plan=plan)
+        _move(
+            full, os.path.join(base, USER_DIR, RAW_DIR, rel), dry_run=dry_run, plan=plan
+        )
 
     # user/info/synopsis.md  (legacy synopsis/synopsis.md)
     for rel, full in _files_under(os.path.join(base, _LEGACY_SYNOPSIS)):
@@ -159,9 +171,9 @@ def migrate_user_to_v2(
     # jds/<jd_id>/<kind>/<rel>.json  (jobs, reports, report_history, company, interview_prep)
     for kind in JD_JSON_KINDS:
         for rel, full in _files_under(os.path.join(base, kind)):
-            jd_id = company_of(rel.split('/', 1)[0])
+            jd_id = company_of(rel.split("/", 1)[0])
             touched_jds.add(jd_id)
-            dst = os.path.join(base, JDS_DIR, jd_id, kind, rel + '.json')
+            dst = os.path.join(base, JDS_DIR, jd_id, kind, rel + ".json")
             _move(full, dst, dry_run=dry_run, plan=plan)
 
     if not dry_run:
@@ -173,8 +185,13 @@ def migrate_user_to_v2(
 
                 _write_json_file(
                     meta_path,
-                    {'jd_id': jd_id, 'company': jd_id, 'label': jd_id, 'created': _utcnow(),
-                     'migrated_from': 'v1-flat'},
+                    {
+                        "jd_id": jd_id,
+                        "company": jd_id,
+                        "label": jd_id,
+                        "created": _utcnow(),
+                        "migrated_from": "v1-flat",
+                    },
                 )
         for kind in _LEGACY_MARKERS:
             shutil.rmtree(os.path.join(base, kind), ignore_errors=True)

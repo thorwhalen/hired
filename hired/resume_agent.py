@@ -42,6 +42,7 @@ def _default_session_dir() -> Path:
     migrate_legacy(LEGACY_SESSION_DATA_PATH, target)
     return target
 
+
 # ============================================================================
 # Base Types and Protocols
 # ============================================================================
