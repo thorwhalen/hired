@@ -28,8 +28,19 @@ import pickle
 import copy
 
 
-APP_DATA_PATH = Path.home() / ".cache" / "hired"
-SESSION_DATA_PATH = APP_DATA_PATH / "resume_agent_sessions"
+# Storage root unification (see misc/docs/DESIGN.md §4). Sessions now live under
+# the canonical ~/.local/share/hired/ root; the legacy ~/.cache/hired/ location
+# is migrated on first use.
+LEGACY_SESSION_DATA_PATH = Path.home() / ".cache" / "hired" / "resume_agent_sessions"
+
+
+def _default_session_dir() -> Path:
+    """Canonical session dir, migrating the legacy ~/.cache/hired/ dir once."""
+    from hired.persistence.base import app_data_dir, migrate_legacy
+
+    target = Path(app_data_dir("resume_agent_sessions"))
+    migrate_legacy(LEGACY_SESSION_DATA_PATH, target)
+    return target
 
 # ============================================================================
 # Base Types and Protocols
@@ -281,8 +292,8 @@ class SessionStore(MutableMapping):
     Sessions are saved after each chat turn to enable recovery and history.
 
     >>> store = SessionStore()
-    >>> store.data_dir
-    PosixPath('~/.cache/hired/resume_agent_sessions')
+    >>> store.data_dir.name
+    'resume_agent_sessions'
     """
 
     def __init__(self, *, data_dir: Path | None = None):
@@ -295,9 +306,8 @@ class SessionStore(MutableMapping):
         if data_dir:
             return Path(data_dir).expanduser()
 
-        # Default: ~/.cache/hired/resume_agent_sessions/
-        default = SESSION_DATA_PATH
-        return default
+        # Default: the canonical hired data root (migrating legacy path once).
+        return _default_session_dir()
 
     def _generate_session_id(self, job_info: str, candidate_info: str) -> str:
         """Generate unique session ID from inputs."""

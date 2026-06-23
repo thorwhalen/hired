@@ -94,6 +94,14 @@ __all__ = [
     "ResumeSession",
     "ResumeExpertAgent",
     "LLMConfig",
+    # Candidate knowledge base (lazily loaded — see __getattr__)
+    "CandidateKnowledgeBase",
+    # JD alignment analysis (lazily loaded — see __getattr__)
+    "AlignmentReport",
+    "Requirement",
+    "RequirementRecord",
+    "classify",
+    "render_report_markdown",
 ]
 
 # The conversational agent lives in the large `hired.resume_agent` module. Expose
@@ -101,12 +109,28 @@ __all__ = [
 # in only when actually used.
 _LAZY_FROM_RESUME_AGENT = {"ResumeSession", "ResumeExpertAgent", "LLMConfig"}
 
+# The candidate-knowledge and alignment subsystems are also exposed lazily: a
+# plain `import hired` does not need to pull in their schemas/stores until used.
+# (Their full surfaces live in `hired.candidate` and `hired.alignment`.)
+_LAZY_FROM_CANDIDATE = {"CandidateKnowledgeBase"}
+_LAZY_FROM_ALIGNMENT = {
+    "AlignmentReport",
+    "Requirement",
+    "RequirementRecord",
+    "classify",
+    "render_report_markdown",
+}
+
 
 def __getattr__(name):
-    if name in _LAZY_FROM_RESUME_AGENT:
-        import importlib
+    import importlib
 
+    if name in _LAZY_FROM_RESUME_AGENT:
         return getattr(importlib.import_module("hired.resume_agent"), name)
+    if name in _LAZY_FROM_CANDIDATE:
+        return getattr(importlib.import_module("hired.candidate"), name)
+    if name in _LAZY_FROM_ALIGNMENT:
+        return getattr(importlib.import_module("hired.alignment"), name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 

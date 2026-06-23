@@ -44,6 +44,31 @@ def test_lazy_agent_surface_resolves():
     assert hired.LLMConfig.__name__ == "LLMConfig"
 
 
+def test_lazy_candidate_alignment_surface_resolves():
+    import hired
+
+    # The candidate-knowledge + alignment subsystems are exposed lazily and need
+    # only core deps + dol (no openai, no secrets).
+    assert hired.CandidateKnowledgeBase.__name__ == "CandidateKnowledgeBase"
+    assert hired.AlignmentReport.__name__ == "AlignmentReport"
+    assert hired.Requirement.__name__ == "Requirement"
+    assert callable(hired.classify)
+    assert callable(hired.render_report_markdown)
+
+
+def test_candidate_alignment_use_does_not_require_openai(monkeypatch, tmp_path):
+    monkeypatch.setenv("HIRED_DATA_DIR", str(tmp_path))
+    import hired
+
+    kb = hired.CandidateKnowledgeBase()
+    from hired.candidate import Fact
+
+    kb.add_fact(Fact(statement="knows Python"))
+    assert kb.regenerate_synopsis()
+    if importlib.util.find_spec("openai") is None:
+        assert "openai" not in sys.modules
+
+
 def test_unknown_attribute_raises_attribute_error():
     import hired
 

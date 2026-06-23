@@ -17,9 +17,29 @@ tracking).
   `cover_letter.py`, `tracking.py`, `job_utils.py`.
 - **`resume_agent.py`** — the large conversational AI agent (`ResumeSession`,
   `ResumeExpertAgent`, `LLMConfig`), exposed lazily from `__init__`.
+- **Candidate knowledge + JD alignment** (epic #4) — `persistence/` (dol-based
+  storage: `app_data_dir`, store factories, `CandidateMall`, `Repository`),
+  `candidate/` (open-world `Fact`/`QAEntry` schemas + `CandidateKnowledgeBase` +
+  document ingest), `alignment/` (`Requirement`/`RequirementRecord`/
+  `AlignmentReport` + the deterministic two-axis rubric with the AI-leverage
+  modifier + elicitation ranking + markdown report). **Intelligence is external**
+  (the `hired-align` skill / injected LLM); the package is storage + schemas +
+  deterministic scoring. Full spec: `misc/docs/DESIGN.md`; research in
+  `misc/docs/research/`.
 
-The public API is `hired/__init__.py` (eager core + `__all__`; the agent surface
-is lazy via `__getattr__`).
+The public API is `hired/__init__.py` (eager core + `__all__`; the agent surface,
+candidate KB, and alignment surface are lazy via `__getattr__`).
+
+## Persistence (all outside the repo)
+
+One canonical data root, `~/.local/share/hired/` (XDG; `$HIRED_DATA_DIR` override),
+resolved by `hired.persistence.app_data_dir()`. Per-candidate stores under
+`users/<user>/` (default user `me`): `uploads`, `facts`, `qa`, `jobs`, `reports`,
+`report_history` (archived report versions for refresh diffs), `company` (company/
+people research), `interview_prep` (study briefings), `synopsis`. `tracking` and
+`resume_agent` sessions live at the root (migrated from the legacy `~/.hired/` and
+`~/.cache/hired/` paths on first use). **No candidate data or JDs are ever
+committed** — tests use a temp `HIRED_DATA_DIR`.
 
 ## The import-safety contract (key invariant)
 
@@ -65,5 +85,26 @@ python -m pytest hired/ tests/ --doctest-modules -q   # core-dep run
 - `DefaultAIAgent` is a mock; `LLMResumeAgent` is the real (opt-in, injected) AI.
 - `search/__init__.py` instantiates default source singletons at import (benign —
   env reads are defensive). Deferring instantiation is a noted future cleanup.
+
+## Agent tooling (skills & subagents)
+
+- **Skill `hired-usage`** — end-user resume/search/match/ATS/cover-letter/tracking.
+- **Skill `hired-dev`** — developing the package (import-safety, extension points).
+- **Skill `hired-align`** (`.claude/skills/hired-align/`) — orchestrates the
+  candidate-knowledge + JD-alignment workflow (ingest → classify → ask → refresh →
+  report). The operational guide for the epic-#4 subsystem.
+- **Skill `hired-interview-prep`** (`.claude/skills/hired-interview-prep/`) — prep for
+  a headhunter call / interview: refresh report → research company → gap-focused study
+  briefings that anchor JD terminology to the candidate's own experience.
+- **Subagent `hired-profile-ingest`** — raw documents → atomic, provenance-bearing facts.
+- **Subagent `hired-requirement-analyst`** — classify JD requirements vs facts (parallelizable).
+- **Subagent `hired-alignment-report`** — canonical generator: all evidence → a full
+  report, unanchored by any existing report (reusable standalone; heavy-review's fresh opinion).
+- **Subagent `hired-alignment-review`** — light (patch false negatives from new Q&A) /
+  heavy (regenerate + adversarial diff via `alignment.diff_reports`) report refresh;
+  proposes changes for approval, never auto-applies.
+- **Subagent `hired-company-research`** — company + people research for interview prep.
+- **Subagent `hired-interview-prep`** — study briefings tying terminology to the
+  candidate's own concepts by analogy.
 
 Handoffs live in `.claude/handoffs/` (gitignored).
