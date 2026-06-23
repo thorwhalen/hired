@@ -22,7 +22,8 @@ report is fine — that's the point of light mode).
 ```python
 from hired.candidate import CandidateKnowledgeBase
 kb = CandidateKnowledgeBase()
-report = kb.get_report(job_id)
+ws = kb.jd(jd_id)                    # the engagement (jd_id ≈ company slug); report keyed by job_id
+report = ws.get_report(job_id)
 qa = list(kb.qa_entries())          # focus on entries newer than report['created_at']
 ```
 

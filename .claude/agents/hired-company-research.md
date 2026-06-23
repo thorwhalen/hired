@@ -31,7 +31,8 @@ Write a structured markdown report and persist it:
 ```python
 from hired.candidate import CandidateKnowledgeBase
 kb = CandidateKnowledgeBase()
-kb.save_company_report(company_name, {"markdown": md, "talking_points": [...], "questions_to_ask": [...], "sources": [...]})
+ws = kb.jd(jd_id, company=company_name)   # engagement workspace (jd_id ≈ company slug)
+ws.save_company_report(company_name, {"markdown": md, "talking_points": [...], "questions_to_ask": [...], "sources": [...]})
 ```
 
 Use Vancouver-style numbered references with [title](url) links. Flag anything

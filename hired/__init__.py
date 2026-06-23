@@ -96,6 +96,7 @@ __all__ = [
     "LLMConfig",
     # Candidate knowledge base (lazily loaded — see __getattr__)
     "CandidateKnowledgeBase",
+    "JDWorkspace",
     # JD alignment analysis (lazily loaded — see __getattr__)
     "AlignmentReport",
     "Requirement",
@@ -112,7 +113,7 @@ _LAZY_FROM_RESUME_AGENT = {"ResumeSession", "ResumeExpertAgent", "LLMConfig"}
 # The candidate-knowledge and alignment subsystems are also exposed lazily: a
 # plain `import hired` does not need to pull in their schemas/stores until used.
 # (Their full surfaces live in `hired.candidate` and `hired.alignment`.)
-_LAZY_FROM_CANDIDATE = {"CandidateKnowledgeBase"}
+_LAZY_FROM_CANDIDATE = {"CandidateKnowledgeBase", "JDWorkspace"}
 _LAZY_FROM_ALIGNMENT = {
     "AlignmentReport",
     "Requirement",

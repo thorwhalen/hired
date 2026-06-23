@@ -18,9 +18,10 @@ tracking).
 - **`resume_agent.py`** — the large conversational AI agent (`ResumeSession`,
   `ResumeExpertAgent`, `LLMConfig`), exposed lazily from `__init__`.
 - **Candidate knowledge + JD alignment** (epic #4) — `persistence/` (dol-based
-  storage: `app_data_dir`, store factories, `CandidateMall`, `Repository`),
-  `candidate/` (open-world `Fact`/`QAEntry` schemas + `CandidateKnowledgeBase` +
-  document ingest), `alignment/` (`Requirement`/`RequirementRecord`/
+  storage: `app_data_dir`, codec store factories, `UserStore`/`JDStore`, `Repository`,
+  `migrate`), `candidate/` (open-world `Fact`/`QAEntry` schemas + `CandidateKnowledgeBase`
+  (user-level) + `JDWorkspace` (per-engagement) + document ingest), `alignment/`
+  (`Requirement`/`RequirementRecord`/
   `AlignmentReport` + the deterministic two-axis rubric with the AI-leverage
   modifier + elicitation ranking + markdown report). **Intelligence is external**
   (the `hired-align` skill / injected LLM); the package is storage + schemas +
@@ -30,15 +31,26 @@ tracking).
 The public API is `hired/__init__.py` (eager core + `__all__`; the agent surface,
 candidate KB, and alignment surface are lazy via `__getattr__`).
 
-## Persistence (all outside the repo)
+## Persistence (all outside the repo) — Storage v2
 
 One canonical data root, `~/.local/share/hired/` (XDG; `$HIRED_DATA_DIR` override),
-resolved by `hired.persistence.app_data_dir()`. Per-candidate stores under
-`users/<user>/` (default user `me`): `uploads`, `facts`, `qa`, `jobs`, `reports`,
-`report_history` (archived report versions for refresh diffs), `company` (company/
-people research), `interview_prep` (study briefings), `synopsis`. `tracking` and
-`resume_agent` sessions live at the root (migrated from the legacy `~/.hired/` and
-`~/.cache/hired/` paths on first use). **No candidate data or JDs are ever
+resolved by `hired.persistence.app_data_dir()`. Per-candidate data under
+`users/<user>/` (default `me`) is split two levels:
+
+- `user/` — the candidate (cross-JD, reusable): `raw/` (raw sources, bytes) +
+  `info/` (agent-maintained: `facts/`, `qa/`, `synopsis.md`, `topics/`, `state.json`).
+- `jds/<jd_id>/` — one engagement (1+ related roles of one company): `meta.json`,
+  `jobs/`, `reports/`, `report_history/`, `company/`, `interview_prep/`.
+
+**Codecs:** keys are extension-less on the facade; the filesystem side carries
+extensions via dol key codecs and dicts↔JSON via value codecs — `json_store`
+(`Jsons`, `<id>.json`), `markdown_store` (`<key>.md`), `bytes_store` (real filenames).
+Singletons (`synopsis.md`/`state.json`/`meta.json`) are single files. Facades:
+`UserStore`/`CandidateKnowledgeBase` (user-level) and `JDStore`/`JDWorkspace`
+(per-engagement, via `kb.jd(jd_id, company=…, label=…)`). `persistence.migrate`
+moves the legacy flat layout → v2 once (auto via `ensure_v2`, or `migrate_user_to_v2`).
+`tracking` and `resume_agent` sessions live at the root (migrated from legacy
+`~/.hired/` and `~/.cache/hired/` on first use). **No candidate data or JDs are ever
 committed** — tests use a temp `HIRED_DATA_DIR`.
 
 ## The import-safety contract (key invariant)

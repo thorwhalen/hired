@@ -16,9 +16,10 @@ candidate's own world are how you get there fast.
 ```python
 from hired.candidate import CandidateKnowledgeBase
 kb = CandidateKnowledgeBase()
-report = kb.get_report(job_id)     # buckets tell you what to prioritize
+ws = kb.jd(jd_id)                  # engagement workspace (jd_id ≈ company slug)
+report = ws.get_report(job_id)     # buckets tell you what to prioritize
 print(kb.synopsis)                 # the candidate's OWN concepts/jargon = your anchor library
-kb.get_company_report(company)     # if present — company-specific framing
+ws.get_company_report(company)     # if present — company-specific framing
 ```
 
 ## What to prioritize (from the alignment report)
@@ -52,7 +53,7 @@ interview** needs deeper mechanism.
 ## Persist & return
 
 ```python
-kb.save_briefing(f"{job_id}--{subject_slug}", {"markdown": md, "terms": [...], "anchors": [...], "sources": [...]})
+ws.save_briefing(f"{job_id}--{subject_slug}", {"markdown": md, "terms": [...], "anchors": [...], "sources": [...]})
 ```
 
 Return the briefings. The defining quality bar: a reader who knows the candidate's

@@ -27,18 +27,24 @@ def test_app_data_dir_honors_env(tmp_path):
     assert app_data_dir('users', 'me').endswith(os.path.join('users', 'me'))
 
 
-def test_candidate_mall_roundtrip_and_kinds():
-    from hired.persistence import CandidateMall
+def test_user_and_jd_stores_roundtrip():
+    from hired.persistence import JDStore, UserStore
 
-    mall = CandidateMall()
-    assert sorted(mall.keys()) == [
-        'company', 'facts', 'interview_prep', 'jobs', 'qa',
-        'report_history', 'reports', 'synopsis', 'uploads',
-    ]
-    mall['facts']['f1'] = {'statement': 'x'}
-    assert mall['facts', 'f1'] == {'statement': 'x'}
-    mall['uploads']['cv.bin'] = b'bytes'
-    assert mall['uploads']['cv.bin'] == b'bytes'
+    # user level: raw sources + agent-maintained info
+    us = UserStore()
+    us.facts['f1'] = {'statement': 'x'}
+    assert us.facts['f1'] == {'statement': 'x'}
+    us.raw['cv.bin'] = b'bytes'
+    assert us.raw['cv.bin'] == b'bytes'
+    us.write_synopsis('# me')
+    assert us.read_synopsis() == '# me'
+
+    # engagement level: reports etc. under jds/<jd_id>/
+    jd = JDStore('me', 'acme')
+    jd.reports['role-1'] = {'verdict': {'recommendation': 'apply'}}
+    assert jd.reports['role-1']['verdict']['recommendation'] == 'apply'
+    jd.write_meta({'company': 'Acme'})
+    assert jd.read_meta()['company'] == 'Acme'
 
 
 def test_repository_validates_models():
@@ -220,23 +226,28 @@ def test_elicitation_ranks_and_detects_stability():
 # --------------------------------------------------------------------------- #
 # Report rendering
 # --------------------------------------------------------------------------- #
-def test_report_archive_company_and_briefing_stores():
+def test_report_archive_company_and_briefing_via_workspace():
     from hired.candidate import CandidateKnowledgeBase
 
     kb = CandidateKnowledgeBase()
-    kb.save_report('job1', {'created_at': '2026-01-01T00:00:00', 'verdict': {'recommendation': 'stretch'}})
+    ws = kb.jd('acme', company='Acme, Inc.', label='Acme roles')
+    ws.save_report('job1', {'created_at': '2026-01-01T00:00:00', 'verdict': {'recommendation': 'stretch'}})
     # Saving again archives the prior version.
-    kb.save_report('job1', {'created_at': '2026-02-01T00:00:00', 'verdict': {'recommendation': 'apply'}})
-    assert kb.get_report('job1')['verdict']['recommendation'] == 'apply'
-    assert len(kb.report_versions('job1')) == 1
+    ws.save_report('job1', {'created_at': '2026-02-01T00:00:00', 'verdict': {'recommendation': 'apply'}})
+    assert ws.get_report('job1')['verdict']['recommendation'] == 'apply'
+    assert len(ws.report_versions('job1')) == 1
 
-    kb.save_company_report('Socure, Inc.', {'summary': 'identity verification'})
-    assert kb.get_company_report('Socure, Inc.')['summary'] == 'identity verification'
-    assert 'socure-inc' in kb.companies()
+    ws.save_company_report('Socure, Inc.', {'summary': 'identity verification'})
+    assert ws.get_company_report('Socure, Inc.')['summary'] == 'identity verification'
+    assert 'socure-inc' in ws.companies()
 
-    kb.save_briefing('KYC / AML primer', {'body': '...'})
-    assert kb.get_briefing('KYC / AML primer')['body'] == '...'
-    assert 'kyc-aml-primer' in kb.briefings()
+    ws.save_briefing('KYC / AML primer', {'body': '...'})
+    assert ws.get_briefing('KYC / AML primer')['body'] == '...'
+    assert 'kyc-aml-primer' in ws.briefings()
+
+    # the engagement is discoverable from the KB, with its meta recorded
+    assert 'acme' in kb.jds()
+    assert ws.meta['company'] == 'Acme, Inc.'
 
 
 def test_diff_reports_detects_bucket_and_verdict_moves():
