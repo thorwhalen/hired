@@ -53,6 +53,7 @@ from hired.alignment.elicitation import (
     should_ask,
 )
 from hired.alignment.report import render_report_markdown
+from hired.alignment.diff import diff_reports, summarize_diff
 
 __all__ = [
     # schemas
@@ -90,4 +91,7 @@ __all__ = [
     'info_gain',
     # report
     'render_report_markdown',
+    # diff (used by the alignment-review refresh)
+    'diff_reports',
+    'summarize_diff',
 ]

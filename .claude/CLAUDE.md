@@ -33,8 +33,10 @@ candidate KB, and alignment surface are lazy via `__getattr__`).
 ## Persistence (all outside the repo)
 
 One canonical data root, `~/.local/share/hired/` (XDG; `$HIRED_DATA_DIR` override),
-resolved by `hired.persistence.app_data_dir()`. Candidate uploads/facts/Q&A/jobs/
-reports live under `users/<user>/` (default user `me`); `tracking` and
+resolved by `hired.persistence.app_data_dir()`. Per-candidate stores under
+`users/<user>/` (default user `me`): `uploads`, `facts`, `qa`, `jobs`, `reports`,
+`report_history` (archived report versions for refresh diffs), `company` (company/
+people research), `interview_prep` (study briefings), `synopsis`. `tracking` and
 `resume_agent` sessions live at the root (migrated from the legacy `~/.hired/` and
 `~/.cache/hired/` paths on first use). **No candidate data or JDs are ever
 committed** — tests use a temp `HIRED_DATA_DIR`.
@@ -89,11 +91,20 @@ python -m pytest hired/ tests/ --doctest-modules -q   # core-dep run
 - **Skill `hired-usage`** — end-user resume/search/match/ATS/cover-letter/tracking.
 - **Skill `hired-dev`** — developing the package (import-safety, extension points).
 - **Skill `hired-align`** (`.claude/skills/hired-align/`) — orchestrates the
-  candidate-knowledge + JD-alignment workflow (ingest → classify → ask → report).
-  This is the operational guide for the epic-#4 subsystem.
-- **Subagent `hired-profile-ingest`** (`.claude/agents/`) — extracts atomic,
-  provenance-bearing facts from raw candidate documents.
-- **Subagent `hired-requirement-analyst`** (`.claude/agents/`) — classifies JD
-  requirements vs candidate facts (parallelizable for large JDs).
+  candidate-knowledge + JD-alignment workflow (ingest → classify → ask → refresh →
+  report). The operational guide for the epic-#4 subsystem.
+- **Skill `hired-interview-prep`** (`.claude/skills/hired-interview-prep/`) — prep for
+  a headhunter call / interview: refresh report → research company → gap-focused study
+  briefings that anchor JD terminology to the candidate's own experience.
+- **Subagent `hired-profile-ingest`** — raw documents → atomic, provenance-bearing facts.
+- **Subagent `hired-requirement-analyst`** — classify JD requirements vs facts (parallelizable).
+- **Subagent `hired-alignment-report`** — canonical generator: all evidence → a full
+  report, unanchored by any existing report (reusable standalone; heavy-review's fresh opinion).
+- **Subagent `hired-alignment-review`** — light (patch false negatives from new Q&A) /
+  heavy (regenerate + adversarial diff via `alignment.diff_reports`) report refresh;
+  proposes changes for approval, never auto-applies.
+- **Subagent `hired-company-research`** — company + people research for interview prep.
+- **Subagent `hired-interview-prep`** — study briefings tying terminology to the
+  candidate's own concepts by analogy.
 
 Handoffs live in `.claude/handoffs/` (gitignored).

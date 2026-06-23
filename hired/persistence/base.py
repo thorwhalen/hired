@@ -95,12 +95,15 @@ def text_store(rootdir: str) -> MutableMapping:
 # The per-candidate sub-stores and the factory that builds each kind. Keeping
 # this as data (not hardcoded properties) keeps the mall open for extension.
 _STORE_KINDS: dict[str, str] = {
-    'uploads': 'bytes',
-    'facts': 'json',
-    'qa': 'json',
-    'jobs': 'json',
-    'reports': 'json',
-    'synopsis': 'text',
+    'uploads': 'bytes',  # raw documents (CVs, bios, publications)
+    'facts': 'json',  # atomic, open-world candidate facts
+    'qa': 'json',  # clarifying Q&A history
+    'jobs': 'json',  # JDs + parsed requirements
+    'reports': 'json',  # current alignment report per job
+    'report_history': 'json',  # archived prior report versions (for refresh diffs)
+    'company': 'json',  # company / people research reports
+    'interview_prep': 'json',  # interview-prep research briefings
+    'synopsis': 'text',  # regenerated human-readable projection of facts
 }
 _STORE_FACTORIES = {'json': json_store, 'bytes': bytes_store, 'text': text_store}
 
@@ -116,7 +119,7 @@ class CandidateMall(MutableMapping):
     >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
     >>> mall = CandidateMall()           # default user "me"
     >>> sorted(mall.keys())
-    ['facts', 'jobs', 'qa', 'reports', 'synopsis', 'uploads']
+    ['company', 'facts', 'interview_prep', 'jobs', 'qa', 'report_history', 'reports', 'synopsis', 'uploads']
     >>> mall['facts']['f1'] = {'statement': 'knows Python'}
     >>> mall['facts', 'f1']
     {'statement': 'knows Python'}

@@ -22,6 +22,12 @@ from hired.persistence.base import DFLT_USER, CandidateMall
 from hired.persistence.repository import Repository
 
 
+def _slug(text: str) -> str:
+    """A filesystem-safe key from an arbitrary label (company name, subject)."""
+    keep = ''.join(c if (c.isalnum() or c in ' -_') else ' ' for c in text)
+    return '-'.join(keep.lower().split()) or 'untitled'
+
+
 class _FactRepo(Repository[Fact]):
     model = Fact
 
@@ -125,11 +131,45 @@ class CandidateKnowledgeBase:
     def jobs(self) -> list[str]:
         return list(self.mall['jobs'])
 
-    def save_report(self, job_id: str, data: dict) -> None:
+    def save_report(self, job_id: str, data: dict, *, archive: bool = True) -> None:
+        """Persist the current alignment report, archiving the prior one first.
+
+        Archiving (on by default) snapshots any existing report into
+        ``report_history`` so the alignment-review agent can diff versions.
+        """
+        if archive and job_id in self.mall['reports']:
+            stamp = data.get('created_at') or _utcnow()
+            self.mall['report_history'][f'{job_id}/{stamp}'] = self.mall['reports'][job_id]
         self.mall['reports'][job_id] = data
 
     def get_report(self, job_id: str) -> dict:
         return self.mall['reports'][job_id]
+
+    def report_versions(self, job_id: str) -> list[str]:
+        """Keys of archived prior versions of a job's report (chronological)."""
+        prefix = f'{job_id}/'
+        return sorted(k for k in self.mall['report_history'] if k.startswith(prefix))
+
+    # --- company research & interview prep ---------------------------------
+    def save_company_report(self, company: str, data: dict) -> None:
+        """Persist a company/people research report (keyed by company name)."""
+        self.mall['company'][_slug(company)] = data
+
+    def get_company_report(self, company: str) -> dict:
+        return self.mall['company'][_slug(company)]
+
+    def companies(self) -> list[str]:
+        return list(self.mall['company'])
+
+    def save_briefing(self, key: str, data: dict) -> None:
+        """Persist an interview-prep research briefing (keyed by subject/job)."""
+        self.mall['interview_prep'][_slug(key)] = data
+
+    def get_briefing(self, key: str) -> dict:
+        return self.mall['interview_prep'][_slug(key)]
+
+    def briefings(self) -> list[str]:
+        return list(self.mall['interview_prep'])
 
     # --- synopsis (regenerated projection) ---------------------------------
     def regenerate_synopsis(self) -> str:

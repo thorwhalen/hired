@@ -94,6 +94,15 @@ answer:
 Stop when `is_decision_stable(records)` is True, or you hit a sensible question
 budget. Unresolved unknowns stay as open questions in the report (honest).
 
+**After every Q&A batch, refresh the report.** A report generated before a Q&A
+batch will carry false negatives the new answers resolve. Run the
+`hired-alignment-review` subagent in **light mode** (read the existing report + the
+new Q&A, propose targeted edits — typically `UNKNOWN → confirmed/adjacent` and
+resolved clarifications), confirm the edits with the user, then persist. This keeps
+`kb.save_report(...)` current (it archives the prior version automatically). For a
+periodic deep audit, run the review in **heavy mode** (regenerate fresh via
+`hired-alignment-report`, then diff).
+
 ## Step 4 — Report
 
 Build an `AlignmentReport` (verdict-first; `bucket_counts`; `blocking_gaps`;
@@ -111,7 +120,21 @@ matches and transferable adjacencies, frame learnable gaps honestly (with the
 AI-leverage ramp), and be candid about any hard gaps — truthful, not misleading,
 but in the best positive light.
 
+## The agent roster (reusable independently)
+
+- **`hired-profile-ingest`** — documents → atomic, quote-grounded facts.
+- **`hired-requirement-analyst`** — classify one requirement vs evidence (parallelizable).
+- **`hired-alignment-report`** — the canonical generator: all evidence → a full report,
+  unanchored by any existing report. Use for a new JD or as heavy-review's fresh opinion.
+- **`hired-alignment-review`** — light (patch false negatives from new Q&A) / heavy
+  (regenerate + adversarial diff) report refresh; proposes, never auto-applies.
+- **`hired-company-research`** — company + people research for interview prep.
+- **`hired-interview-prep`** — gap-focused study briefings tying JD terminology to the
+  candidate's own experience by analogy. (See the `hired-interview-prep` skill.)
+
 ## Reuse
 
 The KB persists across sessions and jobs. On the next JD, `kb.synopsis` already
-carries everything learned, so you ask *fewer, sharper* questions over time.
+carries everything learned, so you ask *fewer, sharper* questions over time. Reports
+are versioned (`kb.report_versions(job_id)`); company reports and interview-prep
+briefings persist alongside (`kb.companies()`, `kb.briefings()`).

@@ -32,7 +32,8 @@ def test_candidate_mall_roundtrip_and_kinds():
 
     mall = CandidateMall()
     assert sorted(mall.keys()) == [
-        'facts', 'jobs', 'qa', 'reports', 'synopsis', 'uploads'
+        'company', 'facts', 'interview_prep', 'jobs', 'qa',
+        'report_history', 'reports', 'synopsis', 'uploads',
     ]
     mall['facts']['f1'] = {'statement': 'x'}
     assert mall['facts', 'f1'] == {'statement': 'x'}
@@ -219,6 +220,56 @@ def test_elicitation_ranks_and_detects_stability():
 # --------------------------------------------------------------------------- #
 # Report rendering
 # --------------------------------------------------------------------------- #
+def test_report_archive_company_and_briefing_stores():
+    from hired.candidate import CandidateKnowledgeBase
+
+    kb = CandidateKnowledgeBase()
+    kb.save_report('job1', {'created_at': '2026-01-01T00:00:00', 'verdict': {'recommendation': 'stretch'}})
+    # Saving again archives the prior version.
+    kb.save_report('job1', {'created_at': '2026-02-01T00:00:00', 'verdict': {'recommendation': 'apply'}})
+    assert kb.get_report('job1')['verdict']['recommendation'] == 'apply'
+    assert len(kb.report_versions('job1')) == 1
+
+    kb.save_company_report('Socure, Inc.', {'summary': 'identity verification'})
+    assert kb.get_company_report('Socure, Inc.')['summary'] == 'identity verification'
+    assert 'socure-inc' in kb.companies()
+
+    kb.save_briefing('KYC / AML primer', {'body': '...'})
+    assert kb.get_briefing('KYC / AML primer')['body'] == '...'
+    assert 'kyc-aml-primer' in kb.briefings()
+
+
+def test_diff_reports_detects_bucket_and_verdict_moves():
+    from hired.alignment import diff_reports, summarize_diff
+
+    old = {
+        'verdict': {'recommendation': 'stretch'},
+        'score_summary': {'fit_band': 'fair'},
+        'requirements': [
+            {'requirement': {'text': 'GNNs'}, 'bucket': None},
+            {'requirement': {'text': 'Python'}, 'bucket': 'strong_match'},
+        ],
+        'clarifications': [{'question': 'Do you know GNNs?'}],
+    }
+    new = {
+        'verdict': {'recommendation': 'apply'},
+        'score_summary': {'fit_band': 'good'},
+        'requirements': [
+            {'requirement': {'text': 'GNNs'}, 'bucket': 'adjacent_transferable'},
+            {'requirement': {'text': 'Python'}, 'bucket': 'strong_match'},
+        ],
+        'clarifications': [],
+    }
+    d = diff_reports(old, new)
+    assert d['verdict_changed'] and d['verdict_new'] == 'apply'
+    assert d['fit_old'] == 'fair' and d['fit_new'] == 'good'
+    assert d['bucket_changes'] == [
+        {'requirement': 'GNNs', 'from': 'needs_clarification', 'to': 'adjacent_transferable'}
+    ]
+    assert d['clarifications_resolved'] == ['Do you know GNNs?']
+    assert 'GNNs' in summarize_diff(d)
+
+
 def test_report_renders_markdown():
     from hired.alignment import (AlignmentReport, Verdict, Recommendation,
                                  ScoreSummary, FitBand, render_report_markdown,
