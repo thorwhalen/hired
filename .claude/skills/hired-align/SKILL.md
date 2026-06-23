@@ -29,13 +29,25 @@ deterministic rubric, and report rendering.
    `~/.local/share/hired/` (or `$HIRED_DATA_DIR`). Never write them into the repo
    or a commit.
 
-## Setup
+## Setup — two levels: the candidate, and the engagement
+
+Knowledge about the **candidate** (facts, Q&A, synopsis, raw sources) is reusable
+across every job and lives at the user level (`kb`). Work on **one company's
+role(s)** (parsed jobs, alignment reports, company research, interview prep) lives
+in a per-engagement **workspace** (`ws = kb.jd(jd_id, ...)`).
 
 ```python
 from hired.candidate import CandidateKnowledgeBase
-kb = CandidateKnowledgeBase()   # default candidate "me"
-print(kb.synopsis)              # fast context load of what's already known
+kb = CandidateKnowledgeBase()                     # default candidate "me" (user-level)
+print(kb.synopsis)                                # fast context load of what's already known
+
+ws = kb.jd(jd_id, company="<Company>", label="<short label>")  # the engagement
 ```
+
+`jd_id` is a slug for the engagement — **one or a group of related roles at the
+same company**, usually the company slug (e.g. `"socure"`). If the candidate gives
+you several unrelated roles at one big company and wants them separate, use distinct
+`jd_id`s. A single role's alignment report is keyed by `job_id` *within* `ws`.
 
 ## Step 1 — Ingest the candidate profile (once, then incrementally)
 
@@ -57,9 +69,9 @@ the source (the package drops quotes that aren't).
 
 ## Step 2 — Analyze a JD
 
-1. Save the JD and decompose it into atomic `Requirement`s (verbatim `text`),
-   tagging each `requirement_class` (gate_keeper / differentiator / value_add),
-   `skill_type`, and `required_level` (0–5).
+1. Save the JD into the engagement (`ws.save_job(job_id, {...})`) and decompose it
+   into atomic `Requirement`s (verbatim `text`), tagging each `requirement_class`
+   (gate_keeper / differentiator / value_add), `skill_type`, and `required_level` (0–5).
 2. For each requirement, gather evidence from the KB (`kb.facts(...)`, the synopsis)
    and build a `RequirementRecord`: set `match_state`
    (CONFIRMED / CONTRADICTED / UNKNOWN), `match_type` (direct / adjacent / none),
@@ -99,7 +111,7 @@ batch will carry false negatives the new answers resolve. Run the
 `hired-alignment-review` subagent in **light mode** (read the existing report + the
 new Q&A, propose targeted edits — typically `UNKNOWN → confirmed/adjacent` and
 resolved clarifications), confirm the edits with the user, then persist. This keeps
-`kb.save_report(...)` current (it archives the prior version automatically). For a
+`ws.save_report(...)` current (it archives the prior version automatically). For a
 periodic deep audit, run the review in **heavy mode** (regenerate fresh via
 `hired-alignment-report`, then diff).
 
@@ -112,7 +124,7 @@ ramp plans for learnable gaps), render and persist it:
 ```python
 from hired.alignment import render_report_markdown
 md = render_report_markdown(report)
-kb.save_report(job_id, report.model_dump(mode="json"))
+ws.save_report(job_id, report.model_dump(mode="json"))
 ```
 
 Present the markdown to the user. For a recruiter response, lead with the strong
@@ -134,7 +146,8 @@ but in the best positive light.
 
 ## Reuse
 
-The KB persists across sessions and jobs. On the next JD, `kb.synopsis` already
-carries everything learned, so you ask *fewer, sharper* questions over time. Reports
-are versioned (`kb.report_versions(job_id)`); company reports and interview-prep
-briefings persist alongside (`kb.companies()`, `kb.briefings()`).
+The candidate KB persists across sessions and jobs. On the next JD, `kb.synopsis`
+already carries everything learned, so you ask *fewer, sharper* questions over time.
+Within an engagement, reports are versioned (`ws.report_versions(job_id)`); company
+reports and interview-prep briefings persist alongside (`ws.companies()`,
+`ws.briefings()`). List all engagements with `kb.jds()`.

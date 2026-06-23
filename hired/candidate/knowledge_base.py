@@ -1,10 +1,15 @@
-"""The candidate knowledge base: a facade over the per-candidate store mall.
+"""The candidate knowledge base: a facade over the user-level store.
 
 :class:`CandidateKnowledgeBase` is the domain-driven entry point for accumulating
-and querying knowledge about one candidate. It wraps the :class:`CandidateMall`
-stores with validated, intention-revealing methods (``add_fact``, ``facts``,
-``record_qa``, ``save_upload``, …) and keeps a regenerated, human-readable
-:meth:`synopsis` projection of the fact store for fast context loading.
+and querying knowledge about one candidate — *what is true about them*, reusable
+across every job application. It wraps the :class:`~hired.persistence.base.UserStore`
+with validated, intention-revealing methods (``add_fact``, ``facts``, ``record_qa``,
+``save_upload``, …) and keeps a regenerated, human-readable :meth:`synopsis`
+projection of the fact store for fast context loading.
+
+Work tied to a specific company's role(s) — alignment reports, company research,
+interview prep — does **not** live here; it lives in a per-engagement
+:class:`~hired.candidate.workspace.JDWorkspace`, reached via :meth:`jd`.
 """
 
 from __future__ import annotations
@@ -18,14 +23,10 @@ from hired.candidate.base import (
     QAEntry,
     _utcnow,
 )
-from hired.persistence.base import DFLT_USER, CandidateMall
+from hired.candidate.workspace import JDWorkspace
+from hired.persistence.base import DFLT_USER, UserStore, list_jds
+from hired.persistence.migrate import ensure_v2
 from hired.persistence.repository import Repository
-
-
-def _slug(text: str) -> str:
-    """A filesystem-safe key from an arbitrary label (company name, subject)."""
-    keep = "".join(c if (c.isalnum() or c in " -_") else " " for c in text)
-    return "-".join(keep.lower().split()) or "untitled"
 
 
 class _FactRepo(Repository[Fact]):
@@ -37,7 +38,7 @@ class _QARepo(Repository[QAEntry]):
 
 
 class CandidateKnowledgeBase:
-    """Accumulated, open-world knowledge about a single candidate.
+    """Accumulated, open-world knowledge about a single candidate (user-level).
 
     >>> import tempfile, os
     >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
@@ -51,11 +52,13 @@ class CandidateKnowledgeBase:
     ['Built ML pipelines in Python']
     """
 
-    def __init__(self, user: str = DFLT_USER, *, mall: CandidateMall | None = None):
+    def __init__(self, user: str = DFLT_USER, *, store: UserStore | None = None):
         self.user = user
-        self.mall = mall or CandidateMall(user)
-        self._facts = _FactRepo(self.mall["facts"])
-        self._qa = _QARepo(self.mall["qa"])
+        # Auto-migrate a legacy flat layout to v2 on first access (idempotent).
+        ensure_v2(user, root=store._root if store is not None else None)
+        self._store = store or UserStore(user)
+        self._facts = _FactRepo(self._store.facts)
+        self._qa = _QARepo(self._store.qa)
 
     # --- facts -------------------------------------------------------------
     def add_fact(self, fact: Fact) -> str:
@@ -110,68 +113,33 @@ class CandidateKnowledgeBase:
     def qa_entries(self) -> Iterator[QAEntry]:
         return self._qa.values()
 
-    # --- raw uploads -------------------------------------------------------
+    # --- raw uploads / sources --------------------------------------------
     def save_upload(self, name: str, data: bytes) -> None:
         """Store a raw uploaded document (CV, bio, publication) by filename."""
-        self.mall["uploads"][name] = data
+        self._store.raw[name] = data
 
     def get_upload(self, name: str) -> bytes:
-        return self.mall["uploads"][name]
+        return self._store.raw[name]
 
     def uploads(self) -> list[str]:
-        return list(self.mall["uploads"])
+        return list(self._store.raw)
 
-    # --- jobs & reports (keyed by job id) ----------------------------------
-    def save_job(self, job_id: str, data: dict) -> None:
-        self.mall["jobs"][job_id] = data
+    # --- engagements (per-JD workspaces) -----------------------------------
+    def jd(
+        self, jd_id: str, *, company: str | None = None, label: str | None = None
+    ) -> JDWorkspace:
+        """Get-or-create the workspace for an engagement (1+ JDs of one company).
 
-    def get_job(self, job_id: str) -> dict:
-        return self.mall["jobs"][job_id]
-
-    def jobs(self) -> list[str]:
-        return list(self.mall["jobs"])
-
-    def save_report(self, job_id: str, data: dict, *, archive: bool = True) -> None:
-        """Persist the current alignment report, archiving the prior one first.
-
-        Archiving (on by default) snapshots any existing report into
-        ``report_history`` so the alignment-review agent can diff versions.
+        ``company`` / ``label`` are recorded in the engagement's ``meta`` when given.
         """
-        if archive and job_id in self.mall["reports"]:
-            stamp = data.get("created_at") or _utcnow()
-            self.mall["report_history"][f"{job_id}/{stamp}"] = self.mall["reports"][
-                job_id
-            ]
-        self.mall["reports"][job_id] = data
+        ws = JDWorkspace(self, jd_id)
+        if company is not None or label is not None:
+            ws.set_meta(jd_id=jd_id, company=company, label=label)
+        return ws
 
-    def get_report(self, job_id: str) -> dict:
-        return self.mall["reports"][job_id]
-
-    def report_versions(self, job_id: str) -> list[str]:
-        """Keys of archived prior versions of a job's report (chronological)."""
-        prefix = f"{job_id}/"
-        return sorted(k for k in self.mall["report_history"] if k.startswith(prefix))
-
-    # --- company research & interview prep ---------------------------------
-    def save_company_report(self, company: str, data: dict) -> None:
-        """Persist a company/people research report (keyed by company name)."""
-        self.mall["company"][_slug(company)] = data
-
-    def get_company_report(self, company: str) -> dict:
-        return self.mall["company"][_slug(company)]
-
-    def companies(self) -> list[str]:
-        return list(self.mall["company"])
-
-    def save_briefing(self, key: str, data: dict) -> None:
-        """Persist an interview-prep research briefing (keyed by subject/job)."""
-        self.mall["interview_prep"][_slug(key)] = data
-
-    def get_briefing(self, key: str) -> dict:
-        return self.mall["interview_prep"][_slug(key)]
-
-    def briefings(self) -> list[str]:
-        return list(self.mall["interview_prep"])
+    def jds(self) -> list[str]:
+        """Ids of all engagements for this candidate."""
+        return list_jds(self.user, root=self._store._root)
 
     # --- synopsis (regenerated projection) ---------------------------------
     def regenerate_synopsis(self) -> str:
@@ -192,13 +160,11 @@ class CandidateKnowledgeBase:
             lines.extend(sorted(by_cat[cat]))
             lines.append("")
         text = "\n".join(lines).rstrip() + "\n"
-        self.mall["synopsis"]["synopsis.md"] = text
+        self._store.write_synopsis(text)
         return text
 
     @property
     def synopsis(self) -> str:
         """The last persisted synopsis, regenerating it if absent."""
-        store = self.mall["synopsis"]
-        if "synopsis.md" in store:
-            return store["synopsis.md"]
-        return self.regenerate_synopsis()
+        text = self._store.read_synopsis()
+        return text if text is not None else self.regenerate_synopsis()

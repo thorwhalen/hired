@@ -47,16 +47,18 @@ either by the Claude Code agent (interactive) or an injected client (autonomous)
 
 ```
 hired/
-  persistence/          # NEW — dol-based storage foundation (Phase 1)
+  persistence/          # dol-based storage foundation (Storage v2)
     __init__.py
-    base.py             # app_data_dir(), store factories, CandidateMall (store-of-stores)
+    base.py             # app_data_dir(), codec store factories, UserStore + JDStore
     repository.py       # Repository base over MutableMapping
-  candidate/            # NEW — candidate knowledge domain (Phase 1)
-    __init__.py         # facade: CandidateKnowledgeBase
-    base.py             # Fact, Provenance, QAEntry, enums (pydantic v2)
-    knowledge_base.py   # repository over the mall: facts / qa / uploads / synopsis
+    migrate.py          # one-time legacy-flat -> v2 migration (+ auto ensure_v2)
+  candidate/            # candidate knowledge domain
+    __init__.py         # facades: CandidateKnowledgeBase, JDWorkspace
+    base.py             # Fact, Provenance, QAEntry, enums (pydantic v2); slug()
+    knowledge_base.py   # user-level: facts / qa / raw sources / synopsis; kb.jd(), kb.jds()
+    workspace.py        # JDWorkspace: per-engagement reports / company / prep / jobs
     ingest.py           # raw upload -> atomic facts (agent-assisted; deterministic glue)
-  alignment/            # NEW — JD alignment domain (Phase 1)
+  alignment/            # JD alignment domain
     __init__.py         # facade: JDAlignmentAnalyzer
     base.py             # Requirement, RequirementRecord, Evidence, AlignmentReport, enums
     rubric.py           # deterministic two-axis bucket assignment + ai-leverage modifier
@@ -68,33 +70,62 @@ Existing modules **composed, not duplicated**: `matching.JobMatcher` (keyword la
 becomes one input signal to `alignment`; `job_utils.JobAnalyzer` parses JDs;
 `search.JobResult` is the JD carrier; `tracking` records applications.
 
-## 4. Storage (dol, repository pattern)
+## 4. Storage (dol, codecs, two-level layout)
 
 **Canonical root:** `~/.local/share/hired/` (XDG `$XDG_DATA_HOME/hired`), overridable
 via `HIRED_DATA_DIR`. All persistence is **outside the repo**. Resolved by
 `hired.persistence.app_data_dir()`.
 
-**Layout (store-of-stores / "mall"):**
+**Two-level per-candidate layout.** Each candidate's data is split into *what is true
+about the candidate* (cross-JD, reusable) and *work on one company's role(s)*:
 
 ```
 ~/.local/share/hired/
   users/
-    me/                       # default candidate; resolves "I"/"me"/"default"
-      uploads/                # raw bytes: CVs, bios, publications (key = filename)
-      facts/                  # one JSON per atomic fact (key = fact id)
-      qa/                     # one JSON per Q&A entry (key = qa id)
-      jobs/                   # JDs + parsed requirements (key = job id)
-      reports/                # alignment reports (key = job id)
-      synopsis/               # regenerated human-readable projections (key = topic)
-  applications/               # migrated from ~/.hired/applications.db (Decision 2)
-  resume_agent_sessions/      # migrated from ~/.cache/hired/ (Decision 2)
+    me/                          # default candidate; resolves "I"/"me"/"default"
+      user/                      # the candidate — single source of truth (cross-JD)
+        raw/                     # raw sources the user provided (bytes; real filenames)
+        info/                    # agent-maintained, operable knowledge (agent CRUDs here)
+          facts/  <id>.json      # atomic facts
+          qa/     <id>.json      # Q&A history
+          topics/ <topic>/...    # per-subject dossiers (overview.md + detail; Phase 2)
+          synopsis.md            # regenerated overview = entry point (singleton)
+          state.json             # refresh bookkeeping (Phase 3)
+      jds/<jd_id>/               # one engagement = 1+ related JDs of the same company
+        meta.json                # company, label, created
+        jobs/ <id>.json          # JDs + parsed requirements
+        reports/ <id>.json       # current alignment report per role
+        report_history/ <id>/<stamp>.json   # archived prior report versions
+        company/ <slug>.json     # company / people research
+        interview_prep/ <slug>.json         # interview-prep briefings
+  applications/                  # migrated from ~/.hired/applications.db (Decision 2)
+  resume_agent_sessions/         # migrated from ~/.cache/hired/ (Decision 2)
 ```
 
-Each leaf is a `MutableMapping` (dol file store + JSON codec). A `CandidateMall`
-groups them and resolves the default user. Repositories wrap the mall with
-domain methods (`add_fact`, `facts_about`, `record_qa`, `save_report`, …) and
-pydantic validation. Multi-tenant is reachable by adding `users/<other>/` — the
-default-user resolution is the only single-tenant assumption, and it is isolated.
+**Codecs (the extension fix).** Store keys are domain-oriented and *extension-less*
+on the `MutableMapping` facade; extensions live only on the filesystem side, applied
+by `dol` **key codecs**, and values are dicts in Python / JSON on disk via **value
+codecs**: `json_store` (`dol.Jsons`: bare-id keys, `<id>.json`, dict values),
+`markdown_store` (bare keys, `<key>.md`, `str`), `bytes_store` (raw filenames kept —
+there the extension *is* the meaningful key, e.g. `cv.pdf`). Singletons
+(`synopsis.md`, `state.json`, `meta.json`) are single files whose accessors carry the
+extension in the path, never in a store key. (dol file stores are recursive, so each
+store is rooted at a directory holding only its own homogeneous files.)
+
+**Facades.** `UserStore` groups the user-level stores; `JDStore` groups one
+engagement's stores. `CandidateKnowledgeBase` is the user-level domain facade
+(`add_fact`, `facts`, `record_qa`, `save_upload`, `synopsis`); `JDWorkspace` (reached
+via `kb.jd(jd_id, company=…, label=…)`) is the per-engagement facade (`save_report`,
+`get_report`, `report_versions`, `save_company_report`, `save_briefing`, `save_job`).
+Repositories wrap the json stores with pydantic validation. Multi-tenant is reachable
+by adding `users/<other>/`; the default-user resolution is the only single-tenant
+assumption, and it is isolated.
+
+**Migration.** `hired.persistence.migrate` moves a legacy *flat* `users/<user>/<kind>/`
+layout (extension-less files) to this v2 layout once, idempotently — grouping a
+company's several role reports + its shared research + prep into one engagement by
+default. It runs automatically on first v2 access (`ensure_v2`) or explicitly
+(`migrate_user_to_v2`, with a `dry_run` plan).
 
 ## 5. Knowledge schemas (open-world, provenance-first)
 

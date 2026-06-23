@@ -11,16 +11,21 @@ mechanism). Builds on the `hired-align` workflow and the candidate knowledge bas
 
 ## The flow
 
+Work for one company lives in an **engagement workspace**: `ws = kb.jd(jd_id)`
+(where `jd_id` is the engagement slug, usually the company — e.g. `"socure"`).
+Reports, company research, and briefings are read/written through `ws`; the
+candidate's cross-JD knowledge stays on `kb` (e.g. `kb.synopsis`).
+
 1. **Refresh the alignment report first.** Interview prep must target the *current*
    gaps, and the report may predate recent Q&A. Run the **`hired-alignment-review`**
    subagent (light mode) for the job; confirm and apply any edits. Now the report's
    buckets reflect reality.
 
 2. **Research the company (and people).** If there's no current company report
-   (`kb.companies()`), run the **`hired-company-research`** subagent for the hiring
+   (`ws.companies()`), run the **`hired-company-research`** subagent for the hiring
    company — business, market, recent news, the DS/AI org and named leaders, the
    recruiter/firm, likely interview focus, and candidate-specific talking points +
-   questions to ask. Persisted via `kb.save_company_report(...)`.
+   questions to ask. Persisted via `ws.save_company_report(...)`.
 
 3. **Produce study briefings.** Run the **`hired-interview-prep`** subagent. It reads
    the refreshed report + `kb.synopsis` + the company report and writes briefings
@@ -28,7 +33,7 @@ mechanism). Builds on the `hired-align` workflow and the candidate knowledge bas
    `adjacent_transferable`), plus full JD-terminology coverage. **Every new concept is
    anchored to the candidate's own experience/jargon by analogy** (the anchor must be
    real, from the KB). Each briefing gives: what it is · your anchor · the bridge ·
-   terminology to own · the honest one-liner. Persisted via `kb.save_briefing(...)`.
+   terminology to own · the honest one-liner. Persisted via `ws.save_briefing(...)`.
 
 4. **Deliver** the company report + briefings, and a short "what to study, in order"
    summary. Calibrate depth to the occasion (headhunter vs technical interview).

@@ -27,6 +27,21 @@ def _utcnow() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def slug(text: str) -> str:
+    """A filesystem-safe, extension-less key from an arbitrary label.
+
+    Used to derive stable store keys from human labels (company names, subjects,
+    briefing titles) so callers pass natural text and the store stays tidy.
+
+    >>> slug('Socure, Inc.')
+    'socure-inc'
+    >>> slug('KYC / AML primer')
+    'kyc-aml-primer'
+    """
+    keep = "".join(c if (c.isalnum() or c in " -_") else " " for c in text)
+    return "-".join(keep.lower().split()) or "untitled"
+
+
 class ConfidenceLevel(str, Enum):
     """Calibrated confidence in a claim (qualitative, not a raw probability)."""
 

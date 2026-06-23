@@ -16,12 +16,15 @@ from hired.candidate.base import (
     Provenance,
     QAEntry,
     SourceKind,
+    slug,
 )
 from hired.candidate.knowledge_base import CandidateKnowledgeBase
+from hired.candidate.workspace import JDWorkspace
 from hired.candidate.ingest import ingest_facts, fact_from_record, verify_quote
 
 __all__ = [
     "CandidateKnowledgeBase",
+    "JDWorkspace",
     "Fact",
     "QAEntry",
     "Provenance",
@@ -30,6 +33,7 @@ __all__ = [
     "SourceKind",
     "ConfidenceLevel",
     "MatchState",
+    "slug",
     "ingest_facts",
     "fact_from_record",
     "verify_quote",
