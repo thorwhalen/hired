@@ -51,21 +51,34 @@ you several unrelated roles at one big company and wants them separate, use dist
 
 ## Step 1 — Ingest the candidate profile (once, then incrementally)
 
-If there are new raw documents (CVs, bios, publications), delegate extraction to
-the **`hired-profile-ingest`** subagent (it reads the files and returns atomic
-fact records). Then persist them:
+First **store the raw sources** the candidate gives you (CVs, bios, publications),
+so the agent owns a copy and can detect changes later:
+
+```python
+src_key = kb.add_source("/path/to/Thor_CV.pdf")   # or add_source(raw_bytes, name="Thor_CV.pdf")
+```
+
+`add_source` keeps the raw bytes under `user/raw/` and records a content digest in
+`state.json`. Then delegate extraction to the **`hired-profile-ingest`** subagent
+(it reads the files and returns atomic fact records) and persist them, citing the
+source you just stored:
 
 ```python
 from hired.candidate import SourceKind
 from hired.candidate.ingest import ingest_facts
 ingest_facts(kb, fact_records, source_kind=SourceKind.UPLOAD,
-             source_id="Thor_CV.pdf", source_text=raw_text)  # quote invariant enforced
+             source_id=src_key, source_text=raw_text)  # quote invariant enforced
 kb.regenerate_synopsis()
 ```
 
 Records are `{"statement","category","tags","confidence","quote","locator","is_negation"}`.
 Keep statements **atomic** (one claim each). Quotes MUST be verbatim substrings of
 the source (the package drops quotes that aren't).
+
+**Volunteered info.** When the candidate says "by the way, I also did X" — a single
+sentence or a whole folder of files/media — capture it as a topic dossier:
+`kb.add_note("subject", "the note", files={"name": data})`. The synopsis links each
+topic so you know where deeper detail lives; extract facts from it as usual.
 
 ## Step 2 — Analyze a JD
 
@@ -99,8 +112,16 @@ Ask the candidate these questions (draft the actual `question` text; the helper
 ranks the *unknowns*). Prefer batching with the AskUserQuestion tool. For each
 answer:
 
-- record it: `kb.record_qa(QAEntry(question=..., answer=..., asked_for_job=job_id))`;
-- extract atomic facts from the answer and `ingest_facts(..., source_kind=SourceKind.QA)`;
+- record it **and distill it in one step** — extract atomic fact records from the
+  answer and pass them to `record_qa`, which ingests them with `SourceKind.QA`
+  provenance and back-links them to the Q&A entry:
+  ```python
+  kb.record_qa(
+      QAEntry(question=..., answer=..., asked_for_job=job_id),
+      derived_facts=[{"statement": ..., "category": ..., "quote": ...}],  # verbatim from the answer
+  )
+  ```
+  This makes each answer reusable across *every* future JD, not just this one.
 - re-build/re-`classify()` the affected requirement(s) — verdicts may change.
 
 Stop when `is_decision_stable(records)` is True, or you hit a sensible question

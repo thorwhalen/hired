@@ -176,9 +176,10 @@ def bytes_store(rootdir: str) -> MutableMapping:
 
 
 # --------------------------------------------------------------------------- #
-# Single-file accessors (for singletons that are not collections)
+# Single-file accessors (for singletons that are not collections; cross-module)
 # --------------------------------------------------------------------------- #
-def _read_json_file(path: str):
+def read_json_file(path: str):
+    """Read a JSON file, or return ``None`` if it does not exist."""
     try:
         with open(path) as f:
             return json.load(f)
@@ -186,13 +187,15 @@ def _read_json_file(path: str):
         return None
 
 
-def _write_json_file(path: str, obj) -> None:
+def write_json_file(path: str, obj) -> None:
+    """Write ``obj`` as indented JSON, creating parent dirs as needed."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
         json.dump(obj, f, indent=4)
 
 
-def _read_text_file(path: str):
+def read_text_file(path: str):
+    """Read a text file, or return ``None`` if it does not exist."""
     try:
         with open(path) as f:
             return f.read()
@@ -200,7 +203,8 @@ def _read_text_file(path: str):
         return None
 
 
-def _write_text_file(path: str, text: str) -> None:
+def write_text_file(path: str, text: str) -> None:
+    """Write ``text`` to a file, creating parent dirs as needed."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
         f.write(text)
@@ -266,19 +270,26 @@ class UserStore:
     def qa(self) -> MutableMapping:
         return json_store(self._info(QA))
 
+    # --- topic dossiers (info/topics/<slug>/) ----------------------------- #
+    def topics_dir(self) -> str:
+        return self._info(TOPICS)
+
+    def topic_dir(self, name: str) -> str:
+        return self._info(TOPICS, name)
+
     # --- synopsis singleton (info/synopsis.md) ---------------------------- #
     def read_synopsis(self) -> str | None:
-        return _read_text_file(self._info(SYNOPSIS_FILE))
+        return read_text_file(self._info(SYNOPSIS_FILE))
 
     def write_synopsis(self, text: str) -> None:
-        _write_text_file(self._info(SYNOPSIS_FILE), text)
+        write_text_file(self._info(SYNOPSIS_FILE), text)
 
     # --- refresh state singleton (info/state.json) ------------------------ #
     def read_state(self) -> dict | None:
-        return _read_json_file(self._info(STATE_FILE))
+        return read_json_file(self._info(STATE_FILE))
 
     def write_state(self, state: dict) -> None:
-        _write_json_file(self._info(STATE_FILE), state)
+        write_json_file(self._info(STATE_FILE), state)
 
 
 class JDStore:
@@ -330,7 +341,7 @@ class JDStore:
 
     # --- engagement meta singleton (jds/<id>/meta.json) ------------------- #
     def read_meta(self) -> dict:
-        return _read_json_file(os.path.join(self.base, META_FILE)) or {}
+        return read_json_file(os.path.join(self.base, META_FILE)) or {}
 
     def write_meta(self, meta: dict) -> None:
-        _write_json_file(os.path.join(self.base, META_FILE), meta)
+        write_json_file(os.path.join(self.base, META_FILE), meta)

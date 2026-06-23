@@ -86,11 +86,11 @@ about the candidate* (cross-JD, reusable) and *work on one company's role(s)*:
       user/                      # the candidate — single source of truth (cross-JD)
         raw/                     # raw sources the user provided (bytes; real filenames)
         info/                    # agent-maintained, operable knowledge (agent CRUDs here)
-          facts/  <id>.json      # atomic facts
-          qa/     <id>.json      # Q&A history
-          topics/ <topic>/...    # per-subject dossiers (overview.md + detail; Phase 2)
-          synopsis.md            # regenerated overview = entry point (singleton)
-          state.json             # refresh bookkeeping (Phase 3)
+          facts/  <id>.json      # atomic facts (distilled, updatable knowledge)
+          qa/     <id>.json      # Q&A history (each answer distilled into facts)
+          topics/ <topic>/overview.md (+ files/)   # per-subject dossiers (volunteered info)
+          synopsis.md            # regenerated overview = entry point (links topics)
+          state.json             # per-source digests + refresh timestamps
       jds/<jd_id>/               # one engagement = 1+ related JDs of the same company
         meta.json                # company, label, created
         jobs/ <id>.json          # JDs + parsed requirements
@@ -104,18 +104,31 @@ about the candidate* (cross-JD, reusable) and *work on one company's role(s)*:
 
 **Codecs (the extension fix).** Store keys are domain-oriented and *extension-less*
 on the `MutableMapping` facade; extensions live only on the filesystem side, applied
-by `dol` **key codecs**, and values are dicts in Python / JSON on disk via **value
-codecs**: `json_store` (`dol.Jsons`: bare-id keys, `<id>.json`, dict values),
-`markdown_store` (bare keys, `<key>.md`, `str`), `bytes_store` (raw filenames kept —
-there the extension *is* the meaningful key, e.g. `cv.pdf`). Singletons
-(`synopsis.md`, `state.json`, `meta.json`) are single files whose accessors carry the
-extension in the path, never in a store key. (dol file stores are recursive, so each
-store is rooted at a directory holding only its own homogeneous files.)
+by a **key codec**, and values are dicts in Python / JSON on disk via **value
+codecs**: `json_store` (`JsonFiles` + a `.json` key codec: bare-id keys, `<id>.json`,
+dict values), `markdown_store` (`TextFiles` + a `.md` key codec: bare keys, `<key>.md`,
+`str`), `bytes_store` (raw filenames kept — there the extension *is* the meaningful key,
+e.g. `cv.pdf`). The key codec uses only dol's core `wrap_kvs` (not
+`affix_key_codec`/`filt_iter`, which has a Windows-specific bug in dol 0.3.x) and
+normalizes path separators, so stores behave identically on POSIX and Windows.
+Singletons (`synopsis.md`, `state.json`, `meta.json`) are single files whose accessors
+carry the extension in the path, never in a store key. (dol file stores are recursive,
+so each store is rooted at a directory holding only its own homogeneous files.)
+
+**Cross-session knowledge.** `kb.add_source(path|bytes)` stores a raw source and
+records its content digest in `state.json` (so a later refresh detects changes).
+`kb.record_qa(entry, derived_facts=…)` persists a Q&A exchange *and* distills the
+answer into provenance-bearing facts (back-linked via `derived_fact_ids`), so a
+clarifying answer becomes reusable across every future JD. `kb.add_note(subject, text,
+files=…)` records volunteered info into a topic dossier (`overview.md` + optional
+files/media) for any subject — a sentence or a whole folder — and the synopsis indexes
+the topics so the agent knows where deeper detail lives.
 
 **Facades.** `UserStore` groups the user-level stores; `JDStore` groups one
 engagement's stores. `CandidateKnowledgeBase` is the user-level domain facade
-(`add_fact`, `facts`, `record_qa`, `save_upload`, `synopsis`); `JDWorkspace` (reached
-via `kb.jd(jd_id, company=…, label=…)`) is the per-engagement facade (`save_report`,
+(`add_fact`, `facts`, `record_qa`, `add_source`, `add_note`, `topic`, `synopsis`);
+`JDWorkspace` (reached via `kb.jd(jd_id, company=…, label=…)`) is the per-engagement
+facade (`save_report`,
 `get_report`, `report_versions`, `save_company_report`, `save_briefing`, `save_job`).
 Repositories wrap the json stores with pydantic validation. Multi-tenant is reachable
 by adding `users/<other>/`; the default-user resolution is the only single-tenant

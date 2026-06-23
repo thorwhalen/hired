@@ -14,15 +14,23 @@ interview prep — does **not** live here; it lives in a per-engagement
 
 from __future__ import annotations
 
+import os
 from collections.abc import Iterator
+from pathlib import Path
 
 from hired.candidate.base import (
     Fact,
     FactCategory,
     FactStatus,
     QAEntry,
+    SourceKind,
+    _new_id,
     _utcnow,
+    slug,
 )
+from hired.candidate.ingest import ingest_facts
+from hired.candidate.state import SourceDigest, load_state, save_state, sha256_hex
+from hired.candidate.topics import TopicDossier
 from hired.candidate.workspace import JDWorkspace
 from hired.persistence.base import DFLT_USER, UserStore, list_jds
 from hired.persistence.migrate import ensure_v2
@@ -106,23 +114,101 @@ class CandidateKnowledgeBase:
         return self._facts.add(new_fact)
 
     # --- Q&A ---------------------------------------------------------------
-    def record_qa(self, entry: QAEntry) -> str:
-        """Append a clarifying Q&A exchange to the (append-only) history."""
+    def record_qa(
+        self, entry: QAEntry, *, derived_facts: "list[dict] | None" = None
+    ) -> str:
+        """Append a clarifying Q&A exchange; optionally distill it into facts.
+
+        When ``derived_facts`` (atomic fact records extracted from the answer) are
+        given, they are ingested with ``SourceKind.QA`` provenance (``source_id``
+        = the Q&A id, quotes verified against the answer) and back-linked via the
+        entry's ``derived_fact_ids`` — so a Q&A answer becomes reusable,
+        discoverable knowledge rather than being buried in the history.
+        """
+        if derived_facts:
+            ids = ingest_facts(
+                self,
+                derived_facts,
+                source_kind=SourceKind.QA,
+                source_id=entry.id,
+                source_text=entry.answer,
+            )
+            entry.derived_fact_ids = list(entry.derived_fact_ids) + ids
         return self._qa.add(entry)
 
     def qa_entries(self) -> Iterator[QAEntry]:
         return self._qa.values()
 
-    # --- raw uploads / sources --------------------------------------------
-    def save_upload(self, name: str, data: bytes) -> None:
-        """Store a raw uploaded document (CV, bio, publication) by filename."""
-        self._store.raw[name] = data
+    # --- raw sources (CVs, bios, publications, …) -------------------------
+    def add_source(self, src: "str | Path | bytes", *, name: str | None = None) -> str:
+        """Store a raw source (file path or bytes) and record its content digest.
 
-    def get_upload(self, name: str) -> bytes:
+        Returns the source key (its name in the raw store). The digest (in
+        ``state.json``) lets a later refresh detect new/changed sources without
+        re-reading everything. Facts extracted from a source cite it by this key.
+        """
+        if isinstance(src, (str, Path)) and os.path.isfile(str(src)):
+            data = Path(src).read_bytes()
+            name = name or os.path.basename(str(src))
+        elif isinstance(src, (bytes, bytearray)):
+            data = bytes(src)
+            name = name or _new_id("src-")
+        else:
+            raise TypeError("add_source expects an existing file path or bytes")
+        self._store.raw[name] = data
+        state = load_state(self._store)
+        state.sources[name] = SourceDigest(
+            key=name, sha256=sha256_hex(data), size=len(data)
+        )
+        save_state(self._store, state)
+        return name
+
+    def get_source(self, name: str) -> bytes:
         return self._store.raw[name]
 
-    def uploads(self) -> list[str]:
+    def sources(self) -> list[str]:
+        """Keys of all raw sources the candidate has provided."""
         return list(self._store.raw)
+
+    # back-compat aliases for the pre-v2 upload API
+    def save_upload(self, name: str, data: bytes) -> None:
+        """Store a raw uploaded document by filename (see :meth:`add_source`)."""
+        self.add_source(data, name=name)
+
+    def get_upload(self, name: str) -> bytes:
+        return self.get_source(name)
+
+    def uploads(self) -> list[str]:
+        return self.sources()
+
+    # --- topic dossiers (volunteered, free-form knowledge by subject) ------
+    def topic(self, name: str) -> TopicDossier:
+        """Get-or-create the dossier for a subject (overview + optional files)."""
+        return TopicDossier(self._store.topic_dir(slug(name)), name=name)
+
+    def add_note(
+        self, subject: str, text: str | None = None, *, files: "dict | None" = None
+    ) -> TopicDossier:
+        """Record volunteered info about a subject into its dossier.
+
+        ``text`` is appended to the dossier's ``overview.md``; ``files`` (a
+        ``{name: bytes}`` mapping) are attached as detail/media. Returns the
+        dossier. This is the "by the way, I also did X" entry point — a single
+        sentence or a whole folder both land here.
+        """
+        dossier = self.topic(subject)
+        if text:
+            dossier.add_note(text)
+        for fname, data in (files or {}).items():
+            dossier.add_file(fname, data)
+        return dossier
+
+    def topics(self) -> list[str]:
+        """Slugs of all topic dossiers."""
+        tdir = self._store.topics_dir()
+        if not os.path.isdir(tdir):
+            return []
+        return sorted(n for n in os.listdir(tdir) if not n.startswith("."))
 
     # --- engagements (per-JD workspaces) -----------------------------------
     def jd(
@@ -158,6 +244,18 @@ class CandidateKnowledgeBase:
         for cat in sorted(by_cat):
             lines.append(f"## {cat}")
             lines.extend(sorted(by_cat[cat]))
+            lines.append("")
+        # Topics index: point to where deeper, free-form detail lives.
+        topic_names = self.topics()
+        if topic_names:
+            lines.append("## topics")
+            for name in topic_names:
+                dossier = TopicDossier(self._store.topic_dir(name), name=name)
+                overview = dossier.overview
+                headline = (
+                    overview.splitlines()[0].lstrip("# ").strip() if overview else name
+                )
+                lines.append(f"- **{name}** — {headline}  (`info/topics/{name}/`)")
             lines.append("")
         text = "\n".join(lines).rstrip() + "\n"
         self._store.write_synopsis(text)
