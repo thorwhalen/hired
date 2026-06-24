@@ -7,12 +7,36 @@ build-backend = "hatchling.build"
 [project]
 name = "hired"
 version = "0.0.16"
-description = "\nStreamline the job application process for job seekers - with AI obvs!"
+description = "Streamline the job application process for job seekers - with AI obvs!"
 readme = "README.md"
 requires-python = ">=3.10"
-keywords = []
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = [
+    "resume",
+    "cv",
+    "job-search",
+    "job-application",
+    "ats",
+    "cover-letter",
+    "json-resume",
+    "ai",
+    "recruiting",
+]
 authors = [
     { name = "Thor Whalen" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
     "pydantic[email]>=2.0",
@@ -27,11 +51,11 @@ dependencies = [
     "dol",
 ]
 
-[project.license]
-text = "MIT"
-
 [project.urls]
 Homepage = "https://github.com/thorwhalen/hired"
+Repository = "https://github.com/thorwhalen/hired"
+Issues = "https://github.com/thorwhalen/hired/issues"
+Documentation = "https://thorwhalen.github.io/hired/"
 
 [project.optional-dependencies]
 testing = []
