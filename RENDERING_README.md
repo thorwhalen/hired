@@ -66,7 +66,7 @@ from hired.tools import mk_resume
 from hired.base import RenderingConfig
 
 # `resume_dict` should match the JSON Resume structure (or ResumeSchemaExtended)
-result_bytes = mk_resume(resume_dict, RenderingConfig(format='pdf', theme='default'))
+result_bytes = mk_resume(resume_dict, RenderingConfig(format="pdf", theme="default"))
 # if you want HTML instead: RenderingConfig(format='html', theme='minimal')
 
 # mk_resume will return bytes; it also accepts output_path= to write file.
@@ -106,21 +106,21 @@ from hired.base import RenderingConfig
 
 # Source and target locations (packaged data_files by default)
 resume_path = resume_json_example  # Path object pointing at the packaged JSON
-out_dir = data_files / 'resume _renderings'
+out_dir = data_files / "resume _renderings"
 out_dir.mkdir(parents=True, exist_ok=True)
 
 # Load the resume dict
 resume = json.loads(resume_path.read_text())
 
 # 1) Render to nice HTML using a packaged theme (e.g. 'startbootstrap')
-html_bytes = mk_resume(resume, RenderingConfig(format='html', theme='startbootstrap'))
-html_path = out_dir / 'test_resume_html_startbootstrap.html'
+html_bytes = mk_resume(resume, RenderingConfig(format="html", theme="startbootstrap"))
+html_path = out_dir / "test_resume_html_startbootstrap.html"
 html_path.write_bytes(html_bytes)
 
 # 2) Render to PDF using the same theme. If WeasyPrint is installed you'll
 # get a styled PDF; otherwise the library falls back to a minimal PDF builder.
-pdf_bytes = mk_resume(resume, RenderingConfig(format='pdf', theme='startbootstrap'))
-pdf_path = out_dir / 'test_resume_pdf_startbootstrap.pdf'
+pdf_bytes = mk_resume(resume, RenderingConfig(format="pdf", theme="startbootstrap"))
+pdf_path = out_dir / "test_resume_pdf_startbootstrap.pdf"
 pdf_path.write_bytes(pdf_bytes)
 
 # 3) Render to Markdown — two options:
@@ -128,8 +128,11 @@ pdf_path.write_bytes(pdf_bytes)
 #      your theme provides a .j2.md template), or
 #   b) Use a small inline Jinja template that emits markdown and render via
 #      HTMLRenderer.from_string (advanced). Example (a):
-md_bytes = mk_resume(resume, RenderingConfig(format='html', theme='elegant', custom_template='Header.j2.md'))
-md_path = out_dir / 'test_resume_md_elegant.md'
+md_bytes = mk_resume(
+    resume,
+    RenderingConfig(format="html", theme="elegant", custom_template="Header.j2.md"),
+)
+md_path = out_dir / "test_resume_md_elegant.md"
 md_path.write_bytes(md_bytes)
 
 # 4) Parametrizations you may want to try
@@ -140,7 +143,7 @@ md_path.write_bytes(md_bytes)
 #   template name found in the theme folder (relative name).
 # - Use your own output path by replacing `out_dir` with any Path you control.
 
-print('Saved examples to', out_dir)
+print("Saved examples to", out_dir)
 ```
 
 Notes:

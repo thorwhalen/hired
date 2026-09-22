@@ -48,9 +48,7 @@ print(sources.list_available())
 
 # Search for jobs
 criteria = SearchCriteria(
-    query="python developer",
-    location="San Francisco, CA",
-    results_wanted=20
+    query="python developer", location="San Francisco, CA", results_wanted=20
 )
 
 # Search using JobSpy (if installed)
@@ -121,39 +119,32 @@ from hired import SearchCriteria, JobType
 
 criteria = SearchCriteria(
     # Required
-    query="software engineer",           # Free-form text query
-
+    query="software engineer",  # Free-form text query
     # Location (optional)
-    location="New York, NY",              # General location string
-    city="New York",                      # Specific city
-    state="NY",                           # State/province
-    country="US",                         # Country code
-    distance_miles=25,                    # Search radius
-
+    location="New York, NY",  # General location string
+    city="New York",  # Specific city
+    state="NY",  # State/province
+    country="US",  # Country code
+    distance_miles=25,  # Search radius
     # Job type (optional)
-    job_type=JobType.FULL_TIME,          # FULL_TIME, PART_TIME, CONTRACT, etc.
-    is_remote=True,                       # Remote jobs only
-
+    job_type=JobType.FULL_TIME,  # FULL_TIME, PART_TIME, CONTRACT, etc.
+    is_remote=True,  # Remote jobs only
     # Time filters (optional)
-    posted_within_days=7,                 # Jobs posted in last N days
-
+    posted_within_days=7,  # Jobs posted in last N days
     # Pagination (optional)
-    results_wanted=50,                    # Number of results
-    offset=0,                             # Starting offset
-
+    results_wanted=50,  # Number of results
+    offset=0,  # Starting offset
     # Salary (optional)
     min_salary=80000,
     max_salary=150000,
-
     # Keywords (optional)
-    keywords=["python", "docker"],        # Must include these
-    exclude_keywords=["java"],            # Must not include these
-
+    keywords=["python", "docker"],  # Must include these
+    exclude_keywords=["java"],  # Must not include these
     # Source-specific parameters (optional)
     source_params={
-        "country": "uk",                  # For Adzuna
-        "sites": ["indeed", "linkedin"]   # For JobSpy
-    }
+        "country": "uk",  # For Adzuna
+        "sites": ["indeed", "linkedin"],  # For JobSpy
+    },
 )
 ```
 
@@ -171,7 +162,7 @@ criteria = SearchCriteria(
     query="data scientist",
     location="Boston, MA",
     results_wanted=30,
-    source_params={"sites": ["indeed"]}
+    source_params={"sites": ["indeed"]},
 )
 
 results = sources.jobspy.search(criteria)
@@ -188,7 +179,7 @@ criteria = SearchCriteria(
     query="machine learning engineer",
     location="Seattle, WA",
     posted_within_days=14,
-    results_wanted=25
+    results_wanted=25,
 )
 
 # Search all available sources
@@ -196,6 +187,7 @@ all_results = sources.search_all(criteria)
 
 # Group by source
 from collections import defaultdict
+
 by_source = defaultdict(list)
 for job in all_results:
     by_source[job.source].append(job)
@@ -216,7 +208,7 @@ criteria = SearchCriteria(
     is_remote=True,
     job_type=JobType.FULL_TIME,
     posted_within_days=7,
-    results_wanted=50
+    results_wanted=50,
 )
 
 results = sources.search_all(criteria)
@@ -234,17 +226,15 @@ import csv
 sources = JobSources()
 
 criteria = SearchCriteria(
-    query="product manager",
-    location="San Francisco, CA",
-    results_wanted=100
+    query="product manager", location="San Francisco, CA", results_wanted=100
 )
 
 results = sources.search_all(criteria)
 
 # Export to CSV
-with open('jobs.csv', 'w', newline='', encoding='utf-8') as f:
+with open("jobs.csv", "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)
-    writer.writerow(['Title', 'Company', 'Location', 'Salary', 'URL', 'Source'])
+    writer.writerow(["Title", "Company", "Location", "Salary", "URL", "Source"])
 
     for job in results:
         salary = ""
@@ -254,14 +244,16 @@ with open('jobs.csv', 'w', newline='', encoding='utf-8') as f:
 
         location = job.location.raw if job.location else ""
 
-        writer.writerow([
-            job.title,
-            job.company or "",
-            location,
-            salary,
-            job.job_url or "",
-            job.source
-        ])
+        writer.writerow(
+            [
+                job.title,
+                job.company or "",
+                location,
+                salary,
+                job.job_url or "",
+                job.source,
+            ]
+        )
 
 print(f"Exported {len(results)} jobs to jobs.csv")
 ```
@@ -310,10 +302,7 @@ from hired.search.sources.usajobs import USAJobsSource
 from hired.search import register_source
 
 # Create custom instance with credentials
-usajobs = USAJobsSource(
-    api_key="your-api-key",
-    email="your-email@example.com"
-)
+usajobs = USAJobsSource(api_key="your-api-key", email="your-email@example.com")
 
 # Register it (replaces default instance)
 register_source(usajobs, USAJobsSource)
@@ -341,7 +330,7 @@ from hired.search import register_source
 adzuna = AdzunaSource(
     app_id="your-app-id",
     app_key="your-app-key",
-    country="us"  # or "uk", "ca", "au", etc.
+    country="us",  # or "uk", "ca", "au", etc.
 )
 
 # Register it
@@ -361,9 +350,7 @@ criteria = SearchCriteria(
     query="devops engineer",
     location="Austin, TX",
     results_wanted=20,
-    source_params={
-        "sites": ["indeed", "linkedin", "glassdoor"]
-    }
+    source_params={"sites": ["indeed", "linkedin", "glassdoor"]},
 )
 
 results = sources.jobspy.search(criteria)
@@ -395,9 +382,7 @@ sources = JobSources()
 
 # Search UK jobs
 criteria = SearchCriteria(
-    query="software developer",
-    location="London",
-    source_params={"country": "uk"}
+    query="software developer", location="London", source_params={"country": "uk"}
 )
 
 uk_jobs = sources.adzuna.search(criteria)
@@ -416,11 +401,11 @@ criteria = SearchCriteria(query="python developer")
 results1 = sources.jobspy.search(criteria)
 
 # Access via mapping (dict-like)
-results2 = sources['jobspy'].search(criteria)
+results2 = sources["jobspy"].search(criteria)
 
 # Check if source exists
-if 'usajobs' in sources:
-    results3 = sources['usajobs'].search(criteria)
+if "usajobs" in sources:
+    results3 = sources["usajobs"].search(criteria)
 
 # Iterate over source names
 for source_name in sources.keys():
@@ -438,8 +423,9 @@ from hired.search import (
     JobResult,
     SearchCriteria,
     register_source,
-    LocationInfo
+    LocationInfo,
 )
+
 
 class MyCustomSource(JobSearchSource):
     """Custom job search source."""
@@ -481,6 +467,7 @@ class MyCustomSource(JobSearchSource):
         #     ))
 
         return results
+
 
 # Register your custom source
 custom_source = MyCustomSource()

@@ -41,7 +41,7 @@ jobs = sources.jobspy.search(SearchCriteria(query="python developer", location="
 top_job = jobs[0]
 resume_content = mk_content_for_resume(
     candidate_info=candidate_dict,
-    job_info=top_job  # Pass JobResult directly!
+    job_info=top_job,  # Pass JobResult directly!
 )
 
 # Render to PDF
@@ -85,11 +85,11 @@ from hired import JobMatcher, quick_match
 
 # Create matcher with your profile
 matcher = JobMatcher(
-    candidate_skills=['python', 'django', 'postgresql', 'docker', 'aws'],
-    candidate_keywords=['backend', 'api', 'microservices'],
+    candidate_skills=["python", "django", "postgresql", "docker", "aws"],
+    candidate_keywords=["backend", "api", "microservices"],
     min_salary=100000,
-    preferred_locations=['San Francisco', 'Remote'],
-    remote_only=False
+    preferred_locations=["San Francisco", "Remote"],
+    remote_only=False,
 )
 
 # Score all jobs
@@ -112,9 +112,7 @@ from hired import quick_match
 
 # Quick match without creating matcher
 matches = quick_match(
-    candidate_skills=['python', 'django', 'react'],
-    jobs=jobs,
-    top_n=5
+    candidate_skills=["python", "django", "react"], jobs=jobs, top_n=5
 )
 
 for match in matches:
@@ -215,21 +213,16 @@ letter_html = mk_cover_letter(
     job_info=job_result,
     tone="professional",  # or "enthusiastic", "formal"
     format="html",
-    output_path="cover_letter.html"
+    output_path="cover_letter.html",
 )
 
 # From manual job info
 letter_text = mk_cover_letter(
-    candidate_info={'basics': {
-        'name': 'Jane Doe',
-        'email': 'jane@example.com',
-        'phone': '555-1234'
-    }},
-    job_info={
-        'title': 'Senior Software Engineer',
-        'company': 'TechCorp'
+    candidate_info={
+        "basics": {"name": "Jane Doe", "email": "jane@example.com", "phone": "555-1234"}
     },
-    format="text"
+    job_info={"title": "Senior Software Engineer", "company": "TechCorp"},
+    format="text",
 )
 ```
 
@@ -255,9 +248,7 @@ from hired import generate_cover_letter_content, render_cover_letter
 
 # Generate content separately
 cover_data = generate_cover_letter_content(
-    candidate_info=candidate_dict,
-    job_info=job_result,
-    tone="professional"
+    candidate_info=candidate_dict, job_info=job_result, tone="professional"
 )
 
 # Customize the content
@@ -303,7 +294,7 @@ app_id = tracker.add_application(
     resume_path="resume_techcorp.pdf",
     cover_letter_path="cover_letter_techcorp.pdf",
     status="applied",
-    notes="Applied via company website"
+    notes="Applied via company website",
 )
 
 # Manual entry
@@ -313,15 +304,13 @@ app_id = tracker.add_application(
     job_url="https://...",
     location="San Francisco, CA",
     salary_range="$120k - $160k",
-    status="draft"
+    status="draft",
 )
 
 # With match score from JobMatcher
 match = matcher.score_job(job_result)
 app_id = tracker.add_application(
-    job=job_result,
-    match_score=match.overall_score,
-    status="interested"
+    job=job_result, match_score=match.overall_score, status="interested"
 )
 ```
 
@@ -336,7 +325,7 @@ tracker.update_application(
     app_id,
     follow_up_date="2025-01-15",
     last_contact_date="2025-01-08",
-    notes="Sent thank you email"
+    notes="Sent thank you email",
 )
 ```
 
@@ -397,7 +386,7 @@ print(f"Response Rate: {stats['response_rate']}%")
 print(f"Avg Days to Response: {stats['avg_days_to_response']}")
 
 print("\nBy Status:")
-for status, count in stats['by_status'].items():
+for status, count in stats["by_status"].items():
     print(f"  {status}: {count}")
 ```
 
@@ -421,26 +410,33 @@ tracker.delete_application(app_id)
 
 ```python
 from hired import (
-    JobSources, SearchCriteria, JobMatcher,
-    mk_content_for_resume, mk_resume, check_resume_ats,
-    mk_cover_letter, ApplicationTracker
+    JobSources,
+    SearchCriteria,
+    JobMatcher,
+    mk_content_for_resume,
+    mk_resume,
+    check_resume_ats,
+    mk_cover_letter,
+    ApplicationTracker,
 )
 
 # 1. Search for jobs
 sources = JobSources()
-jobs = sources.search_all(SearchCriteria(
-    query="senior python developer",
-    location="San Francisco, CA",
-    is_remote=True,
-    results_wanted=50
-))
+jobs = sources.search_all(
+    SearchCriteria(
+        query="senior python developer",
+        location="San Francisco, CA",
+        is_remote=True,
+        results_wanted=50,
+    )
+)
 
 print(f"Found {len(jobs)} jobs")
 
 # 2. Match jobs to your profile
 matcher = JobMatcher(
-    candidate_skills=['python', 'django', 'postgresql', 'docker', 'kubernetes'],
-    min_salary=120000
+    candidate_skills=["python", "django", "postgresql", "docker", "kubernetes"],
+    min_salary=120000,
 )
 
 top_matches = matcher.get_top_matches(jobs, n=10, min_score=70.0)
@@ -448,21 +444,14 @@ print(f"Top {len(top_matches)} matches identified")
 
 # 3. Generate tailored resume for top match
 candidate_info = {
-    'basics': {
-        'name': 'Jane Doe',
-        'email': 'jane@example.com',
-        'phone': '555-1234'
-    },
-    'work': [...],  # Your work experience
-    'skills': [...]  # Your skills
+    "basics": {"name": "Jane Doe", "email": "jane@example.com", "phone": "555-1234"},
+    "work": [...],  # Your work experience
+    "skills": [...],  # Your skills
 }
 
 top_job = top_matches[0].job
 
-resume_content = mk_content_for_resume(
-    candidate_info=candidate_info,
-    job_info=top_job
-)
+resume_content = mk_content_for_resume(candidate_info=candidate_info, job_info=top_job)
 
 # 4. Check ATS compatibility
 ats_report = check_resume_ats(resume_content.model_dump(), top_job)
@@ -481,7 +470,7 @@ cover_letter = mk_cover_letter(
     candidate_info=candidate_info,
     job_info=top_job,
     format="html",
-    output_path="cover_letter.html"
+    output_path="cover_letter.html",
 )
 
 # 7. Track the application
@@ -492,7 +481,7 @@ app_id = tracker.add_application(
     cover_letter_path="cover_letter.html",
     match_score=top_matches[0].overall_score,
     status="draft",
-    notes="High-priority application - great match!"
+    notes="High-priority application - great match!",
 )
 
 print(f"Application tracked with ID: {app_id}")
@@ -502,6 +491,7 @@ tracker.update_status(app_id, "applied", notes="Applied via company website")
 
 # 9. Set follow-up reminder
 from datetime import datetime, timedelta
+
 follow_up = (datetime.now() + timedelta(days=7)).isoformat()
 tracker.update_application(app_id, follow_up_date=follow_up)
 
@@ -512,16 +502,20 @@ print("✓ Application complete and tracked!")
 
 ```python
 from hired import (
-    JobSources, SearchCriteria, JobMatcher,
-    mk_content_for_resume, mk_resume,
-    mk_cover_letter, ApplicationTracker
+    JobSources,
+    SearchCriteria,
+    JobMatcher,
+    mk_content_for_resume,
+    mk_resume,
+    mk_cover_letter,
+    ApplicationTracker,
 )
 
 # Search and match
 sources = JobSources()
 jobs = sources.search_all(SearchCriteria(query="python developer"))
 
-matcher = JobMatcher(candidate_skills=['python', 'django', 'react'])
+matcher = JobMatcher(candidate_skills=["python", "django", "react"])
 top_matches = matcher.get_top_matches(jobs, n=5, min_score=70.0)
 
 # Batch process applications
@@ -529,7 +523,7 @@ tracker = ApplicationTracker()
 
 for i, match in enumerate(top_matches):
     job = match.job
-    print(f"\n{i+1}. Processing: {job.title} at {job.company}")
+    print(f"\n{i + 1}. Processing: {job.title} at {job.company}")
 
     # Generate tailored resume
     resume = mk_content_for_resume(candidate_info, job)
@@ -546,7 +540,7 @@ for i, match in enumerate(top_matches):
         resume_path=resume_path,
         cover_letter_path=letter_path,
         match_score=match.overall_score,
-        status="draft"
+        status="draft",
     )
 
     print(f"  ✓ Resume: {resume_path}")
@@ -583,7 +577,9 @@ for app in follow_ups:
 stats = tracker.get_statistics()
 print(f"\nYour job search stats:")
 print(f"  Total applications: {stats['total_applications']}")
-print(f"  In progress: {stats['by_status'].get('applied', 0) + stats['by_status'].get('interview', 0)}")
+print(
+    f"  In progress: {stats['by_status'].get('applied', 0) + stats['by_status'].get('interview', 0)}"
+)
 print(f"  Response rate: {stats['response_rate']}%")
 ```
 
@@ -606,7 +602,7 @@ llm_config = LLMConfig(model="gpt-4")
 session = ResumeSession(
     job_info=job.description,  # Use job description
     candidate_info=candidate_text,
-    llm_config=llm_config
+    llm_config=llm_config,
 )
 
 # Let agent create resume

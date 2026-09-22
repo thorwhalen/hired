@@ -21,10 +21,11 @@ report is fine — that's the point of light mode).
 
 ```python
 from hired.candidate import CandidateKnowledgeBase
+
 kb = CandidateKnowledgeBase()
-ws = kb.jd(jd_id)                    # the engagement (jd_id ≈ company slug); report keyed by job_id
+ws = kb.jd(jd_id)  # the engagement (jd_id ≈ company slug); report keyed by job_id
 report = ws.get_report(job_id)
-qa = list(kb.qa_entries())          # focus on entries newer than report['created_at']
+qa = list(kb.qa_entries())  # focus on entries newer than report['created_at']
 ```
 
 For each requirement, ask: *does any Q&A answer now establish, contradict, or
@@ -43,6 +44,7 @@ Output the proposed edits (requirement text + old→new) + a one-line rationale 
 2. Diff old vs new deterministically:
    ```python
    from hired.alignment import diff_reports, summarize_diff
+
    print(summarize_diff(diff_reports(old_report, fresh_report)))
    ```
 3. Adversarially reconcile: for every bucket move, decide which version is right —

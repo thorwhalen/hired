@@ -242,44 +242,50 @@ from enum import Enum
 from datetime import datetime
 from pydantic import BaseModel, Field
 
+
 class EpistemicStatus(str, Enum):
-    KNOWN_TRUE  = "known_true"
+    KNOWN_TRUE = "known_true"
     KNOWN_FALSE = "known_false"
-    UNKNOWN     = "unknown"          # DEFAULT — absence of a record means this
+    UNKNOWN = "unknown"  # DEFAULT — absence of a record means this
+
 
 class Polarity(str, Enum):
-    ASSERTED_PRESENT = "asserted_present"   # classical/strong: candidate HAS it
-    ASSERTED_ABSENT  = "asserted_absent"    # classical/strong: candidate explicitly LACKS it
+    ASSERTED_PRESENT = "asserted_present"  # classical/strong: candidate HAS it
+    ASSERTED_ABSENT = (
+        "asserted_absent"  # classical/strong: candidate explicitly LACKS it
+    )
     # (no record at all  ==  UNKNOWN, never asserted_absent)
 
-class Provenance(BaseModel):                       # W3C PROV-aligned [27]
-    source_doc_id: str                             # wasDerivedFrom
-    char_start: int | None = None                  # exact span (anti-hallucination [43][44])
-    char_end:   int | None = None
-    quote: str                                     # verbatim — must be a substring of the source
-    source_kind: str                               # cv_bullet | qa_answer | uploaded_doc
-    extraction_activity: str                       # wasGeneratedBy (e.g. "llm_extract@v2" / "regex_rule")
-    attributed_to: str                             # wasAttributedTo (candidate | recruiter | document)
+
+class Provenance(BaseModel):  # W3C PROV-aligned [27]
+    source_doc_id: str  # wasDerivedFrom
+    char_start: int | None = None  # exact span (anti-hallucination [43][44])
+    char_end: int | None = None
+    quote: str  # verbatim — must be a substring of the source
+    source_kind: str  # cv_bullet | qa_answer | uploaded_doc
+    extraction_activity: str  # wasGeneratedBy (e.g. "llm_extract@v2" / "regex_rule")
+    attributed_to: str  # wasAttributedTo (candidate | recruiter | document)
     created_at: datetime
 
+
 class Fact(BaseModel):
-    id: str                                        # stable hash(subject,predicate,object)
-    subject: str                                   # usually the candidate
-    predicate: str                                 # has_skill | worked_at | achieved | prefers ...
-    object: str                                    # the value
-    fact_type: str                                 # skill_claim | experience | credential | preference
+    id: str  # stable hash(subject,predicate,object)
+    subject: str  # usually the candidate
+    predicate: str  # has_skill | worked_at | achieved | prefers ...
+    object: str  # the value
+    fact_type: str  # skill_claim | experience | credential | preference
     polarity: Polarity = Polarity.ASSERTED_PRESENT
     epistemic_status: EpistemicStatus = EpistemicStatus.UNKNOWN
     # split confidence, never conflated [26]:
-    confidence: float = Field(ge=0.0, le=1.0)      # overall plausibility
-    extraction_confidence: float = 1.0             # algorithm reliability
-    source_confidence: float = 1.0                 # source trustworthiness
-    evidence: list[Provenance]                      # ≥1; more evidence → higher typicality [26]
+    confidence: float = Field(ge=0.0, le=1.0)  # overall plausibility
+    extraction_confidence: float = 1.0  # algorithm reliability
+    source_confidence: float = 1.0  # source trustworthiness
+    evidence: list[Provenance]  # ≥1; more evidence → higher typicality [26]
     # bi-temporal supersession [35]:
-    valid_from: datetime | None = None             # t_valid (true in the world)
-    valid_until: datetime | None = None            # t_invalid (set on supersession, NOT deleted)
-    recorded_at: datetime                          # t_created (system learned it)
-    superseded_by: str | None = None               # id of the replacing fact
+    valid_from: datetime | None = None  # t_valid (true in the world)
+    valid_until: datetime | None = None  # t_invalid (set on supersession, NOT deleted)
+    recorded_at: datetime  # t_created (system learned it)
+    superseded_by: str | None = None  # id of the replacing fact
 ```
 
 **Invariants:** (1) default `epistemic_status = UNKNOWN`; a missing fact is unknown, never absent. (2) `asserted_absent` requires an explicit negative statement *with its own provenance*. (3) every fact carries ≥1 `Provenance` with a verbatim `quote` that is a substring of its source — facts failing this check are rejected or down-confidenced [43][44]. (4) supersession sets `valid_until` + `superseded_by`; nothing is hard-deleted [35].

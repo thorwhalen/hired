@@ -35,6 +35,7 @@ By default this uses a pass-through agent. For real AI tailoring, install
 
 ```python
 from hired import LLMResumeAgent
+
 content = mk_content_for_resume("candidate.json", "job.txt", agent=LLMResumeAgent())
 ```
 
@@ -44,9 +45,11 @@ content = mk_content_for_resume("candidate.json", "job.txt", agent=LLMResumeAgen
 from hired import JobSources, SearchCriteria
 
 sources = JobSources()
-results = sources.search_all(SearchCriteria(
-    query="python developer", location="San Francisco, CA", results_wanted=20
-))
+results = sources.search_all(
+    SearchCriteria(
+        query="python developer", location="San Francisco, CA", results_wanted=20
+    )
+)
 for job in results:
     print(f"{job.title} at {job.company} — {job.job_url}")
 ```

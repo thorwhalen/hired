@@ -38,8 +38,9 @@ in a per-engagement **workspace** (`ws = kb.jd(jd_id, ...)`).
 
 ```python
 from hired.candidate import CandidateKnowledgeBase
-kb = CandidateKnowledgeBase()                     # default candidate "me" (user-level)
-print(kb.synopsis)                                # fast context load of what's already known
+
+kb = CandidateKnowledgeBase()  # default candidate "me" (user-level)
+print(kb.synopsis)  # fast context load of what's already known
 
 ws = kb.jd(jd_id, company="<Company>", label="<short label>")  # the engagement
 ```
@@ -55,7 +56,9 @@ First **store the raw sources** the candidate gives you (CVs, bios, publications
 so the agent owns a copy and can detect changes later:
 
 ```python
-src_key = kb.add_source("/path/to/Thor_CV.pdf")   # or add_source(raw_bytes, name="Thor_CV.pdf")
+src_key = kb.add_source(
+    "/path/to/Thor_CV.pdf"
+)  # or add_source(raw_bytes, name="Thor_CV.pdf")
 ```
 
 `add_source` keeps the raw bytes under `user/raw/` and records a content digest in
@@ -66,8 +69,14 @@ source you just stored:
 ```python
 from hired.candidate import SourceKind
 from hired.candidate.ingest import ingest_facts
-ingest_facts(kb, fact_records, source_kind=SourceKind.UPLOAD,
-             source_id=src_key, source_text=raw_text)  # quote invariant enforced
+
+ingest_facts(
+    kb,
+    fact_records,
+    source_kind=SourceKind.UPLOAD,
+    source_id=src_key,
+    source_text=raw_text,
+)  # quote invariant enforced
 kb.regenerate_synopsis()
 ```
 
@@ -86,7 +95,9 @@ At the start of a session, check whether anything needs re-reading:
 
 ```python
 if kb.needs_refresh():
-    pending = kb.refresh("soft").pending      # list of RefreshItem (source/qa), nothing written
+    pending = kb.refresh(
+        "soft"
+    ).pending  # list of RefreshItem (source/qa), nothing written
 ```
 
 For each pending item, extract fact records (delegate a source to
@@ -97,9 +108,11 @@ regenerates the synopsis:
 
 ```python
 records_by_key = {item.key: extracted_records_for(item) for item in pending}
-preview = kb.refresh("soft", ingest_fn=lambda it: records_by_key.get(it.key, []), apply=False)
+preview = kb.refresh(
+    "soft", ingest_fn=lambda it: records_by_key.get(it.key, []), apply=False
+)
 # show preview.proposals to the user; on approval:
-kb.refresh("soft", ingest_fn=lambda it: records_by_key.get(it.key, []))   # applies
+kb.refresh("soft", ingest_fn=lambda it: records_by_key.get(it.key, []))  # applies
 ```
 
 Use **soft** for the everyday "a source changed / new Q&A" case (only changed/new
@@ -121,8 +134,9 @@ supersession. Always confirm proposed changes with the candidate before applying
 
 ```python
 from hired.alignment import classify
+
 for rec in records:
-    classify(rec)            # fills gap_size, bucket, needs_clarification
+    classify(rec)  # fills gap_size, bucket, needs_clarification
 ```
 
 Use the `hired-requirement-analyst` subagent to classify many requirements in
@@ -132,7 +146,8 @@ parallel when a JD is large.
 
 ```python
 from hired.alignment import rank_clarifications, is_decision_stable
-clarifs = rank_clarifications(records, max_questions=6)   # highest info-gain first
+
+clarifs = rank_clarifications(records, max_questions=6)  # highest info-gain first
 ```
 
 Ask the candidate these questions (draft the actual `question` text; the helper
@@ -145,7 +160,9 @@ answer:
   ```python
   kb.record_qa(
       QAEntry(question=..., answer=..., asked_for_job=job_id),
-      derived_facts=[{"statement": ..., "category": ..., "quote": ...}],  # verbatim from the answer
+      derived_facts=[
+          {"statement": ..., "category": ..., "quote": ...}
+      ],  # verbatim from the answer
   )
   ```
   This makes each answer reusable across *every* future JD, not just this one.
@@ -171,6 +188,7 @@ ramp plans for learnable gaps), render and persist it:
 
 ```python
 from hired.alignment import render_report_markdown
+
 md = render_report_markdown(report)
 ws.save_report(job_id, report.model_dump(mode="json"))
 ```

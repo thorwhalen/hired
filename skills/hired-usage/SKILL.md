@@ -13,8 +13,10 @@ features need extras.
 ```python
 from hired import mk_content_for_resume, mk_resume
 
-content = mk_content_for_resume(candidate, job)          # candidate/job: dict | file path | JobResult
-pdf = mk_resume(content, {"format": "pdf", "theme": "default"})   # bytes
+content = mk_content_for_resume(
+    candidate, job
+)  # candidate/job: dict | file path | JobResult
+pdf = mk_resume(content, {"format": "pdf", "theme": "default"})  # bytes
 ```
 
 - `candidate`/`job` may be dicts, file paths (json/yaml), or a `JobResult`.
@@ -28,6 +30,7 @@ tailoring, install `hired[ai]` and inject `LLMResumeAgent` (needs `OPENAI_API_KE
 
 ```python
 from hired import LLMResumeAgent
+
 content = mk_content_for_resume(candidate, job, agent=LLMResumeAgent())
 ```
 
@@ -35,6 +38,7 @@ content = mk_content_for_resume(candidate, job, agent=LLMResumeAgent())
 
 ```python
 from hired import JobSources, SearchCriteria
+
 sources = JobSources()
 jobs = sources.search_all(SearchCriteria(query="python developer", location="SF"))
 ```
@@ -45,10 +49,11 @@ Sources: `jobspy` (no key), `adzuna`/`usajobs` (need `ADZUNA_*` / `USAJOBS_*`).
 
 ```python
 from hired import quick_match, check_resume_ats, mk_cover_letter, ApplicationTracker
-quick_match(resume, jobs)              # score/rank jobs vs the resume
-check_resume_ats(resume_dict, job)     # ATS-compatibility report
-mk_cover_letter(resume, job)           # draft a cover letter
-ApplicationTracker().add_application(...)   # track applications (SQLite)
+
+quick_match(resume, jobs)  # score/rank jobs vs the resume
+check_resume_ats(resume_dict, job)  # ATS-compatibility report
+mk_cover_letter(resume, job)  # draft a cover letter
+ApplicationTracker().add_application(...)  # track applications (SQLite)
 ```
 
 ## Pick the install

@@ -21,11 +21,15 @@ Run Python to load the candidate knowledge base (default user `me`):
 
 ```python
 from hired.candidate import CandidateKnowledgeBase
-kb = CandidateKnowledgeBase()            # user-level knowledge (reusable across every JD)
-ws = kb.jd(jd_id, company="<Company>")   # the engagement workspace (jd_id ≈ company slug)
-print(kb.synopsis)                       # distilled candidate facts
-for q in kb.qa_entries(): ...            # clarifying Q&A (often fixes false negatives)
-ws.get_company_report("<company>")       # if present — sharpens requirement context
+
+kb = CandidateKnowledgeBase()  # user-level knowledge (reusable across every JD)
+ws = kb.jd(
+    jd_id, company="<Company>"
+)  # the engagement workspace (jd_id ≈ company slug)
+print(kb.synopsis)  # distilled candidate facts
+for q in kb.qa_entries():
+    ...  # clarifying Q&A (often fixes false negatives)
+ws.get_company_report("<company>")  # if present — sharpens requirement context
 ```
 
 `jd_id` identifies the **engagement** — one *or a group of* related roles at one
@@ -45,8 +49,9 @@ the package rubric, render, and persist:
 
 ```python
 from hired.alignment import classify, render_report_markdown, AlignmentReport  # etc.
+
 # build RequirementRecords -> classify(rec) -> assemble AlignmentReport
-ws.save_report(job_id, report.model_dump(mode="json"))   # archives the prior version
+ws.save_report(job_id, report.model_dump(mode="json"))  # archives the prior version
 ```
 
 ## Non-negotiables
