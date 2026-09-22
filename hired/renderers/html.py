@@ -264,7 +264,7 @@ class HTMLRenderer:
         )
 
         # Filter out empty entries from every list-valued core section.
-        work = [w for w in work if not _is_empty_section(w)]
+        work = [_with_employer_name(w) for w in work if not _is_empty_section(w)]
         education = [e for e in education if not _is_empty_section(e)]
         sections = {
             name: [
@@ -313,6 +313,27 @@ class HTMLRenderer:
 
 
 # ---------------------------- helpers ---------------------------- #
+
+
+def _with_employer_name(work_item: Any) -> Any:
+    """Fill ``name`` from the legacy ``company`` key when ``name`` is absent.
+
+    JSON Resume v1 names the employer ``name``; the pre-v1 schema (and inputs
+    this package still accepts, e.g. ``tests/fixtures/candidate.json`` and the
+    rendercv adapter) call it ``company``. ``WorkItem`` allows extra fields, so
+    ``company`` survives validation; templates read ``name`` only, so this is
+    the single place the alias is resolved.
+
+    >>> _with_employer_name({'company': 'Acme', 'position': 'Eng'})['name']
+    'Acme'
+    >>> _with_employer_name({'name': 'New', 'company': 'Old'})['name']
+    'New'
+    """
+    if isinstance(work_item, dict) and not work_item.get("name"):
+        company = work_item.get("company")
+        if company:
+            return {**work_item, "name": company}
+    return work_item
 
 
 def _is_empty_section(value: Any) -> bool:

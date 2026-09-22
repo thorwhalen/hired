@@ -74,3 +74,21 @@ def test_html_renderer_full_sections():
     assert 'pandas' in html
     assert 'Cool Project' in html
     assert 'A cool project.' in html
+
+
+def test_html_renderer_legacy_company_key_still_renders():
+    """Regression: #31 switched templates from ``w.company`` to ``w.name``,
+    which blanked the employer for work items keyed ``company`` (the pre-v1
+    JSON Resume shape, still accepted: ``WorkItem`` allows extra fields and
+    ``fixtures/candidate.json`` uses it).
+    """
+    content = ResumeSchemaExtended(
+        basics=Basics(name='Jane Doe'),
+        work=[{'company': 'Legacy Co', 'position': 'Engineer'}],
+    )
+    renderer = HTMLRenderer()
+    for theme in ('default', 'minimal'):
+        html = renderer.render(
+            content, RenderingConfig(format='html', theme=theme)
+        ).decode('utf-8')
+        assert 'Legacy Co' in html, theme
