@@ -1,0 +1,12 @@
+hired.persistence.repository
+============================
+
+.. automodule:: hired.persistence.repository
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Repository
+   

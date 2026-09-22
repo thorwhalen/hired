@@ -1,0 +1,21 @@
+hired.renderers
+===============
+
+.. automodule:: hired.renderers
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      HTMLRenderer
+      RenderCVRenderer
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   html
+   rendercv

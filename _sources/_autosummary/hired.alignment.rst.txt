@@ -1,0 +1,59 @@
+hired.alignment
+===============
+
+.. automodule:: hired.alignment
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      classify
+      assign_bucket
+      apply_ai_leverage
+      compute_gap_size
+      rank_clarifications
+      is_decision_stable
+      should_ask
+      info_gain
+      render_report_markdown
+      diff_reports
+      summarize_diff
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Requirement
+      RequirementRecord
+      Evidence
+      AlignmentReport
+      Verdict
+      ScoreSummary
+      NextAction
+      Clarification
+      InterviewPrep
+      Bucket
+      MatchType
+      RequirementClass
+      SkillType
+      Closeability
+      CloseMethod
+      TimeToClose
+      Transferability
+      AILeverage
+      FieldCompleteness
+      Recommendation
+      FitBand
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   base
+   diff
+   elicitation
+   report
+   rubric

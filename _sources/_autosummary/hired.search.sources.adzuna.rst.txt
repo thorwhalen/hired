@@ -1,0 +1,18 @@
+hired.search.sources.adzuna
+===========================
+
+.. automodule:: hired.search.sources.adzuna
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_adzuna_source
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AdzunaSource
+   

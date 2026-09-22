@@ -1,4 +1,0 @@
-hired.persistence.base
-======================
-.. automodule:: hired.persistence.base
-   :members:

@@ -1,4 +1,0 @@
-hired.util
-==========
-.. automodule:: hired.util
-   :members:

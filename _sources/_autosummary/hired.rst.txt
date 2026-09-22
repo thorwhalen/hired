@@ -1,0 +1,30 @@
+﻿hired
+=====
+
+.. automodule:: hired
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   alignment
+   ats_checker
+   base
+   candidate
+   config
+   content
+   cover_letter
+   job_utils
+   matching
+   persistence
+   render
+   renderers
+   resume_agent
+   resumejson_pydantic_models
+   search
+   tools
+   tracking
+   util

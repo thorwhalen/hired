@@ -1,0 +1,15 @@
+hired.alignment.rubric
+======================
+
+.. automodule:: hired.alignment.rubric
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      apply_ai_leverage
+      assign_bucket
+      classify
+      compute_gap_size
+   

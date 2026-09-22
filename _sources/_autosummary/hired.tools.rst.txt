@@ -1,0 +1,14 @@
+hired.tools
+===========
+
+.. automodule:: hired.tools
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      mk_content_for_resume
+      mk_resume
+      render_resume_with_template_and_css
+   

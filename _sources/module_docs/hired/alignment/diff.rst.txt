@@ -1,4 +1,0 @@
-hired.alignment.diff
-====================
-.. automodule:: hired.alignment.diff
-   :members:

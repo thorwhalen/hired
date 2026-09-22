@@ -1,4 +1,0 @@
-hired.alignment.rubric
-======================
-.. automodule:: hired.alignment.rubric
-   :members:

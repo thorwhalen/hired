@@ -1,4 +1,0 @@
-hired.candidate.workspace
-=========================
-.. automodule:: hired.candidate.workspace
-   :members:

@@ -1,0 +1,12 @@
+hired.search.facade
+===================
+
+.. automodule:: hired.search.facade
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      JobSources
+   

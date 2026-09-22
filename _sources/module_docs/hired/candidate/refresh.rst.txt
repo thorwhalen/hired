@@ -1,4 +1,0 @@
-hired.candidate.refresh
-=======================
-.. automodule:: hired.candidate.refresh
-   :members:

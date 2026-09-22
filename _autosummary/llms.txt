@@ -1,0 +1,53 @@
+# hired
+
+> Streamline the job application process for job seekers - with AI obvs!
+
+
+## Pages in this subsection
+
+- [hired](hired.html.md): Public API for the hired package.
+- [hired.alignment](hired.alignment.html.md): JD-vs-candidate alignment: classify each requirement honestly into four buckets.
+- [hired.alignment.base](hired.alignment.base.html.md): Schemas for JD-vs-candidate alignment analysis.
+- [hired.alignment.diff](hired.alignment.diff.html.md): Deterministic diff between two alignment reports.
+- [hired.alignment.elicitation](hired.alignment.elicitation.html.md): The honesty loop: rank unknowns into the most informative questions first.
+- [hired.alignment.report](hired.alignment.report.html.md): Render an &#96;AlignmentReport&#96; to Markdown.
+- [hired.alignment.rubric](hired.alignment.rubric.html.md): Deterministic bucket assignment — the two-axis rubric in code.
+- [hired.ats_checker](hired.ats_checker.html.md): ATS (Applicant Tracking System) compatibility checker.
+- [hired.base](hired.base.html.md): Core data models and protocols for the hired package.
+- [hired.candidate](hired.candidate.html.md): Candidate knowledge domain: accumulate open-world facts about a candidate.
+- [hired.candidate.base](hired.candidate.base.html.md): Open-world, provenance-first schemas for accumulated candidate knowledge.
+- [hired.candidate.ingest](hired.candidate.ingest.html.md): Turn extracted atomic-fact records into persisted, provenance-bearing facts.
+- [hired.candidate.knowledge_base](hired.candidate.knowledge_base.html.md): The candidate knowledge base: a facade over the user-level store.
+- [hired.candidate.state](hired.candidate.state.html.md): Refresh bookkeeping: per-source content digests + last-refresh timestamps.
+- [hired.candidate.topics](hired.candidate.topics.html.md): Topic dossiers — “a little, or a whole lot” about any subject the candidate shares.
+- [hired.candidate.workspace](hired.candidate.workspace.html.md): The per-engagement facade: alignment reports, company research, interview prep.
+- [hired.config](hired.config.html.md): Configuration management using Mapping interfaces.
+- [hired.content](hired.content.html.md): Content generation logic and AI agent implementations.
+- [hired.cover_letter](hired.cover_letter.html.md): Cover letter generation functionality.
+- [hired.job_utils](hired.job_utils.html.md): Utilities for working with job postings and matching them to resumes.
+- [hired.matching](hired.matching.html.md): Job matching and scoring utilities.
+- [hired.persistence](hired.persistence.html.md): dol-based persistence foundation for hired (Storage v2).
+- [hired.persistence.base](hired.persistence.base.html.md): Canonical data root, filesystem codecs, and the two-level candidate layout.
+- [hired.persistence.migrate](hired.persistence.migrate.html.md): One-time migration of legacy flat per-user data to the Storage v2 layout.
+- [hired.persistence.repository](hired.persistence.repository.html.md): A small repository base that maps validated domain models to a key-value store.
+- [hired.render](hired.render.html.md): Rendering pipeline and theme management.
+- [hired.renderers](hired.renderers.html.md): Renderer implementations package.
+- [hired.renderers.html](hired.renderers.html.html.md): HTML renderer implementation using Jinja2 templates.
+- [hired.renderers.rendercv](hired.renderers.rendercv.html.md): RenderCV renderer implementation using the RenderCV backend.
+- [hired.resume_agent](hired.resume_agent.html.md): Resume Generation System - Core Architecture
+- [hired.resumejson_pydantic_models](hired.resumejson_pydantic_models.html.md): Pydantic models for resume json schema
+- [hired.search](hired.search.html.md): Job search functionality for the hired package.
+- [hired.search.base](hired.search.base.html.md): Base classes and interfaces for job search functionality.
+- [hired.search.facade](hired.search.facade.html.md): Main facade for job search functionality.
+- [hired.search.registry](hired.search.registry.html.md): Registry system for managing job search sources.
+- [hired.search.sources](hired.search.sources.html.md): Job search source implementations.
+- [hired.search.sources.adzuna](hired.search.sources.adzuna.html.md): Adzuna source adapter.
+- [hired.search.sources.jobspy](hired.search.sources.jobspy.html.md): JobSpy source adapter.
+- [hired.search.sources.usajobs](hired.search.sources.usajobs.html.md): USAJobs source adapter.
+- [hired.tools](hired.tools.html.md): High-level orchestration functions - the main API.
+- [hired.tracking](hired.tracking.html.md): Application tracking system for managing job applications.
+- [hired.util](hired.util.html.md): Utilities for external dependencies and general helpers.
+
+## Optional
+
+- [Top-level llms.txt](../llms.txt): Complete documentation index.

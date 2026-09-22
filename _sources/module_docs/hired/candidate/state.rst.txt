@@ -1,4 +1,0 @@
-hired.candidate.state
-=====================
-.. automodule:: hired.candidate.state
-   :members:

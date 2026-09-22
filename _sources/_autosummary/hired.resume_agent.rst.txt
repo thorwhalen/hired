@@ -1,0 +1,28 @@
+hired.resume\_agent
+===================
+
+.. automodule:: hired.resume_agent
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConversationMemory
+      DistillationAgent
+      ExpansionAgent
+      LLMConfig
+      LLMProvider
+      MatchingAgent
+      ModelRegistry
+      OperationMode
+      Plan
+      PlanStep
+      ResumeExpertAgent
+      ResumeSession
+      SearchAgent
+      SessionSnapshot
+      SessionState
+      SessionStore
+      Turn
+   

@@ -1,0 +1,24 @@
+hired.base
+==========
+
+.. automodule:: hired.base
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_renderer_registry
+      register_renderer
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AIAgent
+      ContentSource
+      Renderer
+      RendererRegistry
+      RenderingConfig
+      ResumeSchemaExtended
+   

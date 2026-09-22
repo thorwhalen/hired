@@ -1,4 +1,0 @@
-hired.job_utils
-===============
-.. automodule:: hired.job_utils
-   :members:

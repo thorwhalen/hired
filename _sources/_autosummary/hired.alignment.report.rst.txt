@@ -1,0 +1,12 @@
+hired.alignment.report
+======================
+
+.. automodule:: hired.alignment.report
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      render_report_markdown
+   

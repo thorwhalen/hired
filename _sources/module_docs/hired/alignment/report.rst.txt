@@ -1,4 +1,0 @@
-hired.alignment.report
-======================
-.. automodule:: hired.alignment.report
-   :members:

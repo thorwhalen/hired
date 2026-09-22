@@ -1,0 +1,13 @@
+hired.tracking
+==============
+
+.. automodule:: hired.tracking
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Application
+      ApplicationTracker
+   

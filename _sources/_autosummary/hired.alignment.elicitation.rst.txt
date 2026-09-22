@@ -1,0 +1,16 @@
+hired.alignment.elicitation
+===========================
+
+.. automodule:: hired.alignment.elicitation
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      info_gain
+      is_decision_relevant
+      is_decision_stable
+      rank_clarifications
+      should_ask
+   

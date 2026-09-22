@@ -1,0 +1,21 @@
+hired.candidate.state
+=====================
+
+.. automodule:: hired.candidate.state
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      load_state
+      save_state
+      sha256_hex
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      RefreshState
+      SourceDigest
+   

@@ -1,4 +1,0 @@
-hired.content
-=============
-.. automodule:: hired.content
-   :members:

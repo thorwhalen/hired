@@ -1,0 +1,29 @@
+hired.persistence.base
+======================
+
+.. automodule:: hired.persistence.base
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      app_data_dir
+      bytes_store
+      json_store
+      list_jds
+      markdown_store
+      migrate_legacy
+      read_json_file
+      read_text_file
+      user_base
+      write_json_file
+      write_text_file
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      JDStore
+      UserStore
+   

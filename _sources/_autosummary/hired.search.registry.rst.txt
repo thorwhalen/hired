@@ -1,0 +1,19 @@
+hired.search.registry
+=====================
+
+.. automodule:: hired.search.registry
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_registry
+      register_source
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SourceRegistry
+   

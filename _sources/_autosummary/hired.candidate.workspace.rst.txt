@@ -1,0 +1,12 @@
+hired.candidate.workspace
+=========================
+
+.. automodule:: hired.candidate.workspace
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      JDWorkspace
+   

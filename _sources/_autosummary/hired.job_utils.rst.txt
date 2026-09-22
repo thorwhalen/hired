@@ -1,0 +1,20 @@
+hired.job\_utils
+================
+
+.. automodule:: hired.job_utils
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      extract_job_keywords
+      get_job_skills
+      job_to_text
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      JobAnalyzer
+   

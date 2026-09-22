@@ -1,4 +1,0 @@
-hired.alignment
-===============
-.. automodule:: hired.alignment
-   :members:

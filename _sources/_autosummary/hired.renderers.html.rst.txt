@@ -1,0 +1,19 @@
+hired.renderers.html
+====================
+
+.. automodule:: hired.renderers.html
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      html_to_pdf
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      HTMLRenderer
+      ThemeRegistry
+   

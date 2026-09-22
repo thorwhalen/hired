@@ -1,4 +1,0 @@
-hired.search.sources
-====================
-.. automodule:: hired.search.sources
-   :members:

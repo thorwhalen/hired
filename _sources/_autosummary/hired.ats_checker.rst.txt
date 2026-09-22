@@ -1,0 +1,20 @@
+hired.ats\_checker
+==================
+
+.. automodule:: hired.ats_checker
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_resume_ats
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ATSChecker
+      ATSIssue
+      ATSReport
+   

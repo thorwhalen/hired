@@ -1,0 +1,50 @@
+hired.candidate
+===============
+
+.. automodule:: hired.candidate
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      needs_refresh
+      refresh
+      slug
+      ingest_facts
+      fact_from_record
+      verify_quote
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CandidateKnowledgeBase
+      JDWorkspace
+      TopicDossier
+      RefreshState
+      SourceDigest
+      RefreshItem
+      RefreshProposal
+      RefreshReport
+      Fact
+      QAEntry
+      Provenance
+      FactCategory
+      FactStatus
+      SourceKind
+      ConfidenceLevel
+      MatchState
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   base
+   ingest
+   knowledge_base
+   state
+   topics
+   workspace

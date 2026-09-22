@@ -1,4 +1,0 @@
-hired.search
-============
-.. automodule:: hired.search
-   :members:

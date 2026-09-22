@@ -1,4 +1,0 @@
-hired.tools
-===========
-.. automodule:: hired.tools
-   :members:

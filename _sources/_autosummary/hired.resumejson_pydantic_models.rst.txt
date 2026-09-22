@@ -1,0 +1,28 @@
+hired.resumejson\_pydantic\_models
+==================================
+
+.. automodule:: hired.resumejson_pydantic_models
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Award
+      Basics
+      Certificate
+      EducationItem
+      Interest
+      Iso8601
+      Language
+      Location
+      Meta
+      Profile
+      Project
+      Publication
+      Reference
+      ResumeSchema
+      Skill
+      VolunteerItem
+      WorkItem
+   

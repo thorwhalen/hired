@@ -1,0 +1,18 @@
+hired.search.sources.usajobs
+============================
+
+.. automodule:: hired.search.sources.usajobs
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_usajobs_source
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      USAJobsSource
+   

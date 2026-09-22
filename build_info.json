@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "built_at": "2026-09-22T19:36:36Z",
+  "package": {
+    "name": "hired",
+    "version": "0.0.21",
+    "display_name": "hired",
+    "source": "pyproject.toml"
+  },
+  "git": {
+    "available": true,
+    "commit": "c9052603129de464b0eaa433acf93d7797825b81",
+    "short_commit": "c905260",
+    "branch": "main",
+    "tags": [],
+    "dirty": false,
+    "remote_url": "https://github.com/thorwhalen/hired",
+    "commit_url": "https://github.com/thorwhalen/hired/commit/c9052603129de464b0eaa433acf93d7797825b81",
+    "error": null
+  },
+  "ci": {
+    "provider": "github",
+    "repository": "thorwhalen/hired",
+    "sha": "c9052603129de464b0eaa433acf93d7797825b81",
+    "sha_in_history": true,
+    "ref": "refs/heads/main",
+    "ref_name": "main",
+    "run_id": "35774717055",
+    "run_url": "https://github.com/thorwhalen/hired/actions/runs/35774717055",
+    "server_url": "https://github.com"
+  },
+  "tools": {
+    "epythet": "0.2.12",
+    "sphinx": "9.1.0",
+    "docutils": "0.22.4",
+    "python": "3.12.14"
+  },
+  "config": {
+    "theme": "auto",
+    "html_theme": "pydata_sphinx_theme",
+    "accent": "#735300",
+    "mode": "auto",
+    "api_generator": "autosummary",
+    "ignore": [
+      "tests/",
+      "scrap/",
+      "examples/"
+    ],
+    "agent_outputs": true,
+    "aggregates": [
+      "md"
+    ],
+    "ai_artifacts": true,
+    "provenance": true,
+    "docs_dir": "docsrc"
+  },
+  "site": {
+    "modules_documented": 42,
+    "objects_documented": 644
+  },
+  "pypi": {
+    "checked": true,
+    "latest": "0.0.21",
+    "relation": "same",
+    "error": null
+  },
+  "reproduce": "git clone https://github.com/thorwhalen/hired && cd hired\ngit checkout c9052603129de464b0eaa433acf93d7797825b81\npip install \"epythet==0.2.12\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "warnings": [],
+  "alignment": {
+    "aligned": true,
+    "notes": []
+  }
+}

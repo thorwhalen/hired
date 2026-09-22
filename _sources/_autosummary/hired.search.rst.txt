@@ -1,0 +1,45 @@
+hired.search
+============
+
+.. automodule:: hired.search
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_registry
+      register_source
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      JobSources
+      SearchCriteria
+      JobResult
+      JobSearchSource
+      JobType
+      LocationInfo
+      CompensationInfo
+      SourceRegistry
+      JobSpySource
+      USAJobsSource
+      AdzunaSource
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      SourceConfigError
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   base
+   facade
+   registry
+   sources

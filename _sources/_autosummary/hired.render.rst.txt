@@ -1,0 +1,6 @@
+hired.render
+============
+
+.. automodule:: hired.render
+
+   

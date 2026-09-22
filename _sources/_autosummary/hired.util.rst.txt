@@ -1,0 +1,20 @@
+hired.util
+==========
+
+.. automodule:: hired.util
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      dump_yaml
+      ensure_resume_content_dict
+      extract_friendly_errors
+      get_jsonschema_errors
+      load_yaml
+      normalize_and_validate_resume
+      refresh_resume_schema
+      validate_resume_content_dict
+      validation_friendly_errors_string
+   

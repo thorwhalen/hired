@@ -1,0 +1,13 @@
+hired.alignment.diff
+====================
+
+.. automodule:: hired.alignment.diff
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      diff_reports
+      summarize_diff
+   

@@ -1,4 +1,0 @@
-hired.resumejson_pydantic_models
-================================
-.. automodule:: hired.resumejson_pydantic_models
-   :members:

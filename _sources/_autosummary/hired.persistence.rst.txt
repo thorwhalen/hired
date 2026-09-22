@@ -1,0 +1,38 @@
+hired.persistence
+=================
+
+.. automodule:: hired.persistence
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      app_data_dir
+      user_base
+      list_jds
+      json_store
+      markdown_store
+      bytes_store
+      migrate_legacy
+      ensure_v2
+      is_legacy_layout
+      migrate_user_to_v2
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      UserStore
+      JDStore
+      Repository
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   base
+   migrate
+   repository

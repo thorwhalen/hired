@@ -1,0 +1,23 @@
+hired.search.base
+=================
+
+.. automodule:: hired.search.base
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CompensationInfo
+      JobResult
+      JobSearchSource
+      JobType
+      LocationInfo
+      SearchCriteria
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      SourceConfigError
+   

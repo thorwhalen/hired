@@ -1,4 +1,0 @@
-hired.persistence.migrate
-=========================
-.. automodule:: hired.persistence.migrate
-   :members:

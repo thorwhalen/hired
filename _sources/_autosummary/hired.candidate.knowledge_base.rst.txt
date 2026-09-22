@@ -1,0 +1,12 @@
+hired.candidate.knowledge\_base
+===============================
+
+.. automodule:: hired.candidate.knowledge_base
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CandidateKnowledgeBase
+   

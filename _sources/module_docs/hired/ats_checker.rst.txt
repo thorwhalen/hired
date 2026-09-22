@@ -1,4 +1,0 @@
-hired.ats_checker
-=================
-.. automodule:: hired.ats_checker
-   :members:

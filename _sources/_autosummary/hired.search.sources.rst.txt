@@ -1,0 +1,15 @@
+hired.search.sources
+====================
+
+.. automodule:: hired.search.sources
+
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   adzuna
+   jobspy
+   usajobs

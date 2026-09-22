@@ -1,4 +1,0 @@
-hired.render
-============
-.. automodule:: hired.render
-   :members:

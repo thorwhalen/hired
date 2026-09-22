@@ -1,0 +1,18 @@
+hired.search.sources.jobspy
+===========================
+
+.. automodule:: hired.search.sources.jobspy
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_jobspy_source
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      JobSpySource
+   

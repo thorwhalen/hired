@@ -1,0 +1,32 @@
+hired.alignment.base
+====================
+
+.. automodule:: hired.alignment.base
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AILeverage
+      AlignmentReport
+      Bucket
+      Clarification
+      CloseMethod
+      Closeability
+      Evidence
+      FieldCompleteness
+      FitBand
+      InterviewPrep
+      MatchType
+      NextAction
+      Recommendation
+      Requirement
+      RequirementClass
+      RequirementRecord
+      ScoreSummary
+      SkillType
+      TimeToClose
+      Transferability
+      Verdict
+   

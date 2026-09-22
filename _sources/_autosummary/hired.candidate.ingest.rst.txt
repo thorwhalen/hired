@@ -1,0 +1,14 @@
+hired.candidate.ingest
+======================
+
+.. automodule:: hired.candidate.ingest
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      fact_from_record
+      ingest_facts
+      verify_quote
+   

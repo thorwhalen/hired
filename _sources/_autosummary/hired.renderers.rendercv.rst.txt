@@ -1,0 +1,12 @@
+hired.renderers.rendercv
+========================
+
+.. automodule:: hired.renderers.rendercv
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      RenderCVRenderer
+   

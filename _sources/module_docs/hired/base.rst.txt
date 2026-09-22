@@ -1,4 +1,0 @@
-hired.base
-==========
-.. automodule:: hired.base
-   :members:

@@ -1,0 +1,20 @@
+hired.cover\_letter
+===================
+
+.. automodule:: hired.cover_letter
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      generate_cover_letter_content
+      mk_cover_letter
+      render_cover_letter
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CoverLetterData
+   

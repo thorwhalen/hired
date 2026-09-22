@@ -1,0 +1,15 @@
+hired.content
+=============
+
+.. automodule:: hired.content
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DefaultAIAgent
+      DictContentSource
+      FileContentSource
+      LLMResumeAgent
+   

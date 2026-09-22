@@ -1,4 +1,0 @@
-hired.search.sources.jobspy
-===========================
-.. automodule:: hired.search.sources.jobspy
-   :members:

@@ -1,0 +1,19 @@
+hired.config
+============
+
+.. automodule:: hired.config
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_default_config
+      load_config
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConfigStore
+   

@@ -1,0 +1,25 @@
+hired.candidate.base
+====================
+
+.. automodule:: hired.candidate.base
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      slug
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConfidenceLevel
+      Fact
+      FactCategory
+      FactStatus
+      MatchState
+      Provenance
+      QAEntry
+      SourceKind
+   

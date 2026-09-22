@@ -1,0 +1,19 @@
+hired.matching
+==============
+
+.. automodule:: hired.matching
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      quick_match
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      JobMatcher
+      MatchScore
+   

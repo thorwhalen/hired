@@ -1,0 +1,12 @@
+hired.candidate.topics
+======================
+
+.. automodule:: hired.candidate.topics
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      TopicDossier
+   

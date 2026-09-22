@@ -1,0 +1,14 @@
+hired.persistence.migrate
+=========================
+
+.. automodule:: hired.persistence.migrate
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ensure_v2
+      is_legacy_layout
+      migrate_user_to_v2
+   
