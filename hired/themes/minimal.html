@@ -3,6 +3,11 @@
 <body>
 <h1>{{ basics.name }}</h1>
 {% if basics.label %}<h3>{{ basics.label }}</h3>{% endif %}
-{% if work %}<h2>Experience</h2><ul>{% for w in work %}<li>{{ w.position }} - {{ w.company }}</li>{% endfor %}</ul>{% endif %}
+{% if basics.summary %}<p>{{ basics.summary }}</p>{% endif %}
+{% if work %}<h2>Experience</h2><ul>{% for w in work %}<li>{{ w.position }} - {{ w.name }}{% if w.summary %}: {{ w.summary }}{% endif %}</li>{% endfor %}</ul>{% endif %}
+{% if skills %}<h2>Skills</h2><ul>{% for s in skills %}<li>{{ s.name }}{% if s.keywords %}: {{ s.keywords|join(', ') }}{% endif %}</li>{% endfor %}</ul>{% endif %}
+{% if projects %}<h2>Projects</h2><ul>{% for p in projects %}<li>{{ p.name }}{% if p.description %}: {{ p.description }}{% endif %}</li>{% endfor %}</ul>{% endif %}
+{% if publications %}<h2>Publications</h2><ul>{% for p in publications %}<li>{{ p.name }}</li>{% endfor %}</ul>{% endif %}
+{% if languages %}<h2>Languages</h2><ul>{% for l in languages %}<li>{{ l.language }}{% if l.fluency %} ({{ l.fluency }}){% endif %}</li>{% endfor %}</ul>{% endif %}
 {% for section in extra_sections %}<h2>{{ section.title }}</h2>{{ section.html|safe }}{% endfor %}
 </body></html>

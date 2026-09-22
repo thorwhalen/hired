@@ -249,9 +249,31 @@ class HTMLRenderer:
         work = content_dict.get("work", [])
         education = content_dict.get("education", [])
 
-        # Filter out empty work and education entries
+        # Core list-valued sections beyond work/education, rendered by name
+        # directly in the templates (not folded into extra_sections).
+        list_sections = (
+            "volunteer",
+            "awards",
+            "certificates",
+            "publications",
+            "skills",
+            "languages",
+            "interests",
+            "references",
+            "projects",
+        )
+
+        # Filter out empty entries from every list-valued core section.
         work = [w for w in work if not _is_empty_section(w)]
         education = [e for e in education if not _is_empty_section(e)]
+        sections = {
+            name: [
+                item
+                for item in content_dict.get(name, []) or []
+                if not _is_empty_section(item)
+            ]
+            for name in list_sections
+        }
 
         # Handle extra sections (anything not in the core schema)
         core_sections = {
@@ -281,6 +303,7 @@ class HTMLRenderer:
             "work": work,
             "education": education,
             "extra_sections": extra_sections,
+            **sections,
         }
 
     # ------------------ PDF conversion ------------------ #
