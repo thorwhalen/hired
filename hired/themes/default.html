@@ -8,14 +8,27 @@
 <body>
   <header>
     <h1>{{ basics.name }}</h1>
+    {% if basics.label %}<p>{{ basics.label }}</p>{% endif %}
+    {% if basics.summary %}<p>{{ basics.summary }}</p>{% endif %}
     {% if basics.email %}<p>{{ basics.email }}</p>{% endif %}
+    {% if basics.profiles %}
+    <ul>
+    {% for p in basics.profiles %}
+      <li>{{ p.network or '' }}: {{ p.url or p.username or '' }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
   </header>
   {% if work %}
   <section id="work">
     <h2>Work</h2>
     <ul>
     {% for w in work %}
-      <li><strong>{{ w.company }}</strong> {{ w.position or '' }}</li>
+      <li>
+        <strong>{{ w.name or '' }}</strong> {{ w.position or '' }}
+        {% if w.summary %}<p>{{ w.summary }}</p>{% endif %}
+        {% if w.highlights %}<ul>{% for h in w.highlights %}<li>{{ h }}</li>{% endfor %}</ul>{% endif %}
+      </li>
     {% endfor %}
     </ul>
   </section>
@@ -26,6 +39,100 @@
     <ul>
     {% for e in education %}
       <li><strong>{{ e.institution }}</strong> {{ e.area or '' }}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if skills %}
+  <section id="skills">
+    <h2>Skills</h2>
+    <ul>
+    {% for s in skills %}
+      <li><strong>{{ s.name or '' }}</strong>{% if s.keywords %}: {{ s.keywords|join(', ') }}{% endif %}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if projects %}
+  <section id="projects">
+    <h2>Projects</h2>
+    <ul>
+    {% for p in projects %}
+      <li>
+        <strong>{{ p.name or '' }}</strong>
+        {% if p.description %}<p>{{ p.description }}</p>{% endif %}
+        {% if p.highlights %}<ul>{% for h in p.highlights %}<li>{{ h }}</li>{% endfor %}</ul>{% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if publications %}
+  <section id="publications">
+    <h2>Publications</h2>
+    <ul>
+    {% for p in publications %}
+      <li><strong>{{ p.name or '' }}</strong>{% if p.publisher %} — {{ p.publisher }}{% endif %}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if languages %}
+  <section id="languages">
+    <h2>Languages</h2>
+    <ul>
+    {% for l in languages %}
+      <li>{{ l.language or '' }}{% if l.fluency %} ({{ l.fluency }}){% endif %}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if awards %}
+  <section id="awards">
+    <h2>Awards</h2>
+    <ul>
+    {% for a in awards %}
+      <li><strong>{{ a.title or '' }}</strong>{% if a.awarder %} — {{ a.awarder }}{% endif %}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if certificates %}
+  <section id="certificates">
+    <h2>Certificates</h2>
+    <ul>
+    {% for c in certificates %}
+      <li><strong>{{ c.name or '' }}</strong>{% if c.issuer %} — {{ c.issuer }}{% endif %}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if volunteer %}
+  <section id="volunteer">
+    <h2>Volunteer</h2>
+    <ul>
+    {% for v in volunteer %}
+      <li><strong>{{ v.organization or '' }}</strong> {{ v.position or '' }}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if interests %}
+  <section id="interests">
+    <h2>Interests</h2>
+    <ul>
+    {% for i in interests %}
+      <li>{{ i.name or '' }}</li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+  {% if references %}
+  <section id="references">
+    <h2>References</h2>
+    <ul>
+    {% for r in references %}
+      <li><strong>{{ r.name or '' }}</strong>{% if r.reference %}: {{ r.reference }}{% endif %}</li>
     {% endfor %}
     </ul>
   </section>
