@@ -82,7 +82,9 @@ def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, An
 
 
 ValidationErrorType = Union[PydanticValidationError, JsonSchemaValidationError]
-ValidationErrors: tuple[type[Exception], ...] = (
+ValidationErrors: tuple[
+    type[PydanticValidationError], type[JsonSchemaValidationError]
+] = (
     PydanticValidationError,
     JsonSchemaValidationError,
 )
