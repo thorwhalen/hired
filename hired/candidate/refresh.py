@@ -21,11 +21,17 @@ change (proposals) so the candidate can validate before anything is written.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any
 
 from hired.candidate.base import FactStatus, SourceKind, _utcnow
 from hired.candidate.ingest import ingest_facts
 from hired.candidate.state import SourceDigest, load_state, save_state, sha256_hex
+
+if TYPE_CHECKING:  # avoid an import cycle (knowledge_base imports this module)
+    from hired.candidate.base import QAEntry
+    from hired.candidate.knowledge_base import CandidateKnowledgeBase
 
 SOURCE = "source"
 QA = "qa"
@@ -46,7 +52,11 @@ class RefreshProposal:
 
     kind: str
     key: str
-    records: list[dict]
+    records: list[dict[str, Any]]
+
+
+#: Extraction callback: one pending item -> fact records (``{"statement", ...}`` dicts).
+IngestFn = Callable[[RefreshItem], "list[dict[str, Any]]"]
 
 
 @dataclass
@@ -83,7 +93,7 @@ def _as_text(content: bytes | str) -> str | None:
         return None
 
 
-def pending_sources(kb) -> list[str]:
+def pending_sources(kb: CandidateKnowledgeBase) -> list[str]:
     """Raw source keys that are new, changed, or never ingested into facts."""
     state = load_state(kb._store)
     out: list[str] = []
@@ -96,17 +106,17 @@ def pending_sources(kb) -> list[str]:
     return sorted(out)
 
 
-def pending_qa(kb) -> list:
+def pending_qa(kb: CandidateKnowledgeBase) -> list[QAEntry]:
     """Q&A entries not yet distilled into facts (no ``derived_fact_ids``)."""
     return [q for q in kb.qa_entries() if not q.derived_fact_ids]
 
 
-def needs_refresh(kb) -> bool:
+def needs_refresh(kb: CandidateKnowledgeBase) -> bool:
     """True when there is uningested source/Q&A material — a refresh is warranted."""
     return bool(pending_sources(kb)) or bool(pending_qa(kb))
 
 
-def _collect(kb, mode: str) -> list[RefreshItem]:
+def _collect(kb: CandidateKnowledgeBase, mode: str) -> list[RefreshItem]:
     if mode == "hard":
         source_keys = sorted(kb.sources())
     elif mode == "soft":
@@ -118,7 +128,7 @@ def _collect(kb, mode: str) -> list[RefreshItem]:
     return items
 
 
-def _supersede(kb, fact_ids: list[str]) -> list[str]:
+def _supersede(kb: CandidateKnowledgeBase, fact_ids: list[str]) -> list[str]:
     """Mark the given (still-asserted) facts superseded; return those changed."""
     changed: list[str] = []
     for fid in fact_ids:
@@ -135,7 +145,11 @@ def _supersede(kb, fact_ids: list[str]) -> list[str]:
 
 
 def refresh(
-    kb, mode: str = "soft", *, ingest_fn=None, apply: bool = True
+    kb: CandidateKnowledgeBase,
+    mode: str = "soft",
+    *,
+    ingest_fn: IngestFn | None = None,
+    apply: bool = True,
 ) -> RefreshReport:
     """Refresh ``info`` from changed sources + undistilled Q&A. See module docstring.
 
@@ -206,7 +220,7 @@ def refresh(
     return report
 
 
-def _backlink_qa(kb, qa_id: str, fact_ids: list[str]) -> None:
+def _backlink_qa(kb: CandidateKnowledgeBase, qa_id: str, fact_ids: list[str]) -> None:
     """Record derived fact ids on the Q&A entry so its answer stays discoverable."""
     for entry in kb.qa_entries():
         if entry.id == qa_id:

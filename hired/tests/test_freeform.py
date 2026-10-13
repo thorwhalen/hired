@@ -1,9 +1,10 @@
 """Tests for freeform sections and strict vs non-strict validation."""
 
+from typing import Any
 import pytest
 from hired.tools import mk_resume
 
-RAW = {
+RAW: dict[str, Any] = {
     'basics': {'name': 'Free Form User', 'email': 'ff@example.com'},
     'work': [{'name': 'OrgX', 'position': 'Dev'}],
     'customSection': 'This is a freeform narrative about achievements.',
@@ -11,14 +12,14 @@ RAW = {
 }
 
 
-def test_non_strict_accepts_freeform():
+def test_non_strict_accepts_freeform() -> None:
     html = mk_resume(RAW, {'format': 'html'}, strict=False)
     assert b'Customsection' in html or b'customSection' in html
     assert b'This is a freeform narrative' in html
 
 
 @pytest.mark.skip("Fails since actual officien json schema is used: Repair")
-def test_strict_still_passes_core_schema():
+def test_strict_still_passes_core_schema() -> None:
     # Our abridged schema allows additionalProperties, so strict also succeeds here
     pdf = mk_resume(RAW, {'format': 'pdf'}, strict=True)
     assert pdf.startswith(b'%PDF')

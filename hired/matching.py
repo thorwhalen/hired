@@ -27,7 +27,7 @@ class MatchScore:
     compensation_match: Optional[bool] = None
     location_match: Optional[bool] = None
 
-    def __lt__(self, other):
+    def __lt__(self, other: "MatchScore") -> bool:
         """Enable sorting by overall score."""
         return self.overall_score < other.overall_score
 
@@ -86,7 +86,7 @@ class JobMatcher:
         max_salary: Optional[float] = None,
         preferred_locations: Optional[List[str]] = None,
         remote_only: bool = False,
-    ):
+    ) -> None:
         """
         Initialize job matcher with candidate profile.
 
@@ -99,13 +99,13 @@ class JobMatcher:
             preferred_locations: List of preferred location strings
             remote_only: Only match remote jobs
         """
-        self.candidate_skills = set(s.lower() for s in (candidate_skills or []))
-        self.candidate_keywords = set(k.lower() for k in (candidate_keywords or []))
-        self.required_skills = set(s.lower() for s in (required_skills or []))
-        self.min_salary = min_salary
-        self.max_salary = max_salary
-        self.preferred_locations = [loc.lower() for loc in (preferred_locations or [])]
-        self.remote_only = remote_only
+        self.candidate_skills: Set[str] = set(s.lower() for s in (candidate_skills or []))
+        self.candidate_keywords: Set[str] = set(k.lower() for k in (candidate_keywords or []))
+        self.required_skills: Set[str] = set(s.lower() for s in (required_skills or []))
+        self.min_salary: Optional[float] = min_salary
+        self.max_salary: Optional[float] = max_salary
+        self.preferred_locations: List[str] = [loc.lower() for loc in (preferred_locations or [])]
+        self.remote_only: bool = remote_only
 
     def score_job(self, job: JobResult) -> MatchScore:
         """

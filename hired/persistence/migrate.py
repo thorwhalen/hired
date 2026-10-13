@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import os
 import shutil
+from collections.abc import Callable
 from datetime import datetime, timezone
 
 from hired.persistence.base import (
@@ -87,7 +88,7 @@ def is_legacy_layout(user: str = DFLT_USER, *, root: str | None = None) -> bool:
     return any(os.path.isdir(os.path.join(base, k)) for k in _LEGACY_MARKERS)
 
 
-def _default_company_of(base: str):
+def _default_company_of(base: str) -> Callable[[str], str]:
     """Build the key→engagement grouper, seeded from company research + existing engagements.
 
     Seeding from both legacy ``company/`` keys and already-created ``jds/`` ids makes
@@ -126,7 +127,7 @@ def migrate_user_to_v2(
     user: str = DFLT_USER,
     *,
     root: str | None = None,
-    company_of=None,
+    company_of: Callable[[str], str] | None = None,
     dry_run: bool = False,
 ) -> list[tuple[str, str]]:
     """Migrate one user's flat v1 data to the v2 layout. Returns the move plan.

@@ -1,11 +1,12 @@
 """Test that HTMLRenderer honours a custom template file passed via RenderingConfig.custom_template."""
 
+from pathlib import Path
 import tempfile
 from hired.tools import mk_resume
 from hired.base import RenderingConfig
 
 
-def test_custom_template_file(tmp_path):
+def test_custom_template_file(tmp_path: Path) -> None:
     # Prepare a minimal resume dict
     resume = {
         'basics': {'name': 'Custom Template User', 'email': 'ct@example.com'},

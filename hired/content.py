@@ -23,7 +23,7 @@ DFLT_LLM_MODEL = "gpt-4o-mini"
 class FileContentSource:
     """Implements ContentSource for file-based data."""
 
-    def __init__(self, path: str):
+    def __init__(self, path: str) -> None:
         self._path = path
 
     def read(self) -> Mapping[str, Any]:
@@ -38,7 +38,7 @@ class FileContentSource:
 class DictContentSource:
     """Implements ContentSource for dictionary data."""
 
-    def __init__(self, data: Mapping[str, Any]):
+    def __init__(self, data: Mapping[str, Any]) -> None:
         self._data = data
 
     def read(self) -> Mapping[str, Any]:
@@ -65,7 +65,7 @@ def _match_skills_to_job(
 class DefaultAIAgent:
     """Default AI agent implementation (mock)."""
 
-    def __init__(self, *, model: str = "default", api_key: str | None = None):
+    def __init__(self, *, model: str = "default", api_key: str | None = None) -> None:
         self._model = model
         self._api_key = api_key
 
@@ -121,13 +121,13 @@ class LLMResumeAgent:
         model: str = DFLT_LLM_MODEL,
         client: Any | None = None,
         api_key: str | None = None,
-    ):
+    ) -> None:
         self._model = model
         self._client = client
         self._api_key = api_key
 
     @property
-    def client(self):
+    def client(self) -> Any:
         if self._client is None:
             import openai  # lazy: only required when actually generating
 

@@ -11,10 +11,14 @@ the soft/hard refresh loop.
 from __future__ import annotations
 
 import hashlib
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, Field
 
 from hired.candidate.base import _utcnow
+
+if TYPE_CHECKING:
+    from hired.persistence.base import UserStore
 
 
 def sha256_hex(data: bytes) -> str:
@@ -41,12 +45,12 @@ class RefreshState(BaseModel):
     sources: dict[str, SourceDigest] = Field(default_factory=dict)
 
 
-def load_state(user_store) -> RefreshState:
+def load_state(user_store: UserStore) -> RefreshState:
     """Read the refresh state for a :class:`UserStore` (empty if none yet)."""
     raw = user_store.read_state()
     return RefreshState.model_validate(raw) if raw else RefreshState()
 
 
-def save_state(user_store, state: RefreshState) -> None:
+def save_state(user_store: UserStore, state: RefreshState) -> None:
     """Persist the refresh state for a :class:`UserStore`."""
     user_store.write_state(state.model_dump(mode="json"))

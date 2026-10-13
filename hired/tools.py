@@ -27,8 +27,8 @@ if TYPE_CHECKING:
 
 
 def mk_content_for_resume(
-    candidate_info_src: Union[ContentSource, str, dict],
-    job_info_src: Union[ContentSource, str, dict, "JobResult"],
+    candidate_info_src: Union[ContentSource, str, dict[str, Any]],
+    job_info_src: Union[ContentSource, str, dict[str, Any], "JobResult"],
     *,
     agent: Union[Any, None] = None,
     validate: bool = True,
@@ -85,8 +85,8 @@ def mk_content_for_resume(
 
 
 def mk_resume(
-    content: Union[ResumeSchemaExtended, dict],
-    rendering: Union[RenderingConfig, dict, None] = None,
+    content: Union[ResumeSchemaExtended, dict[str, Any]],
+    rendering: Union[RenderingConfig, dict[str, Any], None] = None,
     *,
     output_path: Union[str, None] = None,
     strict: bool = False,
@@ -115,11 +115,11 @@ def mk_resume(
 
 
 def render_resume_with_template_and_css(
-    content: Union[ResumeSchemaExtended, dict],
+    content: Union[ResumeSchemaExtended, dict[str, Any]],
     template_path: Union[str, Path],
     css_path: Union[str, Path, None] = None,
     *,
-    format="pdf",
+    format: str = "pdf",
     strict: bool = False,
 ) -> bytes:
     """Render a resume dict (or pydantic model) to PDF using a specific

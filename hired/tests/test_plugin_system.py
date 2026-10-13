@@ -8,7 +8,7 @@ from hired.base import get_renderer_registry, RendererRegistry
 from hired.renderers.html import HTMLRenderer
 
 
-def test_renderer_registry():
+def test_renderer_registry() -> None:
     """Test that the renderer registry works correctly."""
     registry = RendererRegistry()
 
@@ -25,7 +25,7 @@ def test_renderer_registry():
     assert renderer is renderer2
 
 
-def test_default_renderers_available():
+def test_default_renderers_available() -> None:
     """Test that default renderers are properly registered."""
     registry = get_renderer_registry()
 
@@ -41,7 +41,7 @@ def test_default_renderers_available():
     assert isinstance(pdf_renderer, HTMLRenderer)
 
 
-def test_basic_resume_workflow():
+def test_basic_resume_workflow() -> None:
     """Test the complete resume generation workflow with plugin system."""
 
     # Test data
@@ -66,7 +66,7 @@ def test_basic_resume_workflow():
     assert len(pdf) > 100
 
 
-def test_rendercv_available():
+def test_rendercv_available() -> None:
     """Test if RenderCV renderer is available (may fail if dependencies not installed)."""
     registry = get_renderer_registry()
 

@@ -2,9 +2,9 @@
 Main facade for job search functionality.
 """
 
-from typing import List, Dict, Optional, Union
+from typing import Any, List, Dict, Optional, Union
 from hired.search.base import JobSearchSource, SearchCriteria, JobResult
-from hired.search.registry import get_registry
+from hired.search.registry import SourceRegistry, get_registry
 
 
 class JobSources:
@@ -32,7 +32,7 @@ class JobSources:
         ... )
     """
 
-    def __init__(self, registry=None):
+    def __init__(self, registry: Optional[SourceRegistry] = None) -> None:
         """
         Initialize JobSources facade.
 
@@ -83,7 +83,7 @@ class JobSources:
         """
         return self._registry.get(name)
 
-    def get_info(self, name: str) -> Dict[str, any]:
+    def get_info(self, name: str) -> Dict[str, Any]:
         """
         Get information about a source.
 
@@ -230,7 +230,7 @@ class JobSources:
                 f"No source named '{name}'. Available sources: {available}"
             )
 
-    def __dir__(self):
+    def __dir__(self) -> List[str]:
         """Return list of attributes including source names."""
         base_attrs = [
             "list",

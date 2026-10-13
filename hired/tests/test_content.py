@@ -12,13 +12,13 @@ import tempfile
 import json
 
 
-def test_dict_content_source():
+def test_dict_content_source() -> None:
     d = {'foo': 'bar'}
     src = DictContentSource(d)
     assert src.read() == d
 
 
-def test_file_content_source_json():
+def test_file_content_source_json() -> None:
     d = {'foo': 'bar'}
     import os
 
@@ -30,7 +30,7 @@ def test_file_content_source_json():
     os.unlink(f.name)
 
 
-def test_default_ai_agent():
+def test_default_ai_agent() -> None:
     agent = DefaultAIAgent()
     candidate = {
         'basics': {'name': 'A', 'email': 'a@example.com'},

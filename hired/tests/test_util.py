@@ -7,7 +7,7 @@ import os
 from hired.util import _merge_dicts, _load_json_file
 
 
-def test_merge_dicts():
+def test_merge_dicts() -> None:
     a = {'x': 1, 'y': 2}
     b = {'y': 3, 'z': 4}
     merged = _merge_dicts(a, b)
@@ -16,7 +16,7 @@ def test_merge_dicts():
     assert merged['z'] == 4
 
 
-def test_load_json_file():
+def test_load_json_file() -> None:
     d = {'foo': 'bar'}
     with tempfile.NamedTemporaryFile('w+', delete=False) as f:
         import json

@@ -12,19 +12,19 @@ from hired.resumejson_pydantic_models import Basics
 ResumeContent = ResumeSchemaExtended
 
 
-def test_resume_basics():
+def test_resume_basics() -> None:
     basics = Basics(name='John Doe', email='john@example.com')
     assert basics.name == 'John Doe'
     assert basics.email == 'john@example.com'
 
 
-def test_resume_content():
+def test_resume_content() -> None:
     basics = Basics(name='John Doe', email='john@example.com')
     content = ResumeSchemaExtended(basics=basics)
     assert content.basics.name == 'John Doe'
 
 
-def test_rendering_config_defaults():
+def test_rendering_config_defaults() -> None:
     config = RenderingConfig()
     assert config.format == 'pdf'
     assert config.theme == 'default'

@@ -72,9 +72,9 @@ class LLMConfig:
     provider: str = "openai"  # "openai", "anthropic", "together", etc.
     api_key: str | None = None
     base_url: str | None = None
-    extra_params: dict = field(default_factory=dict)
+    extra_params: dict[str, Any] = field(default_factory=dict)
 
-    def to_langchain_kwargs(self) -> dict:
+    def to_langchain_kwargs(self) -> dict[str, Any]:
         """Convert to LangChain model kwargs."""
         kwargs = {
             "model": self.model,
@@ -90,7 +90,7 @@ class LLMConfig:
         kwargs.update(self.extra_params)
         return kwargs
 
-    def to_dspy_lm(self):
+    def to_dspy_lm(self) -> Any:
         """Convert to DSPy LM instance."""
         # TODO: Import and instantiate appropriate DSPy LM
         # import dspy
@@ -101,11 +101,11 @@ class LLMConfig:
 class LLMProvider(Protocol):
     """Protocol for LLM execution."""
 
-    def complete(self, prompt: str, **kwargs) -> str:
+    def complete(self, prompt: str, **kwargs: Any) -> str:
         """Generate completion for prompt."""
         ...
 
-    def chat(self, messages: list[dict], **kwargs) -> str:
+    def chat(self, messages: list[dict[str, Any]], **kwargs: Any) -> str:
         """Generate response for chat messages."""
         ...
 
@@ -174,7 +174,7 @@ class Turn:
     role: str  # "user" or "assistant"
     content: str
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
-    metadata: dict = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -187,7 +187,7 @@ class SessionSnapshot:
     """
 
     turn_count: int
-    data: dict
+    data: dict[str, Any]
     mode: str
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
@@ -199,7 +199,7 @@ class PlanStep:
     id: str
     action: str  # e.g., "analyze_job", "expand_achievements"
     description: str  # Human-readable description
-    params: dict = field(default_factory=dict)
+    params: dict[str, Any] = field(default_factory=dict)
     dependencies: list[str] = field(default_factory=list)  # IDs of prerequisite steps
     estimated_tokens: int | None = None
 
@@ -286,7 +286,7 @@ class Plan:
 # ============================================================================
 
 
-class SessionStore(MutableMapping):
+class SessionStore(MutableMapping[str, Any]):
     """
     Manages automatic persistence of resume sessions.
 
@@ -297,8 +297,8 @@ class SessionStore(MutableMapping):
     'resume_agent_sessions'
     """
 
-    def __init__(self, *, data_dir: Path | None = None):
-        self.data_dir = self._resolve_data_dir(data_dir)
+    def __init__(self, *, data_dir: Path | None = None) -> None:
+        self.data_dir: Path = self._resolve_data_dir(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
     @staticmethod
@@ -394,7 +394,7 @@ class SessionStore(MutableMapping):
 
         return session
 
-    def list_sessions(self) -> Iterable[dict]:
+    def list_sessions(self) -> Iterable[dict[str, Any]]:
         """
         List all persisted sessions.
 
@@ -433,7 +433,9 @@ class SessionStore(MutableMapping):
     # -----------------------------
     # MutableMapping interface
     # -----------------------------
-    def __getitem__(self, key):
+    def __getitem__(
+        self, key: str | tuple[str, Any]
+    ) -> Optional["ResumeSession"]:
         """s[key] or s[(key, llm_config)] -> load_session(key, llm_config=...)
 
         Accepts either a single session_id string or a tuple of (session_id, llm_config).
@@ -450,7 +452,7 @@ class SessionStore(MutableMapping):
         else:
             return self.load_session(key)
 
-    def __setitem__(self, key, value: "ResumeSession") -> None:
+    def __setitem__(self, key: str, value: "ResumeSession") -> None:
         """s[session_id] = session -> save session, aligning session_id if needed."""
         session_id = key
         if not isinstance(value, ResumeSession):
@@ -466,7 +468,7 @@ class SessionStore(MutableMapping):
         else:
             self.save_session(value)
 
-    def __delitem__(self, key) -> None:
+    def __delitem__(self, key: str) -> None:
         deleted = self.delete_session(key)
         if not deleted:
             raise KeyError(key)
@@ -495,12 +497,12 @@ class ConversationMemory:
     Minimal docstring: Stores and retrieves conversation turns with summarization.
     """
 
-    def __init__(self, *, max_recent_turns: int = 10):
+    def __init__(self, *, max_recent_turns: int = 10) -> None:
         self._turns: list[Turn] = []
         self._max_recent_turns = max_recent_turns
         self._summary: str | None = None
 
-    def add_turn(self, role: str, content: str, **metadata) -> None:
+    def add_turn(self, role: str, content: str, **metadata: Any) -> None:
         """Add a conversation turn."""
         turn = Turn(role=role, content=content, metadata=metadata)
         self._turns.append(turn)
@@ -514,7 +516,7 @@ class ConversationMemory:
         """Get all conversation turns."""
         return self._turns.copy()
 
-    def get_context_for_prompt(self) -> Iterable[dict]:
+    def get_context_for_prompt(self) -> Iterable[dict[str, Any]]:
         """
         Generate context for LLM prompt with recent history.
 
@@ -535,8 +537,8 @@ class SessionState:
     Stores extracted entities, analysis results, and work-in-progress content.
     """
 
-    def __init__(self):
-        self._data: dict = {
+    def __init__(self) -> None:
+        self._data: dict[str, Any] = {
             "candidate": {},
             "job": {},
             "extracted_entities": {},
@@ -546,13 +548,13 @@ class SessionState:
             "searches": {},
         }
 
-    def __getitem__(self, key: str):
+    def __getitem__(self, key: str) -> Any:
         return self._data[key]
 
-    def __setitem__(self, key: str, value) -> None:
+    def __setitem__(self, key: str, value: Any) -> None:
         self._data[key] = value
 
-    def update(self, updates: dict) -> None:
+    def update(self, updates: dict[str, Any]) -> None:
         """Update state with new information."""
         for key, value in updates.items():
             if key in self._data and isinstance(self._data[key], dict):
@@ -560,11 +562,11 @@ class SessionState:
             else:
                 self._data[key] = value
 
-    def snapshot(self) -> dict:
+    def snapshot(self) -> dict[str, Any]:
         """Create immutable snapshot of current state."""
         return json.loads(json.dumps(self._data))  # Deep copy via JSON
 
-    def get(self, key: str, default=None):
+    def get(self, key: str, default: Any = None) -> Any:
         """Get state value with default."""
         return self._data.get(key, default)
 
@@ -605,12 +607,14 @@ class ResumeSession:
         auto_persist: bool = True,
         data_dir: Path | None = None,
         name: str | None = None,
-    ):
-        self.job_info = job_info
-        self.candidate_info = candidate_info
-        self.mode = mode
+    ) -> None:
+        self.job_info: str = job_info
+        self.candidate_info: str = candidate_info
+        self.mode: OperationMode = mode
 
         # Model configuration - prioritize registry, then config, then default
+        self.model_registry: ModelRegistry | None
+        self.llm_config: LLMConfig
         if model_registry:
             self.model_registry = model_registry
             self.llm_config = model_registry.supervisor
@@ -627,15 +631,15 @@ class ResumeSession:
         self._snapshots: list[SessionSnapshot] = []
 
         # Session metadata
-        self.created_at = datetime.now()
-        self.session_id = self._generate_session_id()
+        self.created_at: datetime = datetime.now()
+        self.session_id: str = self._generate_session_id()
 
         # Persistence
-        self.auto_persist = auto_persist
+        self.auto_persist: bool = auto_persist
         self._store = SessionStore(data_dir=data_dir) if auto_persist else None
 
         # Optional human-friendly name for the session
-        self.name = name
+        self.name: str | None = name
 
         # Initialize state with job and candidate info
         self._state["candidate"]["raw_info"] = candidate_info
@@ -1034,7 +1038,7 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         return self._snapshots.copy()
 
     @property
-    def metadata(self) -> dict:
+    def metadata(self) -> dict[str, Any]:
         """Return a small metadata dict for quick inspection.
 
         Includes: session_id, name, created_at (iso), n_turns, mode, model
@@ -1100,7 +1104,7 @@ Generate a professional, ATS-friendly {section_name} section in markdown format.
         return store.load_session(session_id, llm_config=llm_config)
 
     @classmethod
-    def list_persisted(cls, data_dir: Path | None = None) -> Iterable[dict]:
+    def list_persisted(cls, data_dir: Path | None = None) -> Iterable[dict[str, Any]]:
         """
         List all persisted sessions.
 
@@ -1123,8 +1127,8 @@ class ExpansionAgent:
     Uses DSPy-optimized prompts for consistent, high-quality expansions.
     """
 
-    def __init__(self, *, llm_config: LLMConfig | None = None):
-        self.llm_config = llm_config or LLMConfig(model="gpt-3.5-turbo")
+    def __init__(self, *, llm_config: LLMConfig | None = None) -> None:
+        self.llm_config: LLMConfig = llm_config or LLMConfig(model="gpt-3.5-turbo")
         self._llm = self._init_llm()
 
     def _init_llm(self):
@@ -1137,7 +1141,7 @@ class ExpansionAgent:
             return None
 
     def expand(
-        self, brief_text: str, context: dict, *, target_length: str = "detailed"
+        self, brief_text: str, context: dict[str, Any], *, target_length: str = "detailed"
     ) -> str:
         """
         Expand brief text into detailed description.
@@ -1184,8 +1188,8 @@ class DistillationAgent:
     Uses DSPy-optimized prompts with metrics for conciseness and clarity.
     """
 
-    def __init__(self, *, llm_config: LLMConfig | None = None):
-        self.llm_config = llm_config or LLMConfig(model="gpt-3.5-turbo")
+    def __init__(self, *, llm_config: LLMConfig | None = None) -> None:
+        self.llm_config: LLMConfig = llm_config or LLMConfig(model="gpt-3.5-turbo")
         self._llm = self._init_llm()
 
     def _init_llm(self):
@@ -1253,8 +1257,8 @@ class MatchingAgent:
     Uses embedding-based similarity and cross-encoder reranking.
     """
 
-    def __init__(self, *, llm_config: LLMConfig | None = None):
-        self.llm_config = llm_config or LLMConfig(model="gpt-3.5-turbo")
+    def __init__(self, *, llm_config: LLMConfig | None = None) -> None:
+        self.llm_config: LLMConfig = llm_config or LLMConfig(model="gpt-3.5-turbo")
         self._llm = self._init_llm()
 
     def _init_llm(self):
@@ -1268,7 +1272,7 @@ class MatchingAgent:
 
     def find_matches(
         self, candidate_text: str, job_requirements: str
-    ) -> Iterable[dict]:
+    ) -> Iterable[dict[str, Any]]:
         """
         Find semantic matches between candidate experience and job needs.
 
@@ -1330,8 +1334,8 @@ class SearchAgent:
     Integrates with search APIs to gather relevant information.
     """
 
-    def __init__(self, *, llm_config: LLMConfig | None = None):
-        self.llm_config = llm_config or LLMConfig(model="gpt-3.5-turbo")
+    def __init__(self, *, llm_config: LLMConfig | None = None) -> None:
+        self.llm_config: LLMConfig = llm_config or LLMConfig(model="gpt-3.5-turbo")
         self._llm = self._init_llm()
 
     def _init_llm(self):
@@ -1343,7 +1347,7 @@ class SearchAgent:
         except ImportError:
             return None
 
-    def search(self, query: str, *, result_count: int = 5) -> Iterable[dict]:
+    def search(self, query: str, *, result_count: int = 5) -> Iterable[dict[str, Any]]:
         """
         Search web for relevant information.
 
@@ -1416,8 +1420,10 @@ class ResumeExpertAgent:
         *,
         llm_config: LLMConfig | None = None,
         model_registry: ModelRegistry | None = None,
-    ):
+    ) -> None:
         # Prioritize registry over single config
+        self.model_registry: ModelRegistry | None
+        self.llm_config: LLMConfig
         if model_registry:
             self.model_registry = model_registry
             self.llm_config = model_registry.supervisor
@@ -1429,7 +1435,7 @@ class ResumeExpertAgent:
             self.llm_config = LLMConfig(model="gpt-4", temperature=0.3)
             self.model_registry = None
 
-        self._execution_history: list[dict] = []
+        self._execution_history: list[dict[str, Any]] = []
         self._planner_llm = self._init_planner()
 
     def _init_planner(self):
@@ -1473,7 +1479,7 @@ class ResumeExpertAgent:
 
         return "Resume generation completed but no resume found in results."
 
-    def _create_plan(self, session: ResumeSession, mode: str) -> list[dict]:
+    def _create_plan(self, session: ResumeSession, mode: str) -> list[dict[str, Any]]:
         """Create execution plan for resume generation."""
         # Deprecated. Use propose_plan instead.
         return [
@@ -1655,7 +1661,7 @@ class ResumeExpertAgent:
         *,
         interactive: bool = False,
         approval_callback: Callable[[PlanStep], str] | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """
         Execute a plan step by step.
 
@@ -1758,7 +1764,7 @@ class ResumeExpertAgent:
 
         return action_templates.get(step.action, f"Perform action: {step.description}")
 
-    def _execute_plan(self, session: ResumeSession, plan: list[dict]) -> None:
+    def _execute_plan(self, session: ResumeSession, plan: list[dict[str, Any]]) -> None:
         """Execute plan steps using session tools."""
         for step in plan:
             action = step["action"]

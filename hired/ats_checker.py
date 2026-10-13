@@ -6,7 +6,7 @@ Analyze resumes to ensure they're compatible with automated screening systems.
 
 import re
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional, Set
+from typing import Any, ClassVar, Dict, List, Optional, Set
 from hired.search.base import JobResult
 from hired.job_utils import JobAnalyzer
 
@@ -119,7 +119,7 @@ class ATSChecker:
     """
 
     # Standard section names that ATS systems recognize
-    STANDARD_SECTIONS = {
+    STANDARD_SECTIONS: ClassVar[set[str]] = {
         "basics",
         "summary",
         "work",
@@ -138,7 +138,7 @@ class ATSChecker:
     }
 
     # Common problematic elements
-    AVOID_ELEMENTS = {
+    AVOID_ELEMENTS: ClassVar[dict[str, str | None]] = {
         "tables": r"<table",
         "text_boxes": r"<textarea",
         "headers_footers": None,  # Checked separately
@@ -146,7 +146,7 @@ class ATSChecker:
         "fancy_fonts": None,  # Checked separately
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize ATS checker."""
         pass
 

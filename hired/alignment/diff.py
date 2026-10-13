@@ -14,9 +14,9 @@ from __future__ import annotations
 from typing import Any
 
 
-def _req_index(report: dict) -> dict[str, dict]:
+def _req_index(report: dict[str, Any]) -> dict[str, dict[str, Any]]:
     """Map requirement text -> its record, for matching across versions."""
-    out: dict[str, dict] = {}
+    out: dict[str, dict[str, Any]] = {}
     for rec in report.get("requirements", []):
         text = (rec.get("requirement") or {}).get("text", "")
         if text:
@@ -24,13 +24,13 @@ def _req_index(report: dict) -> dict[str, dict]:
     return out
 
 
-def _bucket(rec: dict | None) -> str:
+def _bucket(rec: dict[str, Any] | None) -> str:
     if rec is None:
         return "absent"
     return rec.get("bucket") or "needs_clarification"
 
 
-def diff_reports(old: dict, new: dict) -> dict[str, Any]:
+def diff_reports(old: dict[str, Any], new: dict[str, Any]) -> dict[str, Any]:
     """Return a structured diff of two alignment-report dicts.
 
     Both inputs are ``AlignmentReport.model_dump()`` dicts. The result has:
@@ -79,7 +79,7 @@ def diff_reports(old: dict, new: dict) -> dict[str, Any]:
     }
 
 
-def summarize_diff(diff: dict) -> str:
+def summarize_diff(diff: dict[str, Any]) -> str:
     """A short human-readable summary of :func:`diff_reports` output."""
     lines = []
     if diff["verdict_changed"]:

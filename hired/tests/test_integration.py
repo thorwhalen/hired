@@ -7,7 +7,7 @@ import pytest
 from hired import mk_content_for_resume, mk_resume
 
 
-def test_basic_workflow():
+def test_basic_workflow() -> None:
     """Test the complete pipeline from sources to PDF."""
     # Minimal candidate and job data
     candidate = {
@@ -25,7 +25,7 @@ def test_basic_workflow():
     assert len(pdf) > 20  # Some reasonable size for mock
 
 
-def test_file_sources():
+def test_file_sources() -> None:
     """Test loading from file paths."""
     # Use test fixtures
     import os
@@ -37,7 +37,7 @@ def test_file_sources():
     assert hasattr(content, 'basics')
 
 
-def test_custom_rendering():
+def test_custom_rendering() -> None:
     """Test custom themes and formats."""
     content = {
         'basics': {'name': 'Test User', 'email': 'test@example.com'},

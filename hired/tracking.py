@@ -76,7 +76,7 @@ class Application:
     source: Optional[str] = None  # e.g., "linkedin", "indeed", "usajobs"
     source_data: str = ""  # JSON string for additional source data
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.created_at is None:
             self.created_at = datetime.now().isoformat()
         if self.updated_at is None:
@@ -107,7 +107,7 @@ class Application:
         return data
 
     @classmethod
-    def from_job_result(cls, job: "JobResult", **kwargs) -> "Application":
+    def from_job_result(cls, job: "JobResult", **kwargs: Any) -> "Application":
         """
         Create an Application from a JobResult.
 
@@ -162,18 +162,18 @@ class ApplicationTracker:
         >>> stats = tracker.get_statistics()
     """
 
-    def __init__(self, db_path: Optional[Path] = None):
+    def __init__(self, db_path: Optional[Path] = None) -> None:
         """
         Initialize application tracker.
 
         Args:
             db_path: Path to SQLite database. If None, uses default location.
         """
-        self.db_path = Path(db_path) if db_path else _default_db_path()
+        self.db_path: Path = Path(db_path) if db_path else _default_db_path()
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._init_db()
 
-    def _init_db(self):
+    def _init_db(self) -> None:
         """Initialize database schema."""
         conn = sqlite3.connect(str(self.db_path))
         cursor = conn.cursor()
@@ -217,7 +217,9 @@ class ApplicationTracker:
         conn.commit()
         conn.close()
 
-    def add_application(self, job: Optional["JobResult"] = None, **kwargs) -> int:
+    def add_application(
+        self, job: Optional["JobResult"] = None, **kwargs: Any
+    ) -> int:
         """
         Add a new application.
 
@@ -385,7 +387,7 @@ class ApplicationTracker:
 
         return self.update_application(app_id, **updates)
 
-    def update_application(self, app_id: int, **kwargs) -> bool:
+    def update_application(self, app_id: int, **kwargs: Any) -> bool:
         """
         Update application fields.
 
@@ -524,7 +526,7 @@ class ApplicationTracker:
 
         return [Application(**dict(row)) for row in rows]
 
-    def export_to_csv(self, output_path: str):
+    def export_to_csv(self, output_path: str) -> None:
         """
         Export applications to CSV file.
 

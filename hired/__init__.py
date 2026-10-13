@@ -3,6 +3,8 @@ Public API for the hired package.
 Import the main user-facing functions and classes.
 """
 
+from typing import Any
+
 from hired.tools import mk_content_for_resume, mk_resume
 from hired.config import load_config, get_default_config
 from hired.base import RenderingConfig, ResumeSchemaExtended
@@ -123,7 +125,7 @@ _LAZY_FROM_ALIGNMENT = {
 }
 
 
-def __getattr__(name):
+def __getattr__(name: str) -> Any:
     import importlib
 
     if name in _LAZY_FROM_RESUME_AGENT:
@@ -135,5 +137,5 @@ def __getattr__(name):
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
-def __dir__():
+def __dir__() -> list[str]:
     return sorted(__all__)

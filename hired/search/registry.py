@@ -2,7 +2,7 @@
 Registry system for managing job search sources.
 """
 
-from typing import Dict, List, Type, Optional
+from typing import Any, Dict, List, Type, Optional
 from hired.search.base import JobSearchSource
 
 
@@ -14,7 +14,7 @@ class SourceRegistry:
     and retrieved by name.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._sources: Dict[str, JobSearchSource] = {}
         self._source_classes: Dict[str, Type[JobSearchSource]] = {}
 
@@ -99,7 +99,7 @@ class SourceRegistry:
             name for name, source in self._sources.items() if not source.is_configured()
         ]
 
-    def get_source_info(self, name: str) -> Dict[str, any]:
+    def get_source_info(self, name: str) -> Dict[str, Any]:
         """
         Get information about a source.
 
@@ -128,7 +128,7 @@ class SourceRegistry:
 
 
 # Global registry instance
-_global_registry = SourceRegistry()
+_global_registry: SourceRegistry = SourceRegistry()
 
 
 def get_registry() -> SourceRegistry:

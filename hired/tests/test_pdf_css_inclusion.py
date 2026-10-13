@@ -1,3 +1,4 @@
+from typing import Any
 import json
 import importlib
 
@@ -7,14 +8,14 @@ from hired.renderers.html import HTMLRenderer, ThemeRegistry
 from hired.util import resume_json_example
 
 
-def _load_resume():
+def _load_resume() -> Any:
     return json.loads(resume_json_example.read_text())
 
 
 @pytest.mark.skipif(
     importlib.util.find_spec('weasyprint') is None, reason='WeasyPrint not installed'
 )
-def test_pdf_includes_theme_css(monkeypatch):
+def test_pdf_includes_theme_css(monkeypatch: pytest.MonkeyPatch) -> None:
     """Ensure that when rendering to PDF, the theme's CSS is passed to WeasyPrint."""
     content = _load_resume()
     registry = ThemeRegistry()

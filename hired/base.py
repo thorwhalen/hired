@@ -9,7 +9,8 @@ Define:
 - ResumeSchemaExtended: Extended version of ResumeSchema that allows extra fields
 """
 
-from typing import Protocol, Any, List, Dict, Type, Optional
+from typing import Protocol, Any, ClassVar, List, Dict, Type, Optional, TypeVar
+from collections.abc import Callable
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pydantic import ConfigDict
@@ -41,7 +42,7 @@ class Renderer(Protocol):
 class RendererRegistry:
     """Registry for managing multiple renderer implementations."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._renderers: dict[str, type[Renderer]] = {}
         self._instances: dict[str, Renderer] = {}
 
@@ -70,13 +71,16 @@ class RendererRegistry:
 
 
 # Global renderer registry instance
-_renderer_registry = RendererRegistry()
+_renderer_registry: RendererRegistry = RendererRegistry()
 
 
-def register_renderer(format_name: str):
+_RendererClass = TypeVar("_RendererClass", bound=type[Renderer])
+
+
+def register_renderer(format_name: str) -> Callable[[_RendererClass], _RendererClass]:
     """Decorator for registering renderer classes."""
 
-    def decorator(renderer_class: type[Renderer]):
+    def decorator(renderer_class: _RendererClass) -> _RendererClass:
         _renderer_registry.register(format_name, renderer_class)
         return renderer_class
 
@@ -95,7 +99,7 @@ class ResumeSchemaExtended(ResumeSchema):
     but allows additional fields to be stored for custom sections.
     """
 
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
 
 
 @dataclass
