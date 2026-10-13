@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import date as date_aliased
-from typing import List, Optional
+from typing import ClassVar, List, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, RootModel, constr
 
@@ -12,7 +12,7 @@ AnyUrl = Optional[str]
 
 
 class Location(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     address: str | None = Field(
         None,
         description="To add multiple address lines, use \n. For example, 1234 Glücklichkeit Straße\nHinterhaus 5. Etage li.",
@@ -29,7 +29,7 @@ class Location(BaseModel):
 
 
 class Profile(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     network: str | None = Field(None, description="e.g. Facebook or Twitter")
     username: str | None = Field(None, description="e.g. neutralthoughts")
     url: AnyUrl | None = Field(
@@ -38,7 +38,7 @@ class Profile(BaseModel):
 
 
 class Basics(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     name: str | None = None
     label: str | None = Field(None, description="e.g. Web Developer")
     image: str | None = Field(
@@ -64,7 +64,7 @@ class Basics(BaseModel):
 
 
 class Certificate(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     name: str | None = Field(
         None, description="e.g. Certified Kubernetes Administrator"
     )
@@ -74,7 +74,7 @@ class Certificate(BaseModel):
 
 
 class Skill(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     name: str | None = Field(None, description="e.g. Web Development")
     level: str | None = Field(None, description="e.g. Master")
     keywords: list[str] | None = Field(
@@ -83,19 +83,19 @@ class Skill(BaseModel):
 
 
 class Language(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     language: str | None = Field(None, description="e.g. English, Spanish")
     fluency: str | None = Field(None, description="e.g. Fluent, Beginner")
 
 
 class Interest(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     name: str | None = Field(None, description="e.g. Philosophy")
     keywords: list[str] | None = None
 
 
 class Reference(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     name: str | None = Field(None, description="e.g. Timothy Cook")
     reference: str | None = Field(
         None,
@@ -104,7 +104,7 @@ class Reference(BaseModel):
 
 
 class Meta(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     canonical: AnyUrl | None = Field(
         None, description="URL (as per RFC 3986) to latest version of this document"
     )
@@ -129,7 +129,7 @@ class Iso8601(
 
 
 class WorkItem(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     name: str | None = Field(None, description="e.g. Facebook")
     location: str | None = Field(None, description="e.g. Menlo Park, CA")
     description: str | None = Field(None, description="e.g. Social Media Company")
@@ -146,7 +146,7 @@ class WorkItem(BaseModel):
 
 
 class VolunteerItem(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     organization: str | None = Field(None, description="e.g. Facebook")
     position: str | None = Field(None, description="e.g. Software Engineer")
     url: AnyUrl | None = Field(None, description="e.g. http://facebook.example.com")
@@ -161,7 +161,7 @@ class VolunteerItem(BaseModel):
 
 
 class EducationItem(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     institution: str | None = Field(
         None, description="e.g. Massachusetts Institute of Technology"
     )
@@ -175,7 +175,7 @@ class EducationItem(BaseModel):
 
 
 class Award(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     title: str | None = Field(
         None, description="e.g. One of the 100 greatest minds of the century"
     )
@@ -187,7 +187,7 @@ class Award(BaseModel):
 
 
 class Publication(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     name: str | None = Field(None, description="e.g. The World Wide Web")
     publisher: str | None = Field(None, description="e.g. IEEE, Computer Magazine")
     releaseDate: Iso8601 | None = None
@@ -202,7 +202,7 @@ class Publication(BaseModel):
 
 
 class Project(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="allow")
     name: str | None = Field(None, description="e.g. The World Wide Web")
     description: str | None = Field(
         None, description="Short summary of project. e.g. Collated works of 2017."
@@ -231,7 +231,7 @@ class Project(BaseModel):
 
 
 class ResumeSchema(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="forbid")
     field_schema: AnyUrl | None = Field(
         None,
         alias="$schema",

@@ -8,7 +8,7 @@ store from :mod:`hired.persistence.base`) and a pydantic model class, handling
 from __future__ import annotations
 
 from collections.abc import Iterator, MutableMapping
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel
 
@@ -24,7 +24,9 @@ class Repository(Generic[M]):
 
     model: type[M]
 
-    def __init__(self, store: MutableMapping, *, model: type[M] | None = None):
+    def __init__(
+        self, store: MutableMapping[str, Any], *, model: type[M] | None = None
+    ) -> None:
         self._store = store
         if model is not None:
             self.model = model

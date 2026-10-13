@@ -49,8 +49,16 @@ import os
 import shutil
 from collections.abc import MutableMapping
 from functools import cached_property
+from typing import Any
 
 from dol import Files, JsonFiles, TextFiles, mk_dirs_if_missing, wrap_kvs
+
+#: A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.
+JsonStore = MutableMapping[str, Any]
+#: A store of ``str`` values (e.g. markdown files), keyed by bare names.
+TextStore = MutableMapping[str, str]
+#: A store of raw ``bytes``, keyed by real filenames.
+BytesStore = MutableMapping[str, bytes]
 
 DFLT_USER = "me"
 _ENV_VAR = "HIRED_DATA_DIR"
@@ -86,7 +94,9 @@ USER_INFO_JSON_KINDS = (FACTS, QA)
 JD_JSON_KINDS = (JOBS, REPORTS, REPORT_HISTORY, COMPANY, INTERVIEW_PREP)
 
 
-def migrate_legacy(legacy_path, target_path) -> bool:
+def migrate_legacy(
+    legacy_path: str | os.PathLike[str], target_path: str | os.PathLike[str]
+) -> bool:
     """One-time copy of a legacy store into the canonical root.
 
     If ``target_path`` does not yet exist but ``legacy_path`` does, copy it
@@ -136,7 +146,7 @@ def app_data_dir(*subpaths: str, make: bool = True) -> str:
 # --------------------------------------------------------------------------- #
 # Store factories (codec-bearing: extensions on the filesystem side only)
 # --------------------------------------------------------------------------- #
-def _suffix_key_store(base_store, suffix: str) -> MutableMapping:
+def _suffix_key_store(base_store: MutableMapping[Any, Any], suffix: str) -> Any:
     """Add a filename ``suffix`` on the filesystem side; keep keys extension-less.
 
     Uses only dol's core ``wrap_kvs`` (no ``affix_key_codec``/``filt_iter`` stack,
@@ -152,7 +162,7 @@ def _suffix_key_store(base_store, suffix: str) -> MutableMapping:
     )
 
 
-def json_store(rootdir: str) -> MutableMapping:
+def json_store(rootdir: str) -> JsonStore:
     """A ``MutableMapping`` of JSON-able values: bare-id keys, ``<id>.json`` files.
 
     Built on ``JsonFiles`` (dict↔JSON value codec) + a ``.json`` key codec. Missing
@@ -163,13 +173,13 @@ def json_store(rootdir: str) -> MutableMapping:
     return mk_dirs_if_missing(_suffix_key_store(JsonFiles(rootdir), ".json"))
 
 
-def markdown_store(rootdir: str) -> MutableMapping:
+def markdown_store(rootdir: str) -> TextStore:
     """A ``MutableMapping`` of ``str`` values: bare keys, ``<key>.md`` files."""
     os.makedirs(rootdir, exist_ok=True)
     return mk_dirs_if_missing(_suffix_key_store(TextFiles(rootdir), ".md"))
 
 
-def bytes_store(rootdir: str) -> MutableMapping:
+def bytes_store(rootdir: str) -> BytesStore:
     """A ``MutableMapping`` of raw ``bytes``; keys are real filenames (extension kept)."""
     os.makedirs(rootdir, exist_ok=True)
     return mk_dirs_if_missing(Files(rootdir))
@@ -178,7 +188,7 @@ def bytes_store(rootdir: str) -> MutableMapping:
 # --------------------------------------------------------------------------- #
 # Single-file accessors (for singletons that are not collections; cross-module)
 # --------------------------------------------------------------------------- #
-def read_json_file(path: str):
+def read_json_file(path: str) -> Any:
     """Read a JSON file, or return ``None`` if it does not exist."""
     try:
         with open(path) as f:
@@ -187,14 +197,14 @@ def read_json_file(path: str):
         return None
 
 
-def write_json_file(path: str, obj) -> None:
+def write_json_file(path: str, obj: Any) -> None:
     """Write ``obj`` as indented JSON, creating parent dirs as needed."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w") as f:
         json.dump(obj, f, indent=4)
 
 
-def read_text_file(path: str):
+def read_text_file(path: str) -> str | None:
     """Read a text file, or return ``None`` if it does not exist."""
     try:
         with open(path) as f:
@@ -251,8 +261,8 @@ class UserStore:
     '# me'
     """
 
-    def __init__(self, user: str = DFLT_USER, *, root: str | None = None):
-        self.user = user
+    def __init__(self, user: str = DFLT_USER, *, root: str | None = None) -> None:
+        self.user: str = user
         self._root = root
 
     @property
@@ -263,15 +273,15 @@ class UserStore:
         return os.path.join(self.base, USER_DIR, INFO_DIR, *parts)
 
     @cached_property
-    def raw(self) -> MutableMapping:
+    def raw(self) -> BytesStore:
         return bytes_store(os.path.join(self.base, USER_DIR, RAW_DIR))
 
     @cached_property
-    def facts(self) -> MutableMapping:
+    def facts(self) -> JsonStore:
         return json_store(self._info(FACTS))
 
     @cached_property
-    def qa(self) -> MutableMapping:
+    def qa(self) -> JsonStore:
         return json_store(self._info(QA))
 
     # --- topic dossiers (info/topics/<slug>/) ----------------------------- #
@@ -289,10 +299,10 @@ class UserStore:
         write_text_file(self._info(SYNOPSIS_FILE), text)
 
     # --- refresh state singleton (info/state.json) ------------------------ #
-    def read_state(self) -> dict | None:
+    def read_state(self) -> dict[str, Any] | None:
         return read_json_file(self._info(STATE_FILE))
 
-    def write_state(self, state: dict) -> None:
+    def write_state(self, state: dict[str, Any]) -> None:
         write_json_file(self._info(STATE_FILE), state)
 
 
@@ -314,9 +324,9 @@ class JDStore:
     'Acme'
     """
 
-    def __init__(self, user: str, jd_id: str, *, root: str | None = None):
-        self.user = user
-        self.jd_id = jd_id
+    def __init__(self, user: str, jd_id: str, *, root: str | None = None) -> None:
+        self.user: str = user
+        self.jd_id: str = jd_id
         self._root = root
 
     @property
@@ -324,28 +334,28 @@ class JDStore:
         return os.path.join(user_base(self.user, root=self._root), JDS_DIR, self.jd_id)
 
     @cached_property
-    def jobs(self) -> MutableMapping:
+    def jobs(self) -> JsonStore:
         return json_store(os.path.join(self.base, JOBS))
 
     @cached_property
-    def reports(self) -> MutableMapping:
+    def reports(self) -> JsonStore:
         return json_store(os.path.join(self.base, REPORTS))
 
     @cached_property
-    def report_history(self) -> MutableMapping:
+    def report_history(self) -> JsonStore:
         return json_store(os.path.join(self.base, REPORT_HISTORY))
 
     @cached_property
-    def company(self) -> MutableMapping:
+    def company(self) -> JsonStore:
         return json_store(os.path.join(self.base, COMPANY))
 
     @cached_property
-    def interview_prep(self) -> MutableMapping:
+    def interview_prep(self) -> JsonStore:
         return json_store(os.path.join(self.base, INTERVIEW_PREP))
 
     # --- engagement meta singleton (jds/<id>/meta.json) ------------------- #
-    def read_meta(self) -> dict:
+    def read_meta(self) -> dict[str, Any]:
         return read_json_file(os.path.join(self.base, META_FILE)) or {}
 
-    def write_meta(self, meta: dict) -> None:
+    def write_meta(self, meta: dict[str, Any]) -> None:
         write_json_file(os.path.join(self.base, META_FILE), meta)

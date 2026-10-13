@@ -3,10 +3,13 @@ Utilities for external dependencies and general helpers.
 All imports here are external to the hired package.
 """
 
+from __future__ import annotations
+
 import json
 from importlib.resources import files
 import os
-from typing import Union
+from typing import TYPE_CHECKING, Any, Union
+from collections.abc import Iterator
 from collections.abc import Mapping
 from pathlib import Path
 
@@ -15,12 +18,17 @@ import yaml  # pip install PyYAML
 from hired._converters import ensure_dict
 from hired.resumejson_pydantic_models import ResumeSchema
 
-proj_files = files("hired")
-data_files = files("hired") / "data"
-themes_files = data_files / "themes"
+if TYPE_CHECKING:
+    from importlib.abc import Traversable
+
+    from hired.base import ResumeSchemaExtended
+
+proj_files: Traversable = files("hired")
+data_files: Traversable = files("hired") / "data"
+themes_files: Traversable = data_files / "themes"
 
 
-def _load_json_file(path: str) -> dict:
+def _load_json_file(path: str) -> dict[str, Any]:
     """Load a JSON file from the given path."""
     with open(path, encoding="utf-8") as f:
         return json.load(f)
@@ -29,17 +37,17 @@ def _load_json_file(path: str) -> dict:
 try:
     import toml
 
-    def _load_toml_file(path: str) -> dict:
+    def _load_toml_file(path: str) -> dict[str, Any]:
         with open(path, encoding="utf-8") as f:
             return toml.load(f)
 
 except ImportError:
 
-    def _load_toml_file(path: str) -> dict:
+    def _load_toml_file(path: str) -> dict[str, Any]:
         raise ImportError("toml is required for TOML support")
 
 
-def load_yaml(yaml_path: str):
+def load_yaml(yaml_path: str) -> Any:
     """
     Loads a YAML file using PyYAML.
     This works in Python 3.7+ because dicts preserve insertion order.
@@ -49,7 +57,7 @@ def load_yaml(yaml_path: str):
         return yaml.safe_load(file)
 
 
-def dump_yaml(d: dict, yaml_path: str):
+def dump_yaml(d: dict[str, Any], yaml_path: str) -> None:
     """
     Dumps a dictionary to a YAML file using PyYAML,
     preserving key order and using a readable block style.
@@ -66,7 +74,7 @@ from pydantic import ValidationError as PydanticValidationError
 from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
 
 
-def _merge_dicts(base: dict, override: dict) -> dict:
+def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
     """Merge two dicts shallowly, with override taking precedence."""
     result = base.copy()
     result.update(override)
@@ -74,14 +82,19 @@ def _merge_dicts(base: dict, override: dict) -> dict:
 
 
 ValidationErrorType = Union[PydanticValidationError, JsonSchemaValidationError]
-ValidationErrors = (PydanticValidationError, JsonSchemaValidationError)
+ValidationErrors: tuple[type[Exception], ...] = (
+    PydanticValidationError,
+    JsonSchemaValidationError,
+)
 JsonContentStr = str  # JSON string
 PathStr = str  # filesystem path
-ResumeSource = Union[PathStr, JsonContentStr, Path, Mapping]
-ResumeDict = dict  # one that is valid in the ResumeSchema sense
+ResumeSource = Union[PathStr, JsonContentStr, Path, Mapping[str, Any]]
+ResumeDict = dict[str, Any]  # one that is valid in the ResumeSchema sense
 
 
-def extract_friendly_errors(error_obj: ValidationErrorType, schema=None, data=None):
+def extract_friendly_errors(
+    error_obj: ValidationErrorType, schema: Any = None, data: Any = None
+) -> Iterator[tuple[Any, str]]:
     """
     Extracts a generator of user-friendly error messages from a validation error object.
 
@@ -114,8 +127,8 @@ def extract_friendly_errors(error_obj: ValidationErrorType, schema=None, data=No
 
 def validation_friendly_errors_string(
     error_obj: ValidationErrorType,
-    schema=None,
-    data=None,
+    schema: Any = None,
+    data: Any = None,
 ) -> str:
     return "\n".join(
         f"Error in field '{field}': {message}"
@@ -146,7 +159,7 @@ def ensure_resume_content_dict(content_src: ResumeSource) -> ResumeDict:
     return validate_resume_content_dict(content)
 
 
-def _prune_none(obj):
+def _prune_none(obj: Any) -> Any:
     """Recursively remove keys or list items that are None so schema validation doesn't see explicit nulls for optional fields."""
     if isinstance(obj, dict):
         return {k: _prune_none(v) for k, v in obj.items() if v is not None}
@@ -155,7 +168,9 @@ def _prune_none(obj):
     return obj
 
 
-def normalize_and_validate_resume(raw: Mapping, *, strict: bool = True):
+def normalize_and_validate_resume(
+    raw: Mapping[str, Any], *, strict: bool = True
+) -> ResumeSchemaExtended:
     """Normalize and validate a resume-like mapping.
 
     - Prunes None values.
@@ -199,7 +214,7 @@ def normalize_and_validate_resume(raw: Mapping, *, strict: bool = True):
 
 
 def get_jsonschema_errors(
-    content: Mapping, schema_path: str | None = None
+    content: Mapping[str, Any], schema_path: str | None = None
 ) -> list[str]:
     """Return a list of jsonschema validation error messages for the content.
 
@@ -221,7 +236,9 @@ def get_jsonschema_errors(
     return [str(e) for e in validator.iter_errors(content)]
 
 
-def validate_resume_content_dict(content: dict, *, raise_errors=True) -> ResumeDict:
+def validate_resume_content_dict(
+    content: dict[str, Any], *, raise_errors: bool = True
+) -> ResumeDict:
     """Validate resume content using ResumeSchemaExtended (which allows extra fields)."""
     from hired.base import ResumeSchemaExtended
 
@@ -238,9 +255,9 @@ def validate_resume_content_dict(content: dict, *, raise_errors=True) -> ResumeD
 # Functions that manage resources
 
 
-schemas_files = data_files / "schemas"
-resume_jsons_files = data_files / "resume_jsons"
-resume_json_example = resume_jsons_files / "test_resume.json"
+schemas_files: Traversable = data_files / "schemas"
+resume_jsons_files: Traversable = data_files / "resume_jsons"
+resume_json_example: Traversable = resume_jsons_files / "test_resume.json"
 
 DFLT_RESUME_SCHEMA_PATH = str(schemas_files / "resume_schema.json")
 DFLT_SCHEMA_URL = (
@@ -249,7 +266,7 @@ DFLT_SCHEMA_URL = (
 DFLT_TEST_RESUME_URL = "https://raw.githubusercontent.com/jsonresume/resume-schema/refs/heads/v1.0.0/sample.resume.json"
 
 
-def refresh_resume_schema():
+def refresh_resume_schema() -> None:
     from ju import pydantic_model_to_code
     import re
 
