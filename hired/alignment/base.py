@@ -13,13 +13,14 @@ See ``misc/docs/DESIGN.md`` §6.
 from __future__ import annotations
 
 from enum import Enum
+from typing import Any
 
 from pydantic import BaseModel, Field
 
 from hired.candidate.base import ConfidenceLevel, MatchState, _new_id
 
 # Re-export so callers can get the match-state enum from either domain.
-__all_reexport__ = ["MatchState", "ConfidenceLevel"]
+__all_reexport__: list[str] = ["MatchState", "ConfidenceLevel"]
 
 
 class Bucket(str, Enum):
@@ -208,7 +209,7 @@ class ScoreSummary(BaseModel):
 class InterviewPrep(BaseModel):
     summary: str = ""
     talking_points: list[str] = Field(default_factory=list)
-    story_library: list[dict] = Field(default_factory=list)  # STAR/CARLA stories
+    story_library: list[dict[Any, Any]] = Field(default_factory=list)  # STAR/CARLA stories
     proactive_disclosure: str = ""
 
 

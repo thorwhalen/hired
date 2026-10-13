@@ -15,6 +15,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 from enum import Enum
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -112,7 +113,7 @@ class Fact(BaseModel):
     subject: str = "me"  # the candidate this is about (default tenant)
     category: FactCategory = FactCategory.OTHER
     statement: str  # atomic natural-language claim
-    value: dict | list | str | float | int | bool | None = None  # optional payload
+    value: dict[Any, Any] | list[Any] | str | float | int | bool | None = None  # optional payload
     confidence: ConfidenceLevel = ConfidenceLevel.MEDIUM
     # When True, this fact asserts the candidate LACKS something (a real
     # negative), as opposed to mere silence. Drives CONTRADICTED downstream.

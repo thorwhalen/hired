@@ -17,7 +17,7 @@ A *record* is a lightweight dict:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from hired.candidate.base import (
     ConfidenceLevel,
@@ -48,7 +48,7 @@ def _normalize(s: str) -> str:
 
 
 def fact_from_record(
-    record: dict,
+    record: dict[str, Any],
     *,
     source_kind: SourceKind,
     source_id: str = "",
@@ -76,7 +76,7 @@ def fact_from_record(
 
 def ingest_facts(
     kb: CandidateKnowledgeBase,
-    records: list[dict],
+    records: list[dict[str, Any]],
     *,
     source_kind: SourceKind,
     source_id: str = "",

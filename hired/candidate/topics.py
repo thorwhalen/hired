@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import os
 
-from hired.persistence.base import bytes_store, read_text_file, write_text_file
+from hired.persistence.base import BytesStore, bytes_store, read_text_file, write_text_file
 
 _OVERVIEW = "overview.md"
 _FILES = "files"
@@ -33,9 +33,9 @@ class TopicDossier:
     b'patent cert'
     """
 
-    def __init__(self, base_dir: str, *, name: str | None = None):
+    def __init__(self, base_dir: str, *, name: str | None = None) -> None:
         self._dir = base_dir
-        self.name = name or os.path.basename(base_dir.rstrip(os.sep))
+        self.name: str = name or os.path.basename(base_dir.rstrip(os.sep))
 
     @property
     def overview(self) -> str | None:
@@ -70,5 +70,5 @@ class TopicDossier:
             self.overview is not None or bool(self.files())
         )
 
-    def _file_store(self):
+    def _file_store(self) -> BytesStore:
         return bytes_store(os.path.join(self._dir, _FILES))

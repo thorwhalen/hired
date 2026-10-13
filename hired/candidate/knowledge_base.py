@@ -17,6 +17,7 @@ from __future__ import annotations
 import os
 from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 from hired.candidate.base import (
     Fact,
@@ -29,7 +30,7 @@ from hired.candidate.base import (
     slug,
 )
 from hired.candidate.ingest import ingest_facts
-from hired.candidate.refresh import RefreshReport
+from hired.candidate.refresh import IngestFn, RefreshReport
 from hired.candidate.refresh import needs_refresh as _needs_refresh
 from hired.candidate.refresh import pending_qa as _pending_qa
 from hired.candidate.refresh import pending_sources as _pending_sources
@@ -65,8 +66,10 @@ class CandidateKnowledgeBase:
     ['Built ML pipelines in Python']
     """
 
-    def __init__(self, user: str = DFLT_USER, *, store: UserStore | None = None):
-        self.user = user
+    def __init__(
+        self, user: str = DFLT_USER, *, store: UserStore | None = None
+    ) -> None:
+        self.user: str = user
         # Auto-migrate a legacy flat layout to v2 on first access (idempotent).
         ensure_v2(user, root=store._root if store is not None else None)
         self._store = store or UserStore(user)
@@ -120,7 +123,7 @@ class CandidateKnowledgeBase:
 
     # --- Q&A ---------------------------------------------------------------
     def record_qa(
-        self, entry: QAEntry, *, derived_facts: "list[dict] | None" = None
+        self, entry: QAEntry, *, derived_facts: "list[dict[str, Any]] | None" = None
     ) -> str:
         """Append a clarifying Q&A exchange; optionally distill it into facts.
 
@@ -198,7 +201,7 @@ class CandidateKnowledgeBase:
         return TopicDossier(self._store.topic_dir(slug(name)), name=name)
 
     def add_note(
-        self, subject: str, text: str | None = None, *, files: "dict | None" = None
+        self, subject: str, text: str | None = None, *, files: "dict[str, bytes] | None" = None
     ) -> TopicDossier:
         """Record volunteered info about a subject into its dossier.
 
@@ -235,7 +238,11 @@ class CandidateKnowledgeBase:
         return _needs_refresh(self)
 
     def refresh(
-        self, mode: str = "soft", *, ingest_fn=None, apply: bool = True
+        self,
+        mode: str = "soft",
+        *,
+        ingest_fn: IngestFn | None = None,
+        apply: bool = True,
     ) -> RefreshReport:
         """Refresh ``info`` from changed sources + undistilled Q&A.
 
