@@ -99,12 +99,18 @@ class JobMatcher:
             preferred_locations: List of preferred location strings
             remote_only: Only match remote jobs
         """
-        self.candidate_skills: Set[str] = set(s.lower() for s in (candidate_skills or []))
-        self.candidate_keywords: Set[str] = set(k.lower() for k in (candidate_keywords or []))
+        self.candidate_skills: Set[str] = set(
+            s.lower() for s in (candidate_skills or [])
+        )
+        self.candidate_keywords: Set[str] = set(
+            k.lower() for k in (candidate_keywords or [])
+        )
         self.required_skills: Set[str] = set(s.lower() for s in (required_skills or []))
         self.min_salary: Optional[float] = min_salary
         self.max_salary: Optional[float] = max_salary
-        self.preferred_locations: List[str] = [loc.lower() for loc in (preferred_locations or [])]
+        self.preferred_locations: List[str] = [
+            loc.lower() for loc in (preferred_locations or [])
+        ]
         self.remote_only: bool = remote_only
 
     def score_job(self, job: JobResult) -> MatchScore:

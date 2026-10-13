@@ -201,7 +201,11 @@ class CandidateKnowledgeBase:
         return TopicDossier(self._store.topic_dir(slug(name)), name=name)
 
     def add_note(
-        self, subject: str, text: str | None = None, *, files: "dict[str, bytes] | None" = None
+        self,
+        subject: str,
+        text: str | None = None,
+        *,
+        files: "dict[str, bytes] | None" = None,
     ) -> TopicDossier:
         """Record volunteered info about a subject into its dossier.
 

@@ -217,9 +217,7 @@ class ApplicationTracker:
         conn.commit()
         conn.close()
 
-    def add_application(
-        self, job: Optional["JobResult"] = None, **kwargs: Any
-    ) -> int:
+    def add_application(self, job: Optional["JobResult"] = None, **kwargs: Any) -> int:
         """
         Add a new application.
 

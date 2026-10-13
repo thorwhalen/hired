@@ -209,7 +209,9 @@ class ScoreSummary(BaseModel):
 class InterviewPrep(BaseModel):
     summary: str = ""
     talking_points: list[str] = Field(default_factory=list)
-    story_library: list[dict[Any, Any]] = Field(default_factory=list)  # STAR/CARLA stories
+    story_library: list[dict[Any, Any]] = Field(
+        default_factory=list
+    )  # STAR/CARLA stories
     proactive_disclosure: str = ""
 
 

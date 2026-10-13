@@ -433,9 +433,7 @@ class SessionStore(MutableMapping[str, Any]):
     # -----------------------------
     # MutableMapping interface
     # -----------------------------
-    def __getitem__(
-        self, key: str | tuple[str, Any]
-    ) -> Optional["ResumeSession"]:
+    def __getitem__(self, key: str | tuple[str, Any]) -> Optional["ResumeSession"]:
         """s[key] or s[(key, llm_config)] -> load_session(key, llm_config=...)
 
         Accepts either a single session_id string or a tuple of (session_id, llm_config).
@@ -1141,7 +1139,11 @@ class ExpansionAgent:
             return None
 
     def expand(
-        self, brief_text: str, context: dict[str, Any], *, target_length: str = "detailed"
+        self,
+        brief_text: str,
+        context: dict[str, Any],
+        *,
+        target_length: str = "detailed",
     ) -> str:
         """
         Expand brief text into detailed description.

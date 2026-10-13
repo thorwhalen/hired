@@ -12,7 +12,12 @@ from __future__ import annotations
 
 import os
 
-from hired.persistence.base import BytesStore, bytes_store, read_text_file, write_text_file
+from hired.persistence.base import (
+    BytesStore,
+    bytes_store,
+    read_text_file,
+    write_text_file,
+)
 
 _OVERVIEW = "overview.md"
 _FILES = "files"

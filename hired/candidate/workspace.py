@@ -64,7 +64,9 @@ class JDWorkspace:
         return list(self.store.jobs)
 
     # --- alignment reports (keyed by job id; archives prior versions) ------
-    def save_report(self, job_id: str, data: dict[str, Any], *, archive: bool = True) -> None:
+    def save_report(
+        self, job_id: str, data: dict[str, Any], *, archive: bool = True
+    ) -> None:
         """Persist the current alignment report, archiving the prior one first.
 
         Archiving (on by default) snapshots any existing report into
