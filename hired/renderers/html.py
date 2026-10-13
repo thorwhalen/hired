@@ -1,11 +1,13 @@
 """HTML renderer implementation using Jinja2 templates."""
 
 from typing import Any
-from collections.abc import Mapping, Iterable
+from collections.abc import Iterable, Iterator, Mapping
 import re, os, importlib
 import html as html_mod
 from collections.abc import Mapping as ABCMapping
 from hired.base import Renderer, RenderingConfig
+
+__all__ = ["ThemeRegistry", "HTMLRenderer", "html_to_pdf"]
 
 try:  # Optional dependency
     import weasyprint  # type: ignore
@@ -21,7 +23,7 @@ except (
 
 
 # Minimal theme registry
-class ThemeRegistry(ABCMapping):
+class ThemeRegistry(ABCMapping[str, dict[str, Any]]):
     """Registry for available themes.
 
     Each theme is a mapping with keys:
@@ -30,7 +32,7 @@ class ThemeRegistry(ABCMapping):
         css: str (raw CSS text, optional)
     """
 
-    def __init__(self, *, themes_path: str | None = None):
+    def __init__(self, *, themes_path: str | None = None) -> None:
         if themes_path is None:
             # Derive path relative to hired package
             import hired
@@ -146,10 +148,10 @@ class ThemeRegistry(ABCMapping):
             except Exception:
                 pass
 
-    def __getitem__(self, theme_name: str) -> dict:
+    def __getitem__(self, theme_name: str) -> dict[str, Any]:
         return self._themes[theme_name]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[str]:
         return iter(self._themes)
 
     def __len__(self) -> int:
@@ -183,7 +185,7 @@ class HTMLRenderer:
         * If PDF: use WeasyPrint if available, else fallback minimal PDF builder.
     """
 
-    def __init__(self, *, theme_registry: ThemeRegistry | None = None):
+    def __init__(self, *, theme_registry: ThemeRegistry | None = None) -> None:
         self._themes = theme_registry or ThemeRegistry()
         self._env = Environment(
             loader=FileSystemLoader(self._themes.themes_path),

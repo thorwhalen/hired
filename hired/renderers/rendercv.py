@@ -30,7 +30,7 @@ class RenderCVRenderer(Renderer):
     - Gracefully handles schema validation issues
     """
 
-    def __init__(self, strict_validation: bool = False):
+    def __init__(self, strict_validation: bool = False) -> None:
         """Initialize RenderCV renderer.
 
         Args:
@@ -42,8 +42,8 @@ class RenderCVRenderer(Renderer):
                 "RenderCV renderer requires 'rendercv' and 'jsonresume-to-rendercv' packages. "
                 "Install with: pip install hired[rendercv]"
             )
-        self.strict_validation = strict_validation
-        self.warnings = []
+        self.strict_validation: bool = strict_validation
+        self.warnings: list[str] = []
 
     def render(
         self, content: Any, config: RenderingConfig

@@ -8,17 +8,17 @@ Implement:
 """
 
 from typing import Any
-from collections.abc import MutableMapping
+from collections.abc import Iterator, MutableMapping
 from collections.abc import MutableMapping as ABCMutableMapping
 from hired.base import RenderingConfig
 from hired.util import _merge_dicts
 
 
-class ConfigStore(ABCMutableMapping):
+class ConfigStore(ABCMutableMapping[str, Any]):
     """Configuration store with cascading defaults."""
 
-    def __init__(self, base_config: dict | None = None):
-        self._config = base_config or {}
+    def __init__(self, base_config: dict[str, Any] | None = None) -> None:
+        self._config: dict[str, Any] = base_config or {}
 
     def __getitem__(self, key: str) -> Any:
         return self._config[key]
@@ -29,7 +29,7 @@ class ConfigStore(ABCMutableMapping):
     def __delitem__(self, key: str) -> None:
         del self._config[key]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[str]:
         return iter(self._config)
 
     def __len__(self) -> int:

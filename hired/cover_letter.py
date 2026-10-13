@@ -35,13 +35,13 @@ class CoverLetterData:
 
     # Content
     opening_paragraph: str = ""
-    body_paragraphs: Optional[list] = None
+    body_paragraphs: Optional[list[str]] = None
     closing_paragraph: str = ""
 
     # Metadata
     date: Optional[str] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.body_paragraphs is None:
             self.body_paragraphs = []
         if self.date is None:
