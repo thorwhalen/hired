@@ -37,6 +37,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Office/Business",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
 dependencies = [
     "pydantic[email]>=2.0",
@@ -56,6 +57,7 @@ Homepage = "https://github.com/thorwhalen/hired"
 Repository = "https://github.com/thorwhalen/hired"
 Issues = "https://github.com/thorwhalen/hired/issues"
 Documentation = "https://thorwhalen.github.io/hired/"
+Changelog = "https://github.com/thorwhalen/hired/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
 testing = []
