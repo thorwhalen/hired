@@ -8,7 +8,7 @@ import json
 import os
 
 
-def test_config_store():
+def test_config_store() -> None:
     c = ConfigStore({'a': 1})
     assert c['a'] == 1
     c['b'] = 2
@@ -17,13 +17,13 @@ def test_config_store():
     assert 'a' not in c
 
 
-def test_get_default_config():
+def test_get_default_config() -> None:
     c = get_default_config()
     assert c['format'] == 'pdf'
     assert c['theme'] == 'default'
 
 
-def test_load_config():
+def test_load_config() -> None:
     d = {'foo': 'bar'}
     with tempfile.NamedTemporaryFile('w+', delete=False) as f:
         json.dump(d, f)

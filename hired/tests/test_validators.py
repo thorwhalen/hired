@@ -5,7 +5,7 @@ Tests for validation utilities.
 from hired.util import validate_resume_content_dict
 
 
-def test_validate_resume_content_accepts_minimal():
+def test_validate_resume_content_accepts_minimal() -> None:
     """Test that validation accepts a minimal valid resume."""
     minimal_resume = {
         'basics': {

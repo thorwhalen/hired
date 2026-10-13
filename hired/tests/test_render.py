@@ -10,13 +10,13 @@ from hired.resumejson_pydantic_models import Basics, WorkItem, Skill, Project
 ResumeContent = ResumeSchemaExtended
 
 
-def test_theme_registry():
+def test_theme_registry() -> None:
     reg = ThemeRegistry()
     assert 'default' in reg
     assert isinstance(reg['default'], dict)
 
 
-def test_html_renderer_html():
+def test_html_renderer_html() -> None:
     basics = Basics(name='A', email='a@example.com')
     content = ResumeSchemaExtended(basics=basics)
     config = RenderingConfig(format='html')
@@ -25,7 +25,7 @@ def test_html_renderer_html():
     assert b'<html' in html
 
 
-def test_html_renderer_pdf():
+def test_html_renderer_pdf() -> None:
     basics = Basics(name='A', email='a@example.com')
     content = ResumeSchemaExtended(basics=basics)
     config = RenderingConfig(format='pdf')
@@ -34,7 +34,7 @@ def test_html_renderer_pdf():
     assert pdf.startswith(b'%PDF')
 
 
-def test_html_renderer_full_sections():
+def test_html_renderer_full_sections() -> None:
     """Regression test for #14: skills/projects/publications/languages and
     basics.summary/label/profiles and work[].summary/highlights must render,
     and work items must key off `name` (JSON Resume schema), not `company`.
@@ -76,7 +76,7 @@ def test_html_renderer_full_sections():
     assert 'A cool project.' in html
 
 
-def test_html_renderer_legacy_company_key_still_renders():
+def test_html_renderer_legacy_company_key_still_renders() -> None:
     """Regression: #31 switched templates from ``w.company`` to ``w.name``,
     which blanked the employer for work items keyed ``company`` (the pre-v1
     JSON Resume shape, still accepted: ``WorkItem`` allows extra fields and

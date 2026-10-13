@@ -7,7 +7,7 @@ from hired.tools import mk_resume
 
 
 @pytest.mark.skip("Fails since actual officien json schema is used: Repair")
-def test_real_example_resume_renders():
+def test_real_example_resume_renders() -> None:
     path = proj_files / 'tests/fixtures/real_example_resume.json'
     content = json.loads(path.read_text())
     # Non-strict by default; ensure it renders

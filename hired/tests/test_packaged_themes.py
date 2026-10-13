@@ -1,3 +1,4 @@
+from typing import Any
 import json
 from pathlib import Path
 
@@ -5,11 +6,11 @@ from hired.renderers.html import HTMLRenderer, ThemeRegistry
 from hired.util import resume_json_example
 
 
-def _load_resume():
+def _load_resume() -> Any:
     return json.loads(resume_json_example.read_text())
 
 
-def test_render_packaged_themes_to_html(tmp_path):
+def test_render_packaged_themes_to_html(tmp_path: Path) -> None:
     content = _load_resume()
     # Use the registry to discover themes
     registry = ThemeRegistry()

@@ -6,7 +6,7 @@ ResumeContent = ResumeSchemaExtended
 from hired.render import HTMLRenderer
 
 
-def test_empty_sections_omitted():
+def test_empty_sections_omitted() -> None:
     """Test that empty sections are omitted from rendering."""
     from hired.renderers.html import HTMLRenderer
 
@@ -24,7 +24,7 @@ def test_empty_sections_omitted():
     assert b'test@example.com' in html
 
 
-def test_minimal_theme():
+def test_minimal_theme() -> None:
     content = ResumeSchemaExtended(
         basics=Basics(name="Bob", email="bob@example.com"),
         work=[WorkItem(name="Org", position="Dev")],
@@ -35,7 +35,7 @@ def test_minimal_theme():
     assert b'Bob' in html
 
 
-def test_minimal_theme():
+def test_minimal_theme() -> None:
     """Test rendering with minimal theme."""
     from hired.renderers.html import HTMLRenderer
 
@@ -60,7 +60,7 @@ def test_minimal_theme():
     assert b'Engineer' in html
 
 
-def test_minimal_theme():
+def test_minimal_theme() -> None:
     content = ResumeSchemaExtended(
         basics=Basics(name="Bob", email="bob@example.com"),
         work=[WorkItem(name="Org", position="Dev")],
