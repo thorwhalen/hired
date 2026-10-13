@@ -2,16 +2,18 @@
 
 # About this build
 
-This documentation was built on **2026-09-22 19:36 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/c9052603129de464b0eaa433acf93d7797825b81"><code>c905260</code></a> on branch <code>main</code>, for **hired 0.0.21** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-13 19:27 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/59ada2b571f00d7e5872d4142781dd006568db90"><code>59ada2b</code></a> on branch <code>main</code>, for **hired 0.0.22** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.22) is behind the latest release on PyPI (0.0.23): `pip install hired` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/c9052603129de464b0eaa433acf93d7797825b81"><code>c9052603129de464b0eaa433acf93d7797825b81</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/59ada2b571f00d7e5872d4142781dd006568db90"><code>59ada2b571f00d7e5872d4142781dd006568db90</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -22,18 +24,18 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/35774717055">35774717055</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/38454776269">38454776269</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>c9052603129de464b0eaa433acf93d7797825b81</code> (in the history of the built commit) |
+| Event commit | <code>59ada2b571f00d7e5872d4142781dd006568db90</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.12  |
+| epythet  | 0.2.17  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
-| Python   | 3.12.14 |
+| Python   | 3.12.15 |
 
 ## Configuration as resolved
 
@@ -49,14 +51,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.21/">0.0.21</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.23/">0.0.23</a>, newer than the documented version (0.0.22).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout c9052603129de464b0eaa433acf93d7797825b81
-pip install "epythet==0.2.12"
+git checkout 59ada2b571f00d7e5872d4142781dd006568db90
+pip install "epythet==0.2.17"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

@@ -119,7 +119,7 @@ True
 A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept).
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 
 ### hired.persistence.ensure_v2(user='me', , root=None)
 
@@ -148,7 +148,7 @@ intermediate directories are created on write, so nested keys (e.g. `"job/stamp"
 work transparently.
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### hired.persistence.list_jds(user='me', , root=None)
 
@@ -162,7 +162,7 @@ Engagement ids under `users/<user>/jds/` (sorted; empty if none).
 A `MutableMapping` of `str` values: bare keys, `<key>.md` files.
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### hired.persistence.migrate_legacy(legacy_path, target_path)
 

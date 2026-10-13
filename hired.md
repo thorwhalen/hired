@@ -1,4 +1,4 @@
-> built 2026-09-22 19:36 UTC from c905260 (main) · hired 0.0.21. Details: build_info.json
+> built 2026-10-13 19:27 UTC from 59ada2b (main) · hired 0.0.22. Details: build_info.json
 
 # index.html.md
 
@@ -1172,6 +1172,9 @@ Get the global renderer registry.
 
 Decorator for registering renderer classes.
 
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`_RendererClass`, bound= [`type`](https://docs.python.org/3/builtins/functions.html#type)[[`Renderer`](_autosummary/hired.base.html.md#hired.base.Renderer)])], [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`_RendererClass`, bound= [`type`](https://docs.python.org/3/builtins/functions.html#type)[[`Renderer`](_autosummary/hired.base.html.md#hired.base.Renderer)])]
+
 
 # _autosummary/hired.candidate.base.html.md
 
@@ -2273,7 +2276,7 @@ Implement:
 
 ### *class* hired.config.ConfigStore(base_config=None)
 
-Bases: [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+Bases: [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 Configuration store with cascading defaults.
 
@@ -2540,7 +2543,7 @@ Create an Application from a JobResult.
 
 * **Parameters:**
   * **job** ([`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)) – JobResult object
-  * **\*\*kwargs** – Additional fields to set
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Additional fields to set
 * **Return type:**
   [`Application`](_autosummary/hired.tracking.html.md#hired.tracking.Application)
 * **Returns:**
@@ -2587,7 +2590,7 @@ Add a new application.
 
 * **Parameters:**
   * **job** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Optional JobResult to create application from
-  * **\*\*kwargs** – Additional fields (or all fields if job not provided)
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Additional fields (or all fields if job not provided)
 * **Return type:**
   [`int`](https://docs.python.org/3/builtins/functions.html#int)
 * **Returns:**
@@ -2628,6 +2631,8 @@ Export applications to CSV file.
 
 * **Parameters:**
   **output_path** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Path to output CSV file
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_application(app_id)
 
@@ -2679,7 +2684,7 @@ Update application fields.
 
 * **Parameters:**
   * **app_id** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Application ID
-  * **\*\*kwargs** – Fields to update
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Fields to update
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 * **Returns:**
@@ -3201,7 +3206,7 @@ Get information about a source.
 * **Parameters:**
   **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Name of the source
 * **Return type:**
-  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), `any`]
+  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dictionary with source information including setup instructions
 
@@ -3306,12 +3311,15 @@ Configuration for LLM model selection and parameters.
 
 Convert to DSPy LM instance.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 #### to_langchain_kwargs()
 
 Convert to LangChain model kwargs.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### *class* hired.LLMResumeAgent(, model='gpt-4o-mini', client=None, api_key=None)
 
@@ -3425,7 +3433,7 @@ Execute a plan step by step.
   * **plan** ([`Plan`](_autosummary/hired.resume_agent.html.md#hired.resume_agent.Plan)) – Plan to execute
   * **interactive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, pause after each step for approval
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dict with execution results and final outputs
 
@@ -3508,7 +3516,7 @@ Get all conversation turns.
 List all persisted sessions.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 ```pycon
 >>> for session_info in ResumeSession.list_persisted():
@@ -3528,7 +3536,7 @@ Load session from persistent storage.
 'abc123def456'
 ```
 
-#### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)*
+#### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
 Return a small metadata dict for quick inspection.
 
@@ -3660,8 +3668,8 @@ Convert a JobResult to formatted text for resume generation.
 Generate resume content from candidate and job information.
 
 * **Parameters:**
-  * **candidate_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Candidate information as ContentSource, file path, or dict
-  * **job_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
+  * **candidate_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
+  * **job_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
   * **agent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional AI agent for content generation
   * **validate** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to validate the generated content
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to use strict validation
@@ -4096,6 +4104,13 @@ behave identically on POSIX and Windows.
 stores. Singletons (`synopsis.md`, `state.json`, `meta.json`) are single files —
 their accessors carry the extension in the path, never in a store key.
 
+### Module Attributes
+
+| [`JsonStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.JsonStore)   | A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.   |
+|--------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| [`TextStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.TextStore)   | A store of `str` values (e.g. markdown files), keyed by bare names.               |
+| [`BytesStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.BytesStore)  | A store of raw `bytes`, keyed by real filenames.                                  |
+
 ### Functions
 
 | [`app_data_dir`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.app_data_dir)(\*subpaths[, make])         | Return the canonical hired data directory, joined with `subpaths`.           |
@@ -4116,6 +4131,12 @@ their accessors carry the extension in the path, never in a store key.
 | [`JDStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.JDStore)(user, jd_id, \*[, root])   | Per-engagement storage under `users/<user>/jds/<jd_id>/`.              |
 |-------------------------------------------------------------------------------------|------------------------------------------------------------------------|
 | [`UserStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.UserStore)([user, root])            | Per-candidate cross-JD storage: raw sources + agent-maintained `info`. |
+
+### hired.persistence.base.BytesStore
+
+A store of raw `bytes`, keyed by real filenames.
+
+alias of [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 
 ### *class* hired.persistence.base.JDStore(user, jd_id, , root=None)
 
@@ -4138,6 +4159,18 @@ research, and interview-prep briefings for that company’s role(s).
 >>> jd.read_meta()['company']
 'Acme'
 ```
+
+### hired.persistence.base.JsonStore
+
+A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.
+
+alias of [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.persistence.base.TextStore
+
+A store of `str` values (e.g. markdown files), keyed by bare names.
+
+alias of [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* hired.persistence.base.UserStore(user='me', , root=None)
 
@@ -4188,7 +4221,7 @@ True
 A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept).
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 
 ### hired.persistence.base.json_store(rootdir)
 
@@ -4199,7 +4232,7 @@ intermediate directories are created on write, so nested keys (e.g. `"job/stamp"
 work transparently.
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### hired.persistence.base.list_jds(user='me', , root=None)
 
@@ -4213,7 +4246,7 @@ Engagement ids under `users/<user>/jds/` (sorted; empty if none).
 A `MutableMapping` of `str` values: bare keys, `<key>.md` files.
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### hired.persistence.base.migrate_legacy(legacy_path, target_path)
 
@@ -4230,9 +4263,15 @@ unified. No-op otherwise. Returns True iff a copy happened.
 
 Read a JSON file, or return `None` if it does not exist.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 ### hired.persistence.base.read_text_file(path)
 
 Read a text file, or return `None` if it does not exist.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### hired.persistence.base.user_base(user='me', , root=None)
 
@@ -4382,7 +4421,7 @@ True
 A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept).
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 
 ### hired.persistence.ensure_v2(user='me', , root=None)
 
@@ -4411,7 +4450,7 @@ intermediate directories are created on write, so nested keys (e.g. `"job/stamp"
 work transparently.
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### hired.persistence.list_jds(user='me', , root=None)
 
@@ -4425,7 +4464,7 @@ Engagement ids under `users/<user>/jds/` (sorted; empty if none).
 A `MutableMapping` of `str` values: bare keys, `<key>.md` files.
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### hired.persistence.migrate_legacy(legacy_path, target_path)
 
@@ -4593,9 +4632,9 @@ HTML renderer implementation using Jinja2 templates.
 
 ### Classes
 
-| [`HTMLRenderer`](_autosummary/hired.renderers.html.html.md#hired.renderers.html.HTMLRenderer)(\*[, theme_registry])   | Renders resume to HTML or PDF.   |
-|---------------------------------------------------------------------------------------|----------------------------------|
-| [`ThemeRegistry`](_autosummary/hired.renderers.html.html.md#hired.renderers.html.ThemeRegistry)(\*[, themes_path])     | Registry for available themes.   |
+| [`ThemeRegistry`](_autosummary/hired.renderers.html.html.md#hired.renderers.html.ThemeRegistry)(\*[, themes_path])   | Registry for available themes.   |
+|-------------------------------------------------------------------------------------|----------------------------------|
+| [`HTMLRenderer`](_autosummary/hired.renderers.html.html.md#hired.renderers.html.HTMLRenderer)(\*[, theme_registry]) | Renders resume to HTML or PDF.   |
 
 ### *class* hired.renderers.html.HTMLRenderer(, theme_registry=None)
 
@@ -4611,7 +4650,7 @@ Process:
 
 ### *class* hired.renderers.html.ThemeRegistry(, themes_path=None)
 
-Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)
+Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 Registry for available themes.
 
@@ -4787,7 +4826,7 @@ Generate context for LLM prompt with recent history.
 Yields dicts with ‘role’ and ‘content’ for LLM consumption.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 #### get_recent_turns(n=None)
 
@@ -4863,12 +4902,15 @@ Configuration for LLM model selection and parameters.
 
 Convert to DSPy LM instance.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 #### to_langchain_kwargs()
 
 Convert to LangChain model kwargs.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### *class* hired.resume_agent.LLMProvider(\*args, \*\*kwargs)
 
@@ -4905,7 +4947,7 @@ Find semantic matches between candidate experience and job needs.
 Yields dicts with ‘candidate_snippet’, ‘job_requirement’, ‘score’.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 ### *class* hired.resume_agent.ModelRegistry(supervisor, workers, expansion=None, distillation=None, matching=None, search=None)
 
@@ -5040,7 +5082,7 @@ Execute a plan step by step.
   * **plan** ([`Plan`](_autosummary/hired.resume_agent.html.md#hired.resume_agent.Plan)) – Plan to execute
   * **interactive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, pause after each step for approval
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dict with execution results and final outputs
 
@@ -5102,7 +5144,7 @@ Get all conversation turns.
 List all persisted sessions.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 ```pycon
 >>> for session_info in ResumeSession.list_persisted():
@@ -5122,7 +5164,7 @@ Load session from persistent storage.
 'abc123def456'
 ```
 
-#### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)*
+#### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
 Return a small metadata dict for quick inspection.
 
@@ -5167,7 +5209,7 @@ Search web for relevant information.
 Yields dicts with ‘title’, ‘snippet’, ‘url’.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 ### *class* hired.resume_agent.SessionSnapshot(turn_count, data, mode, timestamp=<factory>)
 
@@ -5193,12 +5235,15 @@ Stores extracted entities, analysis results, and work-in-progress content.
 
 Get state value with default.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 #### snapshot()
 
 Create immutable snapshot of current state.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### update(updates)
 
@@ -5209,7 +5254,7 @@ Update state with new information.
 
 ### *class* hired.resume_agent.SessionStore(, data_dir=None)
 
-Bases: [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+Bases: [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 Manages automatic persistence of resume sessions.
 
@@ -5242,7 +5287,7 @@ List all persisted sessions.
 Yields session metadata dicts.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 #### load_session(session_id, , llm_config=None)
 
@@ -5631,7 +5676,7 @@ Get information about a source.
 * **Parameters:**
   **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Name of the source
 * **Return type:**
-  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), `any`]
+  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dictionary with source information including setup instructions
 
@@ -5961,7 +6006,7 @@ Get information about a source.
 * **Parameters:**
   **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Name of the source
 * **Return type:**
-  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), `any`]
+  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dictionary with source information including setup instructions
 
@@ -6156,7 +6201,7 @@ Get information about a source.
 * **Parameters:**
   **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Name of the source
 * **Return type:**
-  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), `any`]
+  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dictionary with source information
 
@@ -6334,7 +6379,7 @@ Get information about a source.
 * **Parameters:**
   **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Name of the source
 * **Return type:**
-  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), `any`]
+  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dictionary with source information
 
@@ -6688,8 +6733,8 @@ the entire pipeline.
 Generate resume content from candidate and job information.
 
 * **Parameters:**
-  * **candidate_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Candidate information as ContentSource, file path, or dict
-  * **job_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
+  * **candidate_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
+  * **job_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
   * **agent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional AI agent for content generation
   * **validate** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to validate the generated content
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to use strict validation
@@ -6724,11 +6769,11 @@ Render a resume dict (or pydantic model) to PDF using a specific
 HTML template file and optional CSS file.
 
 * **Parameters:**
-  * **content** (`Union`[[`ResumeSchemaExtended`](_autosummary/hired.base.html.md#hired.base.ResumeSchemaExtended), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Resume content as a dict or ResumeSchemaExtended instance.
+  * **content** (`Union`[[`ResumeSchemaExtended`](_autosummary/hired.base.html.md#hired.base.ResumeSchemaExtended), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Resume content as a dict or ResumeSchemaExtended instance.
   * **template_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to an HTML/Jinja template file to render from.
   * **css_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Optional path to a CSS file; its contents will be passed to
     the renderer as `custom_css` so PDF rendering picks up the styles.
-  * **format** – Output format, ‘pdf’ or ‘html’. Default is ‘pdf’.
+  * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output format, ‘pdf’ or ‘html’. Default is ‘pdf’.
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, enable stricter schema validation.
 * **Return type:**
   [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
@@ -6762,7 +6807,7 @@ Create an Application from a JobResult.
 
 * **Parameters:**
   * **job** ([`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)) – JobResult object
-  * **\*\*kwargs** – Additional fields to set
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Additional fields to set
 * **Return type:**
   [`Application`](_autosummary/hired.tracking.html.md#hired.tracking.Application)
 * **Returns:**
@@ -6809,7 +6854,7 @@ Add a new application.
 
 * **Parameters:**
   * **job** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Optional JobResult to create application from
-  * **\*\*kwargs** – Additional fields (or all fields if job not provided)
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Additional fields (or all fields if job not provided)
 * **Return type:**
   [`int`](https://docs.python.org/3/builtins/functions.html#int)
 * **Returns:**
@@ -6850,6 +6895,8 @@ Export applications to CSV file.
 
 * **Parameters:**
   **output_path** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Path to output CSV file
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_application(app_id)
 
@@ -6901,7 +6948,7 @@ Update application fields.
 
 * **Parameters:**
   * **app_id** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Application ID
-  * **\*\*kwargs** – Fields to update
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Fields to update
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 * **Returns:**
@@ -6946,13 +6993,16 @@ All imports here are external to the hired package.
 Dumps a dictionary to a YAML file using PyYAML,
 preserving key order and using a readable block style.
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### hired.util.ensure_resume_content_dict(content_src)
 
 Get a schema-valid resume dict from various sources
 (json file, json string, dict, …)
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### hired.util.extract_friendly_errors(error_obj, schema=None, data=None)
 
@@ -6965,6 +7015,8 @@ ValidationError to provide a consistent output.
   **error_obj** (`Union`[`ValidationError`, `ValidationError`]) – The ValidationError instance to process.
 * **Yields:**
   A tuple of (field, message) for each validation error.
+* **Return type:**
+  [*Iterator*](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[*tuple*](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any), [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ### hired.util.get_jsonschema_errors(content, schema_path=None)
 
@@ -6981,6 +7033,9 @@ empty list.
 Loads a YAML file using PyYAML.
 This works in Python 3.7+ because dicts preserve insertion order.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 ### hired.util.normalize_and_validate_resume(raw, , strict=True)
 
 Normalize and validate a resume-like mapping.
@@ -6993,12 +7048,15 @@ Normalize and validate a resume-like mapping.
 Returns a ResumeSchemaExtended instance on success. Raises
 pydantic.ValidationError on failure.
 
+* **Return type:**
+  [`ResumeSchemaExtended`](_autosummary/hired.base.html.md#hired.base.ResumeSchemaExtended)
+
 ### hired.util.validate_resume_content_dict(content, , raise_errors=True)
 
 Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 
 # about-this-build.html.md
@@ -7007,16 +7065,18 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-09-22 19:36 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/c9052603129de464b0eaa433acf93d7797825b81"><code>c905260</code></a> on branch <code>main</code>, for **hired 0.0.21** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-13 19:27 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/59ada2b571f00d7e5872d4142781dd006568db90"><code>59ada2b</code></a> on branch <code>main</code>, for **hired 0.0.22** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.22) is behind the latest release on PyPI (0.0.23): `pip install hired` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/c9052603129de464b0eaa433acf93d7797825b81"><code>c9052603129de464b0eaa433acf93d7797825b81</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/59ada2b571f00d7e5872d4142781dd006568db90"><code>59ada2b571f00d7e5872d4142781dd006568db90</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -7027,18 +7087,18 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/35774717055">35774717055</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/38454776269">38454776269</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>c9052603129de464b0eaa433acf93d7797825b81</code> (in the history of the built commit) |
+| Event commit | <code>59ada2b571f00d7e5872d4142781dd006568db90</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.12  |
+| epythet  | 0.2.17  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
-| Python   | 3.12.14 |
+| Python   | 3.12.15 |
 
 ## Configuration as resolved
 
@@ -7054,14 +7114,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.21/">0.0.21</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.23/">0.0.23</a>, newer than the documented version (0.0.22).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout c9052603129de464b0eaa433acf93d7797825b81
-pip install "epythet==0.2.12"
+git checkout 59ada2b571f00d7e5872d4142781dd006568db90
+pip install "epythet==0.2.17"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

@@ -4,6 +4,14 @@ hired.persistence.base
 .. automodule:: hired.persistence.base
 
    
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      JsonStore
+      TextStore
+      BytesStore
+   
    .. rubric:: Functions
 
    .. autosummary::

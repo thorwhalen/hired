@@ -107,3 +107,6 @@ Get the global renderer registry.
 ### hired.base.register_renderer(format_name)
 
 Decorator for registering renderer classes.
+
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`_RendererClass`, bound= [`type`](https://docs.python.org/3/builtins/functions.html#type)[[`Renderer`](#hired.base.Renderer)])], [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`_RendererClass`, bound= [`type`](https://docs.python.org/3/builtins/functions.html#type)[[`Renderer`](#hired.base.Renderer)])]

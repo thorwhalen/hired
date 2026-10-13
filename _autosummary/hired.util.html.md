@@ -21,13 +21,16 @@ All imports here are external to the hired package.
 Dumps a dictionary to a YAML file using PyYAML,
 preserving key order and using a readable block style.
 
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
 ### hired.util.ensure_resume_content_dict(content_src)
 
 Get a schema-valid resume dict from various sources
 (json file, json string, dict, …)
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### hired.util.extract_friendly_errors(error_obj, schema=None, data=None)
 
@@ -40,6 +43,8 @@ ValidationError to provide a consistent output.
   **error_obj** (`Union`[`ValidationError`, `ValidationError`]) – The ValidationError instance to process.
 * **Yields:**
   A tuple of (field, message) for each validation error.
+* **Return type:**
+  [*Iterator*](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[*tuple*](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any), [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ### hired.util.get_jsonschema_errors(content, schema_path=None)
 
@@ -56,6 +61,9 @@ empty list.
 Loads a YAML file using PyYAML.
 This works in Python 3.7+ because dicts preserve insertion order.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 ### hired.util.normalize_and_validate_resume(raw, , strict=True)
 
 Normalize and validate a resume-like mapping.
@@ -68,9 +76,12 @@ Normalize and validate a resume-like mapping.
 Returns a ResumeSchemaExtended instance on success. Raises
 pydantic.ValidationError on failure.
 
+* **Return type:**
+  [`ResumeSchemaExtended`](hired.base.html.md#hired.base.ResumeSchemaExtended)
+
 ### hired.util.validate_resume_content_dict(content, , raise_errors=True)
 
 Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]

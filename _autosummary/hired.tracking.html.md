@@ -22,7 +22,7 @@ Create an Application from a JobResult.
 
 * **Parameters:**
   * **job** ([`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)) – JobResult object
-  * **\*\*kwargs** – Additional fields to set
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Additional fields to set
 * **Return type:**
   [`Application`](#hired.tracking.Application)
 * **Returns:**
@@ -69,7 +69,7 @@ Add a new application.
 
 * **Parameters:**
   * **job** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Optional JobResult to create application from
-  * **\*\*kwargs** – Additional fields (or all fields if job not provided)
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Additional fields (or all fields if job not provided)
 * **Return type:**
   [`int`](https://docs.python.org/3/builtins/functions.html#int)
 * **Returns:**
@@ -110,6 +110,8 @@ Export applications to CSV file.
 
 * **Parameters:**
   **output_path** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Path to output CSV file
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_application(app_id)
 
@@ -161,7 +163,7 @@ Update application fields.
 
 * **Parameters:**
   * **app_id** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Application ID
-  * **\*\*kwargs** – Fields to update
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Fields to update
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 * **Returns:**

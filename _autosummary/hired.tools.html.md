@@ -17,8 +17,8 @@ the entire pipeline.
 Generate resume content from candidate and job information.
 
 * **Parameters:**
-  * **candidate_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Candidate information as ContentSource, file path, or dict
-  * **job_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
+  * **candidate_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
+  * **job_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
   * **agent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional AI agent for content generation
   * **validate** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to validate the generated content
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to use strict validation
@@ -53,11 +53,11 @@ Render a resume dict (or pydantic model) to PDF using a specific
 HTML template file and optional CSS file.
 
 * **Parameters:**
-  * **content** (`Union`[[`ResumeSchemaExtended`](hired.base.html.md#hired.base.ResumeSchemaExtended), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Resume content as a dict or ResumeSchemaExtended instance.
+  * **content** (`Union`[[`ResumeSchemaExtended`](hired.base.html.md#hired.base.ResumeSchemaExtended), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Resume content as a dict or ResumeSchemaExtended instance.
   * **template_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to an HTML/Jinja template file to render from.
   * **css_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Optional path to a CSS file; its contents will be passed to
     the renderer as `custom_css` so PDF rendering picks up the styles.
-  * **format** – Output format, ‘pdf’ or ‘html’. Default is ‘pdf’.
+  * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output format, ‘pdf’ or ‘html’. Default is ‘pdf’.
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, enable stricter schema validation.
 * **Return type:**
   [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)

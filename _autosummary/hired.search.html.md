@@ -242,7 +242,7 @@ Get information about a source.
 * **Parameters:**
   **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Name of the source
 * **Return type:**
-  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), `any`]
+  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dictionary with source information including setup instructions
 
@@ -437,7 +437,7 @@ Get information about a source.
 * **Parameters:**
   **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Name of the source
 * **Return type:**
-  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), `any`]
+  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dictionary with source information
 

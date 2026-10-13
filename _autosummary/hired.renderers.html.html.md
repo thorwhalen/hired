@@ -9,9 +9,9 @@ HTML renderer implementation using Jinja2 templates.
 
 ### Classes
 
-| [`HTMLRenderer`](#hired.renderers.html.HTMLRenderer)(\*[, theme_registry])   | Renders resume to HTML or PDF.   |
-|---------------------------------------------------------------------------------------|----------------------------------|
-| [`ThemeRegistry`](#hired.renderers.html.ThemeRegistry)(\*[, themes_path])     | Registry for available themes.   |
+| [`ThemeRegistry`](#hired.renderers.html.ThemeRegistry)(\*[, themes_path])   | Registry for available themes.   |
+|-------------------------------------------------------------------------------------|----------------------------------|
+| [`HTMLRenderer`](#hired.renderers.html.HTMLRenderer)(\*[, theme_registry]) | Renders resume to HTML or PDF.   |
 
 ### *class* hired.renderers.html.HTMLRenderer(, theme_registry=None)
 
@@ -27,7 +27,7 @@ Process:
 
 ### *class* hired.renderers.html.ThemeRegistry(, themes_path=None)
 
-Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)
+Bases: [`Mapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 Registry for available themes.
 

@@ -45,6 +45,13 @@ behave identically on POSIX and Windows.
 stores. Singletons (`synopsis.md`, `state.json`, `meta.json`) are single files —
 their accessors carry the extension in the path, never in a store key.
 
+### Module Attributes
+
+| [`JsonStore`](#hired.persistence.base.JsonStore)   | A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.   |
+|--------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| [`TextStore`](#hired.persistence.base.TextStore)   | A store of `str` values (e.g. markdown files), keyed by bare names.               |
+| [`BytesStore`](#hired.persistence.base.BytesStore)  | A store of raw `bytes`, keyed by real filenames.                                  |
+
 ### Functions
 
 | [`app_data_dir`](#hired.persistence.base.app_data_dir)(\*subpaths[, make])         | Return the canonical hired data directory, joined with `subpaths`.           |
@@ -65,6 +72,12 @@ their accessors carry the extension in the path, never in a store key.
 | [`JDStore`](#hired.persistence.base.JDStore)(user, jd_id, \*[, root])   | Per-engagement storage under `users/<user>/jds/<jd_id>/`.              |
 |-------------------------------------------------------------------------------------|------------------------------------------------------------------------|
 | [`UserStore`](#hired.persistence.base.UserStore)([user, root])            | Per-candidate cross-JD storage: raw sources + agent-maintained `info`. |
+
+### hired.persistence.base.BytesStore
+
+A store of raw `bytes`, keyed by real filenames.
+
+alias of [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 
 ### *class* hired.persistence.base.JDStore(user, jd_id, , root=None)
 
@@ -87,6 +100,18 @@ research, and interview-prep briefings for that company’s role(s).
 >>> jd.read_meta()['company']
 'Acme'
 ```
+
+### hired.persistence.base.JsonStore
+
+A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.
+
+alias of [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.persistence.base.TextStore
+
+A store of `str` values (e.g. markdown files), keyed by bare names.
+
+alias of [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### *class* hired.persistence.base.UserStore(user='me', , root=None)
 
@@ -137,7 +162,7 @@ True
 A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept).
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 
 ### hired.persistence.base.json_store(rootdir)
 
@@ -148,7 +173,7 @@ intermediate directories are created on write, so nested keys (e.g. `"job/stamp"
 work transparently.
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### hired.persistence.base.list_jds(user='me', , root=None)
 
@@ -162,7 +187,7 @@ Engagement ids under `users/<user>/jds/` (sorted; empty if none).
 A `MutableMapping` of `str` values: bare keys, `<key>.md` files.
 
 * **Return type:**
-  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+  [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 ### hired.persistence.base.migrate_legacy(legacy_path, target_path)
 
@@ -179,9 +204,15 @@ unified. No-op otherwise. Returns True iff a copy happened.
 
 Read a JSON file, or return `None` if it does not exist.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 ### hired.persistence.base.read_text_file(path)
 
 Read a text file, or return `None` if it does not exist.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 ### hired.persistence.base.user_base(user='me', , root=None)
 

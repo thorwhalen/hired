@@ -97,7 +97,7 @@ Create an Application from a JobResult.
 
 * **Parameters:**
   * **job** ([`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)) – JobResult object
-  * **\*\*kwargs** – Additional fields to set
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Additional fields to set
 * **Return type:**
   [`Application`](hired.tracking.html.md#hired.tracking.Application)
 * **Returns:**
@@ -144,7 +144,7 @@ Add a new application.
 
 * **Parameters:**
   * **job** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Optional JobResult to create application from
-  * **\*\*kwargs** – Additional fields (or all fields if job not provided)
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Additional fields (or all fields if job not provided)
 * **Return type:**
   [`int`](https://docs.python.org/3/builtins/functions.html#int)
 * **Returns:**
@@ -185,6 +185,8 @@ Export applications to CSV file.
 
 * **Parameters:**
   **output_path** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Path to output CSV file
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
 #### get_application(app_id)
 
@@ -236,7 +238,7 @@ Update application fields.
 
 * **Parameters:**
   * **app_id** ([`int`](https://docs.python.org/3/builtins/functions.html#int)) – Application ID
-  * **\*\*kwargs** – Fields to update
+  * **\*\*kwargs** ([`Any`](https://docs.python.org/3/library/typing.html#typing.Any)) – Fields to update
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 * **Returns:**
@@ -758,7 +760,7 @@ Get information about a source.
 * **Parameters:**
   **name** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Name of the source
 * **Return type:**
-  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), `any`]
+  [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dictionary with source information including setup instructions
 
@@ -863,12 +865,15 @@ Configuration for LLM model selection and parameters.
 
 Convert to DSPy LM instance.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 #### to_langchain_kwargs()
 
 Convert to LangChain model kwargs.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### *class* hired.LLMResumeAgent(, model='gpt-4o-mini', client=None, api_key=None)
 
@@ -982,7 +987,7 @@ Execute a plan step by step.
   * **plan** ([`Plan`](hired.resume_agent.html.md#hired.resume_agent.Plan)) – Plan to execute
   * **interactive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, pause after each step for approval
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dict with execution results and final outputs
 
@@ -1065,7 +1070,7 @@ Get all conversation turns.
 List all persisted sessions.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 ```pycon
 >>> for session_info in ResumeSession.list_persisted():
@@ -1085,7 +1090,7 @@ Load session from persistent storage.
 'abc123def456'
 ```
 
-#### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)*
+#### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
 Return a small metadata dict for quick inspection.
 
@@ -1217,8 +1222,8 @@ Convert a JobResult to formatted text for resume generation.
 Generate resume content from candidate and job information.
 
 * **Parameters:**
-  * **candidate_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]) – Candidate information as ContentSource, file path, or dict
-  * **job_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict), [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
+  * **candidate_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
+  * **job_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
   * **agent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional AI agent for content generation
   * **validate** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to validate the generated content
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to use strict validation

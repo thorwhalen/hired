@@ -61,7 +61,7 @@ Generate context for LLM prompt with recent history.
 Yields dicts with ‘role’ and ‘content’ for LLM consumption.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 #### get_recent_turns(n=None)
 
@@ -137,12 +137,15 @@ Configuration for LLM model selection and parameters.
 
 Convert to DSPy LM instance.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 #### to_langchain_kwargs()
 
 Convert to LangChain model kwargs.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### *class* hired.resume_agent.LLMProvider(\*args, \*\*kwargs)
 
@@ -179,7 +182,7 @@ Find semantic matches between candidate experience and job needs.
 Yields dicts with ‘candidate_snippet’, ‘job_requirement’, ‘score’.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 ### *class* hired.resume_agent.ModelRegistry(supervisor, workers, expansion=None, distillation=None, matching=None, search=None)
 
@@ -314,7 +317,7 @@ Execute a plan step by step.
   * **plan** ([`Plan`](#hired.resume_agent.Plan)) – Plan to execute
   * **interactive** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, pause after each step for approval
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 * **Returns:**
   Dict with execution results and final outputs
 
@@ -376,7 +379,7 @@ Get all conversation turns.
 List all persisted sessions.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 ```pycon
 >>> for session_info in ResumeSession.list_persisted():
@@ -396,7 +399,7 @@ Load session from persistent storage.
 'abc123def456'
 ```
 
-#### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)*
+#### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
 Return a small metadata dict for quick inspection.
 
@@ -441,7 +444,7 @@ Search web for relevant information.
 Yields dicts with ‘title’, ‘snippet’, ‘url’.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 ### *class* hired.resume_agent.SessionSnapshot(turn_count, data, mode, timestamp=<factory>)
 
@@ -467,12 +470,15 @@ Stores extracted entities, analysis results, and work-in-progress content.
 
 Get state value with default.
 
+* **Return type:**
+  [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)
+
 #### snapshot()
 
 Create immutable snapshot of current state.
 
 * **Return type:**
-  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 #### update(updates)
 
@@ -483,7 +489,7 @@ Update state with new information.
 
 ### *class* hired.resume_agent.SessionStore(, data_dir=None)
 
-Bases: [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)
+Bases: [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 Manages automatic persistence of resume sessions.
 
@@ -516,7 +522,7 @@ List all persisted sessions.
 Yields session metadata dicts.
 
 * **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)]
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
 
 #### load_session(session_id, , llm_config=None)
 
