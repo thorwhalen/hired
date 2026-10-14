@@ -268,6 +268,106 @@ DFLT_SCHEMA_URL = (
 DFLT_TEST_RESUME_URL = "https://raw.githubusercontent.com/jsonresume/resume-schema/refs/heads/v1.0.0/sample.resume.json"
 
 
+def _rewrite_constr(code: str) -> str:
+    """Rewrite ``constr(...)`` calls as ``Annotated[str, StringConstraints(...)]``.
+
+    The same constraint, spelled so a type checker can read it as a type
+    (pydantic v2; hired#35). Located with :mod:`ast`, so a regex pattern
+    argument holding parentheses is never mistaken for the call's end.
+
+    >>> _rewrite_constr('x: constr(pattern=r"^(a|b)$") = None')
+    'x: Annotated[str, StringConstraints(pattern=r"^(a|b)$")] = None'
+    """
+    import ast
+
+    tree = ast.parse(code)
+    lines = code.splitlines(keepends=True)
+    offsets = [0]
+    for line in lines:
+        offsets.append(offsets[-1] + len(line))
+
+    def _span(node):
+        return (
+            offsets[node.lineno - 1] + node.col_offset,
+            offsets[node.end_lineno - 1] + node.end_col_offset,
+        )
+
+    calls = [
+        node
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "constr"
+    ]
+    # Outermost first, then drop nested ones (constr never nests in practice).
+    spans = sorted((_span(c) for c in calls), key=lambda s: (s[0], -s[1]))
+    kept = []
+    for start, end in spans:
+        if not kept or start >= kept[-1][1]:
+            kept.append((start, end))
+    for start, end in reversed(kept):
+        call = code[start:end]
+        inner = call[call.index("(") + 1 : -1]
+        code = f"{code[:start]}Annotated[str, StringConstraints({inner})]{code[end:]}"
+    return code
+
+
+def _fix_resume_model_typing(code: str) -> str:
+    """Post-process generated model code so a type checker can read it (hired#35).
+
+    ``constr(...)`` becomes ``Annotated[str, StringConstraints(...)]`` (imports
+    adjusted), and ``model_config`` is declared ``ClassVar[ConfigDict]`` (#27),
+    so a regenerated file keeps both.
+    """
+    import re
+
+    if "constr(" in code:
+        code = _rewrite_constr(code)
+        if re.search(r"^from pydantic import \(", code, flags=re.MULTILINE):
+            code = code.replace(
+                "from pydantic import (", "from pydantic import StringConstraints\nfrom pydantic import (", 1
+            )
+        code = re.sub(
+            r"^(from pydantic import )([^(\n]*)$",
+            lambda m: m.group(1)
+            + ", ".join(
+                sorted(
+                    {n.strip() for n in m.group(2).split(",") if n.strip()}
+                    - {"constr"}
+                    | {"StringConstraints"}
+                )
+            ),
+            code,
+            count=1,
+            flags=re.MULTILINE,
+        )
+        code = _ensure_typing_import(code, "Annotated")
+    if re.search(r"^\s+model_config = ", code, flags=re.MULTILINE):
+        code = re.sub(
+            r"^(\s+)model_config = ", r"\1model_config: ClassVar[ConfigDict] = ",
+            code,
+            flags=re.MULTILINE,
+        )
+        code = _ensure_typing_import(code, "ClassVar")
+    return code
+
+
+def _ensure_typing_import(code: str, name: str) -> str:
+    """Add *name* to the module's ``from typing import ...`` line (or add one)."""
+    import re
+
+    m = re.search(r"^from typing import (.*)$", code, flags=re.MULTILINE)
+    if m is None:
+        future = re.search(r"^from __future__ import .*\n", code, flags=re.MULTILINE)
+        at = future.end() if future else 0
+        return f"{code[:at]}from typing import {name}\n{code[at:]}"
+    names = {n.strip() for n in m.group(1).split(",") if n.strip()}
+    if name in names:
+        return code
+    line = "from typing import " + ", ".join(sorted(names | {name}))
+    return code[: m.start()] + line + code[m.end() :]
+
+
 def refresh_resume_schema() -> None:
     from ju import pydantic_model_to_code
     import re
@@ -333,7 +433,10 @@ def refresh_resume_schema() -> None:
     new_schema = ensure_dict(DFLT_SCHEMA_URL)
     print("Make pydantic models (code) from it")
     new_schema_code = pydantic_model_to_code(
-        new_schema, egress_transform=fix_anyurl_transform
+        new_schema,
+        egress_transform=lambda code: _fix_resume_model_typing(
+            fix_anyurl_transform(code)
+        ),
     )
     print("Replace the code that is in resumejson_pydantic_models.py")
     (proj_files / "resumejson_pydantic_models.py").write_text(
@@ -344,4 +447,4 @@ def refresh_resume_schema() -> None:
     Path(DFLT_RESUME_SCHEMA_PATH).write_text(json.dumps(new_schema))
 
     print("Refresh test json")
-    Path(resume_json_example).write_text(json.dumps(url_to_jdict(DFLT_TEST_RESUME_URL)))
+    Path(resume_json_example).write_text(json.dumps(ensure_dict(DFLT_TEST_RESUME_URL)))
