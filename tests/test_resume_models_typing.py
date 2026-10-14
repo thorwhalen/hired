@@ -87,3 +87,15 @@ def test_non_ascii_before_the_call_on_the_same_line():
     assert _rewrite_constr(code) == (
         'café: Annotated[str, StringConstraints(pattern="x")] = "Straße"'
     )
+
+
+def test_a_parenthesised_typing_import_stays_valid_python():
+    import ast
+
+    code = GENERATED.replace(
+        "from typing import List, Optional", "from typing import (\n    List,\n    Optional,\n)"
+    )
+    out = _fix_resume_model_typing(code)
+    ast.parse(out)
+    assert "from typing import Annotated, ClassVar\nfrom typing import (" in out
+    assert _fix_resume_model_typing(out) == out

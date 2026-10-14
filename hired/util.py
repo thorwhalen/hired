@@ -362,6 +362,11 @@ def _ensure_typing_import(code: str, name: str) -> str:
     import re
 
     m = re.search(r"^from typing import (.*)$", code, flags=re.MULTILINE)
+    if m is not None and m.group(1).lstrip().startswith("("):
+        # Parenthesised import: add a line of our own rather than edit it.
+        if re.search(rf"^\s*{name},?\s*$", code[m.end() :], flags=re.MULTILINE):
+            return code
+        return f"{code[: m.start()]}from typing import {name}\n{code[m.start():]}"
     if m is None:
         future = re.search(r"^from __future__ import .*\n", code, flags=re.MULTILINE)
         at = future.end() if future else 0
@@ -444,6 +449,9 @@ def refresh_resume_schema() -> None:
         ),
     )
     print("Replace the code that is in resumejson_pydantic_models.py")
+    import ast
+
+    ast.parse(new_schema_code)  # never write a module that does not parse
     (proj_files / "resumejson_pydantic_models.py").write_text(
         f'"""Pydantic models for resume json schema\n"""\n{new_schema_code}'
     )
