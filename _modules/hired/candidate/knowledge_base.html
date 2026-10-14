@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=96ec9c95"></script>
+    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +410,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.22" />
+  <meta name="docsearch:version" content="0.0.23" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -942,7 +942,11 @@ window.runMermaid = runMermaid;</script>
 <div class="viewcode-block" id="CandidateKnowledgeBase.add_note">
 <a class="viewcode-back" href="../../../_autosummary/hired.candidate.knowledge_base.html#hired.CandidateKnowledgeBase.add_note">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_note</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">files</span><span class="p">:</span> <span class="s2">"dict[str, bytes] | None"</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">files</span><span class="p">:</span> <span class="s2">"dict[str, bytes] | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TopicDossier</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Record volunteered info about a subject into its dossier.</span>
 

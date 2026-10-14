@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=96ec9c95"></script>
+    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +410,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.22" />
+  <meta name="docsearch:version" content="0.0.23" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -849,7 +849,9 @@ window.runMermaid = runMermaid;</script>
     <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"me"</span>  <span class="c1"># the candidate this is about (default tenant)</span>
     <span class="n">category</span><span class="p">:</span> <span class="n">FactCategory</span> <span class="o">=</span> <span class="n">FactCategory</span><span class="o">.</span><span class="n">OTHER</span>
     <span class="n">statement</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># atomic natural-language claim</span>
-    <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># optional payload</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="kc">None</span>  <span class="c1"># optional payload</span>
+    <span class="p">)</span>
     <span class="n">confidence</span><span class="p">:</span> <span class="n">ConfidenceLevel</span> <span class="o">=</span> <span class="n">ConfidenceLevel</span><span class="o">.</span><span class="n">MEDIUM</span>
     <span class="c1"># When True, this fact asserts the candidate LACKS something (a real</span>
     <span class="c1"># negative), as opposed to mere silence. Drives CONTRADICTED downstream.</span>

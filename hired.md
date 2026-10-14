@@ -1,4 +1,4 @@
-> built 2026-10-13 19:27 UTC from 59ada2b (main) · hired 0.0.22. Details: build_info.json
+> built 2026-10-14 02:29 UTC from 2b5ebd0 (main) · hired 0.0.23. Details: build_info.json
 
 # index.html.md
 
@@ -7065,18 +7065,16 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-10-13 19:27 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/59ada2b571f00d7e5872d4142781dd006568db90"><code>59ada2b</code></a> on branch <code>main</code>, for **hired 0.0.22** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-14 02:29 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/2b5ebd05dcebba754734c6d61e268952b1f1ad2f"><code>2b5ebd0</code></a> on branch <code>main</code>, for **hired 0.0.23** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.0.22) is behind the latest release on PyPI (0.0.23): `pip install hired` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/59ada2b571f00d7e5872d4142781dd006568db90"><code>59ada2b571f00d7e5872d4142781dd006568db90</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/2b5ebd05dcebba754734c6d61e268952b1f1ad2f"><code>2b5ebd05dcebba754734c6d61e268952b1f1ad2f</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -7087,9 +7085,9 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/38454776269">38454776269</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/38501127291">38501127291</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>59ada2b571f00d7e5872d4142781dd006568db90</code> (in the history of the built commit) |
+| Event commit | <code>2b5ebd05dcebba754734c6d61e268952b1f1ad2f</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -7114,13 +7112,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.23/">0.0.23</a>, newer than the documented version (0.0.22).
+Latest release: <a href="https://pypi.org/project/hired/0.0.23/">0.0.23</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout 59ada2b571f00d7e5872d4142781dd006568db90
+git checkout 2b5ebd05dcebba754734c6d61e268952b1f1ad2f
 pip install "epythet==0.2.17"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

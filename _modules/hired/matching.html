@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=96ec9c95"></script>
+    <script src="../../_static/documentation_options.js?v=3294188c"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +410,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.22" />
+  <meta name="docsearch:version" content="0.0.23" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -823,12 +823,18 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">            preferred_locations: List of preferred location strings</span>
 <span class="sd">            remote_only: Only match remote jobs</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_skills</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">candidate_skills</span> <span class="ow">or</span> <span class="p">[]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_keywords</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="n">candidate_keywords</span> <span class="ow">or</span> <span class="p">[]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_skills</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">candidate_skills</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidate_keywords</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span>
+            <span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="n">candidate_keywords</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">required_skills</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">required_skills</span> <span class="ow">or</span> <span class="p">[]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">min_salary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_salary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_salary</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_salary</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">preferred_locations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">loc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">(</span><span class="n">preferred_locations</span> <span class="ow">or</span> <span class="p">[])]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preferred_locations</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">loc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">(</span><span class="n">preferred_locations</span> <span class="ow">or</span> <span class="p">[])</span>
+        <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">remote_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">remote_only</span>
 
 <div class="viewcode-block" id="JobMatcher.score_job">
