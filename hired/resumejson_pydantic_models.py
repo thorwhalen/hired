@@ -3,9 +3,16 @@
 from __future__ import annotations
 
 from datetime import date as date_aliased
-from typing import ClassVar, List, Optional
+from typing import Annotated, ClassVar, List, Optional
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, RootModel, constr
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    EmailStr,
+    Field,
+    RootModel,
+    StringConstraints,
+)
 
 # Type alias to avoid strict URL validation
 AnyUrl = Optional[str]
@@ -118,14 +125,20 @@ class Meta(BaseModel):
 
 class Iso8601(
     RootModel[
-        constr(
-            pattern=r"^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$"
-        )
+        Annotated[
+            str,
+            StringConstraints(
+                pattern=r"^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$"
+            ),
+        ]
     ]
 ):
-    root: constr(
-        pattern=r"^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$"
-    ) = Field(..., description="e.g. 2014-06-29")
+    root: Annotated[
+        str,
+        StringConstraints(
+            pattern=r"^([1-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]|[1-2][0-9]{3}-[0-1][0-9]|[1-2][0-9]{3})$"
+        ),
+    ] = Field(..., description="e.g. 2014-06-29")
 
 
 class WorkItem(BaseModel):
