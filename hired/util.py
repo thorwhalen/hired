@@ -330,16 +330,20 @@ def _fix_resume_model_typing(code: str) -> str:
         code = _rewrite_constr(code)
         if re.search(r"^from pydantic import \(", code, flags=re.MULTILINE):
             code = code.replace(
-                "from pydantic import (", "from pydantic import StringConstraints\nfrom pydantic import (", 1
+                "from pydantic import (",
+                "from pydantic import StringConstraints\nfrom pydantic import (",
+                1,
             )
         code = re.sub(
             r"^(from pydantic import )([^(\n]*)$",
-            lambda m: m.group(1)
-            + ", ".join(
-                sorted(
-                    {n.strip() for n in m.group(2).split(",") if n.strip()}
-                    - {"constr"}
-                    | {"StringConstraints"}
+            lambda m: (
+                m.group(1)
+                + ", ".join(
+                    sorted(
+                        {n.strip() for n in m.group(2).split(",") if n.strip()}
+                        - {"constr"}
+                        | {"StringConstraints"}
+                    )
                 )
             ),
             code,
@@ -349,7 +353,8 @@ def _fix_resume_model_typing(code: str) -> str:
         code = _ensure_typing_import(code, "Annotated")
     if re.search(r"^\s+model_config = ", code, flags=re.MULTILINE):
         code = re.sub(
-            r"^(\s+)model_config = ", r"\1model_config: ClassVar[ConfigDict] = ",
+            r"^(\s+)model_config = ",
+            r"\1model_config: ClassVar[ConfigDict] = ",
             code,
             flags=re.MULTILINE,
         )
@@ -366,7 +371,7 @@ def _ensure_typing_import(code: str, name: str) -> str:
         # Parenthesised import: add a line of our own rather than edit it.
         if re.search(rf"^\s*{name},?\s*$", code[m.end() :], flags=re.MULTILINE):
             return code
-        return f"{code[: m.start()]}from typing import {name}\n{code[m.start():]}"
+        return f"{code[: m.start()]}from typing import {name}\n{code[m.start() :]}"
     if m is None:
         future = re.search(r"^from __future__ import .*\n", code, flags=re.MULTILINE)
         at = future.end() if future else 0
