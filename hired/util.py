@@ -286,10 +286,15 @@ def _rewrite_constr(code: str) -> str:
     for line in lines:
         offsets.append(offsets[-1] + len(line))
 
+    def _char_col(lineno, byte_col):
+        # ast columns count UTF-8 bytes; string slicing counts characters.
+        return len(lines[lineno - 1].encode()[:byte_col].decode())
+
     def _span(node):
         return (
-            offsets[node.lineno - 1] + node.col_offset,
-            offsets[node.end_lineno - 1] + node.end_col_offset,
+            offsets[node.lineno - 1] + _char_col(node.lineno, node.col_offset),
+            offsets[node.end_lineno - 1]
+            + _char_col(node.end_lineno, node.end_col_offset),
         )
 
     calls = [

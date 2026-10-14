@@ -79,3 +79,11 @@ def test_the_shipped_models_carry_no_constr():
 
     text = (Path(hired.__file__).parent / "resumejson_pydantic_models.py").read_text()
     assert "constr(" not in text and "StringConstraints(" in text
+
+
+def test_non_ascii_before_the_call_on_the_same_line():
+    """ast columns are UTF-8 byte offsets; the splice must count characters."""
+    code = 'café: constr(pattern="x") = "Straße"'
+    assert _rewrite_constr(code) == (
+        'café: Annotated[str, StringConstraints(pattern="x")] = "Straße"'
+    )
