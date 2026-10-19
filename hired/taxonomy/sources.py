@@ -85,25 +85,37 @@ def _esco_id(uri: str) -> str:
 
 
 def _link_uris(record: dict[str, Any], rel: str) -> list[str]:
-    links = (record.get("_links") or {}).get(rel) or []
-    if isinstance(links, dict):
+    """URIs of a relation, from ``_links`` (``full=true``) or a top-level list (brief)."""
+    links = (record.get("_links") or {}).get(rel) or record.get(rel) or []
+    if isinstance(links, (dict, str)):
         links = [links]
-    return [link["uri"] for link in links if link.get("uri")]
+    return [
+        link if isinstance(link, str) else link.get("uri")
+        for link in links
+        if isinstance(link, str) or link.get("uri")
+    ]
 
 
 def _suffix(uri: str) -> str:
     return uri.rstrip("/").rsplit("/", 1)[-1]
 
 
+def _text(record: dict[str, Any], field: str, language: str) -> Any:
+    """A language-keyed field (``full=true``), or the plain value (brief records)."""
+    value = record.get(field)
+    return value.get(language) if isinstance(value, dict) else value
+
+
 def esco_skill_node(record: dict[str, Any], *, language: str = "en") -> SkillNode:
-    """A :class:`SkillNode` from one ESCO search result (``full=true``)."""
-    label = (record.get("preferredLabel") or {}).get(language) or record["title"]
+    """A :class:`SkillNode` from one ESCO search result (full or brief)."""
+    label = _text(record, "preferredLabel", language) or record["title"]
     types = [_suffix(u) for u in _link_uris(record, "hasSkillType")]
     reuse = [_suffix(u) for u in _link_uris(record, "hasReuseLevel")]
+    alts = _text(record, "alternativeLabel", language) or []
     return SkillNode(
         id=_esco_id(record["uri"]),
         label=label,
-        alt_labels=list((record.get("alternativeLabel") or {}).get(language) or []),
+        alt_labels=[alts] if isinstance(alts, str) else list(alts),
         source="esco",
         kind=_ESCO_KIND.get(types[0], types[0]) if types else "skill",
         reuse_level=reuse[0] if reuse else None,
@@ -112,14 +124,68 @@ def esco_skill_node(record: dict[str, Any], *, language: str = "en") -> SkillNod
 
 
 def esco_occupation(record: dict[str, Any], *, language: str = "en") -> Occupation:
-    """An :class:`Occupation` from one ESCO search result (``full=true``)."""
+    """An :class:`Occupation` from one ESCO search result (full or brief)."""
     return Occupation(
         id=_esco_id(record["uri"]),
-        label=(record.get("preferredLabel") or {}).get(language) or record["title"],
+        label=_text(record, "preferredLabel", language) or record["title"],
         source="esco",
         essential=[_esco_id(u) for u in _link_uris(record, "hasEssentialSkill")],
         optional=[_esco_id(u) for u in _link_uris(record, "hasOptionalSkill")],
     )
+
+
+def _smaller_page_size(size: int) -> int:
+    """The largest proper divisor of ``size`` (so split pages tile the same items)."""
+    return next((d for d in range(size // 2, 0, -1) if size % d == 0), 1)
+
+
+def _search_items(
+    concept_type: str,
+    page_no: int,
+    page_size: int,
+    *,
+    get_json: GetJson,
+    language: str,
+    progress: Progress | None,
+) -> dict[str, Any]:
+    """One search page (``full=true``); on a server error, split it into smaller pages.
+
+    The ESCO API fails a whole ``full=true`` page with HTTP 500 when one record in
+    it is malformed (e.g. a skill with two skill types). Splitting isolates that
+    record; a single item that still fails is taken in its brief (non-full) form.
+    """
+    params = {
+        "type": concept_type,
+        "language": language,
+        "limit": page_size,
+        "offset": page_no,
+    }
+    try:
+        return get_json(ESCO_SEARCH_URL, {**params, "full": "true"})
+    except Exception:
+        if page_size == 1:
+            if progress:
+                progress(
+                    f"ESCO {concept_type} #{page_no}: full record fails; using brief"
+                )
+            return get_json(ESCO_SEARCH_URL, params)
+    sub = _smaller_page_size(page_size)
+    total, results = 0, []
+    for i in range(page_size // sub):
+        part = _search_items(
+            concept_type,
+            page_no * (page_size // sub) + i,
+            sub,
+            get_json=get_json,
+            language=language,
+            progress=progress,
+        )
+        total = part.get("total", total)
+        got = (part.get("_embedded") or {}).get("results") or []
+        results += got
+        if len(got) < sub:
+            break
+    return {"total": total, "_embedded": {"results": results}}
 
 
 def _esco_pages(
@@ -142,14 +208,14 @@ def _esco_pages(
         key = f"esco-{concept_type}-p{page_no:05d}-n{page_size}"
         page = cache.get(key) if cache is not None else None
         if page is None:
-            params = {
-                "type": concept_type,
-                "language": language,
-                "limit": page_size,
-                "offset": page_no,
-                "full": "true",
-            }
-            page = get_json(ESCO_SEARCH_URL, params)
+            page = _search_items(
+                concept_type,
+                page_no,
+                page_size,
+                get_json=get_json,
+                language=language,
+                progress=progress,
+            )
             if cache is not None:
                 cache[key] = page
         total = page.get("total", 0)
@@ -176,7 +242,12 @@ def fetch_esco(
     language: str = "en",
     progress: Progress | None = None,
 ) -> tuple[list[SkillNode], list[Occupation]]:
-    """All ESCO skills and occupations (with their skill links)."""
+    """All ESCO skills and occupations (with their skill links).
+
+    Occupation↔skill links are the union of both sides — an occupation's
+    ``hasEssential/OptionalSkill`` and a skill's ``isEssential/OptionalForOccupation``
+    — so a record that only came back in brief form still gets its links.
+    """
     get_json = get_json or requests_get_json
     kw = dict(
         get_json=get_json,
@@ -185,16 +256,27 @@ def fetch_esco(
         language=language,
         progress=progress,
     )
-    nodes = [
-        esco_skill_node(r, language=language)
-        for page in _esco_pages("skill", **kw)
-        for r in page
-    ]
-    occupations = [
-        esco_occupation(r, language=language)
-        for page in _esco_pages("occupation", **kw)
-        for r in page
-    ]
+    nodes: list[SkillNode] = []
+    from_skills: dict[str, tuple[set[str], set[str]]] = {}
+    for page in _esco_pages("skill", **kw):
+        for record in page:
+            node = esco_skill_node(record, language=language)
+            nodes.append(node)
+            for rel, side in (
+                ("isEssentialForOccupation", 0),
+                ("isOptionalForOccupation", 1),
+            ):
+                for occ_uri in _link_uris(record, rel):
+                    links = from_skills.setdefault(_esco_id(occ_uri), (set(), set()))
+                    links[side].add(node.id)
+    occupations = []
+    for page in _esco_pages("occupation", **kw):
+        for record in page:
+            occ = esco_occupation(record, language=language)
+            essential, optional = from_skills.get(occ.id, (set(), set()))
+            occ.essential = sorted(set(occ.essential) | essential)
+            occ.optional = sorted((set(occ.optional) | optional) - set(occ.essential))
+            occupations.append(occ)
     return nodes, occupations
 
 

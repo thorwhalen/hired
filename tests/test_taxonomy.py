@@ -153,6 +153,63 @@ def test_esco_paging_uses_page_index_and_detects_truncation():
         fetch_esco(get_json=truncating, page_size=4)
 
 
+def test_esco_bad_record_is_isolated_and_degraded_to_brief():
+    """ESCO 500s a whole full=true page when one record is malformed."""
+    from hired.taxonomy.sources import fetch_esco
+
+    good = fake_esco()
+    bad_uri = SKILLS[3]["uri"]  # TensorFlow
+
+    def flaky(url, params):
+        page = good(url, params)
+        items = page["_embedded"]["results"]
+        if params.get("full") and any(r["uri"] == bad_uri for r in items):
+            raise RuntimeError("500 Server Error")
+        if not params.get("full"):  # brief form: plain strings, no _links
+            page = {
+                **page,
+                "_embedded": {
+                    "results": [
+                        {
+                            "uri": r["uri"],
+                            "title": r["title"],
+                            "preferredLabel": r["preferredLabel"]["en"],
+                            "hasSkillType": [
+                                lk["uri"] for lk in r["_links"].get("hasSkillType", [])
+                            ],
+                        }
+                        for r in items
+                    ]
+                },
+            }
+        return page
+
+    nodes, occs = fetch_esco(get_json=flaky, page_size=4)
+    assert [n.label for n in nodes] == [r["title"] for r in SKILLS]
+    tf = next(n for n in nodes if n.id == "esco:tf")
+    assert tf.kind == "skill" and tf.alt_labels == []  # degraded but present
+
+
+def test_occupation_links_include_the_skill_side():
+    from hired.taxonomy.sources import fetch_esco
+
+    skills = [dict(SKILLS[0]), *SKILLS[1:]]
+    skills[0]["_links"] = {
+        **skills[0]["_links"],
+        "isEssentialForOccupation": [{"uri": f"{ESCO}occupation/ck1"}],
+    }
+    occs = [_occ("ck1", "cook", ["cook"])]
+
+    def get_json(url, params):
+        data = skills if params["type"] == "skill" else occs
+        lim = params["limit"]
+        off = params["offset"] * lim
+        return {"total": len(data), "_embedded": {"results": data[off : off + lim]}}
+
+    _, got = fetch_esco(get_json=get_json)
+    assert got[0].essential == ["esco:cook", "esco:py"]
+
+
 def test_esco_records_parse():
     node = esco_skill_node(SKILLS[1])
     assert (node.id, node.kind, node.reuse_level) == (
