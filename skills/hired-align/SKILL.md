@@ -39,7 +39,7 @@ in a per-engagement **workspace** (`ws = kb.jd(jd_id, ...)`).
 ```python
 from hired.candidate import CandidateKnowledgeBase
 
-kb = CandidateKnowledgeBase()  # default candidate "me" (user-level)
+kb = CandidateKnowledgeBase()  # candidate: $HIRED_USER, else "me"; or pass a name
 print(kb.synopsis)  # fast context load of what's already known
 
 ws = kb.jd(jd_id, company="<Company>", label="<short label>")  # the engagement
@@ -187,11 +187,16 @@ Build an `AlignmentReport` (verdict-first; `bucket_counts`; `blocking_gaps`;
 ramp plans for learnable gaps), render and persist it:
 
 ```python
-from hired.alignment import render_report_markdown
+from hired.alignment import render_report
 
-md = render_report_markdown(report)
-ws.save_report(job_id, report.model_dump(mode="json"))
+# finalize (re-classify, recount, rebuild blockers + ranked questions), archive, save
+report = ws.save_alignment(report, job_id=job_id)
+md = render_report(report)  # or render_report(report, "html") for a shareable page
 ```
+
+Give every `Requirement` an explicit, stable `id` in the draft: clarifications and flagged blockers point at requirements by id, so drafted questions survive finalization only when the ids match.
+
+From the shell (`hired[cli]`), the same step is `hired analyze draft.json <jd_id>` then `hired report <jd_id> --fmt html --output report.html`; pass `--user <name>` (or set `$HIRED_USER`) when working on a candidate other than `me`.
 
 Present the markdown to the user. For a recruiter response, lead with the strong
 matches and transferable adjacencies, frame learnable gaps honestly (with the

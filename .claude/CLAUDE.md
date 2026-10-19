@@ -30,6 +30,12 @@ tracking).
   (the `hired-align` skill / injected LLM); the package is storage + schemas +
   deterministic scoring. Full spec: `misc/docs/DESIGN.md`; research in
   `misc/docs/research/`.
+- **Multi-tenant + CLI** (#13) — `persistence.resolve_user` (arg > `$HIRED_USER` >
+  `me`) is the only single-tenant default; `validate_name` guards user/jd/job ids.
+  `cli.py` holds plain operations + `CLI_FUNCS` (SSOT); `__main__.py` is the `cw`
+  adapter (`cli` extra, console script `hired`). `alignment.finalize_report`
+  re-derives a drafted report (`JDWorkspace.save_alignment` = finalize + archive + save, the one draft→persisted path); `render_report(report, fmt)` dispatches via
+  `REPORT_RENDERERS` (`markdown`, `html`).
 
 The public API is `hired/__init__.py` (eager core + `__all__`; the agent surface,
 candidate KB, and alignment surface are lazy via `__getattr__`).
@@ -82,6 +88,7 @@ committed** — tests use a temp `HIRED_DATA_DIR`.
 | `search` | python-jobspy |
 | `ai` | openai |
 | `supervisor` | langchain, langchain-core, langchain-openai |
+| `cli` | cw (only `hired/__main__.py` imports it) |
 
 ## Tests / CI
 

@@ -31,6 +31,7 @@ from hired.candidate.base import (
 )
 from hired.candidate.ingest import ingest_facts
 from hired.candidate.refresh import IngestFn, RefreshReport
+from hired.candidate.refresh import ingest_source as _ingest_source
 from hired.candidate.refresh import needs_refresh as _needs_refresh
 from hired.candidate.refresh import pending_qa as _pending_qa
 from hired.candidate.refresh import pending_sources as _pending_sources
@@ -38,7 +39,7 @@ from hired.candidate.refresh import refresh as _refresh
 from hired.candidate.state import SourceDigest, load_state, save_state, sha256_hex
 from hired.candidate.topics import TopicDossier
 from hired.candidate.workspace import JDWorkspace
-from hired.persistence.base import DFLT_USER, UserStore, list_jds
+from hired.persistence.base import UserStore, list_jds, resolve_user
 from hired.persistence.migrate import ensure_v2
 from hired.persistence.repository import Repository
 
@@ -56,7 +57,7 @@ class CandidateKnowledgeBase:
 
     >>> import tempfile, os
     >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
-    >>> kb = CandidateKnowledgeBase()                 # default candidate "me"
+    >>> kb = CandidateKnowledgeBase()       # default candidate: $HIRED_USER, else "me"
     >>> from hired.candidate.base import Fact, FactCategory
     >>> _ = kb.add_fact(Fact(statement='Built ML pipelines in Python',
     ...                       category=FactCategory.SKILL, tags=['python', 'ml']))
@@ -67,12 +68,18 @@ class CandidateKnowledgeBase:
     """
 
     def __init__(
-        self, user: str = DFLT_USER, *, store: UserStore | None = None
+        self, user: str | None = None, *, store: UserStore | None = None
     ) -> None:
-        self.user: str = user
-        # Auto-migrate a legacy flat layout to v2 on first access (idempotent).
-        ensure_v2(user, root=store._root if store is not None else None)
+        # ``user`` defaults to $HIRED_USER, else "me" (see resolve_user); an
+        # injected ``store`` is authoritative about whose data it holds.
+        if store is not None and user is not None and user != store.user:
+            raise ValueError(
+                f"user={user!r} conflicts with the injected store's {store.user!r}"
+            )
         self._store = store or UserStore(user)
+        self.user: str = self._store.user
+        # Auto-migrate a legacy flat layout to v2 on first access (idempotent).
+        ensure_v2(self.user, root=self._store._root)
         self._facts = _FactRepo(self._store.facts)
         self._qa = _QARepo(self._store.qa)
 
@@ -176,6 +183,18 @@ class CandidateKnowledgeBase:
             )
             save_state(self._store, state)
         return name
+
+    def ingest_source(
+        self, name: str, records: "list[dict[str, Any]]"
+    ) -> tuple[list[str], list[str]]:
+        """Distill extracted fact ``records`` for raw source ``name`` into facts.
+
+        Quotes are checked against the source, facts from a prior ingest of the
+        same source are superseded, and the source stops being pending. Returns
+        ``(added_fact_ids, superseded_fact_ids)``. See
+        :func:`hired.candidate.refresh.ingest_source`.
+        """
+        return _ingest_source(self, name, records)
 
     def get_source(self, name: str) -> bytes:
         return self._store.raw[name]

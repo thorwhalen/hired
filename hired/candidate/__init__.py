@@ -26,6 +26,7 @@ from hired.candidate.refresh import (
     RefreshItem,
     RefreshProposal,
     RefreshReport,
+    ingest_source,
     needs_refresh,
     refresh,
 )
@@ -42,6 +43,7 @@ __all__ = [
     "RefreshReport",
     "needs_refresh",
     "refresh",
+    "ingest_source",
     "Fact",
     "QAEntry",
     "Provenance",

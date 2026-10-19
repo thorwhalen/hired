@@ -46,6 +46,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 from collections.abc import MutableMapping
 from functools import cached_property
@@ -62,6 +63,8 @@ BytesStore = MutableMapping[str, bytes]
 
 DFLT_USER = "me"
 _ENV_VAR = "HIRED_DATA_DIR"
+#: Environment variable naming the active candidate when no ``user`` is passed.
+USER_ENV_VAR = "HIRED_USER"
 
 # --- layout names (single source of truth; no magic strings) --------------- #
 USERS_DIR = "users"
@@ -224,12 +227,107 @@ def write_text_file(path: str, text: str) -> None:
         f.write(text)
 
 
-def user_base(user: str = DFLT_USER, *, root: str | None = None) -> str:
+# --------------------------------------------------------------------------- #
+# Multi-tenancy: which candidate (``users/<user>/``) an operation targets
+# --------------------------------------------------------------------------- #
+#: A safe id: one path segment of ASCII letters/digits/``._-``, starting with an
+#: alphanumeric and not ending in ``.`` (Windows strips trailing dots).
+_ID_PATTERN = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9._-]{0,126}[A-Za-z0-9_-])?")
+#: Candidate (user) names are additionally lower-case: on case-insensitive
+#: filesystems (macOS, Windows) ``ALICE`` and ``alice`` are the same directory, so
+#: allowing both would alias two "different" tenants onto one candidate's data.
+_USER_PATTERN = re.compile(r"[a-z0-9](?:[a-z0-9._-]{0,62}[a-z0-9_-])?")
+#: Device names Windows reserves in every directory (with or without extension).
+_WINDOWS_RESERVED = frozenset(
+    ["con", "prn", "aux", "nul"]
+    + [f"{p}{i}" for p in ("com", "lpt") for i in range(1, 10)]
+)
+
+
+def validate_name(name: str, *, kind: str = "name") -> str:
+    """Return ``name`` if it is a safe, portable single path segment, else raise.
+
+    User, engagement and job ids become directory or file names, so they are
+    restricted to ASCII letters, digits and ``._-`` (starting with a letter or
+    digit, not ending in ``.``), and may not be a Windows device name. That rules
+    out separators, ``..``, drive prefixes (``C:x``), hidden names and NUL bytes —
+    so one id can never address another candidate's (or an arbitrary) directory.
+    ``kind="user"`` also requires lower case (see :data:`_USER_PATTERN`).
+
+    >>> validate_name('acme-2024')
+    'acme-2024'
+    >>> validate_name('../bob', kind='engagement id')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid engagement id '../bob': use ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+    >>> validate_name('Alice', kind='user')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid user 'Alice': use lower-case ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+    """
+    pattern, case = (
+        (_USER_PATTERN, "lower-case ") if kind == "user" else (_ID_PATTERN, "")
+    )
+    if not isinstance(name, str) or not pattern.fullmatch(name):
+        raise ValueError(
+            f"Invalid {kind} {name!r}: use {case}ASCII letters, digits and '._-', "
+            "starting with a letter or digit and not ending in '.'"
+        )
+    if name.split(".")[0].lower() in _WINDOWS_RESERVED:
+        raise ValueError(f"Invalid {kind} {name!r}: reserved device name on Windows")
+    return name
+
+
+def resolve_user(user: str | None = None) -> str:
+    """The candidate an operation targets: ``user``, else ``$HIRED_USER``, else ``"me"``.
+
+    This is the *only* place the single-tenant default lives; every user-scoped
+    entry point passes its ``user`` argument through here. An explicitly given
+    name (even ``""``) is validated, never silently replaced by the default.
+
+    >>> import os
+    >>> _ = os.environ.pop('HIRED_USER', None)
+    >>> resolve_user()
+    'me'
+    >>> resolve_user('alice')
+    'alice'
+    >>> os.environ['HIRED_USER'] = 'bob'
+    >>> resolve_user()
+    'bob'
+    >>> del os.environ['HIRED_USER']
+    """
+    if user is None:
+        user = os.environ.get(USER_ENV_VAR) or DFLT_USER
+    return validate_name(user, kind="user")
+
+
+def list_users() -> list[str]:
+    """Candidates with data under the data root's ``users/`` (sorted; empty if none).
+
+    >>> import os, tempfile
+    >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
+    >>> list_users()
+    []
+    >>> _ = UserStore('alice').facts
+    >>> list_users()
+    ['alice']
+    """
+    users_dir = app_data_dir(USERS_DIR, make=False)
+    if not os.path.isdir(users_dir):
+        return []
+    return sorted(
+        n
+        for n in os.listdir(users_dir)
+        if not n.startswith(".") and os.path.isdir(os.path.join(users_dir, n))
+    )
+
+
+def user_base(user: str | None = None, *, root: str | None = None) -> str:
     """Filesystem base for a candidate: ``<root>`` or ``<data>/users/<user>``."""
-    return root or app_data_dir(USERS_DIR, user)
+    return root or app_data_dir(USERS_DIR, resolve_user(user))
 
 
-def list_jds(user: str = DFLT_USER, *, root: str | None = None) -> list[str]:
+def list_jds(user: str | None = None, *, root: str | None = None) -> list[str]:
     """Engagement ids under ``users/<user>/jds/`` (sorted; empty if none)."""
     jds_dir = os.path.join(user_base(user, root=root), JDS_DIR)
     if not os.path.isdir(jds_dir):
@@ -249,7 +347,7 @@ class UserStore:
 
     >>> import tempfile, os
     >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
-    >>> us = UserStore()                       # default user "me"
+    >>> us = UserStore()           # default user: $HIRED_USER, else "me"
     >>> us.facts['f1'] = {'statement': 'knows Python'}
     >>> us.facts['f1']
     {'statement': 'knows Python'}
@@ -261,8 +359,8 @@ class UserStore:
     '# me'
     """
 
-    def __init__(self, user: str = DFLT_USER, *, root: str | None = None) -> None:
-        self.user: str = user
+    def __init__(self, user: str | None = None, *, root: str | None = None) -> None:
+        self.user: str = resolve_user(user)
         self._root = root
 
     @property
@@ -324,9 +422,11 @@ class JDStore:
     'Acme'
     """
 
-    def __init__(self, user: str, jd_id: str, *, root: str | None = None) -> None:
-        self.user: str = user
-        self.jd_id: str = jd_id
+    def __init__(
+        self, user: str | None, jd_id: str, *, root: str | None = None
+    ) -> None:
+        self.user: str = resolve_user(user)
+        self.jd_id: str = validate_name(jd_id, kind="engagement id")
         self._root = root
 
     @property

@@ -27,7 +27,13 @@ from typing import TYPE_CHECKING, Any
 
 from hired.candidate.base import FactStatus, SourceKind, _utcnow
 from hired.candidate.ingest import ingest_facts
-from hired.candidate.state import SourceDigest, load_state, save_state, sha256_hex
+from hired.candidate.state import (
+    RefreshState,
+    SourceDigest,
+    load_state,
+    save_state,
+    sha256_hex,
+)
 
 if TYPE_CHECKING:  # avoid an import cycle (knowledge_base imports this module)
     from hired.candidate.base import QAEntry
@@ -144,6 +150,55 @@ def _supersede(kb: CandidateKnowledgeBase, fact_ids: list[str]) -> list[str]:
     return changed
 
 
+def _ingest_source_into(
+    kb: CandidateKnowledgeBase,
+    state: RefreshState,
+    key: str,
+    content: bytes | str,
+    records: list[dict[str, Any]],
+) -> tuple[list[str], list[str]]:
+    """Distill ``records`` from source ``key`` into facts, updating ``state`` in memory.
+
+    Facts previously derived from this source are superseded first (a re-ingest
+    replaces, never duplicates). Returns ``(added_fact_ids, superseded_fact_ids)``.
+    """
+    prior = state.sources.get(key)
+    superseded = _supersede(kb, prior.fact_ids) if prior and prior.fact_ids else []
+    new_ids = ingest_facts(
+        kb,
+        records,
+        source_kind=SourceKind.UPLOAD,
+        source_id=key,
+        source_text=_as_text(content),
+    )
+    data = content if isinstance(content, bytes) else content.encode()
+    state.sources[key] = SourceDigest(
+        key=key,
+        sha256=sha256_hex(data),
+        size=len(data),
+        ingested_at=_utcnow(),
+        fact_ids=new_ids,
+    )
+    return new_ids, superseded
+
+
+def ingest_source(
+    kb: CandidateKnowledgeBase, key: str, records: list[dict[str, Any]]
+) -> tuple[list[str], list[str]]:
+    """Distill externally-extracted ``records`` for one raw source into facts.
+
+    The single-source counterpart of :func:`refresh`: quotes are verified against
+    the source text, facts from a previous ingest of the same source are
+    superseded, and the source's digest is marked ingested (so it stops showing
+    as pending). Returns ``(added_fact_ids, superseded_fact_ids)``.
+    """
+    state = load_state(kb._store)
+    result = _ingest_source_into(kb, state, key, kb.get_source(key), records)
+    save_state(kb._store, state)
+    kb.regenerate_synopsis()
+    return result
+
+
 def refresh(
     kb: CandidateKnowledgeBase,
     mode: str = "soft",
@@ -174,31 +229,11 @@ def refresh(
             report.proposals.append(RefreshProposal(item.kind, item.key, records))
             continue
         if item.kind == SOURCE:
-            prior = state.sources.get(item.key)
-            if (
-                prior and prior.fact_ids
-            ):  # changed/hard re-derive → supersede stale facts
-                report.superseded_fact_ids += _supersede(kb, prior.fact_ids)
-            new_ids = ingest_facts(
-                kb,
-                records,
-                source_kind=SourceKind.UPLOAD,
-                source_id=item.key,
-                source_text=_as_text(item.content),
+            new_ids, superseded = _ingest_source_into(
+                kb, state, item.key, item.content, records
             )
             report.added_fact_ids += new_ids
-            data = (
-                item.content
-                if isinstance(item.content, bytes)
-                else item.content.encode()
-            )
-            state.sources[item.key] = SourceDigest(
-                key=item.key,
-                sha256=sha256_hex(data),
-                size=len(data),
-                ingested_at=_utcnow(),
-                fact_ids=new_ids,
-            )
+            report.superseded_fact_ids += superseded
         else:  # QA
             new_ids = ingest_facts(
                 kb,

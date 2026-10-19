@@ -74,3 +74,15 @@ def test_unknown_attribute_raises_attribute_error():
 
     with pytest.raises(AttributeError):
         _ = hired.no_such_thing
+
+
+def test_cli_operations_do_not_import_the_cli_adapter():
+    # `cw` (the `cli` extra) is the adapter's dependency only: neither the package
+    # nor the plain CLI operations may pull it in.
+    import subprocess
+
+    code = (
+        "import sys, hired, hired.cli; "
+        "assert 'cw' not in sys.modules, 'cw imported by hired / hired.cli'"
+    )
+    subprocess.run([sys.executable, "-c", code], check=True)

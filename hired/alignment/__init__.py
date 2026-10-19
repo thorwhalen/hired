@@ -8,8 +8,10 @@ Public surface:
   (:func:`classify`, :func:`assign_bucket`, :func:`apply_ai_leverage`),
 - the elicitation helpers in :mod:`hired.alignment.elicitation`
   (:func:`rank_clarifications`, :func:`is_decision_stable`),
-- Markdown rendering in :mod:`hired.alignment.report`
-  (:func:`render_report_markdown`).
+- deterministic report finalization in :mod:`hired.alignment.assemble`
+  (:func:`finalize_report` — reclassify, recount, rebuild blockers/clarifications),
+- rendering in :mod:`hired.alignment.report` (:func:`render_report` dispatching to
+  :func:`render_report_markdown` / :func:`render_report_html`).
 
 The *intelligence* (judging transfer distance, trainability, evidence) is supplied
 by the ``hired-align`` skill (Claude as brain) or an injected LLM; this package
@@ -52,7 +54,13 @@ from hired.alignment.elicitation import (
     rank_clarifications,
     should_ask,
 )
-from hired.alignment.report import render_report_markdown
+from hired.alignment.report import (
+    REPORT_RENDERERS,
+    render_report,
+    render_report_html,
+    render_report_markdown,
+)
+from hired.alignment.assemble import finalize_report, is_blocking
 from hired.alignment.diff import diff_reports, summarize_diff
 
 __all__ = [
@@ -90,7 +98,12 @@ __all__ = [
     "should_ask",
     "info_gain",
     # report
+    "finalize_report",
+    "is_blocking",
+    "render_report",
     "render_report_markdown",
+    "render_report_html",
+    "REPORT_RENDERERS",
     # diff (used by the alignment-review refresh)
     "diff_reports",
     "summarize_diff",
