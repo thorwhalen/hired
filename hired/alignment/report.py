@@ -303,7 +303,7 @@ def render_report_html(report: AlignmentReport) -> str:
             f"{counts.get(b.value, len(by_bucket[b]))}</li>"
             for b in _BUCKET_ORDER
         ]
-        chips.append(f"<li>❓ needs clarification: {len(unknowns)}</li>")
+        chips.append(f"<li>{escape(_UNKNOWN_HEADING)}: {len(unknowns)}</li>")
         verdict.append(f'<ul class="counts">{"".join(chips)}</ul>')
     body.append(f'<section class="verdict">{"".join(verdict)}</section>')
 

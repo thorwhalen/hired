@@ -52,9 +52,11 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         return cw.dispatch(CLI_FUNCS, argv, egress=_egress, prog="hired")
-    except (ValueError, KeyError, FileNotFoundError) as e:
-        # Expected user errors (unknown candidate/engagement/format, bad file):
-        # one line, no traceback.
+    except UnicodeError:
+        raise  # an encoding bug, not a user error: keep the traceback
+    except (ValueError, FileNotFoundError) as e:
+        # Expected user errors (unknown candidate/engagement/report/format, invalid
+        # id, malformed JSON or draft, missing file): one line, no traceback.
         print(f"hired: {e}", file=sys.stderr)
         return 2
 

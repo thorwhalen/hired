@@ -68,7 +68,7 @@ def _workspace(jd: str, user: str | None):
 
 
 def _read_json(path: str) -> Any:
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -189,15 +189,16 @@ def analyze(
     the report is saved (the previous version of the same job's report is
     archived). Prints the saved job id and the resulting verdict line.
     """
-    from hired.alignment import finalize_report
+    from hired.alignment import AlignmentReport
+    from hired.persistence import validate_name
 
-    final = finalize_report(_read_json(report))
-    if job_id:
-        final.job_id = job_id
-    if company and not final.company:
-        final.company = company
-    ws = _kb(user).jd(jd, company=company or final.company or None)
-    ws.save_report(final.job_id, final.model_dump(mode="json"))
+    draft = AlignmentReport.model_validate(_read_json(report))
+    if company and not draft.company:
+        draft.company = company
+    # Validate every id before anything is written (no orphan engagement).
+    validate_name(job_id or draft.job_id, kind="job id")
+    ws = _kb(user).jd(jd, company=company or draft.company or None)
+    final = ws.save_alignment(draft, job_id=job_id)
     counts = ", ".join(
         f"{k}={v}" for k, v in final.score_summary.bucket_counts.items() if v
     )
@@ -239,10 +240,15 @@ def report(
                 f"({', '.join(available) or 'none'}); pass a job_id"
             )
         job_id = available[0]
+    elif job_id not in ws.reports():
+        raise ValueError(
+            f"No report {job_id!r} in engagement {jd!r}; "
+            f"known: {', '.join(ws.reports()) or 'none'}"
+        )
     text = render_report(ws.get_report(job_id), fmt)
     if output is None:
         return text
-    with open(output, "w", newline="") as f:
+    with open(output, "w", encoding="utf-8", newline="") as f:
         f.write(text)
     return output
 

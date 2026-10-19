@@ -46,6 +46,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 from collections.abc import MutableMapping
 from functools import cached_property
@@ -229,31 +230,51 @@ def write_text_file(path: str, text: str) -> None:
 # --------------------------------------------------------------------------- #
 # Multi-tenancy: which candidate (``users/<user>/``) an operation targets
 # --------------------------------------------------------------------------- #
+#: A safe id: one path segment of ASCII letters/digits/``._-``, starting with an
+#: alphanumeric and not ending in ``.`` (Windows strips trailing dots).
+_ID_PATTERN = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9._-]{0,126}[A-Za-z0-9_-])?")
+#: Candidate (user) names are additionally lower-case: on case-insensitive
+#: filesystems (macOS, Windows) ``ALICE`` and ``alice`` are the same directory, so
+#: allowing both would alias two "different" tenants onto one candidate's data.
+_USER_PATTERN = re.compile(r"[a-z0-9](?:[a-z0-9._-]{0,62}[a-z0-9_-])?")
+#: Device names Windows reserves in every directory (with or without extension).
+_WINDOWS_RESERVED = frozenset(
+    ["con", "prn", "aux", "nul"]
+    + [f"{p}{i}" for p in ("com", "lpt") for i in range(1, 10)]
+)
+
+
 def validate_name(name: str, *, kind: str = "name") -> str:
-    """Return ``name`` if it is a safe single path segment, else raise ``ValueError``.
+    """Return ``name`` if it is a safe, portable single path segment, else raise.
 
-    User and engagement ids become directory names, so they must not be empty,
-    hidden (leading ``.``), or contain a path separator — otherwise one candidate
-    could read or write another's (or an arbitrary) directory.
+    User, engagement and job ids become directory or file names, so they are
+    restricted to ASCII letters, digits and ``._-`` (starting with a letter or
+    digit, not ending in ``.``), and may not be a Windows device name. That rules
+    out separators, ``..``, drive prefixes (``C:x``), hidden names and NUL bytes —
+    so one id can never address another candidate's (or an arbitrary) directory.
+    ``kind="user"`` also requires lower case (see :data:`_USER_PATTERN`).
 
-    >>> validate_name('alice')
-    'alice'
-    >>> validate_name('../bob', kind='user')
+    >>> validate_name('acme-2024')
+    'acme-2024'
+    >>> validate_name('../bob', kind='engagement id')
     Traceback (most recent call last):
       ...
-    ValueError: Invalid user '../bob': must be a non-empty name with no path separators and no leading '.'
+    ValueError: Invalid engagement id '../bob': use ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+    >>> validate_name('Alice', kind='user')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid user 'Alice': use lower-case ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
     """
-    if (
-        not isinstance(name, str)
-        or not name.strip()
-        or name != name.strip()
-        or name.startswith(".")
-        or any(sep in name for sep in ("/", "\\", os.sep))
-    ):
+    pattern, case = (
+        (_USER_PATTERN, "lower-case ") if kind == "user" else (_ID_PATTERN, "")
+    )
+    if not isinstance(name, str) or not pattern.fullmatch(name):
         raise ValueError(
-            f"Invalid {kind} {name!r}: must be a non-empty name with no path "
-            "separators and no leading '.'"
+            f"Invalid {kind} {name!r}: use {case}ASCII letters, digits and '._-', "
+            "starting with a letter or digit and not ending in '.'"
         )
+    if name.split(".")[0].lower() in _WINDOWS_RESERVED:
+        raise ValueError(f"Invalid {kind} {name!r}: reserved device name on Windows")
     return name
 
 
@@ -261,7 +282,8 @@ def resolve_user(user: str | None = None) -> str:
     """The candidate an operation targets: ``user``, else ``$HIRED_USER``, else ``"me"``.
 
     This is the *only* place the single-tenant default lives; every user-scoped
-    entry point passes its ``user`` argument through here.
+    entry point passes its ``user`` argument through here. An explicitly given
+    name (even ``""``) is validated, never silently replaced by the default.
 
     >>> import os
     >>> _ = os.environ.pop('HIRED_USER', None)
@@ -274,7 +296,9 @@ def resolve_user(user: str | None = None) -> str:
     'bob'
     >>> del os.environ['HIRED_USER']
     """
-    return validate_name(user or os.environ.get(USER_ENV_VAR) or DFLT_USER, kind="user")
+    if user is None:
+        user = os.environ.get(USER_ENV_VAR) or DFLT_USER
+    return validate_name(user, kind="user")
 
 
 def list_users() -> list[str]:

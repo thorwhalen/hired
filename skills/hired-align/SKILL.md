@@ -187,12 +187,14 @@ Build an `AlignmentReport` (verdict-first; `bucket_counts`; `blocking_gaps`;
 ramp plans for learnable gaps), render and persist it:
 
 ```python
-from hired.alignment import finalize_report, render_report
+from hired.alignment import render_report
 
-report = finalize_report(report)  # re-classify, recount, rebuild blockers + ranked questions
-ws.save_report(job_id, report.model_dump(mode="json"))
-md = render_report(report)           # or render_report(report, "html") for a shareable page
+# finalize (re-classify, recount, rebuild blockers + ranked questions), archive, save
+report = ws.save_alignment(report, job_id=job_id)
+md = render_report(report)  # or render_report(report, "html") for a shareable page
 ```
+
+Give every `Requirement` an explicit, stable `id` in the draft: clarifications and flagged blockers point at requirements by id, so drafted questions survive finalization only when the ids match.
 
 From the shell (`hired[cli]`), the same step is `hired analyze draft.json <jd_id>` then `hired report <jd_id> --fmt html --output report.html`; pass `--user <name>` (or set `$HIRED_USER`) when working on a candidate other than `me`.
 

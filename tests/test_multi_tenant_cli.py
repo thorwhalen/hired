@@ -49,10 +49,36 @@ def test_resolve_user_precedence(monkeypatch):
     assert CandidateKnowledgeBase().user == "carol"
 
 
-@pytest.mark.parametrize("bad", ["", " ", "../x", "a/b", "a\\b", ".hidden", " pad"])
+@pytest.mark.parametrize(
+    "bad",
+    [
+        "",
+        " ",
+        "../x",
+        "a/b",
+        "a\\b",
+        ".hidden",
+        " pad",
+        "C:evil",
+        "x.",
+        "con",
+        "nul.txt",
+        "a\x00b",
+        "two words",
+    ],
+)
 def test_validate_name_rejects_unsafe(bad):
     with pytest.raises(ValueError):
         validate_name(bad)
+
+
+def test_user_names_are_lower_case_so_tenants_cannot_alias():
+    # On case-insensitive filesystems ALICE/ and alice/ are one directory.
+    CandidateKnowledgeBase("alice").add_fact(Fact(statement="alice only"))
+    with pytest.raises(ValueError, match="lower-case"):
+        CandidateKnowledgeBase("ALICE")
+    with pytest.raises(ValueError):
+        resolve_user("")  # an explicit empty name is not the default
 
 
 def test_unsafe_ids_rejected_at_every_entry_point():
@@ -166,6 +192,37 @@ def test_finalize_report_rebuilds_derived_fields():
     assert again.model_dump() == final.model_dump()
 
 
+def test_finalize_keeps_analyst_links_when_draft_has_no_ids():
+    data = _draft().model_dump(mode="json")
+    for rec in data["requirements"] + data["blocking_gaps"]:
+        del rec["requirement"]["id"]  # a hand/LLM-written draft often omits ids
+    data["blocking_gaps"].append(
+        {
+            "requirement": {"text": "Lives in Paris"},
+            "match_state": "contradicted",
+            "closeability": "structurally_hard",
+        }
+    )
+    final = finalize_report(data)
+    texts = [r.requirement.text for r in final.blocking_gaps]
+    # gate-keeper derived; resolved SQL dropped (matched by text); unmatched kept
+    assert texts == ["Security clearance", "Lives in Paris"]
+    # drafted questions whose ids match nothing are kept, not blanked
+    assert {c.question for c in final.clarifications} >= {
+        "Used Kubernetes?",
+        "Used SQL?",
+    }
+
+
+def test_report_history_never_overwrites():
+    ws = CandidateKnowledgeBase("alice").jd("acme")
+    for i in range(3):
+        ws.save_report("ds", {"created_at": "2026-01-01T00:00:00/x", "v": i})
+    versions = ws.report_versions("ds")
+    assert len(versions) == 2 and all(v.count("/") == 1 for v in versions)
+    assert sorted(ws.store.report_history[v]["v"] for v in versions) == [0, 1]
+
+
 def test_render_html_is_escaped_and_complete():
     page = render_report_html(finalize_report(_draft()))
     assert page.startswith("<!doctype html>")
@@ -234,6 +291,21 @@ def test_cli_end_to_end(data_dir):
     # re-analyze archives the prior version
     cli.analyze(draft, "acme", user="alice")
     assert len(CandidateKnowledgeBase("alice").jd("acme").report_versions("ds")) == 1
+
+
+def test_cli_analyze_validates_before_writing_and_report_names_missing_job(data_dir):
+    from hired import cli
+
+    draft = _write_json(data_dir / "d.json", _draft().model_dump(mode="json"))
+    with pytest.raises(ValueError, match="job id"):
+        cli.analyze(draft, "acme", job_id="../x", company="Acme", user="alice")
+    assert CandidateKnowledgeBase("alice").jds() == []  # no orphan engagement
+    cli.analyze(draft, "acme", user="alice")
+    with pytest.raises(ValueError, match="No report 'nope'"):
+        cli.report("acme", "nope", user="alice")
+    out = data_dir / "r.html"
+    cli.report("acme", fmt="html", output=str(out), user="alice")
+    assert "⛔" in out.read_text(encoding="utf-8")
 
 
 def test_cli_read_commands_do_not_create_candidates():

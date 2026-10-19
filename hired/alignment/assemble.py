@@ -48,22 +48,48 @@ def _is_still_a_gap(record: RequirementRecord) -> bool:
     )
 
 
+def _norm(text: str) -> str:
+    return " ".join(text.split()).lower()
+
+
 def _blocking_gaps(
     records: list[RequirementRecord], flagged: list[RequirementRecord]
 ) -> list[RequirementRecord]:
-    """Derived blockers plus analyst-flagged ones that are still gaps (current copies)."""
-    flagged_ids = {r.requirement.id for r in flagged}
-    return [
+    """Derived blockers, plus analyst-flagged ones that are still gaps.
+
+    A flagged record is matched to its current record by requirement id, else by
+    requirement text (a JSON draft may omit ids, which are then random). A flagged
+    record matching no requirement is kept as the analyst wrote it (classified),
+    never silently dropped.
+    """
+    by_id = {r.requirement.id: r for r in records}
+    by_text = {_norm(r.requirement.text): r for r in records}
+    flagged_ids: set[str] = set()
+    unmatched: list[RequirementRecord] = []
+    for f in flagged:
+        match = by_id.get(f.requirement.id) or by_text.get(_norm(f.requirement.text))
+        if match is not None:
+            flagged_ids.add(match.requirement.id)
+        else:
+            unmatched.append(classify(f))
+    derived = [
         r
         for r in records
         if is_blocking(r) or (r.requirement.id in flagged_ids and _is_still_a_gap(r))
     ]
+    return derived + unmatched
 
 
 def _merge_clarifications(
     records: list[RequirementRecord], drafted: list[Clarification]
 ) -> list[Clarification]:
-    """Re-rank askable records; keep drafted question text for those still askable."""
+    """Re-rank askable records, keeping drafted question text.
+
+    A drafted clarification for a requirement that is now resolved is dropped
+    (its question has been answered). One whose ``requirement_id`` matches no
+    requirement cannot be checked, so it is kept, after the ranked ones.
+    """
+    known_ids = {r.requirement.id for r in records}
     by_req = {c.requirement_id: c for c in drafted}
     merged = []
     for skeleton in rank_clarifications(records):
@@ -71,11 +97,15 @@ def _merge_clarifications(
         if prior is not None:
             skeleton = prior.model_copy(update={"info_gain": skeleton.info_gain})
         merged.append(skeleton)
-    return merged
+    return merged + [c for c in drafted if c.requirement_id not in known_ids]
 
 
 def finalize_report(report: AlignmentReport | dict[str, Any]) -> AlignmentReport:
     """Return a copy of ``report`` with every derivable field recomputed.
+
+    Clarifications and flagged blockers refer to requirements by ``id``; give
+    requirements explicit ids in a draft so those links survive (flagged
+    blockers also fall back to matching by requirement text).
 
     >>> from hired.alignment import (AlignmentReport, Requirement, RequirementRecord,
     ...     RequirementClass, Verdict, Recommendation, MatchType, Closeability)
