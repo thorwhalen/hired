@@ -88,13 +88,25 @@ def test_cli_operations_do_not_import_the_cli_adapter():
     subprocess.run([sys.executable, "-c", code], check=True)
 
 
-def test_import_hired_does_not_import_weasyprint():
+def test_import_hired_does_not_import_weasyprint(tmp_path):
     # WeasyPrint (the `pdf` extra) loads on first PDF render only; importing it
     # eagerly costs time and, without cairo/pango, prints a banner on every import.
+    # A stub `weasyprint` on the path makes this bite even where the real package
+    # is not installed (as in CI): an eager import would leave it in sys.modules.
+    import os
     import subprocess
 
+    (tmp_path / "weasyprint.py").write_text(
+        '"""Stub: importable, so an eager import shows."""\n'
+    )
+    env = {
+        **os.environ,
+        "PYTHONPATH": os.pathsep.join(
+            [str(tmp_path), *filter(None, [os.environ.get("PYTHONPATH")])]
+        ),
+    }
     code = (
         "import sys, hired; "
         "assert 'weasyprint' not in sys.modules, 'weasyprint imported by hired'"
     )
-    subprocess.run([sys.executable, "-c", code], check=True)
+    subprocess.run([sys.executable, "-c", code], check=True, env=env)
