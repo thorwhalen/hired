@@ -59,8 +59,18 @@ Issues = "https://github.com/thorwhalen/hired/issues"
 Documentation = "https://thorwhalen.github.io/hired/"
 Changelog = "https://github.com/thorwhalen/hired/blob/main/CHANGELOG.md"
 
+[project.scripts]
+hired = "hired.__main__:main"
+
 [project.optional-dependencies]
-testing = []
+testing = [
+    "cw>=0.1,<0.2",
+]
+# The `hired` command (candidate knowledge + JD alignment from the shell).
+# cw is MIT, stdlib-only; imported only by hired/__main__.py.
+cli = [
+    "cw>=0.1,<0.2",
+]
 # PDF rendering via WeasyPrint (needs system libs: cairo/pango/gdk-pixbuf).
 pdf = [
     "weasyprint>=58.0",
@@ -93,6 +103,7 @@ all = [
     "pyyaml>=6.0",
     "python-jobspy>=1.1.50",
     "openai>=1.0",
+    "cw>=0.1,<0.2",
 ]
 
 [tool.ruff]

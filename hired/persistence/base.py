@@ -62,6 +62,8 @@ BytesStore = MutableMapping[str, bytes]
 
 DFLT_USER = "me"
 _ENV_VAR = "HIRED_DATA_DIR"
+#: Environment variable naming the active candidate when no ``user`` is passed.
+USER_ENV_VAR = "HIRED_USER"
 
 # --- layout names (single source of truth; no magic strings) --------------- #
 USERS_DIR = "users"
@@ -224,12 +226,84 @@ def write_text_file(path: str, text: str) -> None:
         f.write(text)
 
 
-def user_base(user: str = DFLT_USER, *, root: str | None = None) -> str:
+# --------------------------------------------------------------------------- #
+# Multi-tenancy: which candidate (``users/<user>/``) an operation targets
+# --------------------------------------------------------------------------- #
+def validate_name(name: str, *, kind: str = "name") -> str:
+    """Return ``name`` if it is a safe single path segment, else raise ``ValueError``.
+
+    User and engagement ids become directory names, so they must not be empty,
+    hidden (leading ``.``), or contain a path separator — otherwise one candidate
+    could read or write another's (or an arbitrary) directory.
+
+    >>> validate_name('alice')
+    'alice'
+    >>> validate_name('../bob', kind='user')
+    Traceback (most recent call last):
+      ...
+    ValueError: Invalid user '../bob': must be a non-empty name with no path separators and no leading '.'
+    """
+    if (
+        not isinstance(name, str)
+        or not name.strip()
+        or name != name.strip()
+        or name.startswith(".")
+        or any(sep in name for sep in ("/", "\\", os.sep))
+    ):
+        raise ValueError(
+            f"Invalid {kind} {name!r}: must be a non-empty name with no path "
+            "separators and no leading '.'"
+        )
+    return name
+
+
+def resolve_user(user: str | None = None) -> str:
+    """The candidate an operation targets: ``user``, else ``$HIRED_USER``, else ``"me"``.
+
+    This is the *only* place the single-tenant default lives; every user-scoped
+    entry point passes its ``user`` argument through here.
+
+    >>> import os
+    >>> _ = os.environ.pop('HIRED_USER', None)
+    >>> resolve_user()
+    'me'
+    >>> resolve_user('alice')
+    'alice'
+    >>> os.environ['HIRED_USER'] = 'bob'
+    >>> resolve_user()
+    'bob'
+    >>> del os.environ['HIRED_USER']
+    """
+    return validate_name(user or os.environ.get(USER_ENV_VAR) or DFLT_USER, kind="user")
+
+
+def list_users() -> list[str]:
+    """Candidates with data under the data root's ``users/`` (sorted; empty if none).
+
+    >>> import os, tempfile
+    >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
+    >>> list_users()
+    []
+    >>> _ = UserStore('alice').facts
+    >>> list_users()
+    ['alice']
+    """
+    users_dir = app_data_dir(USERS_DIR, make=False)
+    if not os.path.isdir(users_dir):
+        return []
+    return sorted(
+        n
+        for n in os.listdir(users_dir)
+        if not n.startswith(".") and os.path.isdir(os.path.join(users_dir, n))
+    )
+
+
+def user_base(user: str | None = None, *, root: str | None = None) -> str:
     """Filesystem base for a candidate: ``<root>`` or ``<data>/users/<user>``."""
-    return root or app_data_dir(USERS_DIR, user)
+    return root or app_data_dir(USERS_DIR, resolve_user(user))
 
 
-def list_jds(user: str = DFLT_USER, *, root: str | None = None) -> list[str]:
+def list_jds(user: str | None = None, *, root: str | None = None) -> list[str]:
     """Engagement ids under ``users/<user>/jds/`` (sorted; empty if none)."""
     jds_dir = os.path.join(user_base(user, root=root), JDS_DIR)
     if not os.path.isdir(jds_dir):
@@ -249,7 +323,7 @@ class UserStore:
 
     >>> import tempfile, os
     >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
-    >>> us = UserStore()                       # default user "me"
+    >>> us = UserStore()           # default user: $HIRED_USER, else "me"
     >>> us.facts['f1'] = {'statement': 'knows Python'}
     >>> us.facts['f1']
     {'statement': 'knows Python'}
@@ -261,8 +335,8 @@ class UserStore:
     '# me'
     """
 
-    def __init__(self, user: str = DFLT_USER, *, root: str | None = None) -> None:
-        self.user: str = user
+    def __init__(self, user: str | None = None, *, root: str | None = None) -> None:
+        self.user: str = resolve_user(user)
         self._root = root
 
     @property
@@ -324,9 +398,11 @@ class JDStore:
     'Acme'
     """
 
-    def __init__(self, user: str, jd_id: str, *, root: str | None = None) -> None:
-        self.user: str = user
-        self.jd_id: str = jd_id
+    def __init__(
+        self, user: str | None, jd_id: str, *, root: str | None = None
+    ) -> None:
+        self.user: str = resolve_user(user)
+        self.jd_id: str = validate_name(jd_id, kind="engagement id")
         self._root = root
 
     @property

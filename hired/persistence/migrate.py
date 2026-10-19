@@ -46,7 +46,6 @@ from hired.persistence.base import (
     SYNOPSIS_FILE,
     USER_DIR,
     USER_INFO_JSON_KINDS,
-    DFLT_USER,
     user_base,
 )
 
@@ -77,7 +76,7 @@ _LEGACY_MARKERS = (
 )
 
 
-def is_legacy_layout(user: str = DFLT_USER, *, root: str | None = None) -> bool:
+def is_legacy_layout(user: str | None = None, *, root: str | None = None) -> bool:
     """True iff any legacy v1 flat directory remains for this user.
 
     Gated on the *presence of legacy dirs*, not on the existence of ``user/`` — a
@@ -124,7 +123,7 @@ def _move(src: str, dst: str, *, dry_run: bool, plan: list) -> None:
 
 
 def migrate_user_to_v2(
-    user: str = DFLT_USER,
+    user: str | None = None,
     *,
     root: str | None = None,
     company_of: Callable[[str], str] | None = None,
@@ -200,7 +199,7 @@ def migrate_user_to_v2(
     return plan
 
 
-def ensure_v2(user: str = DFLT_USER, *, root: str | None = None) -> bool:
+def ensure_v2(user: str | None = None, *, root: str | None = None) -> bool:
     """Migrate the user to v2 if a legacy layout is detected. Returns True if migrated."""
     if is_legacy_layout(user, root=root):
         migrate_user_to_v2(user, root=root)

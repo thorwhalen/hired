@@ -140,9 +140,11 @@ engagement's stores. `CandidateKnowledgeBase` is the user-level domain facade
 `JDWorkspace` (reached via `kb.jd(jd_id, company=…, label=…)`) is the per-engagement
 facade (`save_report`,
 `get_report`, `report_versions`, `save_company_report`, `save_briefing`, `save_job`).
-Repositories wrap the json stores with pydantic validation. Multi-tenant is reachable
-by adding `users/<other>/`; the default-user resolution is the only single-tenant
-assumption, and it is isolated.
+Repositories wrap the json stores with pydantic validation.
+
+**Multi-tenant.** Each candidate is a `users/<user>/` subtree. Every user-scoped entry point (`UserStore`, `JDStore`, `CandidateKnowledgeBase`, `list_jds`, the migration helpers, every `hired` CLI command) takes an optional `user` and resolves it through `persistence.resolve_user`: the argument, else `$HIRED_USER`, else `"me"`. That function is the only place the single-tenant default lives. User, engagement and job ids are validated as single path segments (`validate_name`), so one candidate's id can never address another's directory. `list_users()` enumerates the candidates present.
+
+**CLI + report formats.** `hired.cli` holds plain operations (`users`, `status`, `add-source`, `ingest`, `facts`, `synopsis`, `jds`, `analyze`, `reports`, `report`); `CLI_FUNCS` is the SSOT that `hired/__main__.py` projects onto a parser with `cw` (the `cli` extra). `analyze` runs `alignment.finalize_report`, which re-derives everything deterministic in an analyst-drafted report (buckets, counts, blocking gaps, ranked clarifications). Reports render through the `REPORT_RENDERERS` strategy registry (`markdown`, `html` — one self-contained page).
 
 **Migration.** `hired.persistence.migrate` moves a legacy *flat* `users/<user>/<kind>/`
 layout (extension-less files) to this v2 layout once, idempotently — grouping a

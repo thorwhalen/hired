@@ -7,20 +7,28 @@ filesystem codecs that keep keys extension-less while writing properly-extension
 files. Per-candidate data is split two levels deep: a cross-JD ``user/`` subtree
 (:class:`UserStore`) and per-engagement ``jds/<jd_id>/`` subtrees (:class:`JDStore`).
 
+Multi-tenant: every candidate lives under ``users/<user>/``. Entry points take an
+optional ``user``; :func:`resolve_user` falls back to ``$HIRED_USER``, then ``"me"``,
+and :func:`list_users` enumerates the candidates present.
+
 See ``misc/docs/DESIGN.md`` §4 for the full layout and rationale.
 """
 
 from hired.persistence.base import (
     DFLT_USER,
+    USER_ENV_VAR,
     JDStore,
     UserStore,
     app_data_dir,
     bytes_store,
     json_store,
     list_jds,
+    list_users,
     markdown_store,
     migrate_legacy,
+    resolve_user,
     user_base,
+    validate_name,
 )
 from hired.persistence.migrate import ensure_v2, is_legacy_layout, migrate_user_to_v2
 from hired.persistence.repository import Repository
@@ -28,6 +36,9 @@ from hired.persistence.repository import Repository
 __all__ = [
     "app_data_dir",
     "user_base",
+    "resolve_user",
+    "validate_name",
+    "list_users",
     "list_jds",
     "json_store",
     "markdown_store",
@@ -36,6 +47,7 @@ __all__ = [
     "UserStore",
     "JDStore",
     "DFLT_USER",
+    "USER_ENV_VAR",
     "Repository",
     "ensure_v2",
     "is_legacy_layout",

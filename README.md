@@ -16,6 +16,7 @@ optional features are extras:
 | `hired[rendercv]` | LaTeX/Typst-quality PDFs via rendercv |
 | `hired[search]` | multi-board job search (jobspy) |
 | `hired[ai]` | real LLM resume tailoring (openai) |
+| `hired[cli]` | the `hired` command (candidate knowledge + JD alignment from the shell) |
 | `hired[all]` | everything above |
 
 `import hired` works with just the core deps — the heavy integrations load lazily.
@@ -55,6 +56,20 @@ for job in results:
 ```
 
 For detailed documentation, see [JOB_SEARCH_README.md](JOB_SEARCH_README.md)
+
+## Candidate knowledge + JD alignment from the shell
+
+`pip install 'hired[cli]'` adds a `hired` command over the candidate knowledge base and the alignment reports. Extraction and judgment stay external (the `hired-align` skill or an LLM produce fact records and a draft report); the command validates, derives what is deterministic, and persists.
+
+```bash
+hired add-source cv.pdf                       # store a raw source
+hired ingest facts.json --source cv.pdf       # add extracted facts (quotes checked against the source)
+hired analyze draft_report.json acme          # re-classify, recount, rank questions, save
+hired report acme --fmt html --output acme.html
+hired status                                  # facts, pending sources, engagements
+```
+
+Several candidates can share one data root (`~/.local/share/hired/users/<user>/`). Every command takes `--user`; without it, the candidate is `$HIRED_USER`, else `me`. `hired users` lists them. In Python, the same seam is the `user` argument: `CandidateKnowledgeBase("alice")`.
 
 ## Features
 

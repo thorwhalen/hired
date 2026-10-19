@@ -15,7 +15,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from hired.candidate.base import _utcnow, slug
-from hired.persistence.base import JDStore
+from hired.persistence.base import JDStore, validate_name
 
 if TYPE_CHECKING:
     from hired.candidate.knowledge_base import CandidateKnowledgeBase
@@ -72,6 +72,7 @@ class JDWorkspace:
         Archiving (on by default) snapshots any existing report into
         ``report_history`` so the alignment-review agent can diff versions.
         """
+        validate_name(job_id, kind="job id")  # a key, never a path
         if archive and job_id in self.store.reports:
             # ':' is invalid in Windows filenames, so sanitize the ISO timestamp key
             stamp = (data.get("created_at") or _utcnow()).replace(":", "-")
