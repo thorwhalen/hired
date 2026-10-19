@@ -3,16 +3,12 @@
 from typing import Any
 from collections.abc import Iterable, Iterator, Mapping
 import re, os, importlib
+from functools import lru_cache
 import html as html_mod
 from collections.abc import Mapping as ABCMapping
 from hired.base import Renderer, RenderingConfig
 
 __all__ = ["ThemeRegistry", "HTMLRenderer", "html_to_pdf"]
-
-try:  # Optional dependency
-    import weasyprint  # type: ignore
-except Exception:  # pragma: no cover - absence path
-    weasyprint = None
 
 try:
     from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -162,8 +158,25 @@ class ThemeRegistry(ABCMapping[str, dict[str, Any]]):
         return self._themes_path
 
 
+@lru_cache(maxsize=1)
+def _load_weasyprint() -> Any:
+    """Import WeasyPrint (the ``pdf`` extra) on first use; ``None`` if unusable.
+
+    Imported lazily, never at module level, so ``import hired`` neither pays for
+    WeasyPrint nor triggers its "could not import some external libraries" banner
+    when the system libraries (cairo/pango) are missing. Any import failure
+    (missing package or missing system libs) falls back to the minimal builder.
+    """
+    try:
+        import weasyprint  # type: ignore
+    except Exception:  # pragma: no cover - absence path
+        return None
+    return weasyprint
+
+
 def html_to_pdf(html: str, css: str | None) -> bytes:
     """Convert HTML to PDF using WeasyPrint if available, else minimal builder."""
+    weasyprint = _load_weasyprint()
     if weasyprint is not None:
         try:  # pragma: no cover (WeasyPrint path typically optional in tests)
             return weasyprint.HTML(string=html).write_pdf(

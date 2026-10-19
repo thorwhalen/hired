@@ -1,6 +1,5 @@
 from typing import Any
 import json
-import importlib
 
 import pytest
 
@@ -12,9 +11,6 @@ def _load_resume() -> Any:
     return json.loads(resume_json_example.read_text())
 
 
-@pytest.mark.skipif(
-    importlib.util.find_spec('weasyprint') is None, reason='WeasyPrint not installed'
-)
 def test_pdf_includes_theme_css(monkeypatch: pytest.MonkeyPatch) -> None:
     """Ensure that when rendering to PDF, the theme's CSS is passed to WeasyPrint."""
     content = _load_resume()
@@ -51,10 +47,10 @@ def test_pdf_includes_theme_css(monkeypatch: pytest.MonkeyPatch) -> None:
 
     fake_weasy = type('W', (), {'HTML': FakeHTML, 'CSS': FakeCSS})
 
-    # Monkeypatch the weasyprint reference inside the renderer module
+    # Inject the fake at the renderer's lazy-import seam (no real WeasyPrint needed)
     import hired.renderers.html as html_mod
 
-    monkeypatch.setattr(html_mod, 'weasyprint', fake_weasy)
+    monkeypatch.setattr(html_mod, '_load_weasyprint', lambda: fake_weasy)
 
     # Build config-like object
     cfg = type(

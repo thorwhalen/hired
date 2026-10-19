@@ -86,3 +86,15 @@ def test_cli_operations_do_not_import_the_cli_adapter():
         "assert 'cw' not in sys.modules, 'cw imported by hired / hired.cli'"
     )
     subprocess.run([sys.executable, "-c", code], check=True)
+
+
+def test_import_hired_does_not_import_weasyprint():
+    # WeasyPrint (the `pdf` extra) loads on first PDF render only; importing it
+    # eagerly costs time and, without cairo/pango, prints a banner on every import.
+    import subprocess
+
+    code = (
+        "import sys, hired; "
+        "assert 'weasyprint' not in sys.modules, 'weasyprint imported by hired'"
+    )
+    subprocess.run([sys.executable, "-c", code], check=True)

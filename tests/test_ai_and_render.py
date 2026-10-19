@@ -66,7 +66,7 @@ def test_llm_resume_agent_with_injected_client_no_network():
 
 def test_html_to_pdf_fallback_without_weasyprint(monkeypatch):
     """The minimal-PDF fallback produces valid PDF bytes when WeasyPrint is absent."""
-    monkeypatch.setattr(html_mod, "weasyprint", None)
+    monkeypatch.setattr(html_mod, "_load_weasyprint", lambda: None)
     pdf = html_mod.html_to_pdf("<html><body>Hello</body></html>", None)
     assert isinstance(pdf, bytes)
     assert pdf.startswith(b"%PDF")
