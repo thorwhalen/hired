@@ -308,6 +308,62 @@ def report(
     return output
 
 
+# --------------------------------------------------------------------------- #
+# Skills taxonomy (Axis A adjacency)
+# --------------------------------------------------------------------------- #
+def build_skill_index(
+    *, embeddings: bool = False, no_onet: bool = False, refresh: bool = False
+) -> dict[str, Any]:
+    """Download ESCO (+ O*NET) and build the skill-adjacency taxonomy (tens of minutes).
+
+    ``--embeddings`` also embeds every label (needs ``hired[embeddings]``);
+    ``--refresh`` re-downloads instead of reusing cached pages. The data and its
+    CC BY 4.0 attribution (``NOTICE.md``) go under ``<data root>/taxonomy/``.
+    """
+    import sys
+
+    from hired.taxonomy import build_skill_index as build
+
+    def progress(message: str) -> None:
+        print(message, file=sys.stderr, flush=True)
+
+    return build(
+        sources=("esco",) if no_onet else ("esco", "onet"),
+        embeddings=embeddings,
+        refresh=refresh,
+        progress=progress,
+    )
+
+
+def skill_lookup(text: str, *, k: int = 5) -> list[str]:
+    """Taxonomy skills matching ``text`` (score, how matched, label, source, id)."""
+    from hired.taxonomy import load_skill_index
+
+    return [
+        f"{m.score:.2f}  {m.how:<9}  {m.node.label}  ({m.node.source}, {m.node.kind})  {m.node.id}"
+        for m in load_skill_index().lookup(text, k=k)
+    ]
+
+
+def skill_adjacency(
+    requirement: str, candidate_skills: str, *, k: int = 3, alpha: float = 0.5
+) -> list[str]:
+    """Rank the candidate's skills (comma-separated) by adjacency to ``requirement``.
+
+    Each line: blended score, suggested transferability band, and the evidence
+    (shared taxonomy neighbour, relatedness, label similarity).
+    """
+    from hired.taxonomy import load_skill_index
+
+    skills = [s.strip() for s in candidate_skills.split(",") if s.strip()]
+    return [
+        f"{p.score:.2f}  {p.transferability().value:<12}  {p.basis}"
+        for p in load_skill_index().suggest_adjacency(
+            requirement, skills, k=k, alpha=alpha
+        )
+    ]
+
+
 #: The operations the ``hired`` command exposes (SSOT for every surface).
 CLI_FUNCS = [
     users,
@@ -321,4 +377,7 @@ CLI_FUNCS = [
     align,
     reports,
     report,
+    build_skill_index,
+    skill_lookup,
+    skill_adjacency,
 ]

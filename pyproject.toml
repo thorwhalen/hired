@@ -65,6 +65,7 @@ hired = "hired.__main__:main"
 [project.optional-dependencies]
 testing = [
     "cw>=0.1,<0.2",
+    "numpy",
 ]
 # The `hired` command (candidate knowledge + JD alignment from the shell).
 # cw is MIT, stdlib-only; imported only by hired/__main__.py.
@@ -89,6 +90,12 @@ search = [
 # primary path.
 ai = [
     "openai>=1.0",
+]
+# Embedding-based skill adjacency (hired.taxonomy): label vectors via a local
+# sentence-transformers model. The relatedness graph itself needs no extra.
+embeddings = [
+    "sentence-transformers>=2.2",
+    "numpy",
 ]
 # Optional LangChain-powered supervisor path in resume_agent.
 supervisor = [
