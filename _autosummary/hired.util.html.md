@@ -40,9 +40,9 @@ This function works with both Pydantic’s ValidationError and jsonschema’s
 ValidationError to provide a consistent output.
 
 * **Parameters:**
-  **error_obj** (`Union`[`ValidationError`, `ValidationError`]) – The ValidationError instance to process.
+  **error_obj** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[`ValidationError`, `ValidationError`]) – The ValidationError instance to process.
 * **Yields:**
-  A tuple of (field, message) for each validation error.
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)] – A tuple of (field, message) for each validation error.
 * **Return type:**
   [*Iterator*](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[*tuple*](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any), [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 

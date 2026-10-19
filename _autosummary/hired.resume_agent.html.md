@@ -89,15 +89,15 @@ Uses DSPy-optimized prompts with metrics for conciseness and clarity.
 
 Distill verbose text into concise statement.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> config = LLMConfig(model="gpt-4")
 >>> agent = DistillationAgent(llm_config=config)
 >>> agent.llm_config.model
 'gpt-4'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* hired.resume_agent.ExpansionAgent(, llm_config=None)
 
@@ -111,9 +111,6 @@ Uses DSPy-optimized prompts for consistent, high-quality expansions.
 
 Expand brief text into detailed description.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> config = LLMConfig(model="gpt-4")
 >>> agent = ExpansionAgent(llm_config=config)
@@ -121,7 +118,10 @@ Expand brief text into detailed description.
 'gpt-4'
 ```
 
-### *class* hired.resume_agent.LLMConfig(model, temperature=0.7, max_tokens=None, top_p=1.0, provider='openai', api_key=None, base_url=None, extra_params=<factory>)
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### *class* hired.resume_agent.LLMConfig(model, temperature=0.7, max_tokens=None, top_p=1.0, provider='openai', api_key=None, base_url=None, extra_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -264,7 +264,7 @@ Validate plan structure and dependencies.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-### *class* hired.resume_agent.PlanStep(id, action, description, params=<factory>, dependencies=<factory>, estimated_tokens=None)
+### *class* hired.resume_agent.PlanStep(id, action, description, params=dict(), dependencies=list(), estimated_tokens=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -378,26 +378,26 @@ Get all conversation turns.
 
 List all persisted sessions.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
-
 ```pycon
 >>> for session_info in ResumeSession.list_persisted():
 ...     print(session_info['session_id'])
 ```
 
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
+
 #### *classmethod* load(session_id, , data_dir=None, llm_config=None)
 
 Load session from persistent storage.
-
-* **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`ResumeSession`](#hired.resume_agent.ResumeSession)]
 
 ```pycon
 >>> session = ResumeSession.load("abc123def456")
 >>> session.session_id if session else None
 'abc123def456'
 ```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`ResumeSession`](#hired.resume_agent.ResumeSession)]
 
 #### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
@@ -542,7 +542,7 @@ Returns path to saved session file.
 * **Return type:**
   [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
-### *class* hired.resume_agent.Turn(role, content, timestamp=<factory>, metadata=<factory>)
+### *class* hired.resume_agent.Turn(role, content, timestamp=<factory>, metadata=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

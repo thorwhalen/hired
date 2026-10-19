@@ -31,6 +31,7 @@
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/epythet.css?v=c5337052" />
   
@@ -40,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -725,12 +726,14 @@ window.runMermaid = runMermaid;</script>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">_utcnow</span><span class="p">,</span> <span class="n">slug</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hired.persistence.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">JDStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.persistence.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">JDStore</span><span class="p">,</span> <span class="n">validate_name</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AlignmentReport</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.knowledge_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">CandidateKnowledgeBase</span>
 
 
@@ -787,13 +790,49 @@ window.runMermaid = runMermaid;</script>
 <span class="w">        </span><span class="sd">"""Persist the current alignment report, archiving the prior one first.</span>
 
 <span class="sd">        Archiving (on by default) snapshots any existing report into</span>
-<span class="sd">        ``report_history`` so the alignment-review agent can diff versions.</span>
+<span class="sd">        ``report_history`` so the alignment-review agent can diff versions. The</span>
+<span class="sd">        snapshot is keyed by the *archived* report's ``created_at`` (else now),</span>
+<span class="sd">        made filename-safe, and never overwrites an earlier snapshot.</span>
 <span class="sd">        """</span>
+        <span class="n">validate_name</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"job id"</span><span class="p">)</span>  <span class="c1"># a key, never a path</span>
         <span class="k">if</span> <span class="n">archive</span> <span class="ow">and</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">reports</span><span class="p">:</span>
-            <span class="c1"># ':' is invalid in Windows filenames, so sanitize the ISO timestamp key</span>
-            <span class="n">stamp</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"created_at"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_utcnow</span><span class="p">())</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">":"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">report_history</span><span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">reports</span><span class="p">[</span><span class="n">job_id</span><span class="p">]</span>
+            <span class="n">prior</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">reports</span><span class="p">[</span><span class="n">job_id</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">report_history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_history_key</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">prior</span><span class="p">)]</span> <span class="o">=</span> <span class="n">prior</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">reports</span><span class="p">[</span><span class="n">job_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_history_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">report</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># ':' is invalid in Windows filenames and '/' would nest: keep [A-Za-z0-9._-]</span>
+        <span class="n">stamp</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[^A-Za-z0-9._-]"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"created_at"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_utcnow</span><span class="p">())</span>
+        <span class="n">key</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">report_history</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">stamp</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">return</span> <span class="n">key</span>
+
+<div class="viewcode-block" id="JDWorkspace.save_alignment">
+<a class="viewcode-back" href="../../../_autosummary/hired.candidate.workspace.html#hired.JDWorkspace.save_alignment">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_alignment</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">draft</span><span class="p">:</span> <span class="s2">"AlignmentReport | dict[str, Any]"</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"AlignmentReport"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Finalize an analyst-drafted alignment report and save it; return it.</span>
+
+<span class="sd">        Whatever produced the draft — the ``hired-align`` skill, the ``hired</span>
+<span class="sd">        analyze`` command, or an injected-LLM analyzer — this is the one path from</span>
+<span class="sd">        a draft to a persisted report: :func:`~hired.alignment.finalize_report`</span>
+<span class="sd">        re-derives everything deterministic, then :meth:`save_report` archives the</span>
+<span class="sd">        previous version. ``job_id`` overrides the draft's own.</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment</span><span class="w"> </span><span class="kn">import</span> <span class="n">finalize_report</span>
+
+        <span class="n">final</span> <span class="o">=</span> <span class="n">finalize_report</span><span class="p">(</span><span class="n">draft</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">job_id</span><span class="p">:</span>
+            <span class="n">final</span><span class="o">.</span><span class="n">job_id</span> <span class="o">=</span> <span class="n">job_id</span>
+        <span class="n">validate_name</span><span class="p">(</span><span class="n">final</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"job id"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">final</span><span class="o">.</span><span class="n">company</span><span class="p">:</span>
+            <span class="n">final</span><span class="o">.</span><span class="n">company</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"company"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_report</span><span class="p">(</span><span class="n">final</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">final</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"json"</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">final</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>

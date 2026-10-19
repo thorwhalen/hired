@@ -35,7 +35,7 @@ Generate cover letter content from candidate and job information.
 
 * **Parameters:**
   * **candidate_info** ([`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Candidate information (resume dict or basics)
-  * **job_info** (`Union`[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
+  * **job_info** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
   * **tone** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Tone of the letter (‘professional’, ‘enthusiastic’, ‘formal’)
 * **Return type:**
   [`CoverLetterData`](#hired.cover_letter.CoverLetterData)
@@ -57,7 +57,7 @@ Generate and render a cover letter.
 
 * **Parameters:**
   * **candidate_info** ([`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Candidate information (resume dict or basics)
-  * **job_info** (`Union`[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
+  * **job_info** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
   * **tone** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Tone of the letter (‘professional’, ‘enthusiastic’, ‘formal’)
   * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output format (‘text’, ‘html’, ‘markdown’)
   * **output_path** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional path to save the cover letter

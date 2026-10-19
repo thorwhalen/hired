@@ -116,7 +116,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Compensation information for a job.
 
-### *class* hired.search.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=<factory>, benefits=<factory>, emails=<factory>, raw_data=<factory>)
+### *class* hired.search.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=list(), benefits=list(), emails=list(), raw_data=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -393,7 +393,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Location information for a job.
 
-### *class* hired.search.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=<factory>, exclude_keywords=<factory>, source_params=<factory>)
+### *class* hired.search.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=list(), exclude_keywords=list(), source_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

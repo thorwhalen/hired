@@ -31,6 +31,7 @@
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/epythet.css?v=c5337052" />
   
@@ -40,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -759,6 +760,7 @@ window.runMermaid = runMermaid;</script>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableMapping</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cached_property</span>
@@ -775,6 +777,8 @@ window.runMermaid = runMermaid;</script>
 
 <span class="n">DFLT_USER</span> <span class="o">=</span> <span class="s2">"me"</span>
 <span class="n">_ENV_VAR</span> <span class="o">=</span> <span class="s2">"HIRED_DATA_DIR"</span>
+<span class="c1">#: Environment variable naming the active candidate when no ``user`` is passed.</span>
+<span class="n">USER_ENV_VAR</span> <span class="o">=</span> <span class="s2">"HIRED_USER"</span>
 
 <span class="c1"># --- layout names (single source of truth; no magic strings) --------------- #</span>
 <span class="n">USERS_DIR</span> <span class="o">=</span> <span class="s2">"users"</span>
@@ -964,17 +968,121 @@ window.runMermaid = runMermaid;</script>
 
 
 
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># Multi-tenancy: which candidate (``users/&lt;user&gt;/``) an operation targets</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1">#: A safe id: one path segment of ASCII letters/digits/``._-``, starting with an</span>
+<span class="c1">#: alphanumeric and not ending in ``.`` (Windows strips trailing dots).</span>
+<span class="n">_ID_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[A-Za-z0-9](?:[A-Za-z0-9._-]{0,126}[A-Za-z0-9_-])?"</span><span class="p">)</span>
+<span class="c1">#: Candidate (user) names are additionally lower-case: on case-insensitive</span>
+<span class="c1">#: filesystems (macOS, Windows) ``ALICE`` and ``alice`` are the same directory, so</span>
+<span class="c1">#: allowing both would alias two "different" tenants onto one candidate's data.</span>
+<span class="n">_USER_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[a-z0-9](?:[a-z0-9._-]{0,62}[a-z0-9_-])?"</span><span class="p">)</span>
+<span class="c1">#: Device names Windows reserves in every directory (with or without extension).</span>
+<span class="n">_WINDOWS_RESERVED</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">"con"</span><span class="p">,</span> <span class="s2">"prn"</span><span class="p">,</span> <span class="s2">"aux"</span><span class="p">,</span> <span class="s2">"nul"</span><span class="p">]</span>
+    <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">p</span><span class="si">}{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"com"</span><span class="p">,</span> <span class="s2">"lpt"</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)]</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="validate_name">
+<a class="viewcode-back" href="../../../_autosummary/hired.persistence.base.html#hired.persistence.validate_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">validate_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"name"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return ``name`` if it is a safe, portable single path segment, else raise.</span>
+
+<span class="sd">    User, engagement and job ids become directory or file names, so they are</span>
+<span class="sd">    restricted to ASCII letters, digits and ``._-`` (starting with a letter or</span>
+<span class="sd">    digit, not ending in ``.``), and may not be a Windows device name. That rules</span>
+<span class="sd">    out separators, ``..``, drive prefixes (``C:x``), hidden names and NUL bytes —</span>
+<span class="sd">    so one id can never address another candidate's (or an arbitrary) directory.</span>
+<span class="sd">    ``kind="user"`` also requires lower case (see :data:`_USER_PATTERN`).</span>
+
+<span class="sd">    &gt;&gt;&gt; validate_name('acme-2024')</span>
+<span class="sd">    'acme-2024'</span>
+<span class="sd">    &gt;&gt;&gt; validate_name('../bob', kind='engagement id')</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">      ...</span>
+<span class="sd">    ValueError: Invalid engagement id '../bob': use ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'</span>
+<span class="sd">    &gt;&gt;&gt; validate_name('Alice', kind='user')</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">      ...</span>
+<span class="sd">    ValueError: Invalid user 'Alice': use lower-case ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'</span>
+<span class="sd">    """</span>
+    <span class="n">pattern</span><span class="p">,</span> <span class="n">case</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">_USER_PATTERN</span><span class="p">,</span> <span class="s2">"lower-case "</span><span class="p">)</span> <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">"user"</span> <span class="k">else</span> <span class="p">(</span><span class="n">_ID_PATTERN</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">pattern</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Invalid </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">: use </span><span class="si">{</span><span class="n">case</span><span class="si">}</span><span class="s2">ASCII letters, digits and '._-', "</span>
+            <span class="s2">"starting with a letter or digit and not ending in '.'"</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">_WINDOWS_RESERVED</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">: reserved device name on Windows"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">name</span></div>
+
+
+
+<div class="viewcode-block" id="resolve_user">
+<a class="viewcode-back" href="../../../_autosummary/hired.persistence.base.html#hired.persistence.resolve_user">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolve_user</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The candidate an operation targets: ``user``, else ``$HIRED_USER``, else ``"me"``.</span>
+
+<span class="sd">    This is the *only* place the single-tenant default lives; every user-scoped</span>
+<span class="sd">    entry point passes its ``user`` argument through here. An explicitly given</span>
+<span class="sd">    name (even ``""``) is validated, never silently replaced by the default.</span>
+
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; _ = os.environ.pop('HIRED_USER', None)</span>
+<span class="sd">    &gt;&gt;&gt; resolve_user()</span>
+<span class="sd">    'me'</span>
+<span class="sd">    &gt;&gt;&gt; resolve_user('alice')</span>
+<span class="sd">    'alice'</span>
+<span class="sd">    &gt;&gt;&gt; os.environ['HIRED_USER'] = 'bob'</span>
+<span class="sd">    &gt;&gt;&gt; resolve_user()</span>
+<span class="sd">    'bob'</span>
+<span class="sd">    &gt;&gt;&gt; del os.environ['HIRED_USER']</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">USER_ENV_VAR</span><span class="p">)</span> <span class="ow">or</span> <span class="n">DFLT_USER</span>
+    <span class="k">return</span> <span class="n">validate_name</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"user"</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="list_users">
+<a class="viewcode-back" href="../../../_autosummary/hired.persistence.base.html#hired.persistence.list_users">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_users</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Candidates with data under the data root's ``users/`` (sorted; empty if none).</span>
+
+<span class="sd">    &gt;&gt;&gt; import os, tempfile</span>
+<span class="sd">    &gt;&gt;&gt; os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()</span>
+<span class="sd">    &gt;&gt;&gt; list_users()</span>
+<span class="sd">    []</span>
+<span class="sd">    &gt;&gt;&gt; _ = UserStore('alice').facts</span>
+<span class="sd">    &gt;&gt;&gt; list_users()</span>
+<span class="sd">    ['alice']</span>
+<span class="sd">    """</span>
+    <span class="n">users_dir</span> <span class="o">=</span> <span class="n">app_data_dir</span><span class="p">(</span><span class="n">USERS_DIR</span><span class="p">,</span> <span class="n">make</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">users_dir</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">n</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">users_dir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"."</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">users_dir</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="user_base">
 <a class="viewcode-back" href="../../../_autosummary/hired.persistence.base.html#hired.persistence.user_base">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">user_base</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">user_base</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Filesystem base for a candidate: ``&lt;root&gt;`` or ``&lt;data&gt;/users/&lt;user&gt;``."""</span>
-    <span class="k">return</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">app_data_dir</span><span class="p">(</span><span class="n">USERS_DIR</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">root</span> <span class="ow">or</span> <span class="n">app_data_dir</span><span class="p">(</span><span class="n">USERS_DIR</span><span class="p">,</span> <span class="n">resolve_user</span><span class="p">(</span><span class="n">user</span><span class="p">))</span></div>
 
 
 
 <div class="viewcode-block" id="list_jds">
 <a class="viewcode-back" href="../../../_autosummary/hired.persistence.base.html#hired.persistence.list_jds">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">list_jds</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_jds</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">"""Engagement ids under ``users/&lt;user&gt;/jds/`` (sorted; empty if none)."""</span>
     <span class="n">jds_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">user_base</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="n">root</span><span class="p">),</span> <span class="n">JDS_DIR</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">jds_dir</span><span class="p">):</span>
@@ -997,7 +1105,7 @@ window.runMermaid = runMermaid;</script>
 
 <span class="sd">    &gt;&gt;&gt; import tempfile, os</span>
 <span class="sd">    &gt;&gt;&gt; os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()</span>
-<span class="sd">    &gt;&gt;&gt; us = UserStore()                       # default user "me"</span>
+<span class="sd">    &gt;&gt;&gt; us = UserStore()           # default user: $HIRED_USER, else "me"</span>
 <span class="sd">    &gt;&gt;&gt; us.facts['f1'] = {'statement': 'knows Python'}</span>
 <span class="sd">    &gt;&gt;&gt; us.facts['f1']</span>
 <span class="sd">    {'statement': 'knows Python'}</span>
@@ -1009,8 +1117,8 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    '# me'</span>
 <span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_USER</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">user</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">resolve_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">root</span>
 
     <span class="nd">@property</span>
@@ -1075,9 +1183,11 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">    'Acme'</span>
 <span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">jd_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">user</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">jd_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">jd_id</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">jd_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">resolve_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jd_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">validate_name</span><span class="p">(</span><span class="n">jd_id</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"engagement id"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_root</span> <span class="o">=</span> <span class="n">root</span>
 
     <span class="nd">@property</span>

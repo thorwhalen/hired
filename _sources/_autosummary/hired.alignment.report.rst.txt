@@ -4,9 +4,17 @@ hired.alignment.report
 .. automodule:: hired.alignment.report
 
    
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      REPORT_RENDERERS
+   
    .. rubric:: Functions
 
    .. autosummary::
    
+      render_report
+      render_report_html
       render_report_markdown
    

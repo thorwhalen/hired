@@ -11,6 +11,7 @@ hired.persistence.base
       JsonStore
       TextStore
       BytesStore
+      USER_ENV_VAR
    
    .. rubric:: Functions
 
@@ -20,11 +21,14 @@ hired.persistence.base
       bytes_store
       json_store
       list_jds
+      list_users
       markdown_store
       migrate_legacy
       read_json_file
       read_text_file
+      resolve_user
       user_base
+      validate_name
       write_json_file
       write_text_file
    

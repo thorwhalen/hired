@@ -26,9 +26,6 @@ Soften a *codified* gap’s closeability by the candidate’s AI leverage.
 Tacit/soft gaps and structurally-hard gaps are never softened — AI agents
 extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 
-* **Return type:**
-  [`Closeability`](hired.alignment.base.html.md#hired.alignment.base.Closeability)
-
 ```pycon
 >>> apply_ai_leverage(Closeability.REQUIRES_EXPERIENCE, AILeverage.HIGH,
 ...                    skill_type=SkillType.TECHNICAL)
@@ -37,6 +34,9 @@ extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 ...                    skill_type=SkillType.SOFT_SKILL)
 <Closeability.REQUIRES_EXPERIENCE: 'requires_experience'>
 ```
+
+* **Return type:**
+  [`Closeability`](hired.alignment.base.html.md#hired.alignment.base.Closeability)
 
 ### hired.alignment.rubric.assign_bucket(record)
 

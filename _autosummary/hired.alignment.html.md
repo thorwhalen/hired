@@ -10,8 +10,10 @@ Public surface:
   ([`classify()`](#hired.alignment.classify), [`assign_bucket()`](#hired.alignment.assign_bucket), [`apply_ai_leverage()`](#hired.alignment.apply_ai_leverage)),
 - the elicitation helpers in [`hired.alignment.elicitation`](hired.alignment.elicitation.html.md#module-hired.alignment.elicitation)
   ([`rank_clarifications()`](#hired.alignment.rank_clarifications), [`is_decision_stable()`](#hired.alignment.is_decision_stable)),
-- Markdown rendering in [`hired.alignment.report`](hired.alignment.report.html.md#module-hired.alignment.report)
-  ([`render_report_markdown()`](#hired.alignment.render_report_markdown)).
+- deterministic report finalization in [`hired.alignment.assemble`](hired.alignment.assemble.html.md#module-hired.alignment.assemble)
+  ([`finalize_report()`](#hired.alignment.finalize_report) — reclassify, recount, rebuild blockers/clarifications),
+- rendering in [`hired.alignment.report`](hired.alignment.report.html.md#module-hired.alignment.report) ([`render_report()`](#hired.alignment.render_report) dispatching to
+  [`render_report_markdown()`](#hired.alignment.render_report_markdown) / [`render_report_html()`](#hired.alignment.render_report_html)).
 
 The *intelligence* (judging transfer distance, trainability, evidence) is supplied
 by the `hired-align` skill (Claude as brain) or an injected LLM; this package
@@ -29,34 +31,38 @@ provides the schemas, deterministic scoring, and rendering. See
 | [`is_decision_stable`](#hired.alignment.is_decision_stable)(records)                       | True when no remaining open unknown could flip the verdict.                                               |
 | [`should_ask`](#hired.alignment.should_ask)(record)                                | Whether to route this record to a clarifying question.                                                    |
 | [`info_gain`](#hired.alignment.info_gain)(record)                                 | Expected information gain of resolving this requirement, wrt the verdict.                                 |
+| [`finalize_report`](#hired.alignment.finalize_report)(report)                           | Return a copy of `report` with every derivable field recomputed.                                          |
+| [`is_blocking`](#hired.alignment.is_blocking)(record)                               | True for a gate-keeper requirement that is a hard gap or contradicted.                                    |
+| [`render_report`](#hired.alignment.render_report)(report[, fmt])                      | Render `report` (a model or its JSON dict) in the named format.                                           |
 | [`render_report_markdown`](#hired.alignment.render_report_markdown)(report)                    | Render the report as a Markdown string.                                                                   |
+| [`render_report_html`](#hired.alignment.render_report_html)(report)                        | Render the report as a self-contained HTML page (inline CSS, no assets).                                  |
 | [`diff_reports`](#hired.alignment.diff_reports)(old, new)                            | Return a structured diff of two alignment-report dicts.                                                   |
 | [`summarize_diff`](#hired.alignment.summarize_diff)(diff)                              | A short human-readable summary of [`diff_reports()`](#hired.alignment.diff_reports) output. |
 
 ### Classes
 
-| [`Requirement`](#hired.alignment.Requirement)(\*\*data)       | One atomic requirement extracted verbatim from a job description.        |
-|------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| [`RequirementRecord`](#hired.alignment.RequirementRecord)(\*\*data) | The analysis of one requirement against the candidate's knowledge.       |
-| [`Evidence`](#hired.alignment.Evidence)(\*\*data)          | A verbatim grounding span for a match judgment.                          |
-| [`AlignmentReport`](#hired.alignment.AlignmentReport)(\*\*data)   | A complete, verdict-first alignment analysis for one JD.                 |
-| [`Verdict`](#hired.alignment.Verdict)(\*\*data)           |                                                                          |
-| [`ScoreSummary`](#hired.alignment.ScoreSummary)(\*\*data)      |                                                                          |
-| [`NextAction`](#hired.alignment.NextAction)(\*\*data)        |                                                                          |
-| [`Clarification`](#hired.alignment.Clarification)(\*\*data)     | A question to ask the candidate to resolve a decision-relevant unknown.  |
-| [`InterviewPrep`](#hired.alignment.InterviewPrep)(\*\*data)     |                                                                          |
-| [`Bucket`](#hired.alignment.Bucket)(\*values)            | The four alignment buckets.                                              |
-| [`MatchType`](#hired.alignment.MatchType)(\*values)         | How the candidate's background relates to the requirement (Axis A).      |
-| [`RequirementClass`](#hired.alignment.RequirementClass)(\*values)  | How decision-critical a requirement is.                                  |
-| [`SkillType`](#hired.alignment.SkillType)(\*values)         |                                                                          |
-| [`Closeability`](#hired.alignment.Closeability)(\*values)      | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
-| [`CloseMethod`](#hired.alignment.CloseMethod)(\*values)       |                                                                          |
-| [`TimeToClose`](#hired.alignment.TimeToClose)(\*values)       |                                                                          |
-| [`Transferability`](#hired.alignment.Transferability)(\*values)   |                                                                          |
-| [`AILeverage`](#hired.alignment.AILeverage)(\*values)        | How much the candidate's standing AI-agent capability lowers the ramp.   |
-| [`FieldCompleteness`](#hired.alignment.FieldCompleteness)(\*values) | Local closed-world flag: may a missing value be read as a real negative? |
-| [`Recommendation`](#hired.alignment.Recommendation)(\*values)    |                                                                          |
-| [`FitBand`](#hired.alignment.FitBand)(\*values)           |                                                                          |
+| [`Requirement`](#hired.alignment.Requirement)(\*[, id, skill_type, ...])             | One atomic requirement extracted verbatim from a job description.        |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| [`RequirementRecord`](#hired.alignment.RequirementRecord)(\*, requirement[, ...])          | The analysis of one requirement against the candidate's knowledge.       |
+| [`Evidence`](#hired.alignment.Evidence)(\*, quote[, source_document_id, locator]) | A verbatim grounding span for a match judgment.                          |
+| [`AlignmentReport`](#hired.alignment.AlignmentReport)(\*, job_id[, job_title, ...])      | A complete, verdict-first alignment analysis for one JD.                 |
+| [`Verdict`](#hired.alignment.Verdict)(\*, recommendation[, confidence, ...])     |                                                                          |
+| [`ScoreSummary`](#hired.alignment.ScoreSummary)(\*[, fit_band, bucket_counts, ...])   |                                                                          |
+| [`NextAction`](#hired.alignment.NextAction)(\*, action[, addresses, priority, ...]) |                                                                          |
+| [`Clarification`](#hired.alignment.Clarification)(\*, requirement_id, question[, ...]) | A question to ask the candidate to resolve a decision-relevant unknown.  |
+| [`InterviewPrep`](#hired.alignment.InterviewPrep)(\*[, summary, talking_points, ...])  |                                                                          |
+| [`Bucket`](#hired.alignment.Bucket)(\*values)                                   | The four alignment buckets.                                              |
+| [`MatchType`](#hired.alignment.MatchType)(\*values)                                | How the candidate's background relates to the requirement (Axis A).      |
+| [`RequirementClass`](#hired.alignment.RequirementClass)(\*values)                         | How decision-critical a requirement is.                                  |
+| [`SkillType`](#hired.alignment.SkillType)(\*values)                                |                                                                          |
+| [`Closeability`](#hired.alignment.Closeability)(\*values)                             | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
+| [`CloseMethod`](#hired.alignment.CloseMethod)(\*values)                              |                                                                          |
+| [`TimeToClose`](#hired.alignment.TimeToClose)(\*values)                              |                                                                          |
+| [`Transferability`](#hired.alignment.Transferability)(\*values)                          |                                                                          |
+| [`AILeverage`](#hired.alignment.AILeverage)(\*values)                               | How much the candidate's standing AI-agent capability lowers the ramp.   |
+| [`FieldCompleteness`](#hired.alignment.FieldCompleteness)(\*values)                        | Local closed-world flag: may a missing value be read as a real negative? |
+| [`Recommendation`](#hired.alignment.Recommendation)(\*values)                           |                                                                          |
+| [`FitBand`](#hired.alignment.FitBand)(\*values)                                  |                                                                          |
 
 ### *class* hired.alignment.AILeverage(\*values)
 
@@ -67,7 +73,7 @@ How much the candidate’s standing AI-agent capability lowers the ramp.
 Applies to *codified / knowledge-breadth* gaps, not tacit-judgment or
 enduring-aptitude gaps (those it cannot rescue).
 
-### *class* hired.alignment.AlignmentReport(\*\*data)
+### *class* hired.alignment.AlignmentReport(\*, job_id, job_title='', company='', created_at='', verdict, score_summary=<factory>, requirements=<factory>, blocking_gaps=<factory>, next_actions=<factory>, interview_prep=<factory>, clarifications=<factory>)
 
 Bases: `BaseModel`
 
@@ -83,7 +89,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 The four alignment buckets.
 
-### *class* hired.alignment.Clarification(\*\*data)
+### *class* hired.alignment.Clarification(, requirement_id, question, fills_field='', reason='', info_gain=0.0)
 
 Bases: `BaseModel`
 
@@ -103,7 +109,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How hard a gap is to close (Axis B), after the AI-leverage modifier.
 
-### *class* hired.alignment.Evidence(\*\*data)
+### *class* hired.alignment.Evidence(, quote, source_document_id='', locator='')
 
 Bases: `BaseModel`
 
@@ -123,7 +129,7 @@ Local closed-world flag: may a missing value be read as a real negative?
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.InterviewPrep(\*\*data)
+### *class* hired.alignment.InterviewPrep(\*, summary='', talking_points=<factory>, story_library=<factory>, proactive_disclosure='')
 
 Bases: `BaseModel`
 
@@ -137,7 +143,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How the candidate’s background relates to the requirement (Axis A).
 
-### *class* hired.alignment.NextAction(\*\*data)
+### *class* hired.alignment.NextAction(, action, addresses='', priority=1, expected_effect='')
 
 Bases: `BaseModel`
 
@@ -149,7 +155,7 @@ Configuration for the model, should be a dictionary conforming to [`ConfigDict`]
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.Requirement(\*\*data)
+### *class* hired.alignment.Requirement(\*, id=<factory>, text, skill_type=SkillType.TECHNICAL, requirement_class=RequirementClass.DIFFERENTIATOR, required_level=3)
 
 Bases: `BaseModel`
 
@@ -165,7 +171,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How decision-critical a requirement is.
 
-### *class* hired.alignment.RequirementRecord(\*\*data)
+### *class* hired.alignment.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -175,7 +181,7 @@ The analysis of one requirement against the candidate’s knowledge.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.alignment.ScoreSummary(\*\*data)
+### *class* hired.alignment.ScoreSummary(\*, fit_band=FitBand.FAIR, bucket_counts=<factory>, ats_readability=None)
 
 Bases: `BaseModel`
 
@@ -195,7 +201,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.Verdict(\*\*data)
+### *class* hired.alignment.Verdict(\*, recommendation, confidence=ConfidenceLevel.MEDIUM, confidence_basis='', headline='', key_reasons=<factory>, has_blocking_gaps=False)
 
 Bases: `BaseModel`
 
@@ -210,9 +216,6 @@ Soften a *codified* gap’s closeability by the candidate’s AI leverage.
 Tacit/soft gaps and structurally-hard gaps are never softened — AI agents
 extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 
-* **Return type:**
-  [`Closeability`](hired.alignment.base.html.md#hired.alignment.base.Closeability)
-
 ```pycon
 >>> apply_ai_leverage(Closeability.REQUIRES_EXPERIENCE, AILeverage.HIGH,
 ...                    skill_type=SkillType.TECHNICAL)
@@ -221,6 +224,9 @@ extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 ...                    skill_type=SkillType.SOFT_SKILL)
 <Closeability.REQUIRES_EXPERIENCE: 'requires_experience'>
 ```
+
+* **Return type:**
+  [`Closeability`](hired.alignment.base.html.md#hired.alignment.base.Closeability)
 
 ### hired.alignment.assign_bucket(record)
 
@@ -267,6 +273,38 @@ Both inputs are `AlignmentReport.model_dump()` dicts. The result has:
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
+### hired.alignment.finalize_report(report)
+
+Return a copy of `report` with every derivable field recomputed.
+
+Clarifications and flagged blockers refer to requirements by `id`; give
+requirements explicit ids in a draft so those links survive (flagged
+blockers also fall back to matching by requirement text).
+
+```pycon
+>>> from hired.alignment import (AlignmentReport, Requirement, RequirementRecord,
+...     RequirementClass, Verdict, Recommendation, MatchType, Closeability)
+>>> from hired.candidate.base import MatchState
+>>> gate = Requirement(id='r1', text='PhD', requirement_class=RequirementClass.GATE_KEEPER)
+>>> recs = [
+...     RequirementRecord(requirement=gate, closeability=Closeability.STRUCTURALLY_HARD,
+...                       match_state=MatchState.CONTRADICTED),
+...     RequirementRecord(requirement=Requirement(id='r2', text='Python', required_level=3),
+...                       match_state=MatchState.CONFIRMED, match_type=MatchType.DIRECT,
+...                       candidate_level=5),
+... ]
+>>> report = finalize_report(AlignmentReport(
+...     job_id='ds', verdict=Verdict(recommendation=Recommendation.STRETCH),
+...     requirements=recs))
+>>> report.score_summary.bucket_counts['strong_match']
+1
+>>> [r.requirement.id for r in report.blocking_gaps], report.verdict.has_blocking_gaps
+(['r1'], True)
+```
+
+* **Return type:**
+  [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
 ### hired.alignment.info_gain(record)
 
 Expected information gain of resolving this requirement, wrt the verdict.
@@ -276,6 +314,13 @@ criticality when the analyst has a sharper view than the requirement class.
 
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
+### hired.alignment.is_blocking(record)
+
+True for a gate-keeper requirement that is a hard gap or contradicted.
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### hired.alignment.is_decision_stable(records)
 
@@ -296,6 +341,39 @@ skeleton (requirement, reason, info_gain) so the caller can fill `question`.
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Clarification`](hired.alignment.base.html.md#hired.alignment.base.Clarification)]
+
+### hired.alignment.render_report(report, fmt='markdown')
+
+Render `report` (a model or its JSON dict) in the named format.
+
+```pycon
+>>> from hired.alignment import AlignmentReport, Verdict, Recommendation
+>>> r = {'job_id': 'ds', 'verdict': {'recommendation': 'apply'}}
+>>> render_report(r).splitlines()[0]
+'# Alignment: ds'
+>>> render_report(r, 'pdf')
+Traceback (most recent call last):
+  ...
+ValueError: Unknown report format 'pdf'; choose from: html, markdown, md
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.alignment.render_report_html(report)
+
+Render the report as a self-contained HTML page (inline CSS, no assets).
+
+```pycon
+>>> from hired.alignment import AlignmentReport, Verdict, Recommendation
+>>> page = render_report_html(AlignmentReport(job_id='ds', company='Acme <Inc>',
+...     verdict=Verdict(recommendation=Recommendation.APPLY, headline='Go')))
+>>> page.startswith('<!doctype html>'), 'Acme &lt;Inc&gt;' in page
+(True, True)
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### hired.alignment.render_report_markdown(report)
 
@@ -324,9 +402,10 @@ A short human-readable summary of [`diff_reports()`](#hired.alignment.diff_repor
 
 ### Modules
 
-| [`base`](hired.alignment.base.html.md#module-hired.alignment.base)               | Schemas for JD-vs-candidate alignment analysis.                                                                              |
-|-------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| [`diff`](hired.alignment.diff.html.md#module-hired.alignment.diff)               | Deterministic diff between two alignment reports.                                                                            |
-| [`elicitation`](hired.alignment.elicitation.html.md#module-hired.alignment.elicitation) | The honesty loop: rank unknowns into the most informative questions first.                                                   |
-| [`report`](hired.alignment.report.html.md#module-hired.alignment.report)           | Render an [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown. |
-| [`rubric`](hired.alignment.rubric.html.md#module-hired.alignment.rubric)           | Deterministic bucket assignment — the two-axis rubric in code.                                                               |
+| [`assemble`](hired.alignment.assemble.html.md#module-hired.alignment.assemble)       | Deterministically finalize an analyst-drafted [`AlignmentReport`](#hired.alignment.AlignmentReport).                      |
+|-------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| [`base`](hired.alignment.base.html.md#module-hired.alignment.base)               | Schemas for JD-vs-candidate alignment analysis.                                                                                      |
+| [`diff`](hired.alignment.diff.html.md#module-hired.alignment.diff)               | Deterministic diff between two alignment reports.                                                                                    |
+| [`elicitation`](hired.alignment.elicitation.html.md#module-hired.alignment.elicitation) | The honesty loop: rank unknowns into the most informative questions first.                                                           |
+| [`report`](hired.alignment.report.html.md#module-hired.alignment.report)           | Render an [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown or HTML. |
+| [`rubric`](hired.alignment.rubric.html.md#module-hired.alignment.rubric)           | Deterministic bucket assignment — the two-axis rubric in code.                                                                       |

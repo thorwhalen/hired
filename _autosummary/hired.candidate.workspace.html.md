@@ -42,6 +42,19 @@ Keys of archived prior versions of a job’s report (chronological).
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+#### save_alignment(draft, , job_id=None)
+
+Finalize an analyst-drafted alignment report and save it; return it.
+
+Whatever produced the draft — the `hired-align` skill, the `hired
+analyze` command, or an injected-LLM analyzer — this is the one path from
+a draft to a persisted report: [`finalize_report()`](hired.alignment.html.md#hired.alignment.finalize_report)
+re-derives everything deterministic, then [`save_report()`](#hired.candidate.workspace.JDWorkspace.save_report) archives the
+previous version. `job_id` overrides the draft’s own.
+
+* **Return type:**
+  [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
 #### save_briefing(key, data)
 
 Persist an interview-prep research briefing (keyed by subject/job).
@@ -61,7 +74,9 @@ Persist a company/people research report (keyed by company name).
 Persist the current alignment report, archiving the prior one first.
 
 Archiving (on by default) snapshots any existing report into
-`report_history` so the alignment-review agent can diff versions.
+`report_history` so the alignment-review agent can diff versions. The
+snapshot is keyed by the *archived* report’s `created_at` (else now),
+made filename-safe, and never overwrites an earlier snapshot.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)

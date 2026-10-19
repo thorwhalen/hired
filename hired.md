@@ -1,4 +1,4 @@
-> built 2026-10-14 02:29 UTC from 2b5ebd0 (main) · hired 0.0.23. Details: build_info.json
+> built 2026-10-19 12:51 UTC from 94073e0 (main) · hired 0.0.24. Details: build_info.json
 
 # index.html.md
 
@@ -22,6 +22,7 @@ optional features are extras:
 | `hired[rendercv]`   | LaTeX/Typst-quality PDFs via rendercv                                           |
 | `hired[search]`     | multi-board job search (jobspy)                                                 |
 | `hired[ai]`         | real LLM resume tailoring (openai)                                              |
+| `hired[cli]`        | the `hired` command (candidate knowledge + JD alignment from the shell)         |
 | `hired[all]`        | everything above                                                                |
 
 `import hired` works with just the core deps — the heavy integrations load lazily.
@@ -61,6 +62,20 @@ for job in results:
 ```
 
 For detailed documentation, see [JOB_SEARCH_README.md]()
+
+## Candidate knowledge + JD alignment from the shell
+
+`pip install 'hired[cli]'` adds a `hired` command over the candidate knowledge base and the alignment reports. Extraction and judgment stay external (the `hired-align` skill or an LLM produce fact records and a draft report); the command validates, derives what is deterministic, and persists.
+
+```bash
+hired add-source cv.pdf                       # store a raw source
+hired ingest facts.json --source cv.pdf       # add extracted facts (quotes checked against the source)
+hired analyze draft_report.json acme          # re-classify, recount, rank questions, save
+hired report acme --fmt html --output acme.html
+hired status                                  # facts, pending sources, engagements
+```
+
+Several candidates can share one data root (`~/.local/share/hired/users/<user>/`). Every command takes `--user`; without it, the candidate is `$HIRED_USER`, else `me`. `hired users` lists them. In Python, the same seam is the `user` argument: `CandidateKnowledgeBase("alice")`.
 
 ## Features
 
@@ -201,6 +216,73 @@ print("------------------------------------")
 <p class="epythet-aggregates">This documentation as a single file: <a href="hired.md">hired.md</a> (Markdown, for agents).</p>
 
 
+# _autosummary/hired.alignment.assemble.html.md
+
+# hired.alignment.assemble
+
+Deterministically finalize an analyst-drafted `AlignmentReport`.
+
+The *judgments* in a report (match state, levels, adjacency, closeability, the
+verdict) come from outside the package — the `hired-align` skill or an injected
+LLM. Everything that can be *derived* from those judgments is derived here, so a
+report never carries stale bookkeeping after a record changes:
+
+- every record is re-[`classify()`](_autosummary/hired.alignment.rubric.html.md#hired.alignment.rubric.classify)-ed (gap size, bucket,
+  `needs_clarification`),
+- `score_summary.bucket_counts` is recounted,
+- `blocking_gaps` is rebuilt from the current records,
+- `clarifications` is re-ranked by info gain (keeping any question text the
+  analyst already drafted, dropping those whose requirement is now resolved),
+- `verdict.has_blocking_gaps` and `created_at` are filled in.
+
+This is what the `hired analyze` CLI command runs before persisting a report.
+
+### Functions
+
+| [`finalize_report`](_autosummary/hired.alignment.assemble.html.md#hired.alignment.assemble.finalize_report)(report)   | Return a copy of `report` with every derivable field recomputed.       |
+|----------------------------------------------------------------------------|------------------------------------------------------------------------|
+| [`is_blocking`](_autosummary/hired.alignment.assemble.html.md#hired.alignment.assemble.is_blocking)(record)       | True for a gate-keeper requirement that is a hard gap or contradicted. |
+
+### hired.alignment.assemble.finalize_report(report)
+
+Return a copy of `report` with every derivable field recomputed.
+
+Clarifications and flagged blockers refer to requirements by `id`; give
+requirements explicit ids in a draft so those links survive (flagged
+blockers also fall back to matching by requirement text).
+
+```pycon
+>>> from hired.alignment import (AlignmentReport, Requirement, RequirementRecord,
+...     RequirementClass, Verdict, Recommendation, MatchType, Closeability)
+>>> from hired.candidate.base import MatchState
+>>> gate = Requirement(id='r1', text='PhD', requirement_class=RequirementClass.GATE_KEEPER)
+>>> recs = [
+...     RequirementRecord(requirement=gate, closeability=Closeability.STRUCTURALLY_HARD,
+...                       match_state=MatchState.CONTRADICTED),
+...     RequirementRecord(requirement=Requirement(id='r2', text='Python', required_level=3),
+...                       match_state=MatchState.CONFIRMED, match_type=MatchType.DIRECT,
+...                       candidate_level=5),
+... ]
+>>> report = finalize_report(AlignmentReport(
+...     job_id='ds', verdict=Verdict(recommendation=Recommendation.STRETCH),
+...     requirements=recs))
+>>> report.score_summary.bucket_counts['strong_match']
+1
+>>> [r.requirement.id for r in report.blocking_gaps], report.verdict.has_blocking_gaps
+(['r1'], True)
+```
+
+* **Return type:**
+  [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
+### hired.alignment.assemble.is_blocking(record)
+
+True for a gate-keeper requirement that is a hard gap or contradicted.
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+
 # _autosummary/hired.alignment.base.html.md
 
 # hired.alignment.base
@@ -218,28 +300,28 @@ See `misc/docs/DESIGN.md` §6.
 
 ### Classes
 
-| [`AILeverage`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AILeverage)(\*values)        | How much the candidate's standing AI-agent capability lowers the ramp.   |
-|------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)(\*\*data)   | A complete, verdict-first alignment analysis for one JD.                 |
-| [`Bucket`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Bucket)(\*values)            | The four alignment buckets.                                              |
-| [`Clarification`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Clarification)(\*\*data)     | A question to ask the candidate to resolve a decision-relevant unknown.  |
-| [`CloseMethod`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.CloseMethod)(\*values)       |                                                                          |
-| [`Closeability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Closeability)(\*values)      | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
-| [`Evidence`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Evidence)(\*\*data)          | A verbatim grounding span for a match judgment.                          |
-| [`FieldCompleteness`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.FieldCompleteness)(\*values) | Local closed-world flag: may a missing value be read as a real negative? |
-| [`FitBand`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.FitBand)(\*values)           |                                                                          |
-| [`InterviewPrep`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.InterviewPrep)(\*\*data)     |                                                                          |
-| [`MatchType`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.MatchType)(\*values)         | How the candidate's background relates to the requirement (Axis A).      |
-| [`NextAction`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.NextAction)(\*\*data)        |                                                                          |
-| [`Recommendation`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Recommendation)(\*values)    |                                                                          |
-| [`Requirement`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Requirement)(\*\*data)       | One atomic requirement extracted verbatim from a job description.        |
-| [`RequirementClass`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.RequirementClass)(\*values)  | How decision-critical a requirement is.                                  |
-| [`RequirementRecord`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.RequirementRecord)(\*\*data) | The analysis of one requirement against the candidate's knowledge.       |
-| [`ScoreSummary`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.ScoreSummary)(\*\*data)      |                                                                          |
-| [`SkillType`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.SkillType)(\*values)         |                                                                          |
-| [`TimeToClose`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.TimeToClose)(\*values)       |                                                                          |
-| [`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)(\*values)   |                                                                          |
-| [`Verdict`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Verdict)(\*\*data)           |                                                                          |
+| [`AILeverage`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AILeverage)(\*values)                               | How much the candidate's standing AI-agent capability lowers the ramp.   |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)(\*, job_id[, job_title, ...])      | A complete, verdict-first alignment analysis for one JD.                 |
+| [`Bucket`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Bucket)(\*values)                                   | The four alignment buckets.                                              |
+| [`Clarification`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Clarification)(\*, requirement_id, question[, ...]) | A question to ask the candidate to resolve a decision-relevant unknown.  |
+| [`CloseMethod`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.CloseMethod)(\*values)                              |                                                                          |
+| [`Closeability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Closeability)(\*values)                             | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
+| [`Evidence`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Evidence)(\*, quote[, source_document_id, locator]) | A verbatim grounding span for a match judgment.                          |
+| [`FieldCompleteness`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.FieldCompleteness)(\*values)                        | Local closed-world flag: may a missing value be read as a real negative? |
+| [`FitBand`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.FitBand)(\*values)                                  |                                                                          |
+| [`InterviewPrep`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.InterviewPrep)(\*[, summary, talking_points, ...])  |                                                                          |
+| [`MatchType`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.MatchType)(\*values)                                | How the candidate's background relates to the requirement (Axis A).      |
+| [`NextAction`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.NextAction)(\*, action[, addresses, priority, ...]) |                                                                          |
+| [`Recommendation`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Recommendation)(\*values)                           |                                                                          |
+| [`Requirement`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Requirement)(\*[, id, skill_type, ...])             | One atomic requirement extracted verbatim from a job description.        |
+| [`RequirementClass`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.RequirementClass)(\*values)                         | How decision-critical a requirement is.                                  |
+| [`RequirementRecord`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.RequirementRecord)(\*, requirement[, ...])          | The analysis of one requirement against the candidate's knowledge.       |
+| [`ScoreSummary`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.ScoreSummary)(\*[, fit_band, bucket_counts, ...])   |                                                                          |
+| [`SkillType`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.SkillType)(\*values)                                |                                                                          |
+| [`TimeToClose`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.TimeToClose)(\*values)                              |                                                                          |
+| [`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)(\*values)                          |                                                                          |
+| [`Verdict`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Verdict)(\*, recommendation[, confidence, ...])     |                                                                          |
 
 ### *class* hired.alignment.base.AILeverage(\*values)
 
@@ -250,7 +332,7 @@ How much the candidate’s standing AI-agent capability lowers the ramp.
 Applies to *codified / knowledge-breadth* gaps, not tacit-judgment or
 enduring-aptitude gaps (those it cannot rescue).
 
-### *class* hired.alignment.base.AlignmentReport(\*\*data)
+### *class* hired.alignment.base.AlignmentReport(\*, job_id, job_title='', company='', created_at='', verdict, score_summary=<factory>, requirements=<factory>, blocking_gaps=<factory>, next_actions=<factory>, interview_prep=<factory>, clarifications=<factory>)
 
 Bases: `BaseModel`
 
@@ -266,7 +348,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 The four alignment buckets.
 
-### *class* hired.alignment.base.Clarification(\*\*data)
+### *class* hired.alignment.base.Clarification(, requirement_id, question, fills_field='', reason='', info_gain=0.0)
 
 Bases: `BaseModel`
 
@@ -286,7 +368,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How hard a gap is to close (Axis B), after the AI-leverage modifier.
 
-### *class* hired.alignment.base.Evidence(\*\*data)
+### *class* hired.alignment.base.Evidence(, quote, source_document_id='', locator='')
 
 Bases: `BaseModel`
 
@@ -306,7 +388,7 @@ Local closed-world flag: may a missing value be read as a real negative?
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.base.InterviewPrep(\*\*data)
+### *class* hired.alignment.base.InterviewPrep(\*, summary='', talking_points=<factory>, story_library=<factory>, proactive_disclosure='')
 
 Bases: `BaseModel`
 
@@ -320,7 +402,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How the candidate’s background relates to the requirement (Axis A).
 
-### *class* hired.alignment.base.NextAction(\*\*data)
+### *class* hired.alignment.base.NextAction(, action, addresses='', priority=1, expected_effect='')
 
 Bases: `BaseModel`
 
@@ -332,7 +414,7 @@ Configuration for the model, should be a dictionary conforming to [`ConfigDict`]
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.base.Requirement(\*\*data)
+### *class* hired.alignment.base.Requirement(\*, id=<factory>, text, skill_type=SkillType.TECHNICAL, requirement_class=RequirementClass.DIFFERENTIATOR, required_level=3)
 
 Bases: `BaseModel`
 
@@ -348,7 +430,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How decision-critical a requirement is.
 
-### *class* hired.alignment.base.RequirementRecord(\*\*data)
+### *class* hired.alignment.base.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -358,7 +440,7 @@ The analysis of one requirement against the candidate’s knowledge.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.alignment.base.ScoreSummary(\*\*data)
+### *class* hired.alignment.base.ScoreSummary(\*, fit_band=FitBand.FAIR, bucket_counts=<factory>, ats_readability=None)
 
 Bases: `BaseModel`
 
@@ -378,7 +460,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.base.Verdict(\*\*data)
+### *class* hired.alignment.base.Verdict(\*, recommendation, confidence=ConfidenceLevel.MEDIUM, confidence_basis='', headline='', key_reasons=<factory>, has_blocking_gaps=False)
 
 Bases: `BaseModel`
 
@@ -518,8 +600,10 @@ Public surface:
   ([`classify()`](_autosummary/hired.alignment.html.md#hired.alignment.classify), [`assign_bucket()`](_autosummary/hired.alignment.html.md#hired.alignment.assign_bucket), [`apply_ai_leverage()`](_autosummary/hired.alignment.html.md#hired.alignment.apply_ai_leverage)),
 - the elicitation helpers in [`hired.alignment.elicitation`](_autosummary/hired.alignment.elicitation.html.md#module-hired.alignment.elicitation)
   ([`rank_clarifications()`](_autosummary/hired.alignment.html.md#hired.alignment.rank_clarifications), [`is_decision_stable()`](_autosummary/hired.alignment.html.md#hired.alignment.is_decision_stable)),
-- Markdown rendering in [`hired.alignment.report`](_autosummary/hired.alignment.report.html.md#module-hired.alignment.report)
-  ([`render_report_markdown()`](_autosummary/hired.alignment.html.md#hired.alignment.render_report_markdown)).
+- deterministic report finalization in [`hired.alignment.assemble`](_autosummary/hired.alignment.assemble.html.md#module-hired.alignment.assemble)
+  ([`finalize_report()`](_autosummary/hired.alignment.html.md#hired.alignment.finalize_report) — reclassify, recount, rebuild blockers/clarifications),
+- rendering in [`hired.alignment.report`](_autosummary/hired.alignment.report.html.md#module-hired.alignment.report) ([`render_report()`](_autosummary/hired.alignment.html.md#hired.alignment.render_report) dispatching to
+  [`render_report_markdown()`](_autosummary/hired.alignment.html.md#hired.alignment.render_report_markdown) / [`render_report_html()`](_autosummary/hired.alignment.html.md#hired.alignment.render_report_html)).
 
 The *intelligence* (judging transfer distance, trainability, evidence) is supplied
 by the `hired-align` skill (Claude as brain) or an injected LLM; this package
@@ -537,34 +621,38 @@ provides the schemas, deterministic scoring, and rendering. See
 | [`is_decision_stable`](_autosummary/hired.alignment.html.md#hired.alignment.is_decision_stable)(records)                       | True when no remaining open unknown could flip the verdict.                                               |
 | [`should_ask`](_autosummary/hired.alignment.html.md#hired.alignment.should_ask)(record)                                | Whether to route this record to a clarifying question.                                                    |
 | [`info_gain`](_autosummary/hired.alignment.html.md#hired.alignment.info_gain)(record)                                 | Expected information gain of resolving this requirement, wrt the verdict.                                 |
+| [`finalize_report`](_autosummary/hired.alignment.html.md#hired.alignment.finalize_report)(report)                           | Return a copy of `report` with every derivable field recomputed.                                          |
+| [`is_blocking`](_autosummary/hired.alignment.html.md#hired.alignment.is_blocking)(record)                               | True for a gate-keeper requirement that is a hard gap or contradicted.                                    |
+| [`render_report`](_autosummary/hired.alignment.html.md#hired.alignment.render_report)(report[, fmt])                      | Render `report` (a model or its JSON dict) in the named format.                                           |
 | [`render_report_markdown`](_autosummary/hired.alignment.html.md#hired.alignment.render_report_markdown)(report)                    | Render the report as a Markdown string.                                                                   |
+| [`render_report_html`](_autosummary/hired.alignment.html.md#hired.alignment.render_report_html)(report)                        | Render the report as a self-contained HTML page (inline CSS, no assets).                                  |
 | [`diff_reports`](_autosummary/hired.alignment.html.md#hired.alignment.diff_reports)(old, new)                            | Return a structured diff of two alignment-report dicts.                                                   |
 | [`summarize_diff`](_autosummary/hired.alignment.html.md#hired.alignment.summarize_diff)(diff)                              | A short human-readable summary of [`diff_reports()`](_autosummary/hired.alignment.html.md#hired.alignment.diff_reports) output. |
 
 ### Classes
 
-| [`Requirement`](_autosummary/hired.alignment.html.md#hired.alignment.Requirement)(\*\*data)       | One atomic requirement extracted verbatim from a job description.        |
-|------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| [`RequirementRecord`](_autosummary/hired.alignment.html.md#hired.alignment.RequirementRecord)(\*\*data) | The analysis of one requirement against the candidate's knowledge.       |
-| [`Evidence`](_autosummary/hired.alignment.html.md#hired.alignment.Evidence)(\*\*data)          | A verbatim grounding span for a match judgment.                          |
-| [`AlignmentReport`](_autosummary/hired.alignment.html.md#hired.alignment.AlignmentReport)(\*\*data)   | A complete, verdict-first alignment analysis for one JD.                 |
-| [`Verdict`](_autosummary/hired.alignment.html.md#hired.alignment.Verdict)(\*\*data)           |                                                                          |
-| [`ScoreSummary`](_autosummary/hired.alignment.html.md#hired.alignment.ScoreSummary)(\*\*data)      |                                                                          |
-| [`NextAction`](_autosummary/hired.alignment.html.md#hired.alignment.NextAction)(\*\*data)        |                                                                          |
-| [`Clarification`](_autosummary/hired.alignment.html.md#hired.alignment.Clarification)(\*\*data)     | A question to ask the candidate to resolve a decision-relevant unknown.  |
-| [`InterviewPrep`](_autosummary/hired.alignment.html.md#hired.alignment.InterviewPrep)(\*\*data)     |                                                                          |
-| [`Bucket`](_autosummary/hired.alignment.html.md#hired.alignment.Bucket)(\*values)            | The four alignment buckets.                                              |
-| [`MatchType`](_autosummary/hired.alignment.html.md#hired.alignment.MatchType)(\*values)         | How the candidate's background relates to the requirement (Axis A).      |
-| [`RequirementClass`](_autosummary/hired.alignment.html.md#hired.alignment.RequirementClass)(\*values)  | How decision-critical a requirement is.                                  |
-| [`SkillType`](_autosummary/hired.alignment.html.md#hired.alignment.SkillType)(\*values)         |                                                                          |
-| [`Closeability`](_autosummary/hired.alignment.html.md#hired.alignment.Closeability)(\*values)      | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
-| [`CloseMethod`](_autosummary/hired.alignment.html.md#hired.alignment.CloseMethod)(\*values)       |                                                                          |
-| [`TimeToClose`](_autosummary/hired.alignment.html.md#hired.alignment.TimeToClose)(\*values)       |                                                                          |
-| [`Transferability`](_autosummary/hired.alignment.html.md#hired.alignment.Transferability)(\*values)   |                                                                          |
-| [`AILeverage`](_autosummary/hired.alignment.html.md#hired.alignment.AILeverage)(\*values)        | How much the candidate's standing AI-agent capability lowers the ramp.   |
-| [`FieldCompleteness`](_autosummary/hired.alignment.html.md#hired.alignment.FieldCompleteness)(\*values) | Local closed-world flag: may a missing value be read as a real negative? |
-| [`Recommendation`](_autosummary/hired.alignment.html.md#hired.alignment.Recommendation)(\*values)    |                                                                          |
-| [`FitBand`](_autosummary/hired.alignment.html.md#hired.alignment.FitBand)(\*values)           |                                                                          |
+| [`Requirement`](_autosummary/hired.alignment.html.md#hired.alignment.Requirement)(\*[, id, skill_type, ...])             | One atomic requirement extracted verbatim from a job description.        |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| [`RequirementRecord`](_autosummary/hired.alignment.html.md#hired.alignment.RequirementRecord)(\*, requirement[, ...])          | The analysis of one requirement against the candidate's knowledge.       |
+| [`Evidence`](_autosummary/hired.alignment.html.md#hired.alignment.Evidence)(\*, quote[, source_document_id, locator]) | A verbatim grounding span for a match judgment.                          |
+| [`AlignmentReport`](_autosummary/hired.alignment.html.md#hired.alignment.AlignmentReport)(\*, job_id[, job_title, ...])      | A complete, verdict-first alignment analysis for one JD.                 |
+| [`Verdict`](_autosummary/hired.alignment.html.md#hired.alignment.Verdict)(\*, recommendation[, confidence, ...])     |                                                                          |
+| [`ScoreSummary`](_autosummary/hired.alignment.html.md#hired.alignment.ScoreSummary)(\*[, fit_band, bucket_counts, ...])   |                                                                          |
+| [`NextAction`](_autosummary/hired.alignment.html.md#hired.alignment.NextAction)(\*, action[, addresses, priority, ...]) |                                                                          |
+| [`Clarification`](_autosummary/hired.alignment.html.md#hired.alignment.Clarification)(\*, requirement_id, question[, ...]) | A question to ask the candidate to resolve a decision-relevant unknown.  |
+| [`InterviewPrep`](_autosummary/hired.alignment.html.md#hired.alignment.InterviewPrep)(\*[, summary, talking_points, ...])  |                                                                          |
+| [`Bucket`](_autosummary/hired.alignment.html.md#hired.alignment.Bucket)(\*values)                                   | The four alignment buckets.                                              |
+| [`MatchType`](_autosummary/hired.alignment.html.md#hired.alignment.MatchType)(\*values)                                | How the candidate's background relates to the requirement (Axis A).      |
+| [`RequirementClass`](_autosummary/hired.alignment.html.md#hired.alignment.RequirementClass)(\*values)                         | How decision-critical a requirement is.                                  |
+| [`SkillType`](_autosummary/hired.alignment.html.md#hired.alignment.SkillType)(\*values)                                |                                                                          |
+| [`Closeability`](_autosummary/hired.alignment.html.md#hired.alignment.Closeability)(\*values)                             | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
+| [`CloseMethod`](_autosummary/hired.alignment.html.md#hired.alignment.CloseMethod)(\*values)                              |                                                                          |
+| [`TimeToClose`](_autosummary/hired.alignment.html.md#hired.alignment.TimeToClose)(\*values)                              |                                                                          |
+| [`Transferability`](_autosummary/hired.alignment.html.md#hired.alignment.Transferability)(\*values)                          |                                                                          |
+| [`AILeverage`](_autosummary/hired.alignment.html.md#hired.alignment.AILeverage)(\*values)                               | How much the candidate's standing AI-agent capability lowers the ramp.   |
+| [`FieldCompleteness`](_autosummary/hired.alignment.html.md#hired.alignment.FieldCompleteness)(\*values)                        | Local closed-world flag: may a missing value be read as a real negative? |
+| [`Recommendation`](_autosummary/hired.alignment.html.md#hired.alignment.Recommendation)(\*values)                           |                                                                          |
+| [`FitBand`](_autosummary/hired.alignment.html.md#hired.alignment.FitBand)(\*values)                                  |                                                                          |
 
 ### *class* hired.alignment.AILeverage(\*values)
 
@@ -575,7 +663,7 @@ How much the candidate’s standing AI-agent capability lowers the ramp.
 Applies to *codified / knowledge-breadth* gaps, not tacit-judgment or
 enduring-aptitude gaps (those it cannot rescue).
 
-### *class* hired.alignment.AlignmentReport(\*\*data)
+### *class* hired.alignment.AlignmentReport(\*, job_id, job_title='', company='', created_at='', verdict, score_summary=<factory>, requirements=<factory>, blocking_gaps=<factory>, next_actions=<factory>, interview_prep=<factory>, clarifications=<factory>)
 
 Bases: `BaseModel`
 
@@ -591,7 +679,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 The four alignment buckets.
 
-### *class* hired.alignment.Clarification(\*\*data)
+### *class* hired.alignment.Clarification(, requirement_id, question, fills_field='', reason='', info_gain=0.0)
 
 Bases: `BaseModel`
 
@@ -611,7 +699,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How hard a gap is to close (Axis B), after the AI-leverage modifier.
 
-### *class* hired.alignment.Evidence(\*\*data)
+### *class* hired.alignment.Evidence(, quote, source_document_id='', locator='')
 
 Bases: `BaseModel`
 
@@ -631,7 +719,7 @@ Local closed-world flag: may a missing value be read as a real negative?
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.InterviewPrep(\*\*data)
+### *class* hired.alignment.InterviewPrep(\*, summary='', talking_points=<factory>, story_library=<factory>, proactive_disclosure='')
 
 Bases: `BaseModel`
 
@@ -645,7 +733,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How the candidate’s background relates to the requirement (Axis A).
 
-### *class* hired.alignment.NextAction(\*\*data)
+### *class* hired.alignment.NextAction(, action, addresses='', priority=1, expected_effect='')
 
 Bases: `BaseModel`
 
@@ -657,7 +745,7 @@ Configuration for the model, should be a dictionary conforming to [`ConfigDict`]
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.Requirement(\*\*data)
+### *class* hired.alignment.Requirement(\*, id=<factory>, text, skill_type=SkillType.TECHNICAL, requirement_class=RequirementClass.DIFFERENTIATOR, required_level=3)
 
 Bases: `BaseModel`
 
@@ -673,7 +761,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How decision-critical a requirement is.
 
-### *class* hired.alignment.RequirementRecord(\*\*data)
+### *class* hired.alignment.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -683,7 +771,7 @@ The analysis of one requirement against the candidate’s knowledge.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.alignment.ScoreSummary(\*\*data)
+### *class* hired.alignment.ScoreSummary(\*, fit_band=FitBand.FAIR, bucket_counts=<factory>, ats_readability=None)
 
 Bases: `BaseModel`
 
@@ -703,7 +791,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
-### *class* hired.alignment.Verdict(\*\*data)
+### *class* hired.alignment.Verdict(\*, recommendation, confidence=ConfidenceLevel.MEDIUM, confidence_basis='', headline='', key_reasons=<factory>, has_blocking_gaps=False)
 
 Bases: `BaseModel`
 
@@ -718,9 +806,6 @@ Soften a *codified* gap’s closeability by the candidate’s AI leverage.
 Tacit/soft gaps and structurally-hard gaps are never softened — AI agents
 extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 
-* **Return type:**
-  [`Closeability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Closeability)
-
 ```pycon
 >>> apply_ai_leverage(Closeability.REQUIRES_EXPERIENCE, AILeverage.HIGH,
 ...                    skill_type=SkillType.TECHNICAL)
@@ -729,6 +814,9 @@ extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 ...                    skill_type=SkillType.SOFT_SKILL)
 <Closeability.REQUIRES_EXPERIENCE: 'requires_experience'>
 ```
+
+* **Return type:**
+  [`Closeability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Closeability)
 
 ### hired.alignment.assign_bucket(record)
 
@@ -775,6 +863,38 @@ Both inputs are `AlignmentReport.model_dump()` dicts. The result has:
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
+### hired.alignment.finalize_report(report)
+
+Return a copy of `report` with every derivable field recomputed.
+
+Clarifications and flagged blockers refer to requirements by `id`; give
+requirements explicit ids in a draft so those links survive (flagged
+blockers also fall back to matching by requirement text).
+
+```pycon
+>>> from hired.alignment import (AlignmentReport, Requirement, RequirementRecord,
+...     RequirementClass, Verdict, Recommendation, MatchType, Closeability)
+>>> from hired.candidate.base import MatchState
+>>> gate = Requirement(id='r1', text='PhD', requirement_class=RequirementClass.GATE_KEEPER)
+>>> recs = [
+...     RequirementRecord(requirement=gate, closeability=Closeability.STRUCTURALLY_HARD,
+...                       match_state=MatchState.CONTRADICTED),
+...     RequirementRecord(requirement=Requirement(id='r2', text='Python', required_level=3),
+...                       match_state=MatchState.CONFIRMED, match_type=MatchType.DIRECT,
+...                       candidate_level=5),
+... ]
+>>> report = finalize_report(AlignmentReport(
+...     job_id='ds', verdict=Verdict(recommendation=Recommendation.STRETCH),
+...     requirements=recs))
+>>> report.score_summary.bucket_counts['strong_match']
+1
+>>> [r.requirement.id for r in report.blocking_gaps], report.verdict.has_blocking_gaps
+(['r1'], True)
+```
+
+* **Return type:**
+  [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
 ### hired.alignment.info_gain(record)
 
 Expected information gain of resolving this requirement, wrt the verdict.
@@ -784,6 +904,13 @@ criticality when the analyst has a sharper view than the requirement class.
 
 * **Return type:**
   [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
+### hired.alignment.is_blocking(record)
+
+True for a gate-keeper requirement that is a hard gap or contradicted.
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
 ### hired.alignment.is_decision_stable(records)
 
@@ -804,6 +931,39 @@ skeleton (requirement, reason, info_gain) so the caller can fill `question`.
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Clarification`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Clarification)]
+
+### hired.alignment.render_report(report, fmt='markdown')
+
+Render `report` (a model or its JSON dict) in the named format.
+
+```pycon
+>>> from hired.alignment import AlignmentReport, Verdict, Recommendation
+>>> r = {'job_id': 'ds', 'verdict': {'recommendation': 'apply'}}
+>>> render_report(r).splitlines()[0]
+'# Alignment: ds'
+>>> render_report(r, 'pdf')
+Traceback (most recent call last):
+  ...
+ValueError: Unknown report format 'pdf'; choose from: html, markdown, md
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.alignment.render_report_html(report)
+
+Render the report as a self-contained HTML page (inline CSS, no assets).
+
+```pycon
+>>> from hired.alignment import AlignmentReport, Verdict, Recommendation
+>>> page = render_report_html(AlignmentReport(job_id='ds', company='Acme <Inc>',
+...     verdict=Verdict(recommendation=Recommendation.APPLY, headline='Go')))
+>>> page.startswith('<!doctype html>'), 'Acme &lt;Inc&gt;' in page
+(True, True)
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### hired.alignment.render_report_markdown(report)
 
@@ -832,32 +992,82 @@ A short human-readable summary of [`diff_reports()`](_autosummary/hired.alignmen
 
 ### Modules
 
-| [`base`](_autosummary/hired.alignment.base.html.md#module-hired.alignment.base)               | Schemas for JD-vs-candidate alignment analysis.                                                                              |
-|-------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| [`diff`](_autosummary/hired.alignment.diff.html.md#module-hired.alignment.diff)               | Deterministic diff between two alignment reports.                                                                            |
-| [`elicitation`](_autosummary/hired.alignment.elicitation.html.md#module-hired.alignment.elicitation) | The honesty loop: rank unknowns into the most informative questions first.                                                   |
-| [`report`](_autosummary/hired.alignment.report.html.md#module-hired.alignment.report)           | Render an [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown. |
-| [`rubric`](_autosummary/hired.alignment.rubric.html.md#module-hired.alignment.rubric)           | Deterministic bucket assignment — the two-axis rubric in code.                                                               |
+| [`assemble`](_autosummary/hired.alignment.assemble.html.md#module-hired.alignment.assemble)       | Deterministically finalize an analyst-drafted [`AlignmentReport`](_autosummary/hired.alignment.html.md#hired.alignment.AlignmentReport).                      |
+|-------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| [`base`](_autosummary/hired.alignment.base.html.md#module-hired.alignment.base)               | Schemas for JD-vs-candidate alignment analysis.                                                                                      |
+| [`diff`](_autosummary/hired.alignment.diff.html.md#module-hired.alignment.diff)               | Deterministic diff between two alignment reports.                                                                                    |
+| [`elicitation`](_autosummary/hired.alignment.elicitation.html.md#module-hired.alignment.elicitation) | The honesty loop: rank unknowns into the most informative questions first.                                                           |
+| [`report`](_autosummary/hired.alignment.report.html.md#module-hired.alignment.report)           | Render an [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown or HTML. |
+| [`rubric`](_autosummary/hired.alignment.rubric.html.md#module-hired.alignment.rubric)           | Deterministic bucket assignment — the two-axis rubric in code.                                                                       |
 
 
 # _autosummary/hired.alignment.report.html.md
 
 # hired.alignment.report
 
-Render an [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown.
+Render an [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown or HTML.
 
 Verdict-first (BLUF), evidence-quoted, banded — deliberately *not* a single
 false-precision percentage. The four buckets are grouped so the reader sees, in
 order: what’s strong, what transfers, what’s learnable (with the AI-leverage
 note), what’s genuinely hard, and what we still need to ask.
 
+Formats are a strategy registry ([`REPORT_RENDERERS`](_autosummary/hired.alignment.report.html.md#hired.alignment.report.REPORT_RENDERERS), dispatched by
+[`render_report()`](_autosummary/hired.alignment.report.html.md#hired.alignment.report.render_report)): add one by registering a `report -> str` function. The
+HTML renderer is a single self-contained page (inline CSS, light/dark aware, no
+external assets), suitable for opening in a browser or publishing as-is.
+
 See `misc/docs/DESIGN.md` §6, and the research in
 `misc/docs/research/jd-candidate-matching.md`.
 
+### Module Attributes
+
+| [`REPORT_RENDERERS`](_autosummary/hired.alignment.report.html.md#hired.alignment.report.REPORT_RENDERERS)   | `format name -> renderer`.   |
+|---------------------------------------------------------------------|------------------------------|
+
 ### Functions
 
-| [`render_report_markdown`](_autosummary/hired.alignment.report.html.md#hired.alignment.report.render_report_markdown)(report)   | Render the report as a Markdown string.   |
-|-----------------------------------------------------------------------------------|-------------------------------------------|
+| [`render_report`](_autosummary/hired.alignment.report.html.md#hired.alignment.report.render_report)(report[, fmt])   | Render `report` (a model or its JSON dict) in the named format.          |
+|---------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| [`render_report_html`](_autosummary/hired.alignment.report.html.md#hired.alignment.report.render_report_html)(report)     | Render the report as a self-contained HTML page (inline CSS, no assets). |
+| [`render_report_markdown`](_autosummary/hired.alignment.report.html.md#hired.alignment.report.render_report_markdown)(report) | Render the report as a Markdown string.                                  |
+
+### hired.alignment.report.REPORT_RENDERERS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Callable](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[AlignmentReport](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)], [str](https://docs.python.org/3/builtins/stdtypes.html#str)]]* *= {'html': <function render_report_html>, 'markdown': <function render_report_markdown>, 'md': <function render_report_markdown>}*
+
+`format name -> renderer`. Register a new format by adding an entry.
+
+### hired.alignment.report.render_report(report, fmt='markdown')
+
+Render `report` (a model or its JSON dict) in the named format.
+
+```pycon
+>>> from hired.alignment import AlignmentReport, Verdict, Recommendation
+>>> r = {'job_id': 'ds', 'verdict': {'recommendation': 'apply'}}
+>>> render_report(r).splitlines()[0]
+'# Alignment: ds'
+>>> render_report(r, 'pdf')
+Traceback (most recent call last):
+  ...
+ValueError: Unknown report format 'pdf'; choose from: html, markdown, md
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.alignment.report.render_report_html(report)
+
+Render the report as a self-contained HTML page (inline CSS, no assets).
+
+```pycon
+>>> from hired.alignment import AlignmentReport, Verdict, Recommendation
+>>> page = render_report_html(AlignmentReport(job_id='ds', company='Acme <Inc>',
+...     verdict=Verdict(recommendation=Recommendation.APPLY, headline='Go')))
+>>> page.startswith('<!doctype html>'), 'Acme &lt;Inc&gt;' in page
+(True, True)
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### hired.alignment.report.render_report_markdown(report)
 
@@ -897,9 +1107,6 @@ Soften a *codified* gap’s closeability by the candidate’s AI leverage.
 Tacit/soft gaps and structurally-hard gaps are never softened — AI agents
 extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 
-* **Return type:**
-  [`Closeability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Closeability)
-
 ```pycon
 >>> apply_ai_leverage(Closeability.REQUIRES_EXPERIENCE, AILeverage.HIGH,
 ...                    skill_type=SkillType.TECHNICAL)
@@ -908,6 +1115,9 @@ extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 ...                    skill_type=SkillType.SOFT_SKILL)
 <Closeability.REQUIRES_EXPERIENCE: 'requires_experience'>
 ```
+
+* **Return type:**
+  [`Closeability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Closeability)
 
 ### hired.alignment.rubric.assign_bucket(record)
 
@@ -995,7 +1205,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Represents an ATS compatibility issue.
 
-### *class* hired.ats_checker.ATSReport(overall_score, issues=<factory>, keyword_match_score=0.0, matched_keywords=<factory>, missing_keywords=<factory>)
+### *class* hired.ats_checker.ATSReport(overall_score, issues=list(), keyword_match_score=0.0, matched_keywords=set(), missing_keywords=set())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1088,7 +1298,7 @@ Define:
 | [`Renderer`](_autosummary/hired.base.html.md#hired.base.Renderer)(\*args, \*\*kwargs)                      | Protocol for resume renderers.                                                 |
 | [`RendererRegistry`](_autosummary/hired.base.html.md#hired.base.RendererRegistry)()                                | Registry for managing multiple renderer implementations.                       |
 | [`RenderingConfig`](_autosummary/hired.base.html.md#hired.base.RenderingConfig)([format, theme, custom_css, ...]) | Configuration for resume rendering.                                            |
-| [`ResumeSchemaExtended`](_autosummary/hired.base.html.md#hired.base.ResumeSchemaExtended)(\*\*data)                    | Extended version of ResumeSchema that allows extra fields for custom sections. |
+| [`ResumeSchemaExtended`](_autosummary/hired.base.html.md#hired.base.ResumeSchemaExtended)(\*[, field_schema, ...])     | Extended version of ResumeSchema that allows extra fields for custom sections. |
 
 ### *class* hired.base.AIAgent(\*args, \*\*kwargs)
 
@@ -1148,7 +1358,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Configuration for resume rendering.
 
-### *class* hired.base.ResumeSchemaExtended(\*\*data)
+### *class* hired.base.ResumeSchemaExtended(, field_schema=None, basics=None, work=None, volunteer=None, education=None, awards=None, certificates=None, publications=None, skills=None, languages=None, interests=None, references=None, projects=None, meta=None, \*\*extra_data)
 
 Bases: [`ResumeSchema`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.ResumeSchema)
 
@@ -1173,7 +1383,7 @@ Get the global renderer registry.
 Decorator for registering renderer classes.
 
 * **Return type:**
-  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`_RendererClass`, bound= [`type`](https://docs.python.org/3/builtins/functions.html#type)[[`Renderer`](_autosummary/hired.base.html.md#hired.base.Renderer)])], [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`_RendererClass`, bound= [`type`](https://docs.python.org/3/builtins/functions.html#type)[[`Renderer`](_autosummary/hired.base.html.md#hired.base.Renderer)])]
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`_RendererClass`], `_RendererClass`]
 
 
 # _autosummary/hired.candidate.base.html.md
@@ -1198,15 +1408,15 @@ anti-hallucination invariant enforced at extraction time.
 
 ### Classes
 
-| [`ConfidenceLevel`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.ConfidenceLevel)(\*values)   | Calibrated confidence in a claim (qualitative, not a raw probability).   |
-|------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| [`Fact`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.Fact)(\*\*data)              | One atomic claim about a candidate.                                      |
-| [`FactCategory`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.FactCategory)(\*values)      | Coarse category for retrieval and synopsis grouping.                     |
-| [`FactStatus`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.FactStatus)(\*values)        | Whether a fact is current or has been superseded by a newer one.         |
-| [`MatchState`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.MatchState)(\*values)        | Three-valued epistemic state — the core of the honesty contract.         |
-| [`Provenance`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.Provenance)(\*\*data)        | Where a fact came from, with an optional verbatim supporting quote.      |
-| [`QAEntry`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.QAEntry)(\*\*data)           | One clarifying question asked of the candidate and their answer.         |
-| [`SourceKind`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.SourceKind)(\*values)        | Where a piece of provenance came from.                                   |
+| [`ConfidenceLevel`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.ConfidenceLevel)(\*values)                          | Calibrated confidence in a claim (qualitative, not a raw probability).   |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| [`Fact`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.Fact)(\*[, id, subject, category, value, ...])      | One atomic claim about a candidate.                                      |
+| [`FactCategory`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.FactCategory)(\*values)                             | Coarse category for retrieval and synopsis grouping.                     |
+| [`FactStatus`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.FactStatus)(\*values)                               | Whether a fact is current or has been superseded by a newer one.         |
+| [`MatchState`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.MatchState)(\*values)                               | Three-valued epistemic state — the core of the honesty contract.         |
+| [`Provenance`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.Provenance)(\*, source_kind[, source_id, ...])      | Where a fact came from, with an optional verbatim supporting quote.      |
+| [`QAEntry`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.QAEntry)(\*[, id, asked_for_job, fills_field, ...]) | One clarifying question asked of the candidate and their answer.         |
+| [`SourceKind`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.SourceKind)(\*values)                               | Where a piece of provenance came from.                                   |
 
 ### *class* hired.candidate.base.ConfidenceLevel(\*values)
 
@@ -1214,7 +1424,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Calibrated confidence in a claim (qualitative, not a raw probability).
 
-### *class* hired.candidate.base.Fact(\*\*data)
+### *class* hired.candidate.base.Fact(\*, id=<factory>, subject='me', category=FactCategory.OTHER, statement, value=None, confidence=ConfidenceLevel.MEDIUM, is_negation=False, provenance=<factory>, status=FactStatus.ASSERTED, supersedes=None, tags=<factory>, created_at=<factory>, updated_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -1248,7 +1458,7 @@ Three-valued epistemic state — the core of the honesty contract.
 `UNKNOWN` is distinct from `CONTRADICTED`: we have not yet looked, so we
 must *ask* rather than assume absence.
 
-### *class* hired.candidate.base.Provenance(\*\*data)
+### *class* hired.candidate.base.Provenance(\*, source_kind, source_id='', locator='', quote=None, captured_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -1258,7 +1468,7 @@ Where a fact came from, with an optional verbatim supporting quote.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.candidate.base.QAEntry(\*\*data)
+### *class* hired.candidate.base.QAEntry(\*, id=<factory>, question, answer, asked_for_job=None, fills_field=None, derived_fact_ids=<factory>, created_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -1284,15 +1494,15 @@ A filesystem-safe, extension-less key from an arbitrary label.
 Used to derive stable store keys from human labels (company names, subjects,
 briefing titles) so callers pass natural text and the store stays tidy.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> slug('Socure, Inc.')
 'socure-inc'
 >>> slug('KYC / AML primer')
 'kyc-aml-primer'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 
 # _autosummary/hired.candidate.html.md
@@ -1312,6 +1522,7 @@ See `misc/docs/DESIGN.md` §5.
 | [`needs_refresh`](_autosummary/hired.candidate.html.md#hired.candidate.needs_refresh)(kb)                                 | True when there is uningested source/Q&A material — a refresh is warranted.                           |
 |----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | [`refresh`](_autosummary/hired.candidate.html.md#hired.candidate.refresh)(kb[, mode, ingest_fn, apply])             | Refresh `info` from changed sources + undistilled Q&A.                                                |
+| [`ingest_source`](_autosummary/hired.candidate.html.md#hired.candidate.ingest_source)(kb, key, records)                   | Distill externally-extracted `records` for one raw source into facts.                                 |
 | [`slug`](_autosummary/hired.candidate.html.md#hired.candidate.slug)(text)                                        | A filesystem-safe, extension-less key from an arbitrary label.                                        |
 | [`ingest_facts`](_autosummary/hired.candidate.html.md#hired.candidate.ingest_facts)(kb, records, \*, source_kind[, ...]) | Validate, quote-check, and persist fact records; return persisted ids.                                |
 | [`fact_from_record`](_autosummary/hired.candidate.html.md#hired.candidate.fact_from_record)(record, \*, source_kind[, ...])  | Build a (not-yet-persisted) [`Fact`](_autosummary/hired.candidate.html.md#hired.candidate.Fact) from a record dict. |
@@ -1319,25 +1530,25 @@ See `misc/docs/DESIGN.md` §5.
 
 ### Classes
 
-| [`CandidateKnowledgeBase`](_autosummary/hired.candidate.html.md#hired.candidate.CandidateKnowledgeBase)([user, store])        | Accumulated, open-world knowledge about a single candidate (user-level).                 |
-|-----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| [`JDWorkspace`](_autosummary/hired.candidate.html.md#hired.candidate.JDWorkspace)(kb, jd_id, \*[, store])          | Reports, company research, interview-prep briefings, and parsed jobs for one engagement. |
-| [`TopicDossier`](_autosummary/hired.candidate.html.md#hired.candidate.TopicDossier)(base_dir, \*[, name])           | One subject's dossier: an `overview.md` plus optional attached files.                    |
-| [`RefreshState`](_autosummary/hired.candidate.html.md#hired.candidate.RefreshState)(\*\*data)                       | The candidate-info refresh ledger (persisted to `user/info/state.json`).                 |
-| [`SourceDigest`](_autosummary/hired.candidate.html.md#hired.candidate.SourceDigest)(\*\*data)                       | What we know about one raw source for change detection + provenance.                     |
-| [`RefreshItem`](_autosummary/hired.candidate.html.md#hired.candidate.RefreshItem)(kind, key, content)              | One unit of pending work for a refresh: a changed source or an undistilled Q&A.          |
-| [`RefreshProposal`](_autosummary/hired.candidate.html.md#hired.candidate.RefreshProposal)(kind, key, records)          | Proposed fact records for one item (returned when `apply=False`).                        |
-| [`RefreshReport`](_autosummary/hired.candidate.html.md#hired.candidate.RefreshReport)(mode, applied[, pending, ...]) | Outcome (or preview) of a refresh.                                                       |
-| [`Fact`](_autosummary/hired.candidate.html.md#hired.candidate.Fact)(\*\*data)                               | One atomic claim about a candidate.                                                      |
-| [`QAEntry`](_autosummary/hired.candidate.html.md#hired.candidate.QAEntry)(\*\*data)                            | One clarifying question asked of the candidate and their answer.                         |
-| [`Provenance`](_autosummary/hired.candidate.html.md#hired.candidate.Provenance)(\*\*data)                         | Where a fact came from, with an optional verbatim supporting quote.                      |
-| [`FactCategory`](_autosummary/hired.candidate.html.md#hired.candidate.FactCategory)(\*values)                       | Coarse category for retrieval and synopsis grouping.                                     |
-| [`FactStatus`](_autosummary/hired.candidate.html.md#hired.candidate.FactStatus)(\*values)                         | Whether a fact is current or has been superseded by a newer one.                         |
-| [`SourceKind`](_autosummary/hired.candidate.html.md#hired.candidate.SourceKind)(\*values)                         | Where a piece of provenance came from.                                                   |
-| [`ConfidenceLevel`](_autosummary/hired.candidate.html.md#hired.candidate.ConfidenceLevel)(\*values)                    | Calibrated confidence in a claim (qualitative, not a raw probability).                   |
-| [`MatchState`](_autosummary/hired.candidate.html.md#hired.candidate.MatchState)(\*values)                         | Three-valued epistemic state — the core of the honesty contract.                         |
+| [`CandidateKnowledgeBase`](_autosummary/hired.candidate.html.md#hired.candidate.CandidateKnowledgeBase)([user, store])              | Accumulated, open-world knowledge about a single candidate (user-level).                 |
+|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| [`JDWorkspace`](_autosummary/hired.candidate.html.md#hired.candidate.JDWorkspace)(kb, jd_id, \*[, store])                | Reports, company research, interview-prep briefings, and parsed jobs for one engagement. |
+| [`TopicDossier`](_autosummary/hired.candidate.html.md#hired.candidate.TopicDossier)(base_dir, \*[, name])                 | One subject's dossier: an `overview.md` plus optional attached files.                    |
+| [`RefreshState`](_autosummary/hired.candidate.html.md#hired.candidate.RefreshState)(\*[, last_soft_refresh, ...])         | The candidate-info refresh ledger (persisted to `user/info/state.json`).                 |
+| [`SourceDigest`](_autosummary/hired.candidate.html.md#hired.candidate.SourceDigest)(\*, key, sha256, size[, ...])         | What we know about one raw source for change detection + provenance.                     |
+| [`RefreshItem`](_autosummary/hired.candidate.html.md#hired.candidate.RefreshItem)(kind, key, content)                    | One unit of pending work for a refresh: a changed source or an undistilled Q&A.          |
+| [`RefreshProposal`](_autosummary/hired.candidate.html.md#hired.candidate.RefreshProposal)(kind, key, records)                | Proposed fact records for one item (returned when `apply=False`).                        |
+| [`RefreshReport`](_autosummary/hired.candidate.html.md#hired.candidate.RefreshReport)(mode, applied[, pending, ...])       | Outcome (or preview) of a refresh.                                                       |
+| [`Fact`](_autosummary/hired.candidate.html.md#hired.candidate.Fact)(\*[, id, subject, category, value, ...])      | One atomic claim about a candidate.                                                      |
+| [`QAEntry`](_autosummary/hired.candidate.html.md#hired.candidate.QAEntry)(\*[, id, asked_for_job, fills_field, ...]) | One clarifying question asked of the candidate and their answer.                         |
+| [`Provenance`](_autosummary/hired.candidate.html.md#hired.candidate.Provenance)(\*, source_kind[, source_id, ...])      | Where a fact came from, with an optional verbatim supporting quote.                      |
+| [`FactCategory`](_autosummary/hired.candidate.html.md#hired.candidate.FactCategory)(\*values)                             | Coarse category for retrieval and synopsis grouping.                                     |
+| [`FactStatus`](_autosummary/hired.candidate.html.md#hired.candidate.FactStatus)(\*values)                               | Whether a fact is current or has been superseded by a newer one.                         |
+| [`SourceKind`](_autosummary/hired.candidate.html.md#hired.candidate.SourceKind)(\*values)                               | Where a piece of provenance came from.                                                   |
+| [`ConfidenceLevel`](_autosummary/hired.candidate.html.md#hired.candidate.ConfidenceLevel)(\*values)                          | Calibrated confidence in a claim (qualitative, not a raw probability).                   |
+| [`MatchState`](_autosummary/hired.candidate.html.md#hired.candidate.MatchState)(\*values)                               | Three-valued epistemic state — the core of the honesty contract.                         |
 
-### *class* hired.candidate.CandidateKnowledgeBase(user='me', , store=None)
+### *class* hired.candidate.CandidateKnowledgeBase(user=None, , store=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1346,7 +1557,7 @@ Accumulated, open-world knowledge about a single candidate (user-level).
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> kb = CandidateKnowledgeBase()                 # default candidate "me"
+>>> kb = CandidateKnowledgeBase()       # default candidate: $HIRED_USER, else "me"
 >>> from hired.candidate.base import Fact, FactCategory
 >>> _ = kb.add_fact(Fact(statement='Built ML pipelines in Python',
 ...                       category=FactCategory.SKILL, tags=['python', 'ml']))
@@ -1395,6 +1606,18 @@ hidden). `tags` matches facts containing *any* of the given tags.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`Fact`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.Fact)]
+
+#### ingest_source(name, records)
+
+Distill extracted fact `records` for raw source `name` into facts.
+
+Quotes are checked against the source, facts from a prior ingest of the
+same source are superseded, and the source stops being pending. Returns
+`(added_fact_ids, superseded_fact_ids)`. See
+`hired.candidate.refresh.ingest_source()`.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 #### jd(jd_id, , company=None, label=None)
 
@@ -1512,7 +1735,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Calibrated confidence in a claim (qualitative, not a raw probability).
 
-### *class* hired.candidate.Fact(\*\*data)
+### *class* hired.candidate.Fact(\*, id=<factory>, subject='me', category=FactCategory.OTHER, statement, value=None, confidence=ConfidenceLevel.MEDIUM, is_negation=False, provenance=<factory>, status=FactStatus.ASSERTED, supersedes=None, tags=<factory>, created_at=<factory>, updated_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -1563,6 +1786,19 @@ Keys of archived prior versions of a job’s report (chronological).
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+#### save_alignment(draft, , job_id=None)
+
+Finalize an analyst-drafted alignment report and save it; return it.
+
+Whatever produced the draft — the `hired-align` skill, the `hired
+analyze` command, or an injected-LLM analyzer — this is the one path from
+a draft to a persisted report: [`finalize_report()`](_autosummary/hired.alignment.html.md#hired.alignment.finalize_report)
+re-derives everything deterministic, then [`save_report()`](_autosummary/hired.candidate.html.md#hired.candidate.JDWorkspace.save_report) archives the
+previous version. `job_id` overrides the draft’s own.
+
+* **Return type:**
+  [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
 #### save_briefing(key, data)
 
 Persist an interview-prep research briefing (keyed by subject/job).
@@ -1582,7 +1818,9 @@ Persist a company/people research report (keyed by company name).
 Persist the current alignment report, archiving the prior one first.
 
 Archiving (on by default) snapshots any existing report into
-`report_history` so the alignment-review agent can diff versions.
+`report_history` so the alignment-review agent can diff versions. The
+snapshot is keyed by the *archived* report’s `created_at` (else now),
+made filename-safe, and never overwrites an earlier snapshot.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -1596,7 +1834,7 @@ Three-valued epistemic state — the core of the honesty contract.
 `UNKNOWN` is distinct from `CONTRADICTED`: we have not yet looked, so we
 must *ask* rather than assume absence.
 
-### *class* hired.candidate.Provenance(\*\*data)
+### *class* hired.candidate.Provenance(\*, source_kind, source_id='', locator='', quote=None, captured_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -1606,7 +1844,7 @@ Where a fact came from, with an optional verbatim supporting quote.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.candidate.QAEntry(\*\*data)
+### *class* hired.candidate.QAEntry(\*, id=<factory>, question, answer, asked_for_job=None, fills_field=None, derived_fact_ids=<factory>, created_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -1631,13 +1869,13 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Proposed fact records for one item (returned when `apply=False`).
 
-### *class* hired.candidate.RefreshReport(mode, applied, pending=<factory>, proposals=<factory>, added_fact_ids=<factory>, superseded_fact_ids=<factory>)
+### *class* hired.candidate.RefreshReport(mode, applied, pending=list(), proposals=list(), added_fact_ids=list(), superseded_fact_ids=list())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Outcome (or preview) of a refresh.
 
-### *class* hired.candidate.RefreshState(\*\*data)
+### *class* hired.candidate.RefreshState(\*, last_soft_refresh=None, last_hard_refresh=None, sources=<factory>)
 
 Bases: `BaseModel`
 
@@ -1647,7 +1885,7 @@ The candidate-info refresh ledger (persisted to `user/info/state.json`).
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.candidate.SourceDigest(\*\*data)
+### *class* hired.candidate.SourceDigest(\*, key, sha256, size, added_at=<factory>, ingested_at=None, fact_ids=<factory>)
 
 Bases: `BaseModel`
 
@@ -1733,6 +1971,18 @@ in which case a `ValueError` is raised — useful for strict pipelines.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+### hired.candidate.ingest_source(kb, key, records)
+
+Distill externally-extracted `records` for one raw source into facts.
+
+The single-source counterpart of [`refresh()`](_autosummary/hired.candidate.html.md#hired.candidate.refresh): quotes are verified against
+the source text, facts from a previous ingest of the same source are
+superseded, and the source’s digest is marked ingested (so it stops showing
+as pending). Returns `(added_fact_ids, superseded_fact_ids)`.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+
 ### hired.candidate.needs_refresh(kb)
 
 True when there is uningested source/Q&A material — a refresh is warranted.
@@ -1760,15 +2010,15 @@ A filesystem-safe, extension-less key from an arbitrary label.
 Used to derive stable store keys from human labels (company names, subjects,
 briefing titles) so callers pass natural text and the store stays tidy.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> slug('Socure, Inc.')
 'socure-inc'
 >>> slug('KYC / AML primer')
 'kyc-aml-primer'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### hired.candidate.verify_quote(quote, source_text)
 
@@ -1872,7 +2122,7 @@ interview prep — does **not** live here; it lives in a per-engagement
 | [`CandidateKnowledgeBase`](_autosummary/hired.candidate.knowledge_base.html.md#hired.candidate.knowledge_base.CandidateKnowledgeBase)([user, store])   | Accumulated, open-world knowledge about a single candidate (user-level).   |
 |------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 
-### *class* hired.candidate.knowledge_base.CandidateKnowledgeBase(user='me', , store=None)
+### *class* hired.candidate.knowledge_base.CandidateKnowledgeBase(user=None, , store=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1881,7 +2131,7 @@ Accumulated, open-world knowledge about a single candidate (user-level).
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> kb = CandidateKnowledgeBase()                 # default candidate "me"
+>>> kb = CandidateKnowledgeBase()       # default candidate: $HIRED_USER, else "me"
 >>> from hired.candidate.base import Fact, FactCategory
 >>> _ = kb.add_fact(Fact(statement='Built ML pipelines in Python',
 ...                       category=FactCategory.SKILL, tags=['python', 'ml']))
@@ -1930,6 +2180,18 @@ hidden). `tags` matches facts containing *any* of the given tags.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`Fact`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.Fact)]
+
+#### ingest_source(name, records)
+
+Distill extracted fact `records` for raw source `name` into facts.
+
+Quotes are checked against the source, facts from a prior ingest of the
+same source are superseded, and the source stops being pending. Returns
+`(added_fact_ids, superseded_fact_ids)`. See
+`hired.candidate.refresh.ingest_source()`.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 #### jd(jd_id, , company=None, label=None)
 
@@ -2064,11 +2326,11 @@ the soft/hard refresh loop.
 
 ### Classes
 
-| [`RefreshState`](_autosummary/hired.candidate.state.html.md#hired.candidate.state.RefreshState)(\*\*data)   | The candidate-info refresh ledger (persisted to `user/info/state.json`).   |
-|---------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| [`SourceDigest`](_autosummary/hired.candidate.state.html.md#hired.candidate.state.SourceDigest)(\*\*data)   | What we know about one raw source for change detection + provenance.       |
+| [`RefreshState`](_autosummary/hired.candidate.state.html.md#hired.candidate.state.RefreshState)(\*[, last_soft_refresh, ...])   | The candidate-info refresh ledger (persisted to `user/info/state.json`).   |
+|-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| [`SourceDigest`](_autosummary/hired.candidate.state.html.md#hired.candidate.state.SourceDigest)(\*, key, sha256, size[, ...])   | What we know about one raw source for change detection + provenance.       |
 
-### *class* hired.candidate.state.RefreshState(\*\*data)
+### *class* hired.candidate.state.RefreshState(\*, last_soft_refresh=None, last_hard_refresh=None, sources=<factory>)
 
 Bases: `BaseModel`
 
@@ -2078,7 +2340,7 @@ The candidate-info refresh ledger (persisted to `user/info/state.json`).
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.candidate.state.SourceDigest(\*\*data)
+### *class* hired.candidate.state.SourceDigest(\*, key, sha256, size, added_at=<factory>, ingested_at=None, fact_ids=<factory>)
 
 Bases: `BaseModel`
 
@@ -2226,6 +2488,19 @@ Keys of archived prior versions of a job’s report (chronological).
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+#### save_alignment(draft, , job_id=None)
+
+Finalize an analyst-drafted alignment report and save it; return it.
+
+Whatever produced the draft — the `hired-align` skill, the `hired
+analyze` command, or an injected-LLM analyzer — this is the one path from
+a draft to a persisted report: [`finalize_report()`](_autosummary/hired.alignment.html.md#hired.alignment.finalize_report)
+re-derives everything deterministic, then [`save_report()`](_autosummary/hired.candidate.workspace.html.md#hired.candidate.workspace.JDWorkspace.save_report) archives the
+previous version. `job_id` overrides the draft’s own.
+
+* **Return type:**
+  [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
 #### save_briefing(key, data)
 
 Persist an interview-prep research briefing (keyed by subject/job).
@@ -2245,10 +2520,161 @@ Persist a company/people research report (keyed by company name).
 Persist the current alignment report, archiving the prior one first.
 
 Archiving (on by default) snapshots any existing report into
-`report_history` so the alignment-review agent can diff versions.
+`report_history` so the alignment-review agent can diff versions. The
+snapshot is keyed by the *archived* report’s `created_at` (else now),
+made filename-safe, and never overwrites an earlier snapshot.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+
+# _autosummary/hired.cli.html.md
+
+# hired.cli
+
+Command-line operations for the candidate-knowledge + JD-alignment workflow.
+
+Each function here is a plain, importable operation — no CLI library is imported —
+and [`CLI_FUNCS`](_autosummary/hired.cli.html.md#hired.cli.CLI_FUNCS) is the single source of truth for what the `hired` command
+exposes (see `hired.__main__`, which projects it onto a parser with `cw`).
+
+Every operation takes a keyword-only `user` (`--user` on the command line),
+resolved by [`hired.persistence.resolve_user()`](_autosummary/hired.persistence.html.md#hired.persistence.resolve_user): the given name, else
+`$HIRED_USER`, else `"me"`. So a single-candidate setup needs no flag at all,
+and several candidates coexist under `users/<user>/`.
+
+The *intelligence* stays outside: `ingest` takes fact records an extractor (the
+`hired-profile-ingest` subagent, or an LLM) already produced, and `analyze`
+takes an analyst-drafted report; the commands validate, derive what is
+deterministic, and persist.
+
+```pycon
+>>> import os, json, tempfile
+>>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
+>>> work = tempfile.mkdtemp()
+>>> cv = os.path.join(work, 'cv.md')
+>>> _ = open(cv, 'w').write('I built ML pipelines in Python.')
+>>> recs = os.path.join(work, 'facts.json')
+>>> _ = open(recs, 'w').write(json.dumps([{'statement': 'Builds ML pipelines',
+...     'category': 'skill', 'quote': 'built ML pipelines'}]))
+>>> ingest(recs, source=cv, user='alice')['added']
+1
+>>> users()
+['alice']
+>>> facts(user='alice')
+['Builds ML pipelines']
+```
+
+### Module Attributes
+
+| [`CLI_FUNCS`](_autosummary/hired.cli.html.md#hired.cli.CLI_FUNCS)   | The operations the `hired` command exposes (SSOT for every surface).   |
+|--------------------------------------------------------------|------------------------------------------------------------------------|
+
+### Functions
+
+| [`add_source`](_autosummary/hired.cli.html.md#hired.cli.add_source)(path, \*[, name, user])               | Store a raw source document (CV, bio, publication list...) for a candidate.            |
+|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| [`analyze`](_autosummary/hired.cli.html.md#hired.cli.analyze)(report, jd, \*[, job_id, company, user]) | Finalize an analyst-drafted alignment report (JSON) and save it under engagement `jd`. |
+| [`facts`](_autosummary/hired.cli.html.md#hired.cli.facts)(\*[, category, tag, user])                 | List a candidate's current (asserted) fact statements.                                 |
+| [`ingest`](_autosummary/hired.cli.html.md#hired.cli.ingest)(records, \*[, source, user])              | Add extracted fact records (a JSON list) to a candidate's knowledge base.              |
+| [`jds`](_autosummary/hired.cli.html.md#hired.cli.jds)(\*[, user])                                  | List a candidate's engagements (one per company; 1+ roles each).                       |
+| [`report`](_autosummary/hired.cli.html.md#hired.cli.report)(jd[, job_id, fmt, output, user])          | Render a saved alignment report (`--fmt markdown|html`).                               |
+| [`reports`](_autosummary/hired.cli.html.md#hired.cli.reports)(jd, \*[, user])                          | List the job ids that have an alignment report in engagement `jd`.                     |
+| [`status`](_autosummary/hired.cli.html.md#hired.cli.status)(\*[, user])                               | Summarize a candidate's knowledge base: counts, pending material, engagements.         |
+| [`synopsis`](_autosummary/hired.cli.html.md#hired.cli.synopsis)(\*[, regenerate, user])                 | Print a candidate's synopsis (`--regenerate` rebuilds it from the facts).              |
+| [`users`](_autosummary/hired.cli.html.md#hired.cli.users)()                                          | List the candidates that have data (one `users/<user>/` directory each).               |
+
+### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function reports>, <function report>]*
+
+The operations the `hired` command exposes (SSOT for every surface).
+
+### hired.cli.add_source(path, , name=None, user=None)
+
+Store a raw source document (CV, bio, publication list…) for a candidate.
+
+Prints the source key. Its facts are added later with `ingest`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.cli.analyze(report, jd, , job_id=None, company=None, user=None)
+
+Finalize an analyst-drafted alignment report (JSON) and save it under engagement `jd`.
+
+Every requirement is re-classified with the deterministic rubric, bucket
+counts, blocking gaps and the ranked clarifying questions are rebuilt, and
+the report is saved (the previous version of the same job’s report is
+archived). Prints the saved job id and the resulting verdict line.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.cli.facts(, category=None, tag=None, user=None)
+
+List a candidate’s current (asserted) fact statements.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.cli.ingest(records, , source=None, user=None)
+
+Add extracted fact records (a JSON list) to a candidate’s knowledge base.
+
+`records` is a JSON file holding a list of `{"statement", "category",
+"tags", "confidence", "quote", "locator", "is_negation"}` dicts. With
+`--source` (a raw-source key, or a file path, which is stored first) the
+facts cite that source, their quotes are checked against its text, and a
+re-ingest of the same source supersedes the facts of the previous one.
+Without it, the facts are recorded as externally sourced.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.cli.jds(, user=None)
+
+List a candidate’s engagements (one per company; 1+ roles each).
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.cli.report(jd, job_id=None, , fmt='markdown', output=None, user=None)
+
+Render a saved alignment report (`--fmt markdown|html`).
+
+`job_id` may be omitted when the engagement has a single report. With
+`--output` the rendering is written to that file (and its path printed);
+otherwise it is printed.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.cli.reports(jd, , user=None)
+
+List the job ids that have an alignment report in engagement `jd`.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.cli.status(, user=None)
+
+Summarize a candidate’s knowledge base: counts, pending material, engagements.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.cli.synopsis(, regenerate=False, user=None)
+
+Print a candidate’s synopsis (`--regenerate` rebuilds it from the facts).
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.cli.users()
+
+List the candidates that have data (one `users/<user>/` directory each).
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
 
 # _autosummary/hired.config.html.md
@@ -2381,7 +2807,7 @@ Generate cover letter content from candidate and job information.
 
 * **Parameters:**
   * **candidate_info** ([`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Candidate information (resume dict or basics)
-  * **job_info** (`Union`[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
+  * **job_info** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
   * **tone** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Tone of the letter (‘professional’, ‘enthusiastic’, ‘formal’)
 * **Return type:**
   [`CoverLetterData`](_autosummary/hired.cover_letter.html.md#hired.cover_letter.CoverLetterData)
@@ -2403,7 +2829,7 @@ Generate and render a cover letter.
 
 * **Parameters:**
   * **candidate_info** ([`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Candidate information (resume dict or basics)
-  * **job_info** (`Union`[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
+  * **job_info** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
   * **tone** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Tone of the letter (‘professional’, ‘enthusiastic’, ‘formal’)
   * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output format (‘text’, ‘html’, ‘markdown’)
   * **output_path** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional path to save the cover letter
@@ -2480,7 +2906,7 @@ Check resume for ATS compatibility.
 * **Returns:**
   ATSReport with compatibility score and issues
 
-### *class* hired.ATSReport(overall_score, issues=<factory>, keyword_match_score=0.0, matched_keywords=<factory>, missing_keywords=<factory>)
+### *class* hired.ATSReport(overall_score, issues=list(), keyword_match_score=0.0, matched_keywords=set(), missing_keywords=set())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2521,7 +2947,7 @@ Convert to dictionary.
 * **Return type:**
   [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### *class* hired.AlignmentReport(\*\*data)
+### *class* hired.AlignmentReport(\*, job_id, job_title='', company='', created_at='', verdict, score_summary=<factory>, requirements=<factory>, blocking_gaps=<factory>, next_actions=<factory>, interview_prep=<factory>, clarifications=<factory>)
 
 Bases: `BaseModel`
 
@@ -2703,7 +3129,7 @@ Update application status.
 * **Returns:**
   True if updated, False if not found
 
-### *class* hired.CandidateKnowledgeBase(user='me', , store=None)
+### *class* hired.CandidateKnowledgeBase(user=None, , store=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -2712,7 +3138,7 @@ Accumulated, open-world knowledge about a single candidate (user-level).
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> kb = CandidateKnowledgeBase()                 # default candidate "me"
+>>> kb = CandidateKnowledgeBase()       # default candidate: $HIRED_USER, else "me"
 >>> from hired.candidate.base import Fact, FactCategory
 >>> _ = kb.add_fact(Fact(statement='Built ML pipelines in Python',
 ...                       category=FactCategory.SKILL, tags=['python', 'ml']))
@@ -2761,6 +3187,18 @@ hidden). `tags` matches facts containing *any* of the given tags.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`Fact`](_autosummary/hired.candidate.base.html.md#hired.candidate.base.Fact)]
+
+#### ingest_source(name, records)
+
+Distill extracted fact `records` for raw source `name` into facts.
+
+Quotes are checked against the source, facts from a prior ingest of the
+same source are superseded, and the source stops being pending. Returns
+`(added_fact_ids, superseded_fact_ids)`. See
+`hired.candidate.refresh.ingest_source()`.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 #### jd(jd_id, , company=None, label=None)
 
@@ -2917,6 +3355,19 @@ Keys of archived prior versions of a job’s report (chronological).
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+#### save_alignment(draft, , job_id=None)
+
+Finalize an analyst-drafted alignment report and save it; return it.
+
+Whatever produced the draft — the `hired-align` skill, the `hired
+analyze` command, or an injected-LLM analyzer — this is the one path from
+a draft to a persisted report: [`finalize_report()`](_autosummary/hired.alignment.html.md#hired.alignment.finalize_report)
+re-derives everything deterministic, then [`save_report()`](_autosummary/hired.html.md#hired.JDWorkspace.save_report) archives the
+previous version. `job_id` overrides the draft’s own.
+
+* **Return type:**
+  [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
 #### save_briefing(key, data)
 
 Persist an interview-prep research briefing (keyed by subject/job).
@@ -2936,7 +3387,9 @@ Persist a company/people research report (keyed by company name).
 Persist the current alignment report, archiving the prior one first.
 
 Archiving (on by default) snapshots any existing report into
-`report_history` so the alignment-review agent can diff versions.
+`report_history` so the alignment-review agent can diff versions. The
+snapshot is keyed by the *archived* report’s `created_at` (else now),
+made filename-safe, and never overwrites an earlier snapshot.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -3080,7 +3533,7 @@ Score multiple jobs.
 * **Returns:**
   List of MatchScore objects
 
-### *class* hired.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=<factory>, benefits=<factory>, emails=<factory>, raw_data=<factory>)
+### *class* hired.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=list(), benefits=list(), emails=list(), raw_data=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3295,7 +3748,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Standardized job types across all sources.
 
-### *class* hired.LLMConfig(model, temperature=0.7, max_tokens=None, top_p=1.0, provider='openai', api_key=None, base_url=None, extra_params=<factory>)
+### *class* hired.LLMConfig(model, temperature=0.7, max_tokens=None, top_p=1.0, provider='openai', api_key=None, base_url=None, extra_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3343,7 +3796,7 @@ requires `openai`, and no API key is read at construction time. Inject a
 ...                 ...
 ```
 
-### *class* hired.MatchScore(job, overall_score, skill_match_score, keyword_match_score, matched_skills=<factory>, missing_skills=<factory>, matched_keywords=<factory>, compensation_match=None, location_match=None)
+### *class* hired.MatchScore(job, overall_score, skill_match_score, keyword_match_score, matched_skills=set(), missing_skills=set(), matched_keywords=set(), compensation_match=None, location_match=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3369,7 +3822,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Configuration for resume rendering.
 
-### *class* hired.Requirement(\*\*data)
+### *class* hired.Requirement(\*, id=<factory>, text, skill_type=SkillType.TECHNICAL, requirement_class=RequirementClass.DIFFERENTIATOR, required_level=3)
 
 Bases: `BaseModel`
 
@@ -3379,7 +3832,7 @@ One atomic requirement extracted verbatim from a job description.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.RequirementRecord(\*\*data)
+### *class* hired.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -3455,7 +3908,7 @@ Uses LLM to interpret instruction and modify plan accordingly.
 * **Return type:**
   [`Plan`](_autosummary/hired.resume_agent.html.md#hired.resume_agent.Plan)
 
-### *class* hired.ResumeSchema(\*\*data)
+### *class* hired.ResumeSchema(, field_schema=None, basics=None, work=None, volunteer=None, education=None, awards=None, certificates=None, publications=None, skills=None, languages=None, interests=None, references=None, projects=None, meta=None)
 
 Bases: `BaseModel`
 
@@ -3463,7 +3916,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.ResumeSchemaExtended(\*\*data)
+### *class* hired.ResumeSchemaExtended(, field_schema=None, basics=None, work=None, volunteer=None, education=None, awards=None, certificates=None, publications=None, skills=None, languages=None, interests=None, references=None, projects=None, meta=None, \*\*extra_data)
 
 Bases: [`ResumeSchema`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.ResumeSchema)
 
@@ -3515,26 +3968,26 @@ Get all conversation turns.
 
 List all persisted sessions.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
-
 ```pycon
 >>> for session_info in ResumeSession.list_persisted():
 ...     print(session_info['session_id'])
 ```
 
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
+
 #### *classmethod* load(session_id, , data_dir=None, llm_config=None)
 
 Load session from persistent storage.
-
-* **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`ResumeSession`](_autosummary/hired.resume_agent.html.md#hired.resume_agent.ResumeSession)]
 
 ```pycon
 >>> session = ResumeSession.load("abc123def456")
 >>> session.session_id if session else None
 'abc123def456'
 ```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`ResumeSession`](_autosummary/hired.resume_agent.html.md#hired.resume_agent.ResumeSession)]
 
 #### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
@@ -3566,7 +4019,7 @@ Switch between manual and auto operation modes.
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-### *class* hired.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=<factory>, exclude_keywords=<factory>, source_params=<factory>)
+### *class* hired.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=list(), exclude_keywords=list(), source_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -3625,7 +4078,7 @@ Generate cover letter content from candidate and job information.
 
 * **Parameters:**
   * **candidate_info** ([`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Candidate information (resume dict or basics)
-  * **job_info** (`Union`[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
+  * **job_info** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
   * **tone** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Tone of the letter (‘professional’, ‘enthusiastic’, ‘formal’)
 * **Return type:**
   [`CoverLetterData`](_autosummary/hired.cover_letter.html.md#hired.cover_letter.CoverLetterData)
@@ -3668,8 +4121,8 @@ Convert a JobResult to formatted text for resume generation.
 Generate resume content from candidate and job information.
 
 * **Parameters:**
-  * **candidate_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
-  * **job_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
+  * **candidate_info_src** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
+  * **job_info_src** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
   * **agent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional AI agent for content generation
   * **validate** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to validate the generated content
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to use strict validation
@@ -3697,7 +4150,7 @@ Generate and render a cover letter.
 
 * **Parameters:**
   * **candidate_info** ([`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Candidate information (resume dict or basics)
-  * **job_info** (`Union`[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
+  * **job_info** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
   * **tone** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Tone of the letter (‘professional’, ‘enthusiastic’, ‘formal’)
   * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output format (‘text’, ‘html’, ‘markdown’)
   * **output_path** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional path to save the cover letter
@@ -3775,6 +4228,7 @@ Render the report as a Markdown string.
 | [`ats_checker`](_autosummary/hired.ats_checker.html.md#module-hired.ats_checker)                               | ATS (Applicant Tracking System) compatibility checker.                             |
 | [`base`](_autosummary/hired.base.html.md#module-hired.base)                                             | Core data models and protocols for the hired package.                              |
 | [`candidate`](_autosummary/hired.candidate.html.md#module-hired.candidate)                                   | Candidate knowledge domain: accumulate open-world facts about a candidate.         |
+| [`cli`](_autosummary/hired.cli.html.md#module-hired.cli)                                               | Command-line operations for the candidate-knowledge + JD-alignment workflow.       |
 | [`config`](_autosummary/hired.config.html.md#module-hired.config)                                         | Configuration management using Mapping interfaces.                                 |
 | [`content`](_autosummary/hired.content.html.md#module-hired.content)                                       | Content generation logic and AI agent implementations.                             |
 | [`cover_letter`](_autosummary/hired.cover_letter.html.md#module-hired.cover_letter)                             | Cover letter generation functionality.                                             |
@@ -4002,7 +4456,7 @@ Score multiple jobs.
 * **Returns:**
   List of MatchScore objects
 
-### *class* hired.matching.MatchScore(job, overall_score, skill_match_score, keyword_match_score, matched_skills=<factory>, missing_skills=<factory>, matched_keywords=<factory>, compensation_match=None, location_match=None)
+### *class* hired.matching.MatchScore(job, overall_score, skill_match_score, keyword_match_score, matched_skills=set(), missing_skills=set(), matched_keywords=set(), compensation_match=None, location_match=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4106,10 +4560,11 @@ their accessors carry the extension in the path, never in a store key.
 
 ### Module Attributes
 
-| [`JsonStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.JsonStore)   | A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.   |
-|--------------------------------------------------------------|-----------------------------------------------------------------------------------|
-| [`TextStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.TextStore)   | A store of `str` values (e.g. markdown files), keyed by bare names.               |
-| [`BytesStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.BytesStore)  | A store of raw `bytes`, keyed by real filenames.                                  |
+| [`JsonStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.JsonStore)    | A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.   |
+|---------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| [`TextStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.TextStore)    | A store of `str` values (e.g. markdown files), keyed by bare names.               |
+| [`BytesStore`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.BytesStore)   | A store of raw `bytes`, keyed by real filenames.                                  |
+| [`USER_ENV_VAR`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.USER_ENV_VAR) | Environment variable naming the active candidate when no `user` is passed.        |
 
 ### Functions
 
@@ -4118,11 +4573,14 @@ their accessors carry the extension in the path, never in a store key.
 | [`bytes_store`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.bytes_store)(rootdir)                     | A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept). |
 | [`json_store`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.json_store)(rootdir)                      | A `MutableMapping` of JSON-able values: bare-id keys, `<id>.json` files.     |
 | [`list_jds`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.list_jds)([user, root])                   | Engagement ids under `users/<user>/jds/` (sorted; empty if none).            |
+| [`list_users`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.list_users)()                             | Candidates with data under the data root's `users/` (sorted; empty if none). |
 | [`markdown_store`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.markdown_store)(rootdir)                  | A `MutableMapping` of `str` values: bare keys, `<key>.md` files.             |
 | [`migrate_legacy`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.migrate_legacy)(legacy_path, target_path) | One-time copy of a legacy store into the canonical root.                     |
 | [`read_json_file`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.read_json_file)(path)                     | Read a JSON file, or return `None` if it does not exist.                     |
 | [`read_text_file`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.read_text_file)(path)                     | Read a text file, or return `None` if it does not exist.                     |
+| [`resolve_user`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.resolve_user)([user])                     | The candidate an operation targets: `user`, else `$HIRED_USER`, else `"me"`. |
 | [`user_base`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.user_base)([user, root])                  | Filesystem base for a candidate: `<root>` or `<data>/users/<user>`.          |
+| [`validate_name`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.validate_name)(name, \*[, kind])          | Return `name` if it is a safe, portable single path segment, else raise.     |
 | [`write_json_file`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.write_json_file)(path, obj)               | Write `obj` as indented JSON, creating parent dirs as needed.                |
 | [`write_text_file`](_autosummary/hired.persistence.base.html.md#hired.persistence.base.write_text_file)(path, text)              | Write `text` to a file, creating parent dirs as needed.                      |
 
@@ -4172,7 +4630,11 @@ A store of `str` values (e.g. markdown files), keyed by bare names.
 
 alias of [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-### *class* hired.persistence.base.UserStore(user='me', , root=None)
+### hired.persistence.base.USER_ENV_VAR *= 'HIRED_USER'*
+
+Environment variable naming the active candidate when no `user` is passed.
+
+### *class* hired.persistence.base.UserStore(user=None, , root=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4185,7 +4647,7 @@ is a single markdown file accessed via `read_synopsis()` /
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> us = UserStore()                       # default user "me"
+>>> us = UserStore()           # default user: $HIRED_USER, else "me"
 >>> us.facts['f1'] = {'statement': 'knows Python'}
 >>> us.facts['f1']
 {'statement': 'knows Python'}
@@ -4203,9 +4665,6 @@ Return the canonical hired data directory, joined with `subpaths`.
 
 The directory is created when `make` is true (the default).
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> import os, tempfile
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
@@ -4215,6 +4674,9 @@ True
 >>> app_data_dir('users', 'me').endswith(os.path.join('users', 'me'))
 True
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### hired.persistence.base.bytes_store(rootdir)
 
@@ -4234,9 +4696,26 @@ work transparently.
 * **Return type:**
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### hired.persistence.base.list_jds(user='me', , root=None)
+### hired.persistence.base.list_jds(user=None, , root=None)
 
 Engagement ids under `users/<user>/jds/` (sorted; empty if none).
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.persistence.base.list_users()
+
+Candidates with data under the data root’s `users/` (sorted; empty if none).
+
+```pycon
+>>> import os, tempfile
+>>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
+>>> list_users()
+[]
+>>> _ = UserStore('alice').facts
+>>> list_users()
+['alice']
+```
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
@@ -4273,9 +4752,60 @@ Read a text file, or return `None` if it does not exist.
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-### hired.persistence.base.user_base(user='me', , root=None)
+### hired.persistence.base.resolve_user(user=None)
+
+The candidate an operation targets: `user`, else `$HIRED_USER`, else `"me"`.
+
+This is the *only* place the single-tenant default lives; every user-scoped
+entry point passes its `user` argument through here. An explicitly given
+name (even `""`) is validated, never silently replaced by the default.
+
+```pycon
+>>> import os
+>>> _ = os.environ.pop('HIRED_USER', None)
+>>> resolve_user()
+'me'
+>>> resolve_user('alice')
+'alice'
+>>> os.environ['HIRED_USER'] = 'bob'
+>>> resolve_user()
+'bob'
+>>> del os.environ['HIRED_USER']
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.persistence.base.user_base(user=None, , root=None)
 
 Filesystem base for a candidate: `<root>` or `<data>/users/<user>`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.persistence.base.validate_name(name, , kind='name')
+
+Return `name` if it is a safe, portable single path segment, else raise.
+
+User, engagement and job ids become directory or file names, so they are
+restricted to ASCII letters, digits and `._-` (starting with a letter or
+digit, not ending in `.`), and may not be a Windows device name. That rules
+out separators, `..`, drive prefixes (`C:x`), hidden names and NUL bytes —
+so one id can never address another candidate’s (or an arbitrary) directory.
+`kind="user"` also requires lower case (see `_USER_PATTERN`).
+
+```pycon
+>>> validate_name('acme-2024')
+'acme-2024'
+>>> validate_name('../bob', kind='engagement id')
+Traceback (most recent call last):
+  ...
+ValueError: Invalid engagement id '../bob': use ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+>>> validate_name('Alice', kind='user')
+Traceback (most recent call last):
+  ...
+ValueError: Invalid user 'Alice': use lower-case ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+```
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
@@ -4311,6 +4841,10 @@ filesystem codecs that keep keys extension-less while writing properly-extension
 files. Per-candidate data is split two levels deep: a cross-JD `user/` subtree
 ([`UserStore`](_autosummary/hired.persistence.html.md#hired.persistence.UserStore)) and per-engagement `jds/<jd_id>/` subtrees ([`JDStore`](_autosummary/hired.persistence.html.md#hired.persistence.JDStore)).
 
+Multi-tenant: every candidate lives under `users/<user>/`. Entry points take an
+optional `user`; [`resolve_user()`](_autosummary/hired.persistence.html.md#hired.persistence.resolve_user) falls back to `$HIRED_USER`, then `"me"`,
+and [`list_users()`](_autosummary/hired.persistence.html.md#hired.persistence.list_users) enumerates the candidates present.
+
 See `misc/docs/DESIGN.md` §4 for the full layout and rationale.
 
 ### Functions
@@ -4318,6 +4852,9 @@ See `misc/docs/DESIGN.md` §4 for the full layout and rationale.
 | [`app_data_dir`](_autosummary/hired.persistence.html.md#hired.persistence.app_data_dir)(\*subpaths[, make])                  | Return the canonical hired data directory, joined with `subpaths`.           |
 |----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
 | [`user_base`](_autosummary/hired.persistence.html.md#hired.persistence.user_base)([user, root])                           | Filesystem base for a candidate: `<root>` or `<data>/users/<user>`.          |
+| [`resolve_user`](_autosummary/hired.persistence.html.md#hired.persistence.resolve_user)([user])                              | The candidate an operation targets: `user`, else `$HIRED_USER`, else `"me"`. |
+| [`validate_name`](_autosummary/hired.persistence.html.md#hired.persistence.validate_name)(name, \*[, kind])                   | Return `name` if it is a safe, portable single path segment, else raise.     |
+| [`list_users`](_autosummary/hired.persistence.html.md#hired.persistence.list_users)()                                      | Candidates with data under the data root's `users/` (sorted; empty if none). |
 | [`list_jds`](_autosummary/hired.persistence.html.md#hired.persistence.list_jds)([user, root])                            | Engagement ids under `users/<user>/jds/` (sorted; empty if none).            |
 | [`json_store`](_autosummary/hired.persistence.html.md#hired.persistence.json_store)(rootdir)                               | A `MutableMapping` of JSON-able values: bare-id keys, `<id>.json` files.     |
 | [`markdown_store`](_autosummary/hired.persistence.html.md#hired.persistence.markdown_store)(rootdir)                           | A `MutableMapping` of `str` values: bare keys, `<key>.md` files.             |
@@ -4372,7 +4909,7 @@ Derive the storage key for an item (defaults to its `id` field).
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
-### *class* hired.persistence.UserStore(user='me', , root=None)
+### *class* hired.persistence.UserStore(user=None, , root=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -4385,7 +4922,7 @@ is a single markdown file accessed via `read_synopsis()` /
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> us = UserStore()                       # default user "me"
+>>> us = UserStore()           # default user: $HIRED_USER, else "me"
 >>> us.facts['f1'] = {'statement': 'knows Python'}
 >>> us.facts['f1']
 {'statement': 'knows Python'}
@@ -4403,9 +4940,6 @@ Return the canonical hired data directory, joined with `subpaths`.
 
 The directory is created when `make` is true (the default).
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> import os, tempfile
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
@@ -4416,6 +4950,9 @@ True
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### hired.persistence.bytes_store(rootdir)
 
 A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept).
@@ -4423,14 +4960,14 @@ A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept).
 * **Return type:**
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 
-### hired.persistence.ensure_v2(user='me', , root=None)
+### hired.persistence.ensure_v2(user=None, , root=None)
 
 Migrate the user to v2 if a legacy layout is detected. Returns True if migrated.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.persistence.is_legacy_layout(user='me', , root=None)
+### hired.persistence.is_legacy_layout(user=None, , root=None)
 
 True iff any legacy v1 flat directory remains for this user.
 
@@ -4452,9 +4989,26 @@ work transparently.
 * **Return type:**
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### hired.persistence.list_jds(user='me', , root=None)
+### hired.persistence.list_jds(user=None, , root=None)
 
 Engagement ids under `users/<user>/jds/` (sorted; empty if none).
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.persistence.list_users()
+
+Candidates with data under the data root’s `users/` (sorted; empty if none).
+
+```pycon
+>>> import os, tempfile
+>>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
+>>> list_users()
+[]
+>>> _ = UserStore('alice').facts
+>>> list_users()
+['alice']
+```
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
@@ -4477,7 +5031,7 @@ unified. No-op otherwise. Returns True iff a copy happened.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.persistence.migrate_user_to_v2(user='me', , root=None, company_of=None, dry_run=False)
+### hired.persistence.migrate_user_to_v2(user=None, , root=None, company_of=None, dry_run=False)
 
 Migrate one user’s flat v1 data to the v2 layout. Returns the move plan.
 
@@ -4488,9 +5042,60 @@ legacy data. With `dry_run=True` nothing is moved — the returned
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
-### hired.persistence.user_base(user='me', , root=None)
+### hired.persistence.resolve_user(user=None)
+
+The candidate an operation targets: `user`, else `$HIRED_USER`, else `"me"`.
+
+This is the *only* place the single-tenant default lives; every user-scoped
+entry point passes its `user` argument through here. An explicitly given
+name (even `""`) is validated, never silently replaced by the default.
+
+```pycon
+>>> import os
+>>> _ = os.environ.pop('HIRED_USER', None)
+>>> resolve_user()
+'me'
+>>> resolve_user('alice')
+'alice'
+>>> os.environ['HIRED_USER'] = 'bob'
+>>> resolve_user()
+'bob'
+>>> del os.environ['HIRED_USER']
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.persistence.user_base(user=None, , root=None)
 
 Filesystem base for a candidate: `<root>` or `<data>/users/<user>`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.persistence.validate_name(name, , kind='name')
+
+Return `name` if it is a safe, portable single path segment, else raise.
+
+User, engagement and job ids become directory or file names, so they are
+restricted to ASCII letters, digits and `._-` (starting with a letter or
+digit, not ending in `.`), and may not be a Windows device name. That rules
+out separators, `..`, drive prefixes (`C:x`), hidden names and NUL bytes —
+so one id can never address another candidate’s (or an arbitrary) directory.
+`kind="user"` also requires lower case (see `_USER_PATTERN`).
+
+```pycon
+>>> validate_name('acme-2024')
+'acme-2024'
+>>> validate_name('../bob', kind='engagement id')
+Traceback (most recent call last):
+  ...
+ValueError: Invalid engagement id '../bob': use ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+>>> validate_name('Alice', kind='user')
+Traceback (most recent call last):
+  ...
+ValueError: Invalid user 'Alice': use lower-case ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+```
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
@@ -4544,14 +5149,14 @@ access, or explicitly (with [`migrate_user_to_v2()`](_autosummary/hired.persiste
 | [`is_legacy_layout`](_autosummary/hired.persistence.migrate.html.md#hired.persistence.migrate.is_legacy_layout)([user, root])                    | True iff any legacy v1 flat directory remains for this user. |
 | [`migrate_user_to_v2`](_autosummary/hired.persistence.migrate.html.md#hired.persistence.migrate.migrate_user_to_v2)([user, root, company_of, ...]) | Migrate one user's flat v1 data to the v2 layout.            |
 
-### hired.persistence.migrate.ensure_v2(user='me', , root=None)
+### hired.persistence.migrate.ensure_v2(user=None, , root=None)
 
 Migrate the user to v2 if a legacy layout is detected. Returns True if migrated.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.persistence.migrate.is_legacy_layout(user='me', , root=None)
+### hired.persistence.migrate.is_legacy_layout(user=None, , root=None)
 
 True iff any legacy v1 flat directory remains for this user.
 
@@ -4562,7 +5167,7 @@ a partially-migrated (interrupted) user still has some, so a re-run resumes.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.persistence.migrate.migrate_user_to_v2(user='me', , root=None, company_of=None, dry_run=False)
+### hired.persistence.migrate.migrate_user_to_v2(user=None, , root=None, company_of=None, dry_run=False)
 
 Migrate one user’s flat v1 data to the v2 layout. Returns the move plan.
 
@@ -4854,15 +5459,15 @@ Uses DSPy-optimized prompts with metrics for conciseness and clarity.
 
 Distill verbose text into concise statement.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> config = LLMConfig(model="gpt-4")
 >>> agent = DistillationAgent(llm_config=config)
 >>> agent.llm_config.model
 'gpt-4'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### *class* hired.resume_agent.ExpansionAgent(, llm_config=None)
 
@@ -4876,9 +5481,6 @@ Uses DSPy-optimized prompts for consistent, high-quality expansions.
 
 Expand brief text into detailed description.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> config = LLMConfig(model="gpt-4")
 >>> agent = ExpansionAgent(llm_config=config)
@@ -4886,7 +5488,10 @@ Expand brief text into detailed description.
 'gpt-4'
 ```
 
-### *class* hired.resume_agent.LLMConfig(model, temperature=0.7, max_tokens=None, top_p=1.0, provider='openai', api_key=None, base_url=None, extra_params=<factory>)
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### *class* hired.resume_agent.LLMConfig(model, temperature=0.7, max_tokens=None, top_p=1.0, provider='openai', api_key=None, base_url=None, extra_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -5029,7 +5634,7 @@ Validate plan structure and dependencies.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-### *class* hired.resume_agent.PlanStep(id, action, description, params=<factory>, dependencies=<factory>, estimated_tokens=None)
+### *class* hired.resume_agent.PlanStep(id, action, description, params=dict(), dependencies=list(), estimated_tokens=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -5143,26 +5748,26 @@ Get all conversation turns.
 
 List all persisted sessions.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
-
 ```pycon
 >>> for session_info in ResumeSession.list_persisted():
 ...     print(session_info['session_id'])
 ```
 
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
+
 #### *classmethod* load(session_id, , data_dir=None, llm_config=None)
 
 Load session from persistent storage.
-
-* **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`ResumeSession`](_autosummary/hired.resume_agent.html.md#hired.resume_agent.ResumeSession)]
 
 ```pycon
 >>> session = ResumeSession.load("abc123def456")
 >>> session.session_id if session else None
 'abc123def456'
 ```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`ResumeSession`](_autosummary/hired.resume_agent.html.md#hired.resume_agent.ResumeSession)]
 
 #### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
@@ -5307,7 +5912,7 @@ Returns path to saved session file.
 * **Return type:**
   [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)
 
-### *class* hired.resume_agent.Turn(role, content, timestamp=<factory>, metadata=<factory>)
+### *class* hired.resume_agent.Turn(role, content, timestamp=<factory>, metadata=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -5328,34 +5933,26 @@ Pydantic models for resume json schema
 
 ### Classes
 
-| [`Award`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Award)(\*\*data)         |    |
-|--------------------------------------------------------------------------|----|
-| [`Basics`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Basics)(\*\*data)        |    |
-| [`Certificate`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Certificate)(\*\*data)   |    |
-| [`EducationItem`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.EducationItem)(\*\*data) |    |
-| [`Interest`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Interest)(\*\*data)      |    |
-| [`Iso8601`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Iso8601)([root])         |    |
-| [`Language`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Language)(\*\*data)      |    |
-| [`Location`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Location)(\*\*data)      |    |
-| [`Meta`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Meta)(\*\*data)          |    |
-| [`Profile`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Profile)(\*\*data)       |    |
-| [`Project`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Project)(\*\*data)       |    |
-| [`Publication`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Publication)(\*\*data)   |    |
-| [`Reference`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Reference)(\*\*data)     |    |
-| [`ResumeSchema`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.ResumeSchema)(\*\*data)  |    |
-| [`Skill`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Skill)(\*\*data)         |    |
-| [`VolunteerItem`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.VolunteerItem)(\*\*data) |    |
-| [`WorkItem`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.WorkItem)(\*\*data)      |    |
+| [`Award`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Award)(\*[, title, date, awarder, summary])        |    |
+|----------------------------------------------------------------------------------------------------|----|
+| [`Basics`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Basics)(\*[, name, label, image, email, ...])      |    |
+| [`Certificate`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Certificate)(\*[, name, date, url, issuer])        |    |
+| [`EducationItem`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.EducationItem)(\*[, institution, url, area, ...])  |    |
+| [`Interest`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Interest)(\*[, name, keywords])                    |    |
+| [`Iso8601`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Iso8601)([root])                                   |    |
+| [`Language`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Language)(\*[, language, fluency])                 |    |
+| [`Location`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Location)(\*[, address, postalCode, city, ...])    |    |
+| [`Meta`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Meta)(\*[, canonical, version, lastModified])      |    |
+| [`Profile`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Profile)(\*[, network, username, url])             |    |
+| [`Project`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Project)(\*[, name, description, highlights, ...]) |    |
+| [`Publication`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Publication)(\*[, name, publisher, ...])           |    |
+| [`Reference`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Reference)(\*[, name, reference])                  |    |
+| [`ResumeSchema`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.ResumeSchema)(\*[, field_schema, basics, ...])     |    |
+| [`Skill`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.Skill)(\*[, name, level, keywords])                |    |
+| [`VolunteerItem`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.VolunteerItem)(\*[, organization, position, ...])  |    |
+| [`WorkItem`](_autosummary/hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.WorkItem)(\*[, name, location, description, ...])  |    |
 
-### *class* hired.resumejson_pydantic_models.Award(\*\*data)
-
-Bases: `BaseModel`
-
-#### model_config *: [ClassVar](https://docs.python.org/3/library/typing.html#typing.ClassVar)[ConfigDict]* *= {'extra': 'allow'}*
-
-Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
-
-### *class* hired.resumejson_pydantic_models.Basics(\*\*data)
+### *class* hired.resumejson_pydantic_models.Award(, title=None, date=None, awarder=None, summary=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5363,7 +5960,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Certificate(\*\*data)
+### *class* hired.resumejson_pydantic_models.Basics(, name=None, label=None, image=None, email=None, phone=None, url=None, summary=None, location=None, profiles=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5371,7 +5968,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.EducationItem(\*\*data)
+### *class* hired.resumejson_pydantic_models.Certificate(, name=None, date=None, url=None, issuer=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5379,7 +5976,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Interest(\*\*data)
+### *class* hired.resumejson_pydantic_models.EducationItem(, institution=None, url=None, area=None, studyType=None, startDate=None, endDate=None, score=None, courses=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5387,7 +5984,15 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Iso8601(root=PydanticUndefined, \*\*data)
+### *class* hired.resumejson_pydantic_models.Interest(, name=None, keywords=None, \*\*extra_data)
+
+Bases: `BaseModel`
+
+#### model_config *: [ClassVar](https://docs.python.org/3/library/typing.html#typing.ClassVar)[ConfigDict]* *= {'extra': 'allow'}*
+
+Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+
+### *class* hired.resumejson_pydantic_models.Iso8601(root=PydanticUndefined)
 
 Bases: `RootModel[Annotated[str, StringConstraints]]`
 
@@ -5395,7 +6000,7 @@ Bases: `RootModel[Annotated[str, StringConstraints]]`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Language(\*\*data)
+### *class* hired.resumejson_pydantic_models.Language(, language=None, fluency=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5403,7 +6008,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Location(\*\*data)
+### *class* hired.resumejson_pydantic_models.Location(, address=None, postalCode=None, city=None, countryCode=None, region=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5411,7 +6016,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Meta(\*\*data)
+### *class* hired.resumejson_pydantic_models.Meta(, canonical=None, version=None, lastModified=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5419,7 +6024,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Profile(\*\*data)
+### *class* hired.resumejson_pydantic_models.Profile(, network=None, username=None, url=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5427,7 +6032,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Project(\*\*data)
+### *class* hired.resumejson_pydantic_models.Project(, name=None, description=None, highlights=None, keywords=None, startDate=None, endDate=None, url=None, roles=None, entity=None, type=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5435,7 +6040,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Publication(\*\*data)
+### *class* hired.resumejson_pydantic_models.Publication(, name=None, publisher=None, releaseDate=None, url=None, summary=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5443,7 +6048,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Reference(\*\*data)
+### *class* hired.resumejson_pydantic_models.Reference(, name=None, reference=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5451,7 +6056,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.ResumeSchema(\*\*data)
+### *class* hired.resumejson_pydantic_models.ResumeSchema(, field_schema=None, basics=None, work=None, volunteer=None, education=None, awards=None, certificates=None, publications=None, skills=None, languages=None, interests=None, references=None, projects=None, meta=None)
 
 Bases: `BaseModel`
 
@@ -5459,7 +6064,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.Skill(\*\*data)
+### *class* hired.resumejson_pydantic_models.Skill(, name=None, level=None, keywords=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5467,7 +6072,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.VolunteerItem(\*\*data)
+### *class* hired.resumejson_pydantic_models.VolunteerItem(, organization=None, position=None, url=None, startDate=None, endDate=None, summary=None, highlights=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5475,7 +6080,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.resumejson_pydantic_models.WorkItem(\*\*data)
+### *class* hired.resumejson_pydantic_models.WorkItem(, name=None, location=None, description=None, position=None, url=None, startDate=None, endDate=None, summary=None, highlights=None, \*\*extra_data)
 
 Bases: `BaseModel`
 
@@ -5511,7 +6116,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Compensation information for a job.
 
-### *class* hired.search.base.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=<factory>, benefits=<factory>, emails=<factory>, raw_data=<factory>)
+### *class* hired.search.base.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=list(), benefits=list(), emails=list(), raw_data=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -5607,7 +6212,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Location information for a job.
 
-### *class* hired.search.base.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=<factory>, exclude_keywords=<factory>, source_params=<factory>)
+### *class* hired.search.base.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=list(), exclude_keywords=list(), source_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -5880,7 +6485,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Compensation information for a job.
 
-### *class* hired.search.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=<factory>, benefits=<factory>, emails=<factory>, raw_data=<factory>)
+### *class* hired.search.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=list(), benefits=list(), emails=list(), raw_data=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -6157,7 +6762,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Location information for a job.
 
-### *class* hired.search.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=<factory>, exclude_keywords=<factory>, source_params=<factory>)
+### *class* hired.search.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=list(), exclude_keywords=list(), source_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -6733,8 +7338,8 @@ the entire pipeline.
 Generate resume content from candidate and job information.
 
 * **Parameters:**
-  * **candidate_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
-  * **job_info_src** (`Union`[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
+  * **candidate_info_src** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
+  * **job_info_src** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ContentSource`](_autosummary/hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](_autosummary/hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
   * **agent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional AI agent for content generation
   * **validate** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to validate the generated content
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to use strict validation
@@ -6769,9 +7374,9 @@ Render a resume dict (or pydantic model) to PDF using a specific
 HTML template file and optional CSS file.
 
 * **Parameters:**
-  * **content** (`Union`[[`ResumeSchemaExtended`](_autosummary/hired.base.html.md#hired.base.ResumeSchemaExtended), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Resume content as a dict or ResumeSchemaExtended instance.
-  * **template_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to an HTML/Jinja template file to render from.
-  * **css_path** (`Union`[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Optional path to a CSS file; its contents will be passed to
+  * **content** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ResumeSchemaExtended`](_autosummary/hired.base.html.md#hired.base.ResumeSchemaExtended), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Resume content as a dict or ResumeSchemaExtended instance.
+  * **template_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path)]) – Path to an HTML/Jinja template file to render from.
+  * **css_path** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Path`](https://docs.python.org/3/library/pathlib.html#pathlib.Path), [`None`](https://docs.python.org/3/builtins/constants.html#None)]) – Optional path to a CSS file; its contents will be passed to
     the renderer as `custom_css` so PDF rendering picks up the styles.
   * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output format, ‘pdf’ or ‘html’. Default is ‘pdf’.
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – If True, enable stricter schema validation.
@@ -7012,9 +7617,9 @@ This function works with both Pydantic’s ValidationError and jsonschema’s
 ValidationError to provide a consistent output.
 
 * **Parameters:**
-  **error_obj** (`Union`[`ValidationError`, `ValidationError`]) – The ValidationError instance to process.
+  **error_obj** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[`ValidationError`, `ValidationError`]) – The ValidationError instance to process.
 * **Yields:**
-  A tuple of (field, message) for each validation error.
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)] – A tuple of (field, message) for each validation error.
 * **Return type:**
   [*Iterator*](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[*tuple*](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any), [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
@@ -7065,7 +7670,7 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-10-14 02:29 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/2b5ebd05dcebba754734c6d61e268952b1f1ad2f"><code>2b5ebd0</code></a> on branch <code>main</code>, for **hired 0.0.23** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-19 12:51 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/94073e0e45bee769880fc399a38612a09734bc90"><code>94073e0</code></a> on branch <code>main</code>, for **hired 0.0.24** (from <code>pyproject.toml</code>).
 
 #### NOTE
 Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
@@ -7074,7 +7679,7 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/2b5ebd05dcebba754734c6d61e268952b1f1ad2f"><code>2b5ebd05dcebba754734c6d61e268952b1f1ad2f</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/94073e0e45bee769880fc399a38612a09734bc90"><code>94073e0e45bee769880fc399a38612a09734bc90</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -7085,15 +7690,15 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/38501127291">38501127291</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39255176507">39255176507</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>2b5ebd05dcebba754734c6d61e268952b1f1ad2f</code> (in the history of the built commit) |
+| Event commit | <code>94073e0e45bee769880fc399a38612a09734bc90</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.17  |
+| epythet  | 0.2.18  |
 | Sphinx   | 9.1.0   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
@@ -7112,14 +7717,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.23/">0.0.23</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.24/">0.0.24</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout 2b5ebd05dcebba754734c6d61e268952b1f1ad2f
-pip install "epythet==0.2.17"
+git checkout 94073e0e45bee769880fc399a38612a09734bc90
+pip install "epythet==0.2.18"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

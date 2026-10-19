@@ -18,15 +18,15 @@ anti-hallucination invariant enforced at extraction time.
 
 ### Classes
 
-| [`ConfidenceLevel`](#hired.candidate.base.ConfidenceLevel)(\*values)   | Calibrated confidence in a claim (qualitative, not a raw probability).   |
-|------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| [`Fact`](#hired.candidate.base.Fact)(\*\*data)              | One atomic claim about a candidate.                                      |
-| [`FactCategory`](#hired.candidate.base.FactCategory)(\*values)      | Coarse category for retrieval and synopsis grouping.                     |
-| [`FactStatus`](#hired.candidate.base.FactStatus)(\*values)        | Whether a fact is current or has been superseded by a newer one.         |
-| [`MatchState`](#hired.candidate.base.MatchState)(\*values)        | Three-valued epistemic state — the core of the honesty contract.         |
-| [`Provenance`](#hired.candidate.base.Provenance)(\*\*data)        | Where a fact came from, with an optional verbatim supporting quote.      |
-| [`QAEntry`](#hired.candidate.base.QAEntry)(\*\*data)           | One clarifying question asked of the candidate and their answer.         |
-| [`SourceKind`](#hired.candidate.base.SourceKind)(\*values)        | Where a piece of provenance came from.                                   |
+| [`ConfidenceLevel`](#hired.candidate.base.ConfidenceLevel)(\*values)                          | Calibrated confidence in a claim (qualitative, not a raw probability).   |
+|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| [`Fact`](#hired.candidate.base.Fact)(\*[, id, subject, category, value, ...])      | One atomic claim about a candidate.                                      |
+| [`FactCategory`](#hired.candidate.base.FactCategory)(\*values)                             | Coarse category for retrieval and synopsis grouping.                     |
+| [`FactStatus`](#hired.candidate.base.FactStatus)(\*values)                               | Whether a fact is current or has been superseded by a newer one.         |
+| [`MatchState`](#hired.candidate.base.MatchState)(\*values)                               | Three-valued epistemic state — the core of the honesty contract.         |
+| [`Provenance`](#hired.candidate.base.Provenance)(\*, source_kind[, source_id, ...])      | Where a fact came from, with an optional verbatim supporting quote.      |
+| [`QAEntry`](#hired.candidate.base.QAEntry)(\*[, id, asked_for_job, fills_field, ...]) | One clarifying question asked of the candidate and their answer.         |
+| [`SourceKind`](#hired.candidate.base.SourceKind)(\*values)                               | Where a piece of provenance came from.                                   |
 
 ### *class* hired.candidate.base.ConfidenceLevel(\*values)
 
@@ -34,7 +34,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Calibrated confidence in a claim (qualitative, not a raw probability).
 
-### *class* hired.candidate.base.Fact(\*\*data)
+### *class* hired.candidate.base.Fact(\*, id=<factory>, subject='me', category=FactCategory.OTHER, statement, value=None, confidence=ConfidenceLevel.MEDIUM, is_negation=False, provenance=<factory>, status=FactStatus.ASSERTED, supersedes=None, tags=<factory>, created_at=<factory>, updated_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -68,7 +68,7 @@ Three-valued epistemic state — the core of the honesty contract.
 `UNKNOWN` is distinct from `CONTRADICTED`: we have not yet looked, so we
 must *ask* rather than assume absence.
 
-### *class* hired.candidate.base.Provenance(\*\*data)
+### *class* hired.candidate.base.Provenance(\*, source_kind, source_id='', locator='', quote=None, captured_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -78,7 +78,7 @@ Where a fact came from, with an optional verbatim supporting quote.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.candidate.base.QAEntry(\*\*data)
+### *class* hired.candidate.base.QAEntry(\*, id=<factory>, question, answer, asked_for_job=None, fills_field=None, derived_fact_ids=<factory>, created_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -104,12 +104,12 @@ A filesystem-safe, extension-less key from an arbitrary label.
 Used to derive stable store keys from human labels (company names, subjects,
 briefing titles) so callers pass natural text and the store stays tidy.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> slug('Socure, Inc.')
 'socure-inc'
 >>> slug('KYC / AML primer')
 'kyc-aml-primer'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)

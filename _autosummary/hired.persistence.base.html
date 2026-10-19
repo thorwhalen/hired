@@ -34,6 +34,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=c5337052" />
   
@@ -43,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../_static/documentation_options.js?v=f91d8841"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -320,6 +321,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="hired.html">hired</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 has-children"><a class="reference internal" href="hired.alignment.html">hired.alignment</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="hired.alignment.assemble.html">hired.alignment.assemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.base.html">hired.alignment.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.diff.html">hired.alignment.diff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.elicitation.html">hired.alignment.elicitation</a></li>
@@ -338,6 +340,7 @@
 <li class="toctree-l3"><a class="reference internal" href="hired.candidate.workspace.html">hired.candidate.workspace</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="hired.cli.html">hired.cli</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.config.html">hired.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.content.html">hired.content</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.cover_letter.html">hired.cover_letter</a></li>
@@ -489,6 +492,9 @@ their accessors carry the extension in the path, never in a store key.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.BytesStore" title="hired.persistence.base.BytesStore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BytesStore</span></code></a></p></td>
 <td><p>A store of raw <code class="docutils literal notranslate"><span class="pre">bytes</span></code>, keyed by real filenames.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.USER_ENV_VAR" title="hired.persistence.base.USER_ENV_VAR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">USER_ENV_VAR</span></code></a></p></td>
+<td><p>Environment variable naming the active candidate when no <code class="docutils literal notranslate"><span class="pre">user</span></code> is passed.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -507,25 +513,34 @@ their accessors carry the extension in the path, never in a store key.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.list_jds" title="hired.persistence.base.list_jds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_jds</span></code></a>([user, root])</p></td>
 <td><p>Engagement ids under <code class="docutils literal notranslate"><span class="pre">users/&lt;user&gt;/jds/</span></code> (sorted; empty if none).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.markdown_store" title="hired.persistence.base.markdown_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">markdown_store</span></code></a>(rootdir)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.list_users" title="hired.persistence.base.list_users"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_users</span></code></a>()</p></td>
+<td><p>Candidates with data under the data root's <code class="docutils literal notranslate"><span class="pre">users/</span></code> (sorted; empty if none).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.markdown_store" title="hired.persistence.base.markdown_store"><code class="xref py py-obj docutils literal notranslate"><span class="pre">markdown_store</span></code></a>(rootdir)</p></td>
 <td><p>A <code class="docutils literal notranslate"><span class="pre">MutableMapping</span></code> of <code class="docutils literal notranslate"><span class="pre">str</span></code> values: bare keys, <code class="docutils literal notranslate"><span class="pre">&lt;key&gt;.md</span></code> files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.migrate_legacy" title="hired.persistence.base.migrate_legacy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">migrate_legacy</span></code></a>(legacy_path, target_path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.migrate_legacy" title="hired.persistence.base.migrate_legacy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">migrate_legacy</span></code></a>(legacy_path, target_path)</p></td>
 <td><p>One-time copy of a legacy store into the canonical root.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.read_json_file" title="hired.persistence.base.read_json_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_json_file</span></code></a>(path)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.read_json_file" title="hired.persistence.base.read_json_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_json_file</span></code></a>(path)</p></td>
 <td><p>Read a JSON file, or return <code class="docutils literal notranslate"><span class="pre">None</span></code> if it does not exist.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.read_text_file" title="hired.persistence.base.read_text_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_text_file</span></code></a>(path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.read_text_file" title="hired.persistence.base.read_text_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_text_file</span></code></a>(path)</p></td>
 <td><p>Read a text file, or return <code class="docutils literal notranslate"><span class="pre">None</span></code> if it does not exist.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.resolve_user" title="hired.persistence.base.resolve_user"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_user</span></code></a>([user])</p></td>
+<td><p>The candidate an operation targets: <code class="docutils literal notranslate"><span class="pre">user</span></code>, else <code class="docutils literal notranslate"><span class="pre">$HIRED_USER</span></code>, else <code class="docutils literal notranslate"><span class="pre">&quot;me&quot;</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.user_base" title="hired.persistence.base.user_base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">user_base</span></code></a>([user, root])</p></td>
 <td><p>Filesystem base for a candidate: <code class="docutils literal notranslate"><span class="pre">&lt;root&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;data&gt;/users/&lt;user&gt;</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.write_json_file" title="hired.persistence.base.write_json_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_json_file</span></code></a>(path, obj)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.validate_name" title="hired.persistence.base.validate_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_name</span></code></a>(name, *[, kind])</p></td>
+<td><p>Return <code class="docutils literal notranslate"><span class="pre">name</span></code> if it is a safe, portable single path segment, else raise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.write_json_file" title="hired.persistence.base.write_json_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_json_file</span></code></a>(path, obj)</p></td>
 <td><p>Write <code class="docutils literal notranslate"><span class="pre">obj</span></code> as indented JSON, creating parent dirs as needed.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.persistence.base.write_text_file" title="hired.persistence.base.write_text_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_text_file</span></code></a>(path, text)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.persistence.base.write_text_file" title="hired.persistence.base.write_text_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_text_file</span></code></a>(path, text)</p></td>
 <td><p>Write <code class="docutils literal notranslate"><span class="pre">text</span></code> to a file, creating parent dirs as needed.</p></td>
 </tr>
 </tbody>
@@ -587,9 +602,15 @@ research, and interview-prep briefings for that company’s role(s).</p>
 <p>alias of <a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MutableMapping</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</p>
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="hired.persistence.base.USER_ENV_VAR">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">USER_ENV_VAR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'HIRED_USER'</span></span><a class="headerlink" href="#hired.persistence.base.USER_ENV_VAR" title="Link to this definition">#</a></dt>
+<dd><p>Environment variable naming the active candidate when no <code class="docutils literal notranslate"><span class="pre">user</span></code> is passed.</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.persistence.base.UserStore">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">UserStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#UserStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.UserStore" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">UserStore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#UserStore"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.UserStore" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Per-candidate cross-JD storage: raw sources + agent-maintained <code class="docutils literal notranslate"><span class="pre">info</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">raw</span></code> is a bytes store; <code class="docutils literal notranslate"><span class="pre">facts</span></code> and <code class="docutils literal notranslate"><span class="pre">qa</span></code> are json stores; <code class="docutils literal notranslate"><span class="pre">synopsis</span></code>
@@ -597,7 +618,7 @@ is a single markdown file accessed via <code class="xref py py-meth docutils lit
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">write_synopsis()</span></code>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HIRED_DATA_DIR'</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span> <span class="o">=</span> <span class="n">UserStore</span><span class="p">()</span>                       <span class="c1"># default user "me"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">us</span> <span class="o">=</span> <span class="n">UserStore</span><span class="p">()</span>           <span class="c1"># default user: $HIRED_USER, else "me"</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">us</span><span class="o">.</span><span class="n">facts</span><span class="p">[</span><span class="s1">'f1'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'statement'</span><span class="p">:</span> <span class="s1">'knows Python'</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">us</span><span class="o">.</span><span class="n">facts</span><span class="p">[</span><span class="s1">'f1'</span><span class="p">]</span>
 <span class="go">{'statement': 'knows Python'}</span>
@@ -618,11 +639,6 @@ is a single markdown file accessed via <code class="xref py py-meth docutils lit
 <span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">app_data_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">subpaths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">make</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#app_data_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.app_data_dir" title="Link to this definition">#</a></dt>
 <dd><p>Return the canonical hired data directory, joined with <code class="docutils literal notranslate"><span class="pre">subpaths</span></code>.</p>
 <p>The directory is created when <code class="docutils literal notranslate"><span class="pre">make</span></code> is true (the default).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HIRED_DATA_DIR'</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">root</span> <span class="o">=</span> <span class="n">app_data_dir</span><span class="p">()</span>
@@ -632,6 +648,11 @@ is a single markdown file accessed via <code class="xref py py-meth docutils lit
 <span class="go">True</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -661,8 +682,28 @@ work transparently.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hired.persistence.base.list_jds">
-<span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">list_jds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#list_jds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.list_jds" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">list_jds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#list_jds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.list_jds" title="Link to this definition">#</a></dt>
 <dd><p>Engagement ids under <code class="docutils literal notranslate"><span class="pre">users/&lt;user&gt;/jds/</span></code> (sorted; empty if none).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.base.list_users">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">list_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#list_users"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.list_users" title="Link to this definition">#</a></dt>
+<dd><p>Candidates with data under the data root’s <code class="docutils literal notranslate"><span class="pre">users/</span></code> (sorted; empty if none).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HIRED_DATA_DIR'</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_users</span><span class="p">()</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">UserStore</span><span class="p">(</span><span class="s1">'alice'</span><span class="p">)</span><span class="o">.</span><span class="n">facts</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_users</span><span class="p">()</span>
+<span class="go">['alice']</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
@@ -712,15 +753,70 @@ unified. No-op otherwise. Returns True iff a copy happened.</p>
 <dd><p>Read a text file, or return <code class="docutils literal notranslate"><span class="pre">None</span></code> if it does not exist.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.base.resolve_user">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">resolve_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#resolve_user"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.resolve_user" title="Link to this definition">#</a></dt>
+<dd><p>The candidate an operation targets: <code class="docutils literal notranslate"><span class="pre">user</span></code>, else <code class="docutils literal notranslate"><span class="pre">$HIRED_USER</span></code>, else <code class="docutils literal notranslate"><span class="pre">&quot;me&quot;</span></code>.</p>
+<p>This is the <em>only</em> place the single-tenant default lives; every user-scoped
+entry point passes its <code class="docutils literal notranslate"><span class="pre">user</span></code> argument through here. An explicitly given
+name (even <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>) is validated, never silently replaced by the default.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'HIRED_USER'</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_user</span><span class="p">()</span>
+<span class="go">'me'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_user</span><span class="p">(</span><span class="s1">'alice'</span><span class="p">)</span>
+<span class="go">'alice'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HIRED_USER'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'bob'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resolve_user</span><span class="p">()</span>
+<span class="go">'bob'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HIRED_USER'</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="hired.persistence.base.user_base">
-<span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">user_base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#user_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.user_base" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">user_base</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#user_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.user_base" title="Link to this definition">#</a></dt>
 <dd><p>Filesystem base for a candidate: <code class="docutils literal notranslate"><span class="pre">&lt;root&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;data&gt;/users/&lt;user&gt;</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.persistence.base.validate_name">
+<span class="sig-prename descclassname"><span class="pre">hired.persistence.base.</span></span><span class="sig-name descname"><span class="pre">validate_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'name'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/persistence/base.html#validate_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.persistence.base.validate_name" title="Link to this definition">#</a></dt>
+<dd><p>Return <code class="docutils literal notranslate"><span class="pre">name</span></code> if it is a safe, portable single path segment, else raise.</p>
+<p>User, engagement and job ids become directory or file names, so they are
+restricted to ASCII letters, digits and <code class="docutils literal notranslate"><span class="pre">._-</span></code> (starting with a letter or
+digit, not ending in <code class="docutils literal notranslate"><span class="pre">.</span></code>), and may not be a Windows device name. That rules
+out separators, <code class="docutils literal notranslate"><span class="pre">..</span></code>, drive prefixes (<code class="docutils literal notranslate"><span class="pre">C:x</span></code>), hidden names and NUL bytes —
+so one id can never address another candidate’s (or an arbitrary) directory.
+<code class="docutils literal notranslate"><span class="pre">kind=&quot;user&quot;</span></code> also requires lower case (see <code class="xref py py-data docutils literal notranslate"><span class="pre">_USER_PATTERN</span></code>).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">validate_name</span><span class="p">(</span><span class="s1">'acme-2024'</span><span class="p">)</span>
+<span class="go">'acme-2024'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validate_name</span><span class="p">(</span><span class="s1">'../bob'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">'engagement id'</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Invalid engagement id '../bob': use ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validate_name</span><span class="p">(</span><span class="s1">'Alice'</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">'user'</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Invalid user 'Alice': use lower-case ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
@@ -734,7 +830,7 @@ unified. No-op otherwise. Returns True iff a copy happened.</p>
 <dd><p>Write <code class="docutils literal notranslate"><span class="pre">obj</span></code> as indented JSON, creating parent dirs as needed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -747,7 +843,7 @@ unified. No-op otherwise. Returns True iff a copy happened.</p>
 (no <code class="docutils literal notranslate"><span class="pre">\r\n</span></code> translation on Windows), keeping the data store consistent.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -805,16 +901,20 @@ unified. No-op otherwise. Returns True iff a copy happened.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.JDStore"><code class="docutils literal notranslate"><span class="pre">JDStore</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.JsonStore"><code class="docutils literal notranslate"><span class="pre">JsonStore</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.TextStore"><code class="docutils literal notranslate"><span class="pre">TextStore</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.USER_ENV_VAR"><code class="docutils literal notranslate"><span class="pre">USER_ENV_VAR</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.UserStore"><code class="docutils literal notranslate"><span class="pre">UserStore</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.app_data_dir"><code class="docutils literal notranslate"><span class="pre">app_data_dir()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.bytes_store"><code class="docutils literal notranslate"><span class="pre">bytes_store()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.json_store"><code class="docutils literal notranslate"><span class="pre">json_store()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.list_jds"><code class="docutils literal notranslate"><span class="pre">list_jds()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.list_users"><code class="docutils literal notranslate"><span class="pre">list_users()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.markdown_store"><code class="docutils literal notranslate"><span class="pre">markdown_store()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.migrate_legacy"><code class="docutils literal notranslate"><span class="pre">migrate_legacy()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.read_json_file"><code class="docutils literal notranslate"><span class="pre">read_json_file()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.read_text_file"><code class="docutils literal notranslate"><span class="pre">read_text_file()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.resolve_user"><code class="docutils literal notranslate"><span class="pre">resolve_user()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.user_base"><code class="docutils literal notranslate"><span class="pre">user_base()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.validate_name"><code class="docutils literal notranslate"><span class="pre">validate_name()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.write_json_file"><code class="docutils literal notranslate"><span class="pre">write_json_file()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.persistence.base.write_text_file"><code class="docutils literal notranslate"><span class="pre">write_text_file()</span></code></a></li>
 </ul>

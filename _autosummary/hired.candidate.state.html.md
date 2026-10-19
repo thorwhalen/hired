@@ -18,11 +18,11 @@ the soft/hard refresh loop.
 
 ### Classes
 
-| [`RefreshState`](#hired.candidate.state.RefreshState)(\*\*data)   | The candidate-info refresh ledger (persisted to `user/info/state.json`).   |
-|---------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| [`SourceDigest`](#hired.candidate.state.SourceDigest)(\*\*data)   | What we know about one raw source for change detection + provenance.       |
+| [`RefreshState`](#hired.candidate.state.RefreshState)(\*[, last_soft_refresh, ...])   | The candidate-info refresh ledger (persisted to `user/info/state.json`).   |
+|-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| [`SourceDigest`](#hired.candidate.state.SourceDigest)(\*, key, sha256, size[, ...])   | What we know about one raw source for change detection + provenance.       |
 
-### *class* hired.candidate.state.RefreshState(\*\*data)
+### *class* hired.candidate.state.RefreshState(\*, last_soft_refresh=None, last_hard_refresh=None, sources=<factory>)
 
 Bases: `BaseModel`
 
@@ -32,7 +32,7 @@ The candidate-info refresh ledger (persisted to `user/info/state.json`).
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.candidate.state.SourceDigest(\*\*data)
+### *class* hired.candidate.state.SourceDigest(\*, key, sha256, size, added_at=<factory>, ingested_at=None, fact_ids=<factory>)
 
 Bases: `BaseModel`
 

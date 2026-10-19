@@ -99,7 +99,7 @@ Score multiple jobs.
 * **Returns:**
   List of MatchScore objects
 
-### *class* hired.matching.MatchScore(job, overall_score, skill_match_score, keyword_match_score, matched_skills=<factory>, missing_skills=<factory>, matched_keywords=<factory>, compensation_match=None, location_match=None)
+### *class* hired.matching.MatchScore(job, overall_score, skill_match_score, keyword_match_score, matched_skills=set(), missing_skills=set(), matched_keywords=set(), compensation_match=None, location_match=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

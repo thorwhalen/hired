@@ -14,6 +14,7 @@
    ats_checker
    base
    candidate
+   cli
    config
    content
    cover_letter

@@ -37,14 +37,14 @@ access, or explicitly (with [`migrate_user_to_v2()`](#hired.persistence.migrate.
 | [`is_legacy_layout`](#hired.persistence.migrate.is_legacy_layout)([user, root])                    | True iff any legacy v1 flat directory remains for this user. |
 | [`migrate_user_to_v2`](#hired.persistence.migrate.migrate_user_to_v2)([user, root, company_of, ...]) | Migrate one user's flat v1 data to the v2 layout.            |
 
-### hired.persistence.migrate.ensure_v2(user='me', , root=None)
+### hired.persistence.migrate.ensure_v2(user=None, , root=None)
 
 Migrate the user to v2 if a legacy layout is detected. Returns True if migrated.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.persistence.migrate.is_legacy_layout(user='me', , root=None)
+### hired.persistence.migrate.is_legacy_layout(user=None, , root=None)
 
 True iff any legacy v1 flat directory remains for this user.
 
@@ -55,7 +55,7 @@ a partially-migrated (interrupted) user still has some, so a re-run resumes.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.persistence.migrate.migrate_user_to_v2(user='me', , root=None, company_of=None, dry_run=False)
+### hired.persistence.migrate.migrate_user_to_v2(user=None, , root=None, company_of=None, dry_run=False)
 
 Migrate one user’s flat v1 data to the v2 layout. Returns the move plan.
 

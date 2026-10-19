@@ -34,6 +34,7 @@
 <link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/epythet.css?v=c5337052" />
   
@@ -43,7 +44,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="_static/documentation_options.js?v=3294188c"></script>
+    <script src="_static/documentation_options.js?v=f91d8841"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -56,7 +57,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -365,7 +366,10 @@ optional features are extras:</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hired[ai]</span></code></p></td>
 <td><p>real LLM resume tailoring (openai)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hired[all]</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hired[cli]</span></code></p></td>
+<td><p>the <code class="docutils literal notranslate"><span class="pre">hired</span></code> command (candidate knowledge + JD alignment from the shell)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hired[all]</span></code></p></td>
 <td><p>everything above</p></td>
 </tr>
 </tbody>
@@ -405,6 +409,18 @@ optional features are extras:</p>
 </pre></div>
 </div>
 <p>For detailed documentation, see <a class="reference internal" href="#JOB_SEARCH_README.md"><span class="xref myst">JOB_SEARCH_README.md</span></a></p>
+</section>
+<section id="candidate-knowledge-jd-alignment-from-the-shell">
+<h2>Candidate knowledge + JD alignment from the shell<a class="headerlink" href="#candidate-knowledge-jd-alignment-from-the-shell" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">'hired[cli]'</span></code> adds a <code class="docutils literal notranslate"><span class="pre">hired</span></code> command over the candidate knowledge base and the alignment reports. Extraction and judgment stay external (the <code class="docutils literal notranslate"><span class="pre">hired-align</span></code> skill or an LLM produce fact records and a draft report); the command validates, derives what is deterministic, and persists.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hired<span class="w"> </span>add-source<span class="w"> </span>cv.pdf<span class="w">                       </span><span class="c1"># store a raw source</span>
+hired<span class="w"> </span>ingest<span class="w"> </span>facts.json<span class="w"> </span>--source<span class="w"> </span>cv.pdf<span class="w">       </span><span class="c1"># add extracted facts (quotes checked against the source)</span>
+hired<span class="w"> </span>analyze<span class="w"> </span>draft_report.json<span class="w"> </span>acme<span class="w">          </span><span class="c1"># re-classify, recount, rank questions, save</span>
+hired<span class="w"> </span>report<span class="w"> </span>acme<span class="w"> </span>--fmt<span class="w"> </span>html<span class="w"> </span>--output<span class="w"> </span>acme.html
+hired<span class="w"> </span>status<span class="w">                                  </span><span class="c1"># facts, pending sources, engagements</span>
+</pre></div>
+</div>
+<p>Several candidates can share one data root (<code class="docutils literal notranslate"><span class="pre">~/.local/share/hired/users/&lt;user&gt;/</span></code>). Every command takes <code class="docutils literal notranslate"><span class="pre">--user</span></code>; without it, the candidate is <code class="docutils literal notranslate"><span class="pre">$HIRED_USER</span></code>, else <code class="docutils literal notranslate"><span class="pre">me</span></code>. <code class="docutils literal notranslate"><span class="pre">hired</span> <span class="pre">users</span></code> lists them. In Python, the same seam is the <code class="docutils literal notranslate"><span class="pre">user</span></code> argument: <code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase(&quot;alice&quot;)</span></code>.</p>
 </section>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h2>
@@ -552,7 +568,7 @@ optional features are extras:</p>
 </section>
 </section>
 
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-14 02:29 UTC from <a href="https://github.com/thorwhalen/hired/commit/2b5ebd05dcebba754734c6d61e268952b1f1ad2f">2b5ebd0</a> (main) · hired 0.0.23 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-19 12:51 UTC from <a href="https://github.com/thorwhalen/hired/commit/94073e0e45bee769880fc399a38612a09734bc90">94073e0</a> (main) · hired 0.0.24 · <a href="about-this-build.html">about this build</a></p>
 
                 </article>
               
@@ -595,6 +611,7 @@ optional features are extras:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install">Install</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-tailor-and-render-a-resume">Quick start — tailor and render a resume</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-job-search">Quick start — job search</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#candidate-knowledge-jd-alignment-from-the-shell">Candidate knowledge + JD alignment from the shell</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#job-search-new">1. Job Search (NEW!)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-generation">2. Content Generation</a></li>

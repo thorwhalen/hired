@@ -47,10 +47,11 @@ their accessors carry the extension in the path, never in a store key.
 
 ### Module Attributes
 
-| [`JsonStore`](#hired.persistence.base.JsonStore)   | A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.   |
-|--------------------------------------------------------------|-----------------------------------------------------------------------------------|
-| [`TextStore`](#hired.persistence.base.TextStore)   | A store of `str` values (e.g. markdown files), keyed by bare names.               |
-| [`BytesStore`](#hired.persistence.base.BytesStore)  | A store of raw `bytes`, keyed by real filenames.                                  |
+| [`JsonStore`](#hired.persistence.base.JsonStore)    | A store of JSON-able values (dicts in Python, JSON on disk), keyed by bare ids.   |
+|---------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| [`TextStore`](#hired.persistence.base.TextStore)    | A store of `str` values (e.g. markdown files), keyed by bare names.               |
+| [`BytesStore`](#hired.persistence.base.BytesStore)   | A store of raw `bytes`, keyed by real filenames.                                  |
+| [`USER_ENV_VAR`](#hired.persistence.base.USER_ENV_VAR) | Environment variable naming the active candidate when no `user` is passed.        |
 
 ### Functions
 
@@ -59,11 +60,14 @@ their accessors carry the extension in the path, never in a store key.
 | [`bytes_store`](#hired.persistence.base.bytes_store)(rootdir)                     | A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept). |
 | [`json_store`](#hired.persistence.base.json_store)(rootdir)                      | A `MutableMapping` of JSON-able values: bare-id keys, `<id>.json` files.     |
 | [`list_jds`](#hired.persistence.base.list_jds)([user, root])                   | Engagement ids under `users/<user>/jds/` (sorted; empty if none).            |
+| [`list_users`](#hired.persistence.base.list_users)()                             | Candidates with data under the data root's `users/` (sorted; empty if none). |
 | [`markdown_store`](#hired.persistence.base.markdown_store)(rootdir)                  | A `MutableMapping` of `str` values: bare keys, `<key>.md` files.             |
 | [`migrate_legacy`](#hired.persistence.base.migrate_legacy)(legacy_path, target_path) | One-time copy of a legacy store into the canonical root.                     |
 | [`read_json_file`](#hired.persistence.base.read_json_file)(path)                     | Read a JSON file, or return `None` if it does not exist.                     |
 | [`read_text_file`](#hired.persistence.base.read_text_file)(path)                     | Read a text file, or return `None` if it does not exist.                     |
+| [`resolve_user`](#hired.persistence.base.resolve_user)([user])                     | The candidate an operation targets: `user`, else `$HIRED_USER`, else `"me"`. |
 | [`user_base`](#hired.persistence.base.user_base)([user, root])                  | Filesystem base for a candidate: `<root>` or `<data>/users/<user>`.          |
+| [`validate_name`](#hired.persistence.base.validate_name)(name, \*[, kind])          | Return `name` if it is a safe, portable single path segment, else raise.     |
 | [`write_json_file`](#hired.persistence.base.write_json_file)(path, obj)               | Write `obj` as indented JSON, creating parent dirs as needed.                |
 | [`write_text_file`](#hired.persistence.base.write_text_file)(path, text)              | Write `text` to a file, creating parent dirs as needed.                      |
 
@@ -113,7 +117,11 @@ A store of `str` values (e.g. markdown files), keyed by bare names.
 
 alias of [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-### *class* hired.persistence.base.UserStore(user='me', , root=None)
+### hired.persistence.base.USER_ENV_VAR *= 'HIRED_USER'*
+
+Environment variable naming the active candidate when no `user` is passed.
+
+### *class* hired.persistence.base.UserStore(user=None, , root=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -126,7 +134,7 @@ is a single markdown file accessed via `read_synopsis()` /
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> us = UserStore()                       # default user "me"
+>>> us = UserStore()           # default user: $HIRED_USER, else "me"
 >>> us.facts['f1'] = {'statement': 'knows Python'}
 >>> us.facts['f1']
 {'statement': 'knows Python'}
@@ -144,9 +152,6 @@ Return the canonical hired data directory, joined with `subpaths`.
 
 The directory is created when `make` is true (the default).
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> import os, tempfile
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
@@ -156,6 +161,9 @@ True
 >>> app_data_dir('users', 'me').endswith(os.path.join('users', 'me'))
 True
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### hired.persistence.base.bytes_store(rootdir)
 
@@ -175,9 +183,26 @@ work transparently.
 * **Return type:**
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### hired.persistence.base.list_jds(user='me', , root=None)
+### hired.persistence.base.list_jds(user=None, , root=None)
 
 Engagement ids under `users/<user>/jds/` (sorted; empty if none).
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.persistence.base.list_users()
+
+Candidates with data under the data root’s `users/` (sorted; empty if none).
+
+```pycon
+>>> import os, tempfile
+>>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
+>>> list_users()
+[]
+>>> _ = UserStore('alice').facts
+>>> list_users()
+['alice']
+```
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
@@ -214,9 +239,60 @@ Read a text file, or return `None` if it does not exist.
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-### hired.persistence.base.user_base(user='me', , root=None)
+### hired.persistence.base.resolve_user(user=None)
+
+The candidate an operation targets: `user`, else `$HIRED_USER`, else `"me"`.
+
+This is the *only* place the single-tenant default lives; every user-scoped
+entry point passes its `user` argument through here. An explicitly given
+name (even `""`) is validated, never silently replaced by the default.
+
+```pycon
+>>> import os
+>>> _ = os.environ.pop('HIRED_USER', None)
+>>> resolve_user()
+'me'
+>>> resolve_user('alice')
+'alice'
+>>> os.environ['HIRED_USER'] = 'bob'
+>>> resolve_user()
+'bob'
+>>> del os.environ['HIRED_USER']
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.persistence.base.user_base(user=None, , root=None)
 
 Filesystem base for a candidate: `<root>` or `<data>/users/<user>`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.persistence.base.validate_name(name, , kind='name')
+
+Return `name` if it is a safe, portable single path segment, else raise.
+
+User, engagement and job ids become directory or file names, so they are
+restricted to ASCII letters, digits and `._-` (starting with a letter or
+digit, not ending in `.`), and may not be a Windows device name. That rules
+out separators, `..`, drive prefixes (`C:x`), hidden names and NUL bytes —
+so one id can never address another candidate’s (or an arbitrary) directory.
+`kind="user"` also requires lower case (see `_USER_PATTERN`).
+
+```pycon
+>>> validate_name('acme-2024')
+'acme-2024'
+>>> validate_name('../bob', kind='engagement id')
+Traceback (most recent call last):
+  ...
+ValueError: Invalid engagement id '../bob': use ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+>>> validate_name('Alice', kind='user')
+Traceback (most recent call last):
+  ...
+ValueError: Invalid user 'Alice': use lower-case ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+```
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)

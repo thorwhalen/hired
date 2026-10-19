@@ -31,6 +31,7 @@
 <link href="_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/epythet.css?v=c5337052" />
   
@@ -40,7 +41,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="_static/documentation_options.js?v=3294188c"></script>
+    <script src="_static/documentation_options.js?v=f91d8841"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -756,6 +757,8 @@ window.runMermaid = runMermaid;</script>
 </li>
         <li><a href="_autosummary/hired.html#hired.CandidateKnowledgeBase.add_source">(hired.CandidateKnowledgeBase method)</a>
 </li>
+        <li><a href="_autosummary/hired.cli.html#hired.cli.add_source">(in module hired.cli)</a>
+</li>
       </ul></li>
       <li><a href="_autosummary/hired.resume_agent.html#hired.resume_agent.ConversationMemory.add_turn">add_turn() (hired.resume_agent.ConversationMemory method)</a>
 </li>
@@ -783,6 +786,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.alignment.base.html#hired.alignment.base.AlignmentReport">(class in hired.alignment.base)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.cli.html#hired.cli.analyze">analyze() (in module hired.cli)</a>
+</li>
       <li><a href="_autosummary/hired.persistence.html#hired.persistence.app_data_dir">app_data_dir() (in module hired.persistence)</a>
 
       <ul>
@@ -905,6 +910,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.alignment.rubric.html#hired.alignment.rubric.classify">(in module hired.alignment.rubric)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.cli.html#hired.cli.CLI_FUNCS">CLI_FUNCS (in module hired.cli)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/hired.alignment.html#hired.alignment.Closeability">Closeability (class in hired.alignment)</a>
@@ -1118,6 +1125,8 @@ window.runMermaid = runMermaid;</script>
 </li>
         <li><a href="_autosummary/hired.html#hired.CandidateKnowledgeBase.facts">(hired.CandidateKnowledgeBase method)</a>
 </li>
+        <li><a href="_autosummary/hired.cli.html#hired.cli.facts">(in module hired.cli)</a>
+</li>
       </ul></li>
       <li><a href="_autosummary/hired.candidate.html#hired.candidate.FactStatus">FactStatus (class in hired.candidate)</a>
 
@@ -1147,6 +1156,12 @@ window.runMermaid = runMermaid;</script>
 
       <ul>
         <li><a href="_autosummary/hired.matching.html#hired.matching.JobMatcher.filter_jobs">(hired.matching.JobMatcher method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/hired.alignment.html#hired.alignment.finalize_report">finalize_report() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.alignment.assemble.html#hired.alignment.assemble.finalize_report">(in module hired.alignment.assemble)</a>
 </li>
       </ul></li>
       <li><a href="_autosummary/hired.resume_agent.html#hired.resume_agent.MatchingAgent.find_matches">find_matches() (hired.resume_agent.MatchingAgent method)</a>
@@ -1350,6 +1365,13 @@ window.runMermaid = runMermaid;</script>
 </li>
       </ul></li>
       <li>
+    hired.alignment.assemble
+
+      <ul>
+        <li><a href="_autosummary/hired.alignment.assemble.html#module-hired.alignment.assemble">module</a>
+</li>
+      </ul></li>
+      <li>
     hired.alignment.base
 
       <ul>
@@ -1448,6 +1470,13 @@ window.runMermaid = runMermaid;</script>
 </li>
       </ul></li>
       <li>
+    hired.cli
+
+      <ul>
+        <li><a href="_autosummary/hired.cli.html#module-hired.cli">module</a>
+</li>
+      </ul></li>
+      <li>
     hired.config
 
       <ul>
@@ -1482,6 +1511,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.matching.html#module-hired.matching">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     hired.persistence
 
@@ -1489,8 +1520,6 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.persistence.html#module-hired.persistence">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     hired.persistence.base
 
@@ -1663,10 +1692,22 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.alignment.elicitation.html#hired.alignment.elicitation.info_gain">(in module hired.alignment.elicitation)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.cli.html#hired.cli.ingest">ingest() (in module hired.cli)</a>
+</li>
       <li><a href="_autosummary/hired.candidate.html#hired.candidate.ingest_facts">ingest_facts() (in module hired.candidate)</a>
 
       <ul>
         <li><a href="_autosummary/hired.candidate.ingest.html#hired.candidate.ingest.ingest_facts">(in module hired.candidate.ingest)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/hired.candidate.html#hired.candidate.CandidateKnowledgeBase.ingest_source">ingest_source() (hired.candidate.CandidateKnowledgeBase method)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.candidate.knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.ingest_source">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="_autosummary/hired.html#hired.CandidateKnowledgeBase.ingest_source">(hired.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="_autosummary/hired.candidate.html#hired.candidate.ingest_source">(in module hired.candidate)</a>
 </li>
       </ul></li>
       <li><a href="_autosummary/hired.resumejson_pydantic_models.html#hired.resumejson_pydantic_models.Interest">Interest (class in hired.resumejson_pydantic_models)</a>
@@ -1677,6 +1718,14 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.alignment.base.html#hired.alignment.base.InterviewPrep">(class in hired.alignment.base)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.alignment.html#hired.alignment.is_blocking">is_blocking() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.alignment.assemble.html#hired.alignment.assemble.is_blocking">(in module hired.alignment.assemble)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/hired.html#hired.JobSearchSource.is_configured">is_configured() (hired.JobSearchSource method)</a>
 
       <ul>
@@ -1697,8 +1746,6 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.search.html#hired.search.USAJobsSource.is_configured">(hired.search.USAJobsSource method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/hired.alignment.elicitation.html#hired.alignment.elicitation.is_decision_relevant">is_decision_relevant() (in module hired.alignment.elicitation)</a>
 </li>
       <li><a href="_autosummary/hired.alignment.html#hired.alignment.is_decision_stable">is_decision_stable() (in module hired.alignment)</a>
@@ -1737,6 +1784,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.candidate.knowledge_base.html#hired.candidate.knowledge_base.CandidateKnowledgeBase.jds">(hired.candidate.knowledge_base.CandidateKnowledgeBase method)</a>
 </li>
         <li><a href="_autosummary/hired.html#hired.CandidateKnowledgeBase.jds">(hired.CandidateKnowledgeBase method)</a>
+</li>
+        <li><a href="_autosummary/hired.cli.html#hired.cli.jds">(in module hired.cli)</a>
 </li>
       </ul></li>
       <li><a href="_autosummary/hired.persistence.html#hired.persistence.JDStore">JDStore (class in hired.persistence)</a>
@@ -1893,8 +1942,6 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.search.html#hired.search.SourceRegistry.list_sources">(hired.search.SourceRegistry method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/hired.html#hired.JobSources.list_unconfigured">list_unconfigured() (hired.JobSources method)</a>
 
       <ul>
@@ -1903,10 +1950,18 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.search.html#hired.search.JobSources.list_unconfigured">(hired.search.JobSources method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="_autosummary/hired.search.registry.html#hired.search.registry.SourceRegistry.list_unconfigured_sources">list_unconfigured_sources() (hired.search.registry.SourceRegistry method)</a>
 
       <ul>
         <li><a href="_autosummary/hired.search.html#hired.search.SourceRegistry.list_unconfigured_sources">(hired.search.SourceRegistry method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/hired.persistence.html#hired.persistence.list_users">list_users() (in module hired.persistence)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.persistence.base.html#hired.persistence.base.list_users">(in module hired.persistence.base)</a>
 </li>
       </ul></li>
       <li><a href="_autosummary/hired.html#hired.LLMConfig">LLMConfig (class in hired)</a>
@@ -2129,6 +2184,8 @@ window.runMermaid = runMermaid;</script>
 </li>
         <li><a href="_autosummary/hired.alignment.html#module-hired.alignment">hired.alignment</a>
 </li>
+        <li><a href="_autosummary/hired.alignment.assemble.html#module-hired.alignment.assemble">hired.alignment.assemble</a>
+</li>
         <li><a href="_autosummary/hired.alignment.base.html#module-hired.alignment.base">hired.alignment.base</a>
 </li>
         <li><a href="_autosummary/hired.alignment.diff.html#module-hired.alignment.diff">hired.alignment.diff</a>
@@ -2156,6 +2213,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.candidate.topics.html#module-hired.candidate.topics">hired.candidate.topics</a>
 </li>
         <li><a href="_autosummary/hired.candidate.workspace.html#module-hired.candidate.workspace">hired.candidate.workspace</a>
+</li>
+        <li><a href="_autosummary/hired.cli.html#module-hired.cli">hired.cli</a>
 </li>
         <li><a href="_autosummary/hired.config.html#module-hired.config">hired.config</a>
 </li>
@@ -2434,6 +2493,18 @@ window.runMermaid = runMermaid;</script>
       </ul></li>
       <li><a href="_autosummary/hired.cover_letter.html#hired.cover_letter.render_cover_letter">render_cover_letter() (in module hired.cover_letter)</a>
 </li>
+      <li><a href="_autosummary/hired.alignment.html#hired.alignment.render_report">render_report() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.alignment.report.html#hired.alignment.report.render_report">(in module hired.alignment.report)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/hired.alignment.html#hired.alignment.render_report_html">render_report_html() (in module hired.alignment)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.alignment.report.html#hired.alignment.report.render_report_html">(in module hired.alignment.report)</a>
+</li>
+      </ul></li>
       <li><a href="_autosummary/hired.html#hired.render_report_markdown">render_report_markdown() (in module hired)</a>
 
       <ul>
@@ -2462,6 +2533,10 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.base.html#hired.base.RenderingConfig">(class in hired.base)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.cli.html#hired.cli.report">report() (in module hired.cli)</a>
+</li>
+      <li><a href="_autosummary/hired.alignment.report.html#hired.alignment.report.REPORT_RENDERERS">REPORT_RENDERERS (in module hired.alignment.report)</a>
+</li>
       <li><a href="_autosummary/hired.candidate.html#hired.candidate.JDWorkspace.report_versions">report_versions() (hired.candidate.JDWorkspace method)</a>
 
       <ul>
@@ -2470,6 +2545,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.html#hired.JDWorkspace.report_versions">(hired.JDWorkspace method)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.cli.html#hired.cli.reports">reports() (in module hired.cli)</a>
+</li>
       <li><a href="_autosummary/hired.persistence.html#hired.persistence.Repository">Repository (class in hired.persistence)</a>
 
       <ul>
@@ -2518,6 +2595,12 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.search.html#hired.search.USAJobsSource.requires_auth">(hired.search.USAJobsSource property)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.persistence.html#hired.persistence.resolve_user">resolve_user() (in module hired.persistence)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.persistence.base.html#hired.persistence.base.resolve_user">(in module hired.persistence.base)</a>
+</li>
+      </ul></li>
       <li><a href="_autosummary/hired.html#hired.ResumeContent">ResumeContent (in module hired)</a>
 </li>
       <li><a href="_autosummary/hired.html#hired.ResumeExpertAgent">ResumeExpertAgent (class in hired)</a>
@@ -2560,6 +2643,14 @@ window.runMermaid = runMermaid;</script>
 
       <ul>
         <li><a href="_autosummary/hired.html#hired.ResumeSession.save">(hired.ResumeSession method)</a>
+</li>
+      </ul></li>
+      <li><a href="_autosummary/hired.candidate.html#hired.candidate.JDWorkspace.save_alignment">save_alignment() (hired.candidate.JDWorkspace method)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.candidate.workspace.html#hired.candidate.workspace.JDWorkspace.save_alignment">(hired.candidate.workspace.JDWorkspace method)</a>
+</li>
+        <li><a href="_autosummary/hired.html#hired.JDWorkspace.save_alignment">(hired.JDWorkspace method)</a>
 </li>
       </ul></li>
       <li><a href="_autosummary/hired.candidate.html#hired.candidate.JDWorkspace.save_briefing">save_briefing() (hired.candidate.JDWorkspace method)</a>
@@ -2734,6 +2825,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.html#hired.ResumeSession.state">(hired.ResumeSession property)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.cli.html#hired.cli.status">status() (in module hired.cli)</a>
+</li>
       <li><a href="_autosummary/hired.alignment.html#hired.alignment.summarize_diff">summarize_diff() (in module hired.alignment)</a>
 
       <ul>
@@ -2764,6 +2857,8 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.html#hired.CandidateKnowledgeBase.synopsis">(hired.CandidateKnowledgeBase property)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.cli.html#hired.cli.synopsis">synopsis() (in module hired.cli)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -2896,6 +2991,10 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.persistence.base.html#hired.persistence.base.user_base">(in module hired.persistence.base)</a>
 </li>
       </ul></li>
+      <li><a href="_autosummary/hired.persistence.base.html#hired.persistence.base.USER_ENV_VAR">USER_ENV_VAR (in module hired.persistence.base)</a>
+</li>
+      <li><a href="_autosummary/hired.cli.html#hired.cli.users">users() (in module hired.cli)</a>
+</li>
       <li><a href="_autosummary/hired.persistence.html#hired.persistence.UserStore">UserStore (class in hired.persistence)</a>
 
       <ul>
@@ -2918,10 +3017,16 @@ window.runMermaid = runMermaid;</script>
         <li><a href="_autosummary/hired.search.html#hired.search.JobSearchSource.validate_configured">(hired.search.JobSearchSource method)</a>
 </li>
       </ul></li>
-      <li><a href="_autosummary/hired.util.html#hired.util.validate_resume_content_dict">validate_resume_content_dict() (in module hired.util)</a>
+      <li><a href="_autosummary/hired.persistence.html#hired.persistence.validate_name">validate_name() (in module hired.persistence)</a>
+
+      <ul>
+        <li><a href="_autosummary/hired.persistence.base.html#hired.persistence.base.validate_name">(in module hired.persistence.base)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="_autosummary/hired.util.html#hired.util.validate_resume_content_dict">validate_resume_content_dict() (in module hired.util)</a>
+</li>
       <li><a href="_autosummary/hired.alignment.html#hired.alignment.Verdict">Verdict (class in hired.alignment)</a>
 
       <ul>

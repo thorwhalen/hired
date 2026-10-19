@@ -13,6 +13,7 @@ See `misc/docs/DESIGN.md` §5.
 | [`needs_refresh`](#hired.candidate.needs_refresh)(kb)                                 | True when there is uningested source/Q&A material — a refresh is warranted.                           |
 |----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | [`refresh`](#hired.candidate.refresh)(kb[, mode, ingest_fn, apply])             | Refresh `info` from changed sources + undistilled Q&A.                                                |
+| [`ingest_source`](#hired.candidate.ingest_source)(kb, key, records)                   | Distill externally-extracted `records` for one raw source into facts.                                 |
 | [`slug`](#hired.candidate.slug)(text)                                        | A filesystem-safe, extension-less key from an arbitrary label.                                        |
 | [`ingest_facts`](#hired.candidate.ingest_facts)(kb, records, \*, source_kind[, ...]) | Validate, quote-check, and persist fact records; return persisted ids.                                |
 | [`fact_from_record`](#hired.candidate.fact_from_record)(record, \*, source_kind[, ...])  | Build a (not-yet-persisted) [`Fact`](#hired.candidate.Fact) from a record dict. |
@@ -20,25 +21,25 @@ See `misc/docs/DESIGN.md` §5.
 
 ### Classes
 
-| [`CandidateKnowledgeBase`](#hired.candidate.CandidateKnowledgeBase)([user, store])        | Accumulated, open-world knowledge about a single candidate (user-level).                 |
-|-----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
-| [`JDWorkspace`](#hired.candidate.JDWorkspace)(kb, jd_id, \*[, store])          | Reports, company research, interview-prep briefings, and parsed jobs for one engagement. |
-| [`TopicDossier`](#hired.candidate.TopicDossier)(base_dir, \*[, name])           | One subject's dossier: an `overview.md` plus optional attached files.                    |
-| [`RefreshState`](#hired.candidate.RefreshState)(\*\*data)                       | The candidate-info refresh ledger (persisted to `user/info/state.json`).                 |
-| [`SourceDigest`](#hired.candidate.SourceDigest)(\*\*data)                       | What we know about one raw source for change detection + provenance.                     |
-| [`RefreshItem`](#hired.candidate.RefreshItem)(kind, key, content)              | One unit of pending work for a refresh: a changed source or an undistilled Q&A.          |
-| [`RefreshProposal`](#hired.candidate.RefreshProposal)(kind, key, records)          | Proposed fact records for one item (returned when `apply=False`).                        |
-| [`RefreshReport`](#hired.candidate.RefreshReport)(mode, applied[, pending, ...]) | Outcome (or preview) of a refresh.                                                       |
-| [`Fact`](#hired.candidate.Fact)(\*\*data)                               | One atomic claim about a candidate.                                                      |
-| [`QAEntry`](#hired.candidate.QAEntry)(\*\*data)                            | One clarifying question asked of the candidate and their answer.                         |
-| [`Provenance`](#hired.candidate.Provenance)(\*\*data)                         | Where a fact came from, with an optional verbatim supporting quote.                      |
-| [`FactCategory`](#hired.candidate.FactCategory)(\*values)                       | Coarse category for retrieval and synopsis grouping.                                     |
-| [`FactStatus`](#hired.candidate.FactStatus)(\*values)                         | Whether a fact is current or has been superseded by a newer one.                         |
-| [`SourceKind`](#hired.candidate.SourceKind)(\*values)                         | Where a piece of provenance came from.                                                   |
-| [`ConfidenceLevel`](#hired.candidate.ConfidenceLevel)(\*values)                    | Calibrated confidence in a claim (qualitative, not a raw probability).                   |
-| [`MatchState`](#hired.candidate.MatchState)(\*values)                         | Three-valued epistemic state — the core of the honesty contract.                         |
+| [`CandidateKnowledgeBase`](#hired.candidate.CandidateKnowledgeBase)([user, store])              | Accumulated, open-world knowledge about a single candidate (user-level).                 |
+|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| [`JDWorkspace`](#hired.candidate.JDWorkspace)(kb, jd_id, \*[, store])                | Reports, company research, interview-prep briefings, and parsed jobs for one engagement. |
+| [`TopicDossier`](#hired.candidate.TopicDossier)(base_dir, \*[, name])                 | One subject's dossier: an `overview.md` plus optional attached files.                    |
+| [`RefreshState`](#hired.candidate.RefreshState)(\*[, last_soft_refresh, ...])         | The candidate-info refresh ledger (persisted to `user/info/state.json`).                 |
+| [`SourceDigest`](#hired.candidate.SourceDigest)(\*, key, sha256, size[, ...])         | What we know about one raw source for change detection + provenance.                     |
+| [`RefreshItem`](#hired.candidate.RefreshItem)(kind, key, content)                    | One unit of pending work for a refresh: a changed source or an undistilled Q&A.          |
+| [`RefreshProposal`](#hired.candidate.RefreshProposal)(kind, key, records)                | Proposed fact records for one item (returned when `apply=False`).                        |
+| [`RefreshReport`](#hired.candidate.RefreshReport)(mode, applied[, pending, ...])       | Outcome (or preview) of a refresh.                                                       |
+| [`Fact`](#hired.candidate.Fact)(\*[, id, subject, category, value, ...])      | One atomic claim about a candidate.                                                      |
+| [`QAEntry`](#hired.candidate.QAEntry)(\*[, id, asked_for_job, fills_field, ...]) | One clarifying question asked of the candidate and their answer.                         |
+| [`Provenance`](#hired.candidate.Provenance)(\*, source_kind[, source_id, ...])      | Where a fact came from, with an optional verbatim supporting quote.                      |
+| [`FactCategory`](#hired.candidate.FactCategory)(\*values)                             | Coarse category for retrieval and synopsis grouping.                                     |
+| [`FactStatus`](#hired.candidate.FactStatus)(\*values)                               | Whether a fact is current or has been superseded by a newer one.                         |
+| [`SourceKind`](#hired.candidate.SourceKind)(\*values)                               | Where a piece of provenance came from.                                                   |
+| [`ConfidenceLevel`](#hired.candidate.ConfidenceLevel)(\*values)                          | Calibrated confidence in a claim (qualitative, not a raw probability).                   |
+| [`MatchState`](#hired.candidate.MatchState)(\*values)                               | Three-valued epistemic state — the core of the honesty contract.                         |
 
-### *class* hired.candidate.CandidateKnowledgeBase(user='me', , store=None)
+### *class* hired.candidate.CandidateKnowledgeBase(user=None, , store=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -47,7 +48,7 @@ Accumulated, open-world knowledge about a single candidate (user-level).
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> kb = CandidateKnowledgeBase()                 # default candidate "me"
+>>> kb = CandidateKnowledgeBase()       # default candidate: $HIRED_USER, else "me"
 >>> from hired.candidate.base import Fact, FactCategory
 >>> _ = kb.add_fact(Fact(statement='Built ML pipelines in Python',
 ...                       category=FactCategory.SKILL, tags=['python', 'ml']))
@@ -96,6 +97,18 @@ hidden). `tags` matches facts containing *any* of the given tags.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`Fact`](hired.candidate.base.html.md#hired.candidate.base.Fact)]
+
+#### ingest_source(name, records)
+
+Distill extracted fact `records` for raw source `name` into facts.
+
+Quotes are checked against the source, facts from a prior ingest of the
+same source are superseded, and the source stops being pending. Returns
+`(added_fact_ids, superseded_fact_ids)`. See
+`hired.candidate.refresh.ingest_source()`.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 #### jd(jd_id, , company=None, label=None)
 
@@ -213,7 +226,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Calibrated confidence in a claim (qualitative, not a raw probability).
 
-### *class* hired.candidate.Fact(\*\*data)
+### *class* hired.candidate.Fact(\*, id=<factory>, subject='me', category=FactCategory.OTHER, statement, value=None, confidence=ConfidenceLevel.MEDIUM, is_negation=False, provenance=<factory>, status=FactStatus.ASSERTED, supersedes=None, tags=<factory>, created_at=<factory>, updated_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -264,6 +277,19 @@ Keys of archived prior versions of a job’s report (chronological).
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+#### save_alignment(draft, , job_id=None)
+
+Finalize an analyst-drafted alignment report and save it; return it.
+
+Whatever produced the draft — the `hired-align` skill, the `hired
+analyze` command, or an injected-LLM analyzer — this is the one path from
+a draft to a persisted report: [`finalize_report()`](hired.alignment.html.md#hired.alignment.finalize_report)
+re-derives everything deterministic, then [`save_report()`](#hired.candidate.JDWorkspace.save_report) archives the
+previous version. `job_id` overrides the draft’s own.
+
+* **Return type:**
+  [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
 #### save_briefing(key, data)
 
 Persist an interview-prep research briefing (keyed by subject/job).
@@ -283,7 +309,9 @@ Persist a company/people research report (keyed by company name).
 Persist the current alignment report, archiving the prior one first.
 
 Archiving (on by default) snapshots any existing report into
-`report_history` so the alignment-review agent can diff versions.
+`report_history` so the alignment-review agent can diff versions. The
+snapshot is keyed by the *archived* report’s `created_at` (else now),
+made filename-safe, and never overwrites an earlier snapshot.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -297,7 +325,7 @@ Three-valued epistemic state — the core of the honesty contract.
 `UNKNOWN` is distinct from `CONTRADICTED`: we have not yet looked, so we
 must *ask* rather than assume absence.
 
-### *class* hired.candidate.Provenance(\*\*data)
+### *class* hired.candidate.Provenance(\*, source_kind, source_id='', locator='', quote=None, captured_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -307,7 +335,7 @@ Where a fact came from, with an optional verbatim supporting quote.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.candidate.QAEntry(\*\*data)
+### *class* hired.candidate.QAEntry(\*, id=<factory>, question, answer, asked_for_job=None, fills_field=None, derived_fact_ids=<factory>, created_at=<factory>)
 
 Bases: `BaseModel`
 
@@ -332,13 +360,13 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Proposed fact records for one item (returned when `apply=False`).
 
-### *class* hired.candidate.RefreshReport(mode, applied, pending=<factory>, proposals=<factory>, added_fact_ids=<factory>, superseded_fact_ids=<factory>)
+### *class* hired.candidate.RefreshReport(mode, applied, pending=list(), proposals=list(), added_fact_ids=list(), superseded_fact_ids=list())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Outcome (or preview) of a refresh.
 
-### *class* hired.candidate.RefreshState(\*\*data)
+### *class* hired.candidate.RefreshState(\*, last_soft_refresh=None, last_hard_refresh=None, sources=<factory>)
 
 Bases: `BaseModel`
 
@@ -348,7 +376,7 @@ The candidate-info refresh ledger (persisted to `user/info/state.json`).
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.candidate.SourceDigest(\*\*data)
+### *class* hired.candidate.SourceDigest(\*, key, sha256, size, added_at=<factory>, ingested_at=None, fact_ids=<factory>)
 
 Bases: `BaseModel`
 
@@ -434,6 +462,18 @@ in which case a `ValueError` is raised — useful for strict pipelines.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+### hired.candidate.ingest_source(kb, key, records)
+
+Distill externally-extracted `records` for one raw source into facts.
+
+The single-source counterpart of [`refresh()`](#hired.candidate.refresh): quotes are verified against
+the source text, facts from a previous ingest of the same source are
+superseded, and the source’s digest is marked ingested (so it stops showing
+as pending). Returns `(added_fact_ids, superseded_fact_ids)`.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+
 ### hired.candidate.needs_refresh(kb)
 
 True when there is uningested source/Q&A material — a refresh is warranted.
@@ -461,15 +501,15 @@ A filesystem-safe, extension-less key from an arbitrary label.
 Used to derive stable store keys from human labels (company names, subjects,
 briefing titles) so callers pass natural text and the store stays tidy.
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> slug('Socure, Inc.')
 'socure-inc'
 >>> slug('KYC / AML primer')
 'kyc-aml-primer'
 ```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
 ### hired.candidate.verify_quote(quote, source_text)
 

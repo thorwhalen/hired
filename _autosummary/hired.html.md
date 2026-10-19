@@ -34,7 +34,7 @@ Check resume for ATS compatibility.
 * **Returns:**
   ATSReport with compatibility score and issues
 
-### *class* hired.ATSReport(overall_score, issues=<factory>, keyword_match_score=0.0, matched_keywords=<factory>, missing_keywords=<factory>)
+### *class* hired.ATSReport(overall_score, issues=list(), keyword_match_score=0.0, matched_keywords=set(), missing_keywords=set())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -75,7 +75,7 @@ Convert to dictionary.
 * **Return type:**
   [`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### *class* hired.AlignmentReport(\*\*data)
+### *class* hired.AlignmentReport(\*, job_id, job_title='', company='', created_at='', verdict, score_summary=<factory>, requirements=<factory>, blocking_gaps=<factory>, next_actions=<factory>, interview_prep=<factory>, clarifications=<factory>)
 
 Bases: `BaseModel`
 
@@ -257,7 +257,7 @@ Update application status.
 * **Returns:**
   True if updated, False if not found
 
-### *class* hired.CandidateKnowledgeBase(user='me', , store=None)
+### *class* hired.CandidateKnowledgeBase(user=None, , store=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -266,7 +266,7 @@ Accumulated, open-world knowledge about a single candidate (user-level).
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> kb = CandidateKnowledgeBase()                 # default candidate "me"
+>>> kb = CandidateKnowledgeBase()       # default candidate: $HIRED_USER, else "me"
 >>> from hired.candidate.base import Fact, FactCategory
 >>> _ = kb.add_fact(Fact(statement='Built ML pipelines in Python',
 ...                       category=FactCategory.SKILL, tags=['python', 'ml']))
@@ -315,6 +315,18 @@ hidden). `tags` matches facts containing *any* of the given tags.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`Fact`](hired.candidate.base.html.md#hired.candidate.base.Fact)]
+
+#### ingest_source(name, records)
+
+Distill extracted fact `records` for raw source `name` into facts.
+
+Quotes are checked against the source, facts from a prior ingest of the
+same source are superseded, and the source stops being pending. Returns
+`(added_fact_ids, superseded_fact_ids)`. See
+`hired.candidate.refresh.ingest_source()`.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 #### jd(jd_id, , company=None, label=None)
 
@@ -471,6 +483,19 @@ Keys of archived prior versions of a job’s report (chronological).
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
+#### save_alignment(draft, , job_id=None)
+
+Finalize an analyst-drafted alignment report and save it; return it.
+
+Whatever produced the draft — the `hired-align` skill, the `hired
+analyze` command, or an injected-LLM analyzer — this is the one path from
+a draft to a persisted report: [`finalize_report()`](hired.alignment.html.md#hired.alignment.finalize_report)
+re-derives everything deterministic, then [`save_report()`](#hired.JDWorkspace.save_report) archives the
+previous version. `job_id` overrides the draft’s own.
+
+* **Return type:**
+  [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport)
+
 #### save_briefing(key, data)
 
 Persist an interview-prep research briefing (keyed by subject/job).
@@ -490,7 +515,9 @@ Persist a company/people research report (keyed by company name).
 Persist the current alignment report, archiving the prior one first.
 
 Archiving (on by default) snapshots any existing report into
-`report_history` so the alignment-review agent can diff versions.
+`report_history` so the alignment-review agent can diff versions. The
+snapshot is keyed by the *archived* report’s `created_at` (else now),
+made filename-safe, and never overwrites an earlier snapshot.
 
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
@@ -634,7 +661,7 @@ Score multiple jobs.
 * **Returns:**
   List of MatchScore objects
 
-### *class* hired.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=<factory>, benefits=<factory>, emails=<factory>, raw_data=<factory>)
+### *class* hired.JobResult(title, source, company=None, company_url=None, job_url=None, location=None, is_remote=None, description=None, job_type=None, compensation=None, date_posted=None, date_updated=None, application_deadline=None, skills=list(), benefits=list(), emails=list(), raw_data=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -849,7 +876,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 Standardized job types across all sources.
 
-### *class* hired.LLMConfig(model, temperature=0.7, max_tokens=None, top_p=1.0, provider='openai', api_key=None, base_url=None, extra_params=<factory>)
+### *class* hired.LLMConfig(model, temperature=0.7, max_tokens=None, top_p=1.0, provider='openai', api_key=None, base_url=None, extra_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -897,7 +924,7 @@ requires `openai`, and no API key is read at construction time. Inject a
 ...                 ...
 ```
 
-### *class* hired.MatchScore(job, overall_score, skill_match_score, keyword_match_score, matched_skills=<factory>, missing_skills=<factory>, matched_keywords=<factory>, compensation_match=None, location_match=None)
+### *class* hired.MatchScore(job, overall_score, skill_match_score, keyword_match_score, matched_skills=set(), missing_skills=set(), matched_keywords=set(), compensation_match=None, location_match=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -923,7 +950,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Configuration for resume rendering.
 
-### *class* hired.Requirement(\*\*data)
+### *class* hired.Requirement(\*, id=<factory>, text, skill_type=SkillType.TECHNICAL, requirement_class=RequirementClass.DIFFERENTIATOR, required_level=3)
 
 Bases: `BaseModel`
 
@@ -933,7 +960,7 @@ One atomic requirement extracted verbatim from a job description.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.RequirementRecord(\*\*data)
+### *class* hired.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -1009,7 +1036,7 @@ Uses LLM to interpret instruction and modify plan accordingly.
 * **Return type:**
   [`Plan`](hired.resume_agent.html.md#hired.resume_agent.Plan)
 
-### *class* hired.ResumeSchema(\*\*data)
+### *class* hired.ResumeSchema(, field_schema=None, basics=None, work=None, volunteer=None, education=None, awards=None, certificates=None, publications=None, skills=None, languages=None, interests=None, references=None, projects=None, meta=None)
 
 Bases: `BaseModel`
 
@@ -1017,7 +1044,7 @@ Bases: `BaseModel`
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.ResumeSchemaExtended(\*\*data)
+### *class* hired.ResumeSchemaExtended(, field_schema=None, basics=None, work=None, volunteer=None, education=None, awards=None, certificates=None, publications=None, skills=None, languages=None, interests=None, references=None, projects=None, meta=None, \*\*extra_data)
 
 Bases: [`ResumeSchema`](hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.ResumeSchema)
 
@@ -1069,26 +1096,26 @@ Get all conversation turns.
 
 List all persisted sessions.
 
-* **Return type:**
-  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
-
 ```pycon
 >>> for session_info in ResumeSession.list_persisted():
 ...     print(session_info['session_id'])
 ```
 
+* **Return type:**
+  [`Iterable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
+
 #### *classmethod* load(session_id, , data_dir=None, llm_config=None)
 
 Load session from persistent storage.
-
-* **Return type:**
-  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`ResumeSession`](hired.resume_agent.html.md#hired.resume_agent.ResumeSession)]
 
 ```pycon
 >>> session = ResumeSession.load("abc123def456")
 >>> session.session_id if session else None
 'abc123def456'
 ```
+
+* **Return type:**
+  [`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`ResumeSession`](hired.resume_agent.html.md#hired.resume_agent.ResumeSession)]
 
 #### *property* metadata *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [Any](https://docs.python.org/3/library/typing.html#typing.Any)]*
 
@@ -1120,7 +1147,7 @@ Switch between manual and auto operation modes.
 * **Return type:**
   [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
-### *class* hired.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=<factory>, exclude_keywords=<factory>, source_params=<factory>)
+### *class* hired.SearchCriteria(query, location=None, country=None, city=None, state=None, postal_code=None, distance_miles=None, job_type=None, is_remote=None, posted_within_days=None, results_wanted=20, offset=0, min_salary=None, max_salary=None, keywords=list(), exclude_keywords=list(), source_params=dict())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -1179,7 +1206,7 @@ Generate cover letter content from candidate and job information.
 
 * **Parameters:**
   * **candidate_info** ([`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Candidate information (resume dict or basics)
-  * **job_info** (`Union`[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
+  * **job_info** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
   * **tone** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Tone of the letter (‘professional’, ‘enthusiastic’, ‘formal’)
 * **Return type:**
   [`CoverLetterData`](hired.cover_letter.html.md#hired.cover_letter.CoverLetterData)
@@ -1222,8 +1249,8 @@ Convert a JobResult to formatted text for resume generation.
 Generate resume content from candidate and job information.
 
 * **Parameters:**
-  * **candidate_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
-  * **job_info_src** (`Union`[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
+  * **candidate_info_src** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]) – Candidate information as ContentSource, file path, or dict
+  * **job_info_src** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`ContentSource`](hired.base.html.md#hired.base.ContentSource), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information as ContentSource, file path, dict, or JobResult
   * **agent** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Optional AI agent for content generation
   * **validate** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to validate the generated content
   * **strict** ([`bool`](https://docs.python.org/3/builtins/functions.html#bool)) – Whether to use strict validation
@@ -1251,7 +1278,7 @@ Generate and render a cover letter.
 
 * **Parameters:**
   * **candidate_info** ([`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]) – Candidate information (resume dict or basics)
-  * **job_info** (`Union`[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
+  * **job_info** ([`Union`](https://docs.python.org/3/library/typing.html#typing.Union)[[`Dict`](https://docs.python.org/3/library/typing.html#typing.Dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)], [`JobResult`](hired.search.base.html.md#hired.search.base.JobResult)]) – Job information (dict, text, or JobResult)
   * **tone** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Tone of the letter (‘professional’, ‘enthusiastic’, ‘formal’)
   * **format** ([`str`](https://docs.python.org/3/builtins/stdtypes.html#str)) – Output format (‘text’, ‘html’, ‘markdown’)
   * **output_path** ([`Optional`](https://docs.python.org/3/library/typing.html#typing.Optional)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]) – Optional path to save the cover letter
@@ -1329,6 +1356,7 @@ Render the report as a Markdown string.
 | [`ats_checker`](hired.ats_checker.html.md#module-hired.ats_checker)                               | ATS (Applicant Tracking System) compatibility checker.                             |
 | [`base`](hired.base.html.md#module-hired.base)                                             | Core data models and protocols for the hired package.                              |
 | [`candidate`](hired.candidate.html.md#module-hired.candidate)                                   | Candidate knowledge domain: accumulate open-world facts about a candidate.         |
+| [`cli`](hired.cli.html.md#module-hired.cli)                                               | Command-line operations for the candidate-knowledge + JD-alignment workflow.       |
 | [`config`](hired.config.html.md#module-hired.config)                                         | Configuration management using Mapping interfaces.                                 |
 | [`content`](hired.content.html.md#module-hired.content)                                       | Content generation logic and AI agent implementations.                             |
 | [`cover_letter`](hired.cover_letter.html.md#module-hired.cover_letter)                             | Cover letter generation functionality.                                             |

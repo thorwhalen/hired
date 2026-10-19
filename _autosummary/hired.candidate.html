@@ -34,6 +34,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=c5337052" />
   
@@ -43,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../_static/documentation_options.js?v=f91d8841"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -320,6 +321,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="hired.html">hired</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 has-children"><a class="reference internal" href="hired.alignment.html">hired.alignment</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="hired.alignment.assemble.html">hired.alignment.assemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.base.html">hired.alignment.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.diff.html">hired.alignment.diff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.elicitation.html">hired.alignment.elicitation</a></li>
@@ -338,6 +340,7 @@
 <li class="toctree-l3"><a class="reference internal" href="hired.candidate.workspace.html">hired.candidate.workspace</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="hired.cli.html">hired.cli</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.config.html">hired.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.content.html">hired.content</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.cover_letter.html">hired.cover_letter</a></li>
@@ -448,16 +451,19 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.refresh" title="hired.candidate.refresh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">refresh</span></code></a>(kb[, mode, ingest_fn, apply])</p></td>
 <td><p>Refresh <code class="docutils literal notranslate"><span class="pre">info</span></code> from changed sources + undistilled Q&amp;A.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.slug" title="hired.candidate.slug"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slug</span></code></a>(text)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.ingest_source" title="hired.candidate.ingest_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ingest_source</span></code></a>(kb, key, records)</p></td>
+<td><p>Distill externally-extracted <code class="docutils literal notranslate"><span class="pre">records</span></code> for one raw source into facts.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.slug" title="hired.candidate.slug"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slug</span></code></a>(text)</p></td>
 <td><p>A filesystem-safe, extension-less key from an arbitrary label.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.ingest_facts" title="hired.candidate.ingest_facts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ingest_facts</span></code></a>(kb, records, *, source_kind[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.ingest_facts" title="hired.candidate.ingest_facts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ingest_facts</span></code></a>(kb, records, *, source_kind[, ...])</p></td>
 <td><p>Validate, quote-check, and persist fact records; return persisted ids.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.fact_from_record" title="hired.candidate.fact_from_record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fact_from_record</span></code></a>(record, *, source_kind[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.fact_from_record" title="hired.candidate.fact_from_record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fact_from_record</span></code></a>(record, *, source_kind[, ...])</p></td>
 <td><p>Build a (not-yet-persisted) <a class="reference internal" href="#hired.candidate.Fact" title="hired.candidate.Fact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fact</span></code></a> from a record dict.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.verify_quote" title="hired.candidate.verify_quote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_quote</span></code></a>(quote, source_text)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.verify_quote" title="hired.candidate.verify_quote"><code class="xref py py-obj docutils literal notranslate"><span class="pre">verify_quote</span></code></a>(quote, source_text)</p></td>
 <td><p>True if <code class="docutils literal notranslate"><span class="pre">quote</span></code> is a verbatim substring of <code class="docutils literal notranslate"><span class="pre">source_text</span></code>.</p></td>
 </tr>
 </tbody>
@@ -475,10 +481,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.TopicDossier" title="hired.candidate.TopicDossier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TopicDossier</span></code></a>(base_dir, *[, name])</p></td>
 <td><p>One subject's dossier: an <code class="docutils literal notranslate"><span class="pre">overview.md</span></code> plus optional attached files.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.RefreshState" title="hired.candidate.RefreshState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RefreshState</span></code></a>(**data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.RefreshState" title="hired.candidate.RefreshState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RefreshState</span></code></a>(*[, last_soft_refresh, ...])</p></td>
 <td><p>The candidate-info refresh ledger (persisted to <code class="docutils literal notranslate"><span class="pre">user/info/state.json</span></code>).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.SourceDigest" title="hired.candidate.SourceDigest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SourceDigest</span></code></a>(**data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.SourceDigest" title="hired.candidate.SourceDigest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SourceDigest</span></code></a>(*, key, sha256, size[, ...])</p></td>
 <td><p>What we know about one raw source for change detection + provenance.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.RefreshItem" title="hired.candidate.RefreshItem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RefreshItem</span></code></a>(kind, key, content)</p></td>
@@ -490,13 +496,13 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.RefreshReport" title="hired.candidate.RefreshReport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RefreshReport</span></code></a>(mode, applied[, pending, ...])</p></td>
 <td><p>Outcome (or preview) of a refresh.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.Fact" title="hired.candidate.Fact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Fact</span></code></a>(**data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.Fact" title="hired.candidate.Fact"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Fact</span></code></a>(*[, id, subject, category, value, ...])</p></td>
 <td><p>One atomic claim about a candidate.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.QAEntry" title="hired.candidate.QAEntry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QAEntry</span></code></a>(**data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.QAEntry" title="hired.candidate.QAEntry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QAEntry</span></code></a>(*[, id, asked_for_job, fills_field, ...])</p></td>
 <td><p>One clarifying question asked of the candidate and their answer.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.Provenance" title="hired.candidate.Provenance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Provenance</span></code></a>(**data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.candidate.Provenance" title="hired.candidate.Provenance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Provenance</span></code></a>(*, source_kind[, source_id, ...])</p></td>
 <td><p>Where a fact came from, with an optional verbatim supporting quote.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#hired.candidate.FactCategory" title="hired.candidate.FactCategory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FactCategory</span></code></a>(*values)</p></td>
@@ -519,12 +525,12 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.candidate.CandidateKnowledgeBase">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">CandidateKnowledgeBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.CandidateKnowledgeBase" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">CandidateKnowledgeBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.CandidateKnowledgeBase" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Accumulated, open-world knowledge about a single candidate (user-level).</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HIRED_DATA_DIR'</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">kb</span> <span class="o">=</span> <span class="n">CandidateKnowledgeBase</span><span class="p">()</span>                 <span class="c1"># default candidate "me"</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kb</span> <span class="o">=</span> <span class="n">CandidateKnowledgeBase</span><span class="p">()</span>       <span class="c1"># default candidate: $HIRED_USER, else "me"</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fact</span><span class="p">,</span> <span class="n">FactCategory</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">kb</span><span class="o">.</span><span class="n">add_fact</span><span class="p">(</span><span class="n">Fact</span><span class="p">(</span><span class="n">statement</span><span class="o">=</span><span class="s1">'Built ML pipelines in Python'</span><span class="p">,</span>
 <span class="gp">... </span>                      <span class="n">category</span><span class="o">=</span><span class="n">FactCategory</span><span class="o">.</span><span class="n">SKILL</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s1">'python'</span><span class="p">,</span> <span class="s1">'ml'</span><span class="p">]))</span>
@@ -585,6 +591,21 @@ hidden). <code class="docutils literal notranslate"><span class="pre">tags</span
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code></a>[<a class="reference internal" href="hired.candidate.base.html#hired.candidate.base.Fact" title="hired.candidate.base.Fact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fact</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.CandidateKnowledgeBase.ingest_source">
+<span class="sig-name descname"><span class="pre">ingest_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">records</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.ingest_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.CandidateKnowledgeBase.ingest_source" title="Link to this definition">#</a></dt>
+<dd><p>Distill extracted fact <code class="docutils literal notranslate"><span class="pre">records</span></code> for raw source <code class="docutils literal notranslate"><span class="pre">name</span></code> into facts.</p>
+<p>Quotes are checked against the source, facts from a prior ingest of the
+same source are superseded, and the source stops being pending. Returns
+<code class="docutils literal notranslate"><span class="pre">(added_fact_ids,</span> <span class="pre">superseded_fact_ids)</span></code>. See
+<code class="xref py py-func docutils literal notranslate"><span class="pre">hired.candidate.refresh.ingest_source()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -694,7 +715,7 @@ hand-edited — so it can be regenerated at any time without loss.</p>
 <dd><p>Store a raw uploaded document by filename (see <a class="reference internal" href="#hired.candidate.CandidateKnowledgeBase.add_source" title="hired.candidate.CandidateKnowledgeBase.add_source"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_source()</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -760,7 +781,7 @@ hand-edited — so it can be regenerated at any time without loss.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.candidate.Fact">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">Fact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/base.html#Fact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.Fact" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">Fact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'me'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FactCategory.OTHER</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confidence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ConfidenceLevel.MEDIUM</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_negation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provenance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FactStatus.ASSERTED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supersedes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/base.html#Fact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.Fact" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>One atomic claim about a candidate.</p>
 <p>Atomicity matters: a fact states a single thing so it can be confirmed,
@@ -820,12 +841,28 @@ superseded, or cited independently.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.JDWorkspace.save_alignment">
+<span class="sig-name descname"><span class="pre">save_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">draft</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_alignment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.JDWorkspace.save_alignment" title="Link to this definition">#</a></dt>
+<dd><p>Finalize an analyst-drafted alignment report and save it; return it.</p>
+<p>Whatever produced the draft — the <code class="docutils literal notranslate"><span class="pre">hired-align</span></code> skill, the <code class="docutils literal notranslate"><span class="pre">hired</span>
+<span class="pre">analyze</span></code> command, or an injected-LLM analyzer — this is the one path from
+a draft to a persisted report: <a class="reference internal" href="hired.alignment.html#hired.alignment.finalize_report" title="hired.alignment.finalize_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">finalize_report()</span></code></a>
+re-derives everything deterministic, then <a class="reference internal" href="#hired.candidate.JDWorkspace.save_report" title="hired.candidate.JDWorkspace.save_report"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save_report()</span></code></a> archives the
+previous version. <code class="docutils literal notranslate"><span class="pre">job_id</span></code> overrides the draft’s own.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hired.candidate.JDWorkspace.save_briefing">
 <span class="sig-name descname"><span class="pre">save_briefing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_briefing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.JDWorkspace.save_briefing" title="Link to this definition">#</a></dt>
 <dd><p>Persist an interview-prep research briefing (keyed by subject/job).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -836,7 +873,7 @@ superseded, or cited independently.</p>
 <dd><p>Persist a company/people research report (keyed by company name).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -846,10 +883,12 @@ superseded, or cited independently.</p>
 <span class="sig-name descname"><span class="pre">save_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.JDWorkspace.save_report" title="Link to this definition">#</a></dt>
 <dd><p>Persist the current alignment report, archiving the prior one first.</p>
 <p>Archiving (on by default) snapshots any existing report into
-<code class="docutils literal notranslate"><span class="pre">report_history</span></code> so the alignment-review agent can diff versions.</p>
+<code class="docutils literal notranslate"><span class="pre">report_history</span></code> so the alignment-review agent can diff versions. The
+snapshot is keyed by the <em>archived</em> report’s <code class="docutils literal notranslate"><span class="pre">created_at</span></code> (else now),
+made filename-safe, and never overwrites an earlier snapshot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -867,7 +906,7 @@ must <em>ask</em> rather than assume absence.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.candidate.Provenance">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">Provenance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/base.html#Provenance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.Provenance" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">Provenance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quote</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captured_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/base.html#Provenance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.Provenance" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Where a fact came from, with an optional verbatim supporting quote.</p>
 <dl class="field-list simple">
@@ -882,7 +921,7 @@ must <em>ask</em> rather than assume absence.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.candidate.QAEntry">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">QAEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/base.html#QAEntry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.QAEntry" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">QAEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">question</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">answer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asked_for_job</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fills_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">derived_fact_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/base.html#QAEntry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.QAEntry" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>One clarifying question asked of the candidate and their answer.</p>
 <p>Q&amp;A is append-only history; the distilled, updatable projection lives in
@@ -917,7 +956,7 @@ must <em>ask</em> rather than assume absence.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.candidate.RefreshReport">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">RefreshReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">applied</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proposals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added_fact_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">superseded_fact_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/refresh.html#RefreshReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.RefreshReport" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">RefreshReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">applied</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pending</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proposals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added_fact_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">superseded_fact_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">list()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/refresh.html#RefreshReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.RefreshReport" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Outcome (or preview) of a refresh.</p>
 <dl class="field-list simple">
@@ -926,7 +965,7 @@ must <em>ask</em> rather than assume absence.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.candidate.RefreshState">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">RefreshState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/state.html#RefreshState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.RefreshState" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">RefreshState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_soft_refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_hard_refresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/state.html#RefreshState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.RefreshState" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>The candidate-info refresh ledger (persisted to <code class="docutils literal notranslate"><span class="pre">user/info/state.json</span></code>).</p>
 <dl class="field-list simple">
@@ -941,7 +980,7 @@ must <em>ask</em> rather than assume absence.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="hired.candidate.SourceDigest">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">SourceDigest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/state.html#SourceDigest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.SourceDigest" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">SourceDigest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sha256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">added_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ingested_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fact_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/state.html#SourceDigest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.SourceDigest" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>What we know about one raw source for change detection + provenance.</p>
 <dl class="field-list simple">
@@ -986,7 +1025,7 @@ must <em>ask</em> rather than assume absence.</p>
 <dd><p>Attach a detail file / media blob to the dossier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -997,7 +1036,7 @@ must <em>ask</em> rather than assume absence.</p>
 <dd><p>Append a note to the overview (creating it, titled, if absent).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1059,6 +1098,21 @@ in which case a <code class="docutils literal notranslate"><span class="pre">Val
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="hired.candidate.ingest_source">
+<span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">ingest_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">records</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/refresh.html#ingest_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.ingest_source" title="Link to this definition">#</a></dt>
+<dd><p>Distill externally-extracted <code class="docutils literal notranslate"><span class="pre">records</span></code> for one raw source into facts.</p>
+<p>The single-source counterpart of <a class="reference internal" href="#hired.candidate.refresh" title="hired.candidate.refresh"><code class="xref py py-func docutils literal notranslate"><span class="pre">refresh()</span></code></a>: quotes are verified against
+the source text, facts from a previous ingest of the same source are
+superseded, and the source’s digest is marked ingested (so it stops showing
+as pending). Returns <code class="docutils literal notranslate"><span class="pre">(added_fact_ids,</span> <span class="pre">superseded_fact_ids)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="hired.candidate.needs_refresh">
 <span class="sig-prename descclassname"><span class="pre">hired.candidate.</span></span><span class="sig-name descname"><span class="pre">needs_refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/refresh.html#needs_refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.needs_refresh" title="Link to this definition">#</a></dt>
 <dd><p>True when there is uningested source/Q&amp;A material — a refresh is warranted.</p>
@@ -1091,17 +1145,17 @@ proposals and nothing is written.</p>
 <dd><p>A filesystem-safe, extension-less key from an arbitrary label.</p>
 <p>Used to derive stable store keys from human labels (company names, subjects,
 briefing titles) so callers pass natural text and the store stays tidy.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
-</dd>
-</dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">slug</span><span class="p">(</span><span class="s1">'Socure, Inc.'</span><span class="p">)</span>
 <span class="go">'socure-inc'</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">slug</span><span class="p">(</span><span class="s1">'KYC / AML primer'</span><span class="p">)</span>
 <span class="go">'kyc-aml-primer'</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1196,6 +1250,7 @@ invariant only bites when we <em>can</em> check.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.CandidateKnowledgeBase.add_note"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_note()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.CandidateKnowledgeBase.add_source"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_source()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.CandidateKnowledgeBase.facts"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.facts()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.CandidateKnowledgeBase.ingest_source"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.ingest_source()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.CandidateKnowledgeBase.jd"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jd()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.CandidateKnowledgeBase.jds"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jds()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.CandidateKnowledgeBase.needs_refresh"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.needs_refresh()</span></code></a></li>
@@ -1221,6 +1276,7 @@ invariant only bites when we <em>can</em> check.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.FactStatus"><code class="docutils literal notranslate"><span class="pre">FactStatus</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.JDWorkspace"><code class="docutils literal notranslate"><span class="pre">JDWorkspace</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.JDWorkspace.report_versions"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.report_versions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.JDWorkspace.save_alignment"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_alignment()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.JDWorkspace.save_briefing"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_briefing()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.JDWorkspace.save_company_report"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_company_report()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.JDWorkspace.save_report"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_report()</span></code></a></li>
@@ -1257,6 +1313,7 @@ invariant only bites when we <em>can</em> check.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.fact_from_record"><code class="docutils literal notranslate"><span class="pre">fact_from_record()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.ingest_facts"><code class="docutils literal notranslate"><span class="pre">ingest_facts()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.ingest_source"><code class="docutils literal notranslate"><span class="pre">ingest_source()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.needs_refresh"><code class="docutils literal notranslate"><span class="pre">needs_refresh()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.refresh"><code class="docutils literal notranslate"><span class="pre">refresh()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.slug"><code class="docutils literal notranslate"><span class="pre">slug()</span></code></a></li>

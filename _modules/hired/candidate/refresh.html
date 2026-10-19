@@ -31,6 +31,7 @@
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/epythet.css?v=c5337052" />
   
@@ -40,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -740,7 +741,13 @@ window.runMermaid = runMermaid;</script>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">FactStatus</span><span class="p">,</span> <span class="n">SourceKind</span><span class="p">,</span> <span class="n">_utcnow</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.ingest</span><span class="w"> </span><span class="kn">import</span> <span class="n">ingest_facts</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.state</span><span class="w"> </span><span class="kn">import</span> <span class="n">SourceDigest</span><span class="p">,</span> <span class="n">load_state</span><span class="p">,</span> <span class="n">save_state</span><span class="p">,</span> <span class="n">sha256_hex</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.state</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">RefreshState</span><span class="p">,</span>
+    <span class="n">SourceDigest</span><span class="p">,</span>
+    <span class="n">load_state</span><span class="p">,</span>
+    <span class="n">save_state</span><span class="p">,</span>
+    <span class="n">sha256_hex</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># avoid an import cycle (knowledge_base imports this module)</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">QAEntry</span>
@@ -869,6 +876,58 @@ window.runMermaid = runMermaid;</script>
     <span class="k">return</span> <span class="n">changed</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_ingest_source_into</span><span class="p">(</span>
+    <span class="n">kb</span><span class="p">:</span> <span class="n">CandidateKnowledgeBase</span><span class="p">,</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">RefreshState</span><span class="p">,</span>
+    <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">records</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Distill ``records`` from source ``key`` into facts, updating ``state`` in memory.</span>
+
+<span class="sd">    Facts previously derived from this source are superseded first (a re-ingest</span>
+<span class="sd">    replaces, never duplicates). Returns ``(added_fact_ids, superseded_fact_ids)``.</span>
+<span class="sd">    """</span>
+    <span class="n">prior</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="n">superseded</span> <span class="o">=</span> <span class="n">_supersede</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">prior</span><span class="o">.</span><span class="n">fact_ids</span><span class="p">)</span> <span class="k">if</span> <span class="n">prior</span> <span class="ow">and</span> <span class="n">prior</span><span class="o">.</span><span class="n">fact_ids</span> <span class="k">else</span> <span class="p">[]</span>
+    <span class="n">new_ids</span> <span class="o">=</span> <span class="n">ingest_facts</span><span class="p">(</span>
+        <span class="n">kb</span><span class="p">,</span>
+        <span class="n">records</span><span class="p">,</span>
+        <span class="n">source_kind</span><span class="o">=</span><span class="n">SourceKind</span><span class="o">.</span><span class="n">UPLOAD</span><span class="p">,</span>
+        <span class="n">source_id</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+        <span class="n">source_text</span><span class="o">=</span><span class="n">_as_text</span><span class="p">(</span><span class="n">content</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">content</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="k">else</span> <span class="n">content</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourceDigest</span><span class="p">(</span>
+        <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+        <span class="n">sha256</span><span class="o">=</span><span class="n">sha256_hex</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+        <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
+        <span class="n">ingested_at</span><span class="o">=</span><span class="n">_utcnow</span><span class="p">(),</span>
+        <span class="n">fact_ids</span><span class="o">=</span><span class="n">new_ids</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_ids</span><span class="p">,</span> <span class="n">superseded</span>
+
+
+<div class="viewcode-block" id="ingest_source">
+<a class="viewcode-back" href="../../../_autosummary/hired.candidate.html#hired.candidate.ingest_source">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ingest_source</span><span class="p">(</span>
+    <span class="n">kb</span><span class="p">:</span> <span class="n">CandidateKnowledgeBase</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">records</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Distill externally-extracted ``records`` for one raw source into facts.</span>
+
+<span class="sd">    The single-source counterpart of :func:`refresh`: quotes are verified against</span>
+<span class="sd">    the source text, facts from a previous ingest of the same source are</span>
+<span class="sd">    superseded, and the source's digest is marked ingested (so it stops showing</span>
+<span class="sd">    as pending). Returns ``(added_fact_ids, superseded_fact_ids)``.</span>
+<span class="sd">    """</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">load_state</span><span class="p">(</span><span class="n">kb</span><span class="o">.</span><span class="n">_store</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">_ingest_source_into</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">kb</span><span class="o">.</span><span class="n">get_source</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">records</span><span class="p">)</span>
+    <span class="n">save_state</span><span class="p">(</span><span class="n">kb</span><span class="o">.</span><span class="n">_store</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">regenerate_synopsis</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
 <div class="viewcode-block" id="refresh">
 <a class="viewcode-back" href="../../../_autosummary/hired.candidate.html#hired.candidate.refresh">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">refresh</span><span class="p">(</span>
@@ -901,31 +960,11 @@ window.runMermaid = runMermaid;</script>
             <span class="n">report</span><span class="o">.</span><span class="n">proposals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RefreshProposal</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">records</span><span class="p">))</span>
             <span class="k">continue</span>
         <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">SOURCE</span><span class="p">:</span>
-            <span class="n">prior</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">sources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="n">prior</span> <span class="ow">and</span> <span class="n">prior</span><span class="o">.</span><span class="n">fact_ids</span>
-            <span class="p">):</span>  <span class="c1"># changed/hard re-derive → supersede stale facts</span>
-                <span class="n">report</span><span class="o">.</span><span class="n">superseded_fact_ids</span> <span class="o">+=</span> <span class="n">_supersede</span><span class="p">(</span><span class="n">kb</span><span class="p">,</span> <span class="n">prior</span><span class="o">.</span><span class="n">fact_ids</span><span class="p">)</span>
-            <span class="n">new_ids</span> <span class="o">=</span> <span class="n">ingest_facts</span><span class="p">(</span>
-                <span class="n">kb</span><span class="p">,</span>
-                <span class="n">records</span><span class="p">,</span>
-                <span class="n">source_kind</span><span class="o">=</span><span class="n">SourceKind</span><span class="o">.</span><span class="n">UPLOAD</span><span class="p">,</span>
-                <span class="n">source_id</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
-                <span class="n">source_text</span><span class="o">=</span><span class="n">_as_text</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">content</span><span class="p">),</span>
+            <span class="n">new_ids</span><span class="p">,</span> <span class="n">superseded</span> <span class="o">=</span> <span class="n">_ingest_source_into</span><span class="p">(</span>
+                <span class="n">kb</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">records</span>
             <span class="p">)</span>
             <span class="n">report</span><span class="o">.</span><span class="n">added_fact_ids</span> <span class="o">+=</span> <span class="n">new_ids</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">item</span><span class="o">.</span><span class="n">content</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span>
-                <span class="k">else</span> <span class="n">item</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
-            <span class="p">)</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">sources</span><span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourceDigest</span><span class="p">(</span>
-                <span class="n">key</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
-                <span class="n">sha256</span><span class="o">=</span><span class="n">sha256_hex</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
-                <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span>
-                <span class="n">ingested_at</span><span class="o">=</span><span class="n">_utcnow</span><span class="p">(),</span>
-                <span class="n">fact_ids</span><span class="o">=</span><span class="n">new_ids</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="n">report</span><span class="o">.</span><span class="n">superseded_fact_ids</span> <span class="o">+=</span> <span class="n">superseded</span>
         <span class="k">else</span><span class="p">:</span>  <span class="c1"># QA</span>
             <span class="n">new_ids</span> <span class="o">=</span> <span class="n">ingest_facts</span><span class="p">(</span>
                 <span class="n">kb</span><span class="p">,</span>

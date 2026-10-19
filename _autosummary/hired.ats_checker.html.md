@@ -53,7 +53,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Represents an ATS compatibility issue.
 
-### *class* hired.ats_checker.ATSReport(overall_score, issues=<factory>, keyword_match_score=0.0, matched_keywords=<factory>, missing_keywords=<factory>)
+### *class* hired.ats_checker.ATSReport(overall_score, issues=list(), keyword_match_score=0.0, matched_keywords=set(), missing_keywords=set())
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 

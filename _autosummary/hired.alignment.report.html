@@ -34,6 +34,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=c5337052" />
   
@@ -43,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../_static/documentation_options.js?v=f91d8841"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -320,6 +321,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="hired.html">hired</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="hired.alignment.html">hired.alignment</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="hired.alignment.assemble.html">hired.alignment.assemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.base.html">hired.alignment.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.diff.html">hired.alignment.diff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.elicitation.html">hired.alignment.elicitation</a></li>
@@ -338,6 +340,7 @@
 <li class="toctree-l3"><a class="reference internal" href="hired.candidate.workspace.html">hired.candidate.workspace</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="hired.cli.html">hired.cli</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.config.html">hired.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.content.html">hired.content</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.cover_letter.html">hired.cover_letter</a></li>
@@ -437,22 +440,86 @@
                   
   <section id="module-hired.alignment.report">
 <span id="hired-alignment-report"></span><h1>hired.alignment.report<a class="headerlink" href="#module-hired.alignment.report" title="Link to this heading">#</a></h1>
-<p>Render an <a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a> to Markdown.</p>
+<p>Render an <a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a> to Markdown or HTML.</p>
 <p>Verdict-first (BLUF), evidence-quoted, banded — deliberately <em>not</em> a single
 false-precision percentage. The four buckets are grouped so the reader sees, in
 order: what’s strong, what transfers, what’s learnable (with the AI-leverage
 note), what’s genuinely hard, and what we still need to ask.</p>
+<p>Formats are a strategy registry (<a class="reference internal" href="#hired.alignment.report.REPORT_RENDERERS" title="hired.alignment.report.REPORT_RENDERERS"><code class="xref py py-data docutils literal notranslate"><span class="pre">REPORT_RENDERERS</span></code></a>, dispatched by
+<a class="reference internal" href="#hired.alignment.report.render_report" title="hired.alignment.report.render_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">render_report()</span></code></a>): add one by registering a <code class="docutils literal notranslate"><span class="pre">report</span> <span class="pre">-&gt;</span> <span class="pre">str</span></code> function. The
+HTML renderer is a single self-contained page (inline CSS, light/dark aware, no
+external assets), suitable for opening in a browser or publishing as-is.</p>
 <p>See <code class="docutils literal notranslate"><span class="pre">misc/docs/DESIGN.md</span></code> §6, and the research in
 <code class="docutils literal notranslate"><span class="pre">misc/docs/research/jd-candidate-matching.md</span></code>.</p>
+<p class="rubric">Module Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.report.REPORT_RENDERERS" title="hired.alignment.report.REPORT_RENDERERS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">REPORT_RENDERERS</span></code></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">format</span> <span class="pre">name</span> <span class="pre">-&gt;</span> <span class="pre">renderer</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.report.render_report" title="hired.alignment.report.render_report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_report</span></code></a>(report[, fmt])</p></td>
+<td><p>Render <code class="docutils literal notranslate"><span class="pre">report</span></code> (a model or its JSON dict) in the named format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.report.render_report_html" title="hired.alignment.report.render_report_html"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_report_html</span></code></a>(report)</p></td>
+<td><p>Render the report as a self-contained HTML page (inline CSS, no assets).</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.report.render_report_markdown" title="hired.alignment.report.render_report_markdown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_report_markdown</span></code></a>(report)</p></td>
 <td><p>Render the report as a Markdown string.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py data">
+<dt class="sig sig-object py" id="hired.alignment.report.REPORT_RENDERERS">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.report.</span></span><span class="sig-name descname"><span class="pre">REPORT_RENDERERS</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable" title="(in Python v3.15)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><span class="pre">AlignmentReport</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'html':</span> <span class="pre">&lt;function</span> <span class="pre">render_report_html&gt;,</span> <span class="pre">'markdown':</span> <span class="pre">&lt;function</span> <span class="pre">render_report_markdown&gt;,</span> <span class="pre">'md':</span> <span class="pre">&lt;function</span> <span class="pre">render_report_markdown&gt;}</span></span><a class="headerlink" href="#hired.alignment.report.REPORT_RENDERERS" title="Link to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">format</span> <span class="pre">name</span> <span class="pre">-&gt;</span> <span class="pre">renderer</span></code>. Register a new format by adding an entry.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.report.render_report">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.report.</span></span><span class="sig-name descname"><span class="pre">render_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'markdown'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/report.html#render_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.report.render_report" title="Link to this definition">#</a></dt>
+<dd><p>Render <code class="docutils literal notranslate"><span class="pre">report</span></code> (a model or its JSON dict) in the named format.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment</span><span class="w"> </span><span class="kn">import</span> <span class="n">AlignmentReport</span><span class="p">,</span> <span class="n">Verdict</span><span class="p">,</span> <span class="n">Recommendation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'job_id'</span><span class="p">:</span> <span class="s1">'ds'</span><span class="p">,</span> <span class="s1">'verdict'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'recommendation'</span><span class="p">:</span> <span class="s1">'apply'</span><span class="p">}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">render_report</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">'# Alignment: ds'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">render_report</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="s1">'pdf'</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">Unknown report format 'pdf'; choose from: html, markdown, md</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.report.render_report_html">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.report.</span></span><span class="sig-name descname"><span class="pre">render_report_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/report.html#render_report_html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.report.render_report_html" title="Link to this definition">#</a></dt>
+<dd><p>Render the report as a self-contained HTML page (inline CSS, no assets).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment</span><span class="w"> </span><span class="kn">import</span> <span class="n">AlignmentReport</span><span class="p">,</span> <span class="n">Verdict</span><span class="p">,</span> <span class="n">Recommendation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">render_report_html</span><span class="p">(</span><span class="n">AlignmentReport</span><span class="p">(</span><span class="n">job_id</span><span class="o">=</span><span class="s1">'ds'</span><span class="p">,</span> <span class="n">company</span><span class="o">=</span><span class="s1">'Acme &lt;Inc&gt;'</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">verdict</span><span class="o">=</span><span class="n">Verdict</span><span class="p">(</span><span class="n">recommendation</span><span class="o">=</span><span class="n">Recommendation</span><span class="o">.</span><span class="n">APPLY</span><span class="p">,</span> <span class="n">headline</span><span class="o">=</span><span class="s1">'Go'</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'&lt;!doctype html&gt;'</span><span class="p">),</span> <span class="s1">'Acme &amp;lt;Inc&amp;gt;'</span> <span class="ow">in</span> <span class="n">page</span>
+<span class="go">(True, True)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="hired.alignment.report.render_report_markdown">
 <span class="sig-prename descclassname"><span class="pre">hired.alignment.report.</span></span><span class="sig-name descname"><span class="pre">render_report_markdown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">report</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/report.html#render_report_markdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.report.render_report_markdown" title="Link to this definition">#</a></dt>
@@ -513,6 +580,9 @@ note), what’s genuinely hard, and what we still need to ask.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.report.REPORT_RENDERERS"><code class="docutils literal notranslate"><span class="pre">REPORT_RENDERERS</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.report.render_report"><code class="docutils literal notranslate"><span class="pre">render_report()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.report.render_report_html"><code class="docutils literal notranslate"><span class="pre">render_report_html()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.report.render_report_markdown"><code class="docutils literal notranslate"><span class="pre">render_report_markdown()</span></code></a></li>
 </ul>
   </nav></div>

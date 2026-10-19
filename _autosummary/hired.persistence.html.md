@@ -9,6 +9,10 @@ filesystem codecs that keep keys extension-less while writing properly-extension
 files. Per-candidate data is split two levels deep: a cross-JD `user/` subtree
 ([`UserStore`](#hired.persistence.UserStore)) and per-engagement `jds/<jd_id>/` subtrees ([`JDStore`](#hired.persistence.JDStore)).
 
+Multi-tenant: every candidate lives under `users/<user>/`. Entry points take an
+optional `user`; [`resolve_user()`](#hired.persistence.resolve_user) falls back to `$HIRED_USER`, then `"me"`,
+and [`list_users()`](#hired.persistence.list_users) enumerates the candidates present.
+
 See `misc/docs/DESIGN.md` §4 for the full layout and rationale.
 
 ### Functions
@@ -16,6 +20,9 @@ See `misc/docs/DESIGN.md` §4 for the full layout and rationale.
 | [`app_data_dir`](#hired.persistence.app_data_dir)(\*subpaths[, make])                  | Return the canonical hired data directory, joined with `subpaths`.           |
 |----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
 | [`user_base`](#hired.persistence.user_base)([user, root])                           | Filesystem base for a candidate: `<root>` or `<data>/users/<user>`.          |
+| [`resolve_user`](#hired.persistence.resolve_user)([user])                              | The candidate an operation targets: `user`, else `$HIRED_USER`, else `"me"`. |
+| [`validate_name`](#hired.persistence.validate_name)(name, \*[, kind])                   | Return `name` if it is a safe, portable single path segment, else raise.     |
+| [`list_users`](#hired.persistence.list_users)()                                      | Candidates with data under the data root's `users/` (sorted; empty if none). |
 | [`list_jds`](#hired.persistence.list_jds)([user, root])                            | Engagement ids under `users/<user>/jds/` (sorted; empty if none).            |
 | [`json_store`](#hired.persistence.json_store)(rootdir)                               | A `MutableMapping` of JSON-able values: bare-id keys, `<id>.json` files.     |
 | [`markdown_store`](#hired.persistence.markdown_store)(rootdir)                           | A `MutableMapping` of `str` values: bare keys, `<key>.md` files.             |
@@ -70,7 +77,7 @@ Derive the storage key for an item (defaults to its `id` field).
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
-### *class* hired.persistence.UserStore(user='me', , root=None)
+### *class* hired.persistence.UserStore(user=None, , root=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -83,7 +90,7 @@ is a single markdown file accessed via `read_synopsis()` /
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> us = UserStore()                       # default user "me"
+>>> us = UserStore()           # default user: $HIRED_USER, else "me"
 >>> us.facts['f1'] = {'statement': 'knows Python'}
 >>> us.facts['f1']
 {'statement': 'knows Python'}
@@ -101,9 +108,6 @@ Return the canonical hired data directory, joined with `subpaths`.
 
 The directory is created when `make` is true (the default).
 
-* **Return type:**
-  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
-
 ```pycon
 >>> import os, tempfile
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
@@ -114,6 +118,9 @@ True
 True
 ```
 
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
 ### hired.persistence.bytes_store(rootdir)
 
 A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept).
@@ -121,14 +128,14 @@ A `MutableMapping` of raw `bytes`; keys are real filenames (extension kept).
 * **Return type:**
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)]
 
-### hired.persistence.ensure_v2(user='me', , root=None)
+### hired.persistence.ensure_v2(user=None, , root=None)
 
 Migrate the user to v2 if a legacy layout is detected. Returns True if migrated.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.persistence.is_legacy_layout(user='me', , root=None)
+### hired.persistence.is_legacy_layout(user=None, , root=None)
 
 True iff any legacy v1 flat directory remains for this user.
 
@@ -150,9 +157,26 @@ work transparently.
 * **Return type:**
   [`MutableMapping`](https://docs.python.org/3/library/collections.abc.html#collections.abc.MutableMapping)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
-### hired.persistence.list_jds(user='me', , root=None)
+### hired.persistence.list_jds(user=None, , root=None)
 
 Engagement ids under `users/<user>/jds/` (sorted; empty if none).
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.persistence.list_users()
+
+Candidates with data under the data root’s `users/` (sorted; empty if none).
+
+```pycon
+>>> import os, tempfile
+>>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
+>>> list_users()
+[]
+>>> _ = UserStore('alice').facts
+>>> list_users()
+['alice']
+```
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
@@ -175,7 +199,7 @@ unified. No-op otherwise. Returns True iff a copy happened.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.persistence.migrate_user_to_v2(user='me', , root=None, company_of=None, dry_run=False)
+### hired.persistence.migrate_user_to_v2(user=None, , root=None, company_of=None, dry_run=False)
 
 Migrate one user’s flat v1 data to the v2 layout. Returns the move plan.
 
@@ -186,9 +210,60 @@ legacy data. With `dry_run=True` nothing is moved — the returned
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
-### hired.persistence.user_base(user='me', , root=None)
+### hired.persistence.resolve_user(user=None)
+
+The candidate an operation targets: `user`, else `$HIRED_USER`, else `"me"`.
+
+This is the *only* place the single-tenant default lives; every user-scoped
+entry point passes its `user` argument through here. An explicitly given
+name (even `""`) is validated, never silently replaced by the default.
+
+```pycon
+>>> import os
+>>> _ = os.environ.pop('HIRED_USER', None)
+>>> resolve_user()
+'me'
+>>> resolve_user('alice')
+'alice'
+>>> os.environ['HIRED_USER'] = 'bob'
+>>> resolve_user()
+'bob'
+>>> del os.environ['HIRED_USER']
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.persistence.user_base(user=None, , root=None)
 
 Filesystem base for a candidate: `<root>` or `<data>/users/<user>`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.persistence.validate_name(name, , kind='name')
+
+Return `name` if it is a safe, portable single path segment, else raise.
+
+User, engagement and job ids become directory or file names, so they are
+restricted to ASCII letters, digits and `._-` (starting with a letter or
+digit, not ending in `.`), and may not be a Windows device name. That rules
+out separators, `..`, drive prefixes (`C:x`), hidden names and NUL bytes —
+so one id can never address another candidate’s (or an arbitrary) directory.
+`kind="user"` also requires lower case (see `_USER_PATTERN`).
+
+```pycon
+>>> validate_name('acme-2024')
+'acme-2024'
+>>> validate_name('../bob', kind='engagement id')
+Traceback (most recent call last):
+  ...
+ValueError: Invalid engagement id '../bob': use ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+>>> validate_name('Alice', kind='user')
+Traceback (most recent call last):
+  ...
+ValueError: Invalid user 'Alice': use lower-case ASCII letters, digits and '._-', starting with a letter or digit and not ending in '.'
+```
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)

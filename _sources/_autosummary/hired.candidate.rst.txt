@@ -10,6 +10,7 @@ hired.candidate
    
       needs_refresh
       refresh
+      ingest_source
       slug
       ingest_facts
       fact_from_record

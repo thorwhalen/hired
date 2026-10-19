@@ -16,7 +16,11 @@ hired.alignment
       is_decision_stable
       should_ask
       info_gain
+      finalize_report
+      is_blocking
+      render_report
       render_report_markdown
+      render_report_html
       diff_reports
       summarize_diff
    
@@ -52,6 +56,7 @@ hired.alignment
    :toctree:
    :recursive:
 
+   assemble
    base
    diff
    elicitation

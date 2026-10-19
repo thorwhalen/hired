@@ -24,7 +24,7 @@ Define:
 | [`Renderer`](#hired.base.Renderer)(\*args, \*\*kwargs)                      | Protocol for resume renderers.                                                 |
 | [`RendererRegistry`](#hired.base.RendererRegistry)()                                | Registry for managing multiple renderer implementations.                       |
 | [`RenderingConfig`](#hired.base.RenderingConfig)([format, theme, custom_css, ...]) | Configuration for resume rendering.                                            |
-| [`ResumeSchemaExtended`](#hired.base.ResumeSchemaExtended)(\*\*data)                    | Extended version of ResumeSchema that allows extra fields for custom sections. |
+| [`ResumeSchemaExtended`](#hired.base.ResumeSchemaExtended)(\*[, field_schema, ...])     | Extended version of ResumeSchema that allows extra fields for custom sections. |
 
 ### *class* hired.base.AIAgent(\*args, \*\*kwargs)
 
@@ -84,7 +84,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
 Configuration for resume rendering.
 
-### *class* hired.base.ResumeSchemaExtended(\*\*data)
+### *class* hired.base.ResumeSchemaExtended(, field_schema=None, basics=None, work=None, volunteer=None, education=None, awards=None, certificates=None, publications=None, skills=None, languages=None, interests=None, references=None, projects=None, meta=None, \*\*extra_data)
 
 Bases: [`ResumeSchema`](hired.resumejson_pydantic_models.html.md#hired.resumejson_pydantic_models.ResumeSchema)
 
@@ -109,4 +109,4 @@ Get the global renderer registry.
 Decorator for registering renderer classes.
 
 * **Return type:**
-  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`_RendererClass`, bound= [`type`](https://docs.python.org/3/builtins/functions.html#type)[[`Renderer`](#hired.base.Renderer)])], [`TypeVar`](https://docs.python.org/3/library/typing.html#typing.TypeVar)(`_RendererClass`, bound= [`type`](https://docs.python.org/3/builtins/functions.html#type)[[`Renderer`](#hired.base.Renderer)])]
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`_RendererClass`], `_RendererClass`]

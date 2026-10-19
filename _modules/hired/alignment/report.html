@@ -31,6 +31,7 @@
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/epythet.css?v=c5337052" />
   
@@ -40,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../../../_static/documentation_options.js?v=f91d8841"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -410,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -711,18 +712,27 @@ window.runMermaid = runMermaid;</script>
                 <article class="bd-article">
                   
   <h1>Source code for hired.alignment.report</h1><div class="highlight"><pre>
-<span></span><span class="sd">"""Render an :class:`~hired.alignment.base.AlignmentReport` to Markdown.</span>
+<span></span><span class="sd">"""Render an :class:`~hired.alignment.base.AlignmentReport` to Markdown or HTML.</span>
 
 <span class="sd">Verdict-first (BLUF), evidence-quoted, banded — deliberately *not* a single</span>
 <span class="sd">false-precision percentage. The four buckets are grouped so the reader sees, in</span>
 <span class="sd">order: what's strong, what transfers, what's learnable (with the AI-leverage</span>
 <span class="sd">note), what's genuinely hard, and what we still need to ask.</span>
 
+<span class="sd">Formats are a strategy registry (:data:`REPORT_RENDERERS`, dispatched by</span>
+<span class="sd">:func:`render_report`): add one by registering a ``report -&gt; str`` function. The</span>
+<span class="sd">HTML renderer is a single self-contained page (inline CSS, light/dark aware, no</span>
+<span class="sd">external assets), suitable for opening in a browser or publishing as-is.</span>
+
 <span class="sd">See ``misc/docs/DESIGN.md`` §6, and the research in</span>
 <span class="sd">``misc/docs/research/jd-candidate-matching.md``.</span>
 <span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">html</span><span class="w"> </span><span class="kn">import</span> <span class="n">escape</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">AlignmentReport</span><span class="p">,</span> <span class="n">Bucket</span><span class="p">,</span> <span class="n">RequirementRecord</span>
 
@@ -732,12 +742,46 @@ window.runMermaid = runMermaid;</script>
     <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">:</span> <span class="s2">"📈 Gap — learnable"</span><span class="p">,</span>
     <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">:</span> <span class="s2">"⛔ Gap — hard to learn"</span><span class="p">,</span>
 <span class="p">}</span>
+<span class="n">_UNKNOWN_HEADING</span> <span class="o">=</span> <span class="s2">"❓ Not yet known"</span>
 <span class="n">_BUCKET_ORDER</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">Bucket</span><span class="o">.</span><span class="n">STRONG_MATCH</span><span class="p">,</span>
     <span class="n">Bucket</span><span class="o">.</span><span class="n">ADJACENT_TRANSFERABLE</span><span class="p">,</span>
     <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">,</span>
     <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">,</span>
 <span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_group_by_bucket</span><span class="p">(</span>
+    <span class="n">report</span><span class="p">:</span> <span class="n">AlignmentReport</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="n">Bucket</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]],</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""Records per bucket (in display order) and the unresolved (unknown) ones."""</span>
+    <span class="n">by_bucket</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Bucket</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">b</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span><span class="p">}</span>
+    <span class="n">unknowns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">requirements</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">unknowns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">by_bucket</span><span class="p">[</span><span class="n">rec</span><span class="o">.</span><span class="n">bucket</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">by_bucket</span><span class="p">,</span> <span class="n">unknowns</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_close_bits</span><span class="p">(</span><span class="n">rec</span><span class="p">:</span> <span class="n">RequirementRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Closeability annotations for a gap record (empty for non-gaps)."""</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">,</span> <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">closeability</span><span class="p">:</span>
+        <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">closeability</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">time_to_close</span><span class="p">:</span>
+        <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"~</span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">time_to_close</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">ai_leverage</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="s2">"none"</span><span class="p">:</span>
+        <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"AI-leverage: </span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">ai_leverage</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bits</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_title</span><span class="p">(</span><span class="n">report</span><span class="p">:</span> <span class="n">AlignmentReport</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Alignment: </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">job_title</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">report</span><span class="o">.</span><span class="n">job_id</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">head</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">company</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">company</span> <span class="k">else</span> <span class="n">head</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_record_line</span><span class="p">(</span><span class="n">rec</span><span class="p">:</span> <span class="n">RequirementRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -748,16 +792,9 @@ window.runMermaid = runMermaid;</script>
         <span class="n">line</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  - _transfers from:_ </span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">source_skill</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'—'</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">adjacency_basis</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">,</span> <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">):</span>
-        <span class="n">bits</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">closeability</span><span class="p">:</span>
-            <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">closeability</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">time_to_close</span><span class="p">:</span>
-            <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"~</span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">time_to_close</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">ai_leverage</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="s2">"none"</span><span class="p">:</span>
-            <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"AI-leverage: </span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">ai_leverage</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">bits</span><span class="p">:</span>
-            <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  - _close:_ </span><span class="si">{</span><span class="s1">' · '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="n">_close_bits</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">bits</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">  - _close:_ </span><span class="si">{</span><span class="s1">' · '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
     <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">evidence</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">evidence</span><span class="o">.</span><span class="n">quote</span><span class="p">:</span>
         <span class="n">line</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">  - _evidence:_ "</span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">evidence</span><span class="o">.</span><span class="n">quote</span><span class="si">}</span><span class="s1">"'</span>
     <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">talking_point</span><span class="p">:</span>
@@ -771,11 +808,7 @@ window.runMermaid = runMermaid;</script>
 <span class="w">    </span><span class="sd">"""Render the report as a Markdown string."""</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">verdict</span>
     <span class="n">out</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">job_title</span> <span class="ow">or</span> <span class="n">report</span><span class="o">.</span><span class="n">job_id</span>
-    <span class="n">head</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"# Alignment: </span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">"</span>
-    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">company</span><span class="p">:</span>
-        <span class="n">head</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" — </span><span class="si">{</span><span class="n">report</span><span class="o">.</span><span class="n">company</span><span class="si">}</span><span class="s2">"</span>
-    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"# </span><span class="si">{</span><span class="n">_title</span><span class="p">(</span><span class="n">report</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
     <span class="c1"># --- verdict (BLUF) ---------------------------------------------------</span>
@@ -810,20 +843,13 @@ window.runMermaid = runMermaid;</script>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_record_line</span><span class="p">(</span><span class="n">rec</span><span class="p">))</span>
 
     <span class="c1"># --- per-bucket breakdown --------------------------------------------</span>
-    <span class="n">by_bucket</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Bucket</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">b</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span><span class="p">}</span>
-    <span class="n">unknowns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">requirements</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">unknowns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">by_bucket</span><span class="p">[</span><span class="n">rec</span><span class="o">.</span><span class="n">bucket</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">bucket</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span><span class="p">:</span>
-        <span class="n">recs</span> <span class="o">=</span> <span class="n">by_bucket</span><span class="p">[</span><span class="n">bucket</span><span class="p">]</span>
+    <span class="n">by_bucket</span><span class="p">,</span> <span class="n">unknowns</span> <span class="o">=</span> <span class="n">_group_by_bucket</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+    <span class="n">sections</span> <span class="o">=</span> <span class="p">[(</span><span class="n">_BUCKET_HEADINGS</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="n">by_bucket</span><span class="p">[</span><span class="n">b</span><span class="p">])</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">heading</span><span class="p">,</span> <span class="n">recs</span> <span class="ow">in</span> <span class="p">[</span><span class="o">*</span><span class="n">sections</span><span class="p">,</span> <span class="p">(</span><span class="n">_UNKNOWN_HEADING</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">)]:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">recs</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
-        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"## </span><span class="si">{</span><span class="n">_BUCKET_HEADINGS</span><span class="p">[</span><span class="n">bucket</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"## </span><span class="si">{</span><span class="n">heading</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">recs</span><span class="p">:</span>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_record_line</span><span class="p">(</span><span class="n">rec</span><span class="p">))</span>
 
@@ -861,6 +887,235 @@ window.runMermaid = runMermaid;</script>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"_Proactive disclosure:_ </span><span class="si">{</span><span class="n">ip</span><span class="o">.</span><span class="n">proactive_disclosure</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># HTML</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="n">_BUCKET_CSS_CLASS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">STRONG_MATCH</span><span class="p">:</span> <span class="s2">"strong"</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">ADJACENT_TRANSFERABLE</span><span class="p">:</span> <span class="s2">"adjacent"</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">:</span> <span class="s2">"learnable"</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">:</span> <span class="s2">"hard"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">_HTML_CSS</span> <span class="o">=</span> <span class="s2">"""</span>
+<span class="s2">:root { --bg:#fbfbfa; --fg:#1d1d1f; --muted:#6b6b70; --card:#ffffff; --line:#e3e3e0;</span>
+<span class="s2">  --strong:#1f7a4d; --adjacent:#2f6db3; --learnable:#a86a00; --hard:#b3261e;</span>
+<span class="s2">  --unknown:#6b6b70; }</span>
+<span class="s2">@media (prefers-color-scheme: dark) { :root { --bg:#161618; --fg:#ececee;</span>
+<span class="s2">  --muted:#a0a0a8; --card:#1f1f22; --line:#33333a; --strong:#5cc28f;</span>
+<span class="s2">  --adjacent:#7fb0ef; --learnable:#e0a83d; --hard:#f07a72; --unknown:#a0a0a8; } }</span>
+<span class="s2">* { box-sizing:border-box; }</span>
+<span class="s2">body { margin:0; background:var(--bg); color:var(--fg); line-height:1.5;</span>
+<span class="s2">  font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }</span>
+<span class="s2">main { max-width:860px; margin:0 auto; padding:24px 16px 64px; }</span>
+<span class="s2">h1 { font-size:1.6rem; margin:0 0 12px; }</span>
+<span class="s2">h2 { font-size:1.15rem; margin:32px 0 8px; padding-bottom:4px;</span>
+<span class="s2">  border-bottom:1px solid var(--line); }</span>
+<span class="s2">.verdict { background:var(--card); border:1px solid var(--line); border-radius:10px;</span>
+<span class="s2">  padding:16px; }</span>
+<span class="s2">.verdict .rec { font-weight:700; font-size:1.2rem; letter-spacing:.02em; }</span>
+<span class="s2">.meta { color:var(--muted); font-size:.9rem; }</span>
+<span class="s2">.counts { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 0; padding:0;</span>
+<span class="s2">  list-style:none; }</span>
+<span class="s2">.counts li { border:1px solid var(--line); border-radius:999px; padding:2px 10px;</span>
+<span class="s2">  font-size:.85rem; background:var(--card); }</span>
+<span class="s2">ul.records { list-style:none; padding:0; margin:0; }</span>
+<span class="s2">.record { background:var(--card); border:1px solid var(--line);</span>
+<span class="s2">  border-left:4px solid var(--unknown); border-radius:8px; padding:10px 12px;</span>
+<span class="s2">  margin:8px 0; }</span>
+<span class="s2">.record.strong { border-left-color:var(--strong); }</span>
+<span class="s2">.record.adjacent { border-left-color:var(--adjacent); }</span>
+<span class="s2">.record.learnable { border-left-color:var(--learnable); }</span>
+<span class="s2">.record.hard { border-left-color:var(--hard); }</span>
+<span class="s2">.record .text { font-weight:600; }</span>
+<span class="s2">.record .level { color:var(--muted); font-size:.85rem; margin-left:6px; }</span>
+<span class="s2">.record dl { margin:6px 0 0; display:grid; grid-template-columns:max-content 1fr;</span>
+<span class="s2">  gap:2px 10px; font-size:.9rem; }</span>
+<span class="s2">.record dt { color:var(--muted); }</span>
+<span class="s2">.record dd { margin:0; overflow-wrap:anywhere; }</span>
+<span class="s2">blockquote { margin:0; font-style:italic; }</span>
+<span class="s2">ol, ul.plain { padding-left:20px; }</span>
+<span class="s2">"""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_html_record</span><span class="p">(</span><span class="n">rec</span><span class="p">:</span> <span class="n">RequirementRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">rec</span><span class="o">.</span><span class="n">requirement</span>
+    <span class="n">css</span> <span class="o">=</span> <span class="n">_BUCKET_CSS_CLASS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">bucket</span><span class="p">,</span> <span class="s2">"unknown"</span><span class="p">)</span> <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">bucket</span> <span class="k">else</span> <span class="s2">"unknown"</span>
+    <span class="n">details</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">match_type</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="s2">"adjacent"</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">adjacency_basis</span><span class="p">:</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">"transfers from"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">source_skill</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'—'</span><span class="p">)</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">adjacency_basis</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">bits</span> <span class="o">=</span> <span class="n">_close_bits</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">bits</span><span class="p">:</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"close"</span><span class="p">,</span> <span class="n">escape</span><span class="p">(</span><span class="s2">" · "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bits</span><span class="p">))))</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">uncertainty_reason</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"unknown because"</span><span class="p">,</span> <span class="n">escape</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">uncertainty_reason</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">evidence</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">evidence</span><span class="o">.</span><span class="n">quote</span><span class="p">:</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">(</span><span class="s2">"evidence"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"&lt;blockquote&gt;“</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">evidence</span><span class="o">.</span><span class="n">quote</span><span class="p">)</span><span class="si">}</span><span class="s2">”&lt;/blockquote&gt;"</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">talking_point</span><span class="p">:</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">"talking point"</span><span class="p">,</span> <span class="n">escape</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">talking_point</span><span class="p">)))</span>
+    <span class="n">dl</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">"&lt;dl&gt;"</span> <span class="o">+</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;dt&gt;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">&lt;/dt&gt;&lt;dd&gt;</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&lt;/dd&gt;"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">details</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"&lt;/dl&gt;"</span>
+        <span class="k">if</span> <span class="n">details</span>
+        <span class="k">else</span> <span class="s2">""</span>
+    <span class="p">)</span>
+    <span class="n">level</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"need L</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">required_level</span><span class="si">}</span><span class="s2"> · have L</span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">candidate_level</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s1">'&lt;li class="record </span><span class="si">{</span><span class="n">css</span><span class="si">}</span><span class="s1">"&gt;&lt;span class="text"&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/span&gt;'</span>
+        <span class="sa">f</span><span class="s1">'&lt;span class="level"&gt;(</span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s1">)&lt;/span&gt;</span><span class="si">{</span><span class="n">dl</span><span class="si">}</span><span class="s1">&lt;/li&gt;'</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_html_records</span><span class="p">(</span><span class="n">heading</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">records</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">records</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_html_record</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span> <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">records</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"&lt;h2&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">heading</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/h2&gt;"</span><span class="p">,</span> <span class="sa">f</span><span class="s1">'&lt;ul class="records"&gt;</span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s1">&lt;/ul&gt;'</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="render_report_html">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.report.html#hired.render_report_html">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render_report_html</span><span class="p">(</span><span class="n">report</span><span class="p">:</span> <span class="n">AlignmentReport</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Render the report as a self-contained HTML page (inline CSS, no assets).</span>
+
+<span class="sd">    &gt;&gt;&gt; from hired.alignment import AlignmentReport, Verdict, Recommendation</span>
+<span class="sd">    &gt;&gt;&gt; page = render_report_html(AlignmentReport(job_id='ds', company='Acme &lt;Inc&gt;',</span>
+<span class="sd">    ...     verdict=Verdict(recommendation=Recommendation.APPLY, headline='Go')))</span>
+<span class="sd">    &gt;&gt;&gt; page.startswith('&lt;!doctype html&gt;'), 'Acme &amp;lt;Inc&amp;gt;' in page</span>
+<span class="sd">    (True, True)</span>
+<span class="sd">    """</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">verdict</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">escape</span><span class="p">(</span><span class="n">_title</span><span class="p">(</span><span class="n">report</span><span class="p">))</span>
+    <span class="n">body</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"&lt;h1&gt;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&lt;/h1&gt;"</span><span class="p">]</span>
+
+    <span class="c1"># --- verdict (BLUF) ---------------------------------------------------</span>
+    <span class="n">verdict</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s1">'&lt;div class="rec"&gt;Verdict: '</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">recommendation</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span><span class="w"> </span><span class="s1">' '</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span><span class="si">}</span><span class="s2">&lt;/div&gt;"</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s1">'&lt;div class="meta"&gt;confidence: </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s1"> · '</span>
+        <span class="sa">f</span><span class="s2">"fit: </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">score_summary</span><span class="o">.</span><span class="n">fit_band</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="o">+</span> <span class="p">(</span><span class="sa">f</span><span class="s2">" · </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">created_at</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">created_at</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">"&lt;/div&gt;"</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">headline</span><span class="p">:</span>
+        <span class="n">verdict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;p&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">headline</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/p&gt;"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">key_reasons</span><span class="p">:</span>
+        <span class="n">verdict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="s1">'&lt;ul class="plain"&gt;'</span>
+            <span class="o">+</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;li&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/li&gt;"</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">key_reasons</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+            <span class="o">+</span> <span class="s2">"&lt;/ul&gt;"</span>
+        <span class="p">)</span>
+    <span class="n">by_bucket</span><span class="p">,</span> <span class="n">unknowns</span> <span class="o">=</span> <span class="n">_group_by_bucket</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">score_summary</span><span class="o">.</span><span class="n">bucket_counts</span>
+    <span class="k">if</span> <span class="n">counts</span> <span class="ow">or</span> <span class="n">report</span><span class="o">.</span><span class="n">requirements</span><span class="p">:</span>
+        <span class="n">chips</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">"&lt;li&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">_BUCKET_HEADINGS</span><span class="p">[</span><span class="n">b</span><span class="p">])</span><span class="si">}</span><span class="s2">: "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">by_bucket</span><span class="p">[</span><span class="n">b</span><span class="p">]))</span><span class="si">}</span><span class="s2">&lt;/li&gt;"</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span>
+        <span class="p">]</span>
+        <span class="n">chips</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;li&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">_UNKNOWN_HEADING</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unknowns</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/li&gt;"</span><span class="p">)</span>
+        <span class="n">verdict</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">'&lt;ul class="counts"&gt;</span><span class="si">{</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chips</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/ul&gt;'</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">'&lt;section class="verdict"&gt;</span><span class="si">{</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">verdict</span><span class="p">)</span><span class="si">}</span><span class="s1">&lt;/section&gt;'</span><span class="p">)</span>
+
+    <span class="c1"># --- blocking gaps, buckets, unknowns ---------------------------------</span>
+    <span class="n">body</span> <span class="o">+=</span> <span class="n">_html_records</span><span class="p">(</span><span class="s2">"⛔ Blocking gaps"</span><span class="p">,</span> <span class="n">report</span><span class="o">.</span><span class="n">blocking_gaps</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">bucket</span> <span class="ow">in</span> <span class="n">_BUCKET_ORDER</span><span class="p">:</span>
+        <span class="n">body</span> <span class="o">+=</span> <span class="n">_html_records</span><span class="p">(</span><span class="n">_BUCKET_HEADINGS</span><span class="p">[</span><span class="n">bucket</span><span class="p">],</span> <span class="n">by_bucket</span><span class="p">[</span><span class="n">bucket</span><span class="p">])</span>
+    <span class="n">body</span> <span class="o">+=</span> <span class="n">_html_records</span><span class="p">(</span><span class="n">_UNKNOWN_HEADING</span><span class="p">,</span> <span class="n">unknowns</span><span class="p">)</span>
+
+    <span class="c1"># --- clarifications ---------------------------------------------------</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">clarifications</span><span class="p">:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">clarifications</span><span class="p">:</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">escape</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">question</span> <span class="ow">or</span> <span class="s2">"(question to be drafted)"</span><span class="p">)</span>
+            <span class="n">why</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s1">'&lt;div class="meta"&gt;why: </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span><span class="si">}</span><span class="s1"> '</span>
+                <span class="sa">f</span><span class="s2">"(info-gain </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">info_gain</span><span class="si">}</span><span class="s2">)&lt;/div&gt;"</span>
+                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">reason</span>
+                <span class="k">else</span> <span class="s2">""</span>
+            <span class="p">)</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;li&gt;</span><span class="si">{</span><span class="n">q</span><span class="si">}{</span><span class="n">why</span><span class="si">}</span><span class="s2">&lt;/li&gt;"</span><span class="p">)</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"&lt;h2&gt;❓ Questions to clarify (highest-value first)&lt;/h2&gt;"</span><span class="p">)</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;ol&gt;</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/ol&gt;"</span><span class="p">)</span>
+
+    <span class="c1"># --- next actions -----------------------------------------------------</span>
+    <span class="k">if</span> <span class="n">report</span><span class="o">.</span><span class="n">next_actions</span><span class="p">:</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">report</span><span class="o">.</span><span class="n">next_actions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">priority</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]:</span>
+            <span class="n">effect</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">" — </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">expected_effect</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">expected_effect</span> <span class="k">else</span> <span class="s2">""</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;li&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">action</span><span class="p">)</span><span class="si">}{</span><span class="n">effect</span><span class="si">}</span><span class="s2">&lt;/li&gt;"</span><span class="p">)</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"&lt;h2&gt;Next actions&lt;/h2&gt;"</span><span class="p">)</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;ol&gt;</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/ol&gt;"</span><span class="p">)</span>
+
+    <span class="c1"># --- interview prep ---------------------------------------------------</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="n">report</span><span class="o">.</span><span class="n">interview_prep</span>
+    <span class="k">if</span> <span class="n">ip</span><span class="o">.</span><span class="n">summary</span> <span class="ow">or</span> <span class="n">ip</span><span class="o">.</span><span class="n">talking_points</span> <span class="ow">or</span> <span class="n">ip</span><span class="o">.</span><span class="n">proactive_disclosure</span><span class="p">:</span>
+        <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"&lt;h2&gt;Interview prep&lt;/h2&gt;"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ip</span><span class="o">.</span><span class="n">summary</span><span class="p">:</span>
+            <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;p&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/p&gt;"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ip</span><span class="o">.</span><span class="n">talking_points</span><span class="p">:</span>
+            <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="s1">'&lt;ul class="plain"&gt;'</span>
+                <span class="o">+</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;li&gt;</span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/li&gt;"</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ip</span><span class="o">.</span><span class="n">talking_points</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">"&lt;/ul&gt;"</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">ip</span><span class="o">.</span><span class="n">proactive_disclosure</span><span class="p">:</span>
+            <span class="n">body</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"&lt;p&gt;&lt;em&gt;Proactive disclosure:&lt;/em&gt; </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">ip</span><span class="o">.</span><span class="n">proactive_disclosure</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/p&gt;"</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="s1">'&lt;!doctype html&gt;</span><span class="se">\n</span><span class="s1">&lt;html lang="en"&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;'</span>
+        <span class="s1">'&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;'</span>
+        <span class="sa">f</span><span class="s2">"&lt;title&gt;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&lt;/title&gt;&lt;style&gt;</span><span class="si">{</span><span class="n">_HTML_CSS</span><span class="si">}</span><span class="s2">&lt;/style&gt;&lt;/head&gt;"</span>
+        <span class="sa">f</span><span class="s2">"&lt;body&gt;&lt;main&gt;</span><span class="si">{</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">body</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/main&gt;&lt;/body&gt;&lt;/html&gt;</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="p">)</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># Format registry (strategy) + dispatcher</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1">#: ``format name -&gt; renderer``. Register a new format by adding an entry.</span>
+<span class="n">REPORT_RENDERERS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">AlignmentReport</span><span class="p">],</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"markdown"</span><span class="p">:</span> <span class="n">render_report_markdown</span><span class="p">,</span>
+    <span class="s2">"md"</span><span class="p">:</span> <span class="n">render_report_markdown</span><span class="p">,</span>
+    <span class="s2">"html"</span><span class="p">:</span> <span class="n">render_report_html</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="render_report">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.report.html#hired.render_report">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">render_report</span><span class="p">(</span>
+    <span class="n">report</span><span class="p">:</span> <span class="n">AlignmentReport</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">fmt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"markdown"</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Render ``report`` (a model or its JSON dict) in the named format.</span>
+
+<span class="sd">    &gt;&gt;&gt; from hired.alignment import AlignmentReport, Verdict, Recommendation</span>
+<span class="sd">    &gt;&gt;&gt; r = {'job_id': 'ds', 'verdict': {'recommendation': 'apply'}}</span>
+<span class="sd">    &gt;&gt;&gt; render_report(r).splitlines()[0]</span>
+<span class="sd">    '# Alignment: ds'</span>
+<span class="sd">    &gt;&gt;&gt; render_report(r, 'pdf')</span>
+<span class="sd">    Traceback (most recent call last):</span>
+<span class="sd">      ...</span>
+<span class="sd">    ValueError: Unknown report format 'pdf'; choose from: html, markdown, md</span>
+<span class="sd">    """</span>
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">REPORT_RENDERERS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">renderer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Unknown report format </span><span class="si">{</span><span class="n">fmt</span><span class="si">!r}</span><span class="s2">; choose from: "</span>
+            <span class="o">+</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">REPORT_RENDERERS</span><span class="p">))</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">renderer</span><span class="p">(</span><span class="n">AlignmentReport</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">report</span><span class="p">))</span></div>
 
 </pre></div>
 

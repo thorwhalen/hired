@@ -1,0 +1,13 @@
+hired.alignment.assemble
+========================
+
+.. automodule:: hired.alignment.assemble
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      finalize_report
+      is_blocking
+   

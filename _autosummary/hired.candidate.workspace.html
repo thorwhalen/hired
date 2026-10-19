@@ -34,6 +34,7 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx_autodoc_typehints.css?v=057ac668" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/epythet.css?v=c5337052" />
   
@@ -43,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=3294188c"></script>
+    <script src="../_static/documentation_options.js?v=f91d8841"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,12 +53,12 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="hired.config" href="hired.config.html" />
+    <link rel="next" title="hired.cli" href="hired.cli.html" />
     <link rel="prev" title="hired.candidate.topics" href="hired.candidate.topics.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.23" />
+  <meta name="docsearch:version" content="0.0.24" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -320,6 +321,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="hired.html">hired</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 has-children"><a class="reference internal" href="hired.alignment.html">hired.alignment</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="hired.alignment.assemble.html">hired.alignment.assemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.base.html">hired.alignment.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.diff.html">hired.alignment.diff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.elicitation.html">hired.alignment.elicitation</a></li>
@@ -338,6 +340,7 @@
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">hired.candidate.workspace</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="hired.cli.html">hired.cli</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.config.html">hired.config</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.content.html">hired.content</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hired.cover_letter.html">hired.cover_letter</a></li>
@@ -485,12 +488,28 @@ agent has both the candidate’s knowledge and the engagement’s work products 
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.workspace.JDWorkspace.save_alignment">
+<span class="sig-name descname"><span class="pre">save_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">draft</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_alignment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.workspace.JDWorkspace.save_alignment" title="Link to this definition">#</a></dt>
+<dd><p>Finalize an analyst-drafted alignment report and save it; return it.</p>
+<p>Whatever produced the draft — the <code class="docutils literal notranslate"><span class="pre">hired-align</span></code> skill, the <code class="docutils literal notranslate"><span class="pre">hired</span>
+<span class="pre">analyze</span></code> command, or an injected-LLM analyzer — this is the one path from
+a draft to a persisted report: <a class="reference internal" href="hired.alignment.html#hired.alignment.finalize_report" title="hired.alignment.finalize_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">finalize_report()</span></code></a>
+re-derives everything deterministic, then <a class="reference internal" href="#hired.candidate.workspace.JDWorkspace.save_report" title="hired.candidate.workspace.JDWorkspace.save_report"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save_report()</span></code></a> archives the
+previous version. <code class="docutils literal notranslate"><span class="pre">job_id</span></code> overrides the draft’s own.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hired.candidate.workspace.JDWorkspace.save_briefing">
 <span class="sig-name descname"><span class="pre">save_briefing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_briefing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.workspace.JDWorkspace.save_briefing" title="Link to this definition">#</a></dt>
 <dd><p>Persist an interview-prep research briefing (keyed by subject/job).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -501,7 +520,7 @@ agent has both the candidate’s knowledge and the engagement’s work products 
 <dd><p>Persist a company/people research report (keyed by company name).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -511,10 +530,12 @@ agent has both the candidate’s knowledge and the engagement’s work products 
 <span class="sig-name descname"><span class="pre">save_report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">archive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/workspace.html#JDWorkspace.save_report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.workspace.JDWorkspace.save_report" title="Link to this definition">#</a></dt>
 <dd><p>Persist the current alignment report, archiving the prior one first.</p>
 <p>Archiving (on by default) snapshots any existing report into
-<code class="docutils literal notranslate"><span class="pre">report_history</span></code> so the alignment-review agent can diff versions.</p>
+<code class="docutils literal notranslate"><span class="pre">report_history</span></code> so the alignment-review agent can diff versions. The
+snapshot is keyed by the <em>archived</em> report’s <code class="docutils literal notranslate"><span class="pre">created_at</span></code> (else now),
+made filename-safe, and never overwrites an earlier snapshot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><span class="highlight sphinx_autodoc_typehints-value"><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="kc"><span class="pre">None</span></span></code></a></span></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -543,11 +564,11 @@ agent has both the candidate’s knowledge and the engagement’s work products 
       </div>
     </a>
     <a class="right-next"
-       href="hired.config.html"
+       href="hired.cli.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">hired.config</p>
+        <p class="prev-next-title">hired.cli</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -572,6 +593,7 @@ agent has both the candidate’s knowledge and the engagement’s work products 
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.workspace.JDWorkspace"><code class="docutils literal notranslate"><span class="pre">JDWorkspace</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.workspace.JDWorkspace.report_versions"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.report_versions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.workspace.JDWorkspace.save_alignment"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_alignment()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.workspace.JDWorkspace.save_briefing"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_briefing()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.workspace.JDWorkspace.save_company_report"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_company_report()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.workspace.JDWorkspace.save_report"><code class="docutils literal notranslate"><span class="pre">JDWorkspace.save_report()</span></code></a></li>

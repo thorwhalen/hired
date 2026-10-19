@@ -9,10 +9,11 @@
 - [API reference](api.html.md): | &#96;hired&#96;   | Public API for the hired package.   |
 - [hired](_autosummary/hired.html.md): Public API for the hired package.
 - [hired.alignment](_autosummary/hired.alignment.html.md): JD-vs-candidate alignment: classify each requirement honestly into four buckets.
+- [hired.alignment.assemble](_autosummary/hired.alignment.assemble.html.md): Deterministically finalize an analyst-drafted &#96;AlignmentReport&#96;.
 - [hired.alignment.base](_autosummary/hired.alignment.base.html.md): Schemas for JD-vs-candidate alignment analysis.
 - [hired.alignment.diff](_autosummary/hired.alignment.diff.html.md): Deterministic diff between two alignment reports.
 - [hired.alignment.elicitation](_autosummary/hired.alignment.elicitation.html.md): The honesty loop: rank unknowns into the most informative questions first.
-- [hired.alignment.report](_autosummary/hired.alignment.report.html.md): Render an &#96;AlignmentReport&#96; to Markdown.
+- [hired.alignment.report](_autosummary/hired.alignment.report.html.md): Render an &#96;AlignmentReport&#96; to Markdown or HTML.
 - [hired.alignment.rubric](_autosummary/hired.alignment.rubric.html.md): Deterministic bucket assignment — the two-axis rubric in code.
 - [hired.ats_checker](_autosummary/hired.ats_checker.html.md): ATS (Applicant Tracking System) compatibility checker.
 - [hired.base](_autosummary/hired.base.html.md): Core data models and protocols for the hired package.
@@ -23,6 +24,7 @@
 - [hired.candidate.state](_autosummary/hired.candidate.state.html.md): Refresh bookkeeping: per-source content digests + last-refresh timestamps.
 - [hired.candidate.topics](_autosummary/hired.candidate.topics.html.md): Topic dossiers — “a little, or a whole lot” about any subject the candidate shares.
 - [hired.candidate.workspace](_autosummary/hired.candidate.workspace.html.md): The per-engagement facade: alignment reports, company research, interview prep.
+- [hired.cli](_autosummary/hired.cli.html.md): Command-line operations for the candidate-knowledge + JD-alignment workflow.
 - [hired.config](_autosummary/hired.config.html.md): Configuration management using Mapping interfaces.
 - [hired.content](_autosummary/hired.content.html.md): Content generation logic and AI agent implementations.
 - [hired.cover_letter](_autosummary/hired.cover_letter.html.md): Cover letter generation functionality.
@@ -50,7 +52,7 @@
 - [hired.tracking](_autosummary/hired.tracking.html.md): Application tracking system for managing job applications.
 - [hired.util](_autosummary/hired.util.html.md): Utilities for external dependencies and general helpers.
 - [For AI agents](ai-agents.html.md): &#96;hired&#96; ships artifacts for coding agents alongside its code. This page lists
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-14 02:29 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-19 12:51 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 

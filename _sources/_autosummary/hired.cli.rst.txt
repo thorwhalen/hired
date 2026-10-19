@@ -1,0 +1,27 @@
+hired.cli
+=========
+
+.. automodule:: hired.cli
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      CLI_FUNCS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      add_source
+      analyze
+      facts
+      ingest
+      jds
+      report
+      reports
+      status
+      synopsis
+      users
+   

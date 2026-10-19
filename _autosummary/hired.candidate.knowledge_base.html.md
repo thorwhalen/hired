@@ -18,7 +18,7 @@ interview prep — does **not** live here; it lives in a per-engagement
 | [`CandidateKnowledgeBase`](#hired.candidate.knowledge_base.CandidateKnowledgeBase)([user, store])   | Accumulated, open-world knowledge about a single candidate (user-level).   |
 |------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 
-### *class* hired.candidate.knowledge_base.CandidateKnowledgeBase(user='me', , store=None)
+### *class* hired.candidate.knowledge_base.CandidateKnowledgeBase(user=None, , store=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -27,7 +27,7 @@ Accumulated, open-world knowledge about a single candidate (user-level).
 ```pycon
 >>> import tempfile, os
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
->>> kb = CandidateKnowledgeBase()                 # default candidate "me"
+>>> kb = CandidateKnowledgeBase()       # default candidate: $HIRED_USER, else "me"
 >>> from hired.candidate.base import Fact, FactCategory
 >>> _ = kb.add_fact(Fact(statement='Built ML pipelines in Python',
 ...                       category=FactCategory.SKILL, tags=['python', 'ml']))
@@ -76,6 +76,18 @@ hidden). `tags` matches facts containing *any* of the given tags.
 
 * **Return type:**
   [`Iterator`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[`Fact`](hired.candidate.base.html.md#hired.candidate.base.Fact)]
+
+#### ingest_source(name, records)
+
+Distill extracted fact `records` for raw source `name` into facts.
+
+Quotes are checked against the source, facts from a prior ingest of the
+same source are superseded, and the source stops being pending. Returns
+`(added_fact_ids, superseded_fact_ids)`. See
+`hired.candidate.refresh.ingest_source()`.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 #### jd(jd_id, , company=None, label=None)
 
