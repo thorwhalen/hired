@@ -528,3 +528,30 @@ def test_a_missing_embedder_fails_before_fetching(tmp_path, monkeypatch):
             root=str(tmp_path / "t"), embeddings=True, get_json=lambda u, p: calls.append(p)
         )
     assert calls == []
+
+
+def test_resolve_prefers_skills_over_technology_and_reranks_by_embedding():
+    """#58: short free text should not land on product/software nodes."""
+    nodes = [
+        SkillNode(id="onet:sw", label="Sales software", source="onet", kind="technology"),
+        SkillNode(id="esco:sa", label="sales activities", source="esco"),
+        SkillNode(id="esco:sm", label="sales methods", source="esco"),
+    ]
+    assert SkillIndex(nodes, {}).resolve("sales").id == "esco:sa"
+    # kind_weights is the knob: neutral weights fall back to the label order
+    neutral = SkillIndex(nodes, {}, kind_weights={})
+    assert neutral.resolve("sales").id == "esco:sa"
+    # with vectors, the token tie is broken by embedding similarity
+    np = pytest.importorskip("numpy")
+    vectors = np.array([[1.0, 0.0], [0.0, 1.0], [0.6, 0.8]])
+
+    def embedder(texts):
+        return np.array([[0.0, 1.0] for _ in texts])
+
+    idx = SkillIndex(
+        nodes, {}, vectors=vectors, vector_ids=["onet:sw", "esco:sa", "esco:sm"],
+        embedder=embedder,
+    )
+    ranked = idx.lookup("sales")
+    assert [m.node.id for m in ranked] == ["esco:sa", "esco:sm", "onet:sw"]
+    assert ranked[0].how == "tokens" and ranked[0].score == 0.5
