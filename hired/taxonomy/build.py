@@ -153,13 +153,17 @@ def build_skill_index(
 
 
 def load_skill_index(
-    *, root: str | None = None, embedder: Embedder | str | None = "auto"
+    *,
+    root: str | None = None,
+    embedder: Embedder | str | None = "auto",
+    **index_kwargs: Any,
 ) -> SkillIndex:
     """Load the built taxonomy (raises ``FileNotFoundError`` with the build hint).
 
     ``embedder="auto"`` uses the stored embedding model for *query* text when the
     taxonomy has vectors and the ``embeddings`` extra is installed (loaded on first
     use); pass ``None`` to compare stored vectors only, or any embedder.
+    ``index_kwargs`` go to :class:`SkillIndex` (e.g. ``bridge_k``).
     """
     path = taxonomy_dir(root=root, make=False)
     raw_nodes = read_json_file(os.path.join(path, NODES_FILE))
@@ -185,6 +189,7 @@ def load_skill_index(
         vector_ids=vector_ids,
         embedder=embedder,
         meta=meta,
+        **index_kwargs,
     )
 
 

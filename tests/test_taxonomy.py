@@ -415,3 +415,52 @@ def test_taxonomy_import_is_light():
         "assert not bad, bad"
     )
     subprocess.run([sys.executable, "-c", code], check=True)
+
+
+def _two_source_index(**kwargs):
+    """O*NET tech node with no edges of its own; ESCO graph links its namesake."""
+    nodes = [
+        SkillNode(id="onet:tf", label="TensorFlow", source="onet", kind="technology"),
+        SkillNode(id="esco:tf", label="TensorFlow framework", source="esco"),
+        SkillNode(id="esco:dl", label="deep learning", source="esco"),
+        SkillNode(id="esco:cook", label="cooking", source="esco"),
+    ]
+    edges = {"esco:tf": [("esco:dl", 0.8)], "esco:dl": [("esco:tf", 0.8)]}
+    return SkillIndex(nodes, edges, **kwargs)
+
+
+def test_cross_source_bridge_lets_the_graph_propagate():
+    idx = _two_source_index()
+    assert idx._bridges("onet:tf") == {"esco:tf": 0.5}
+    p = idx.proximity("onet:tf", "deep learning")
+    assert p.graph == pytest.approx(0.4)  # bridge 0.5 x ESCO link 0.8
+    assert idx.proximity("onet:tf", "cooking").graph == 0.0
+    no_bridge = _two_source_index(bridge_k=0)
+    assert no_bridge.proximity("onet:tf", "deep learning").graph == 0.0
+
+
+def test_no_shared_source_falls_back_to_cosine():
+    np = pytest.importorskip("numpy")
+    vocab = ["tensorflow", "deep", "learning", "cooking", "framework"]
+
+    def embed(texts):
+        rows = []
+        for t in texts:
+            toks = normalize_label(t).split()
+            rows.append([float(toks.count(w)) for w in vocab] + [1e-3])
+        return np.asarray(rows)
+
+    nodes = [
+        SkillNode(id="onet:tf", label="TensorFlow deep learning", source="onet"),
+        SkillNode(id="esco:dl", label="deep learning", source="esco"),
+        SkillNode(id="esco:cook", label="cooking", source="esco"),
+    ]
+    # no bridges: the graph cannot see across sources, so cosine decides alone
+    idx = SkillIndex(nodes, {}, embedder=embed, bridge_k=0)
+    p = idx.proximity("onet:tf", "esco:dl")
+    assert p.alpha == 1.0 and p.score == pytest.approx(p.cosine, abs=1e-4)
+    # same source, graph says 0: that is evidence, so the blend stays
+    same = idx.proximity("esco:dl", "esco:cook")
+    assert same.alpha == 0.5
+    off = SkillIndex(nodes, {}, embedder=embed, bridge_k=0, cross_source_fallback=False)
+    assert off.proximity("onet:tf", "esco:dl").alpha == 0.5

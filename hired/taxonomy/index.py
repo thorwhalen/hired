@@ -13,6 +13,13 @@ requirement Y?* by blending two signals::
   which also covers skills absent from both taxonomies. Without vectors,
   ``alpha`` is effectively 0 and the score is graph-only — :class:`Proximity`
   records the ``alpha`` actually used.
+- **bridges** across sources: the ESCO and O*NET graphs share no occupations,
+  so a node is also linked to its closest nodes in the *other* sources (token
+  overlap of labels, then embedding similarity), weighted by that closeness.
+  Graph relatedness then propagates through the bridge. When the two skills
+  still have no source in common, the graph has no say and the score falls
+  back to cosine alone (``alpha`` 1), rather than reading the missing evidence
+  as unrelatedness.
 
 The index *suggests*; the analyst (skill or LLM) still decides the record's
 ``match_type`` / ``transferability``. :meth:`SkillIndex.suggest_adjacency` ranks
@@ -91,8 +98,8 @@ class Proximity:
             bits.append(f"same taxonomy concept '{self.a_node.label}'")
         elif self.graph > 0 and self.via is not None:
             bits.append(
-                f"both co-occur with '{self.via.label}' in occupations "
-                f"(relatedness {self.graph:.2f})"
+                f"both relate to '{self.via.label}' ({self.via.source}) "
+                f"in occupations (relatedness {self.graph:.2f})"
             )
         elif self.graph > 0:
             bits.append(
@@ -134,6 +141,9 @@ class SkillIndex:
         vector_ids: Sequence[str] | None = None,
         embedder: Embedder | None = None,
         meta: dict[str, Any] | None = None,
+        bridge_k: int = 3,
+        bridge_min_score: float = 0.5,
+        cross_source_fallback: bool = True,
     ) -> None:
         self.nodes: dict[str, SkillNode] = {n.id: n for n in nodes}
         self._edges = edges
@@ -141,6 +151,10 @@ class SkillIndex:
         self._vector_row = {v: i for i, v in enumerate(vector_ids or [])}
         self.embedder = embedder
         self.meta: dict[str, Any] = meta or {}
+        self.bridge_k = bridge_k
+        self.bridge_min_score = bridge_min_score
+        self.cross_source_fallback = cross_source_fallback
+        self._bridge_cache: dict[str, dict[str, float]] = {}
 
     def __len__(self) -> int:
         return len(self.nodes)
@@ -244,22 +258,75 @@ class SkillIndex:
     def _links(self, node_id: str) -> dict[str, float]:
         return dict(self._edges.get(node_id, ()))
 
+    def _bridges(self, node_id: str) -> dict[str, float]:
+        """Closest nodes in *other* sources, weighted by label closeness (cached)."""
+        if node_id in self._bridge_cache:
+            return self._bridge_cache[node_id]
+        node = self.nodes[node_id]
+        k, floor = self.bridge_k, self.bridge_min_score
+        found: dict[str, float] = {}
+        for label in (node.label, *node.alt_labels):
+            key = normalize_label(label)
+            for m in self._token_matches(key, k=k * 4, min_score=floor):
+                if m.node.source != node.source:
+                    found[m.node.id] = max(found.get(m.node.id, 0.0), m.score)
+        row = self._vector_row.get(node_id)
+        if len(found) < k and row is not None and self._unit_vectors is not None:
+            ids = list(self._vector_row)
+            sims = self._unit_vectors @ self._unit_vectors[row]
+            for i in sims.argsort()[::-1][: k * 4]:
+                other = ids[i]
+                if sims[i] < floor:
+                    break
+                if other in self.nodes and self.nodes[other].source != node.source:
+                    found.setdefault(other, round(float(sims[i]), 4))
+        top = dict(sorted(found.items(), key=lambda kv: -kv[1])[:k])
+        self._bridge_cache[node_id] = top
+        return top
+
+    def _weighted_equivalents(self, node_id: str) -> dict[str, float]:
+        """Equivalent ids (weight 1) plus their cross-source bridges (weight < 1)."""
+        out = dict.fromkeys(self._equivalents(node_id), 1.0)
+        for x in list(out):
+            for other, w in self._bridges(x).items():
+                if w > out.get(other, 0.0):
+                    out[other] = w
+        return out
+
+    def _sources(self, ids: Iterable[str]) -> set[str]:
+        return {self.nodes[i].source for i in ids if i in self.nodes}
+
     def graph_score(self, a_id: str, b_id: str) -> tuple[float, str | None]:
-        """Relatedness of two nodes (direct, or via one shared neighbour) and the via id."""
-        a_set, b_set = self._equivalents(a_id), self._equivalents(b_id)
-        if a_set & b_set:
-            return 1.0, None
+        """Relatedness of two nodes (direct, or via one shared neighbour) and the via id.
+
+        Equivalent nodes count fully; cross-source bridges count with their weight.
+        """
+        a_set = self._weighted_equivalents(a_id)
+        b_set = self._weighted_equivalents(b_id)
         best, via = 0.0, None
-        for x in a_set:
+        for x, wx in a_set.items():
             x_links = self._links(x)
-            for y in b_set:
-                best = max(best, x_links.get(y, 0.0))
+            for y, wy in b_set.items():
+                w = wx * wy
+                if x == y:
+                    if w > best:  # a bridge lands on the other side itself
+                        best, via = w, (None if w == 1.0 else x)
+                    continue
+                if w * x_links.get(y, 0.0) > best:
+                    best, via = w * x_links[y], None
                 y_links = self._links(y)
                 for mid in x_links.keys() & y_links.keys():
-                    score = x_links[mid] * y_links[mid]
+                    score = w * x_links[mid] * y_links[mid]
                     if score > best:
                         best, via = score, mid
         return round(best, 4), via
+
+    def graph_comparable(self, a_id: str, b_id: str) -> bool:
+        """Whether the graph can speak to this pair: some source holds both sides."""
+        return bool(
+            self._sources(self._weighted_equivalents(a_id))
+            & self._sources(self._weighted_equivalents(b_id))
+        )
 
     def neighbors(self, text: str, *, k: int = 10) -> list[tuple[SkillNode, float]]:
         """The skills most related to ``text`` in the co-occurrence graph."""
@@ -293,6 +360,13 @@ class SkillIndex:
         va, vb = self._vector(a, a_node), self._vector(b, b_node)
         cosine = None if va is None or vb is None else round(float(va @ vb), 4)
         used = alpha if cosine is not None else 0.0
+        if (
+            cosine is not None
+            and self.cross_source_fallback
+            and graph == 0.0
+            and not (a_node and b_node and self.graph_comparable(a_node.id, b_node.id))
+        ):
+            used = 1.0  # no source holds both: missing graph evidence, not unrelatedness
         score = used * max(cosine or 0.0, 0.0) + (1 - used) * graph
         return Proximity(
             a=a,
