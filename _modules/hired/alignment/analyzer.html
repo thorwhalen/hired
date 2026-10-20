@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../../../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -1077,8 +1077,7 @@ window.runMermaid = runMermaid;</script>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_facts_block</span><span class="p">(</span><span class="n">facts</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Fact</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">]</span><span class="si">{</span><span class="s1">' (NEGATION)'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">is_negation</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">''</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">statement</span><span class="si">}</span><span class="s2">"</span>
-        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">facts</span>
+        <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">]</span><span class="si">{</span><span class="s1">' (NEGATION)'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">is_negation</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">''</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">statement</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">facts</span>
     <span class="p">)</span>
 
 
@@ -1184,9 +1183,7 @@ window.runMermaid = runMermaid;</script>
                 <span class="n">uncertainty_reason</span><span class="o">=</span><span class="s2">"no fact in the knowledge base mentions this"</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="n">by_id</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">facts</span><span class="p">}</span>
-        <span class="n">prompt</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"REQUIREMENT: </span><span class="si">{</span><span class="n">requirement</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">FACTS:</span><span class="se">\n</span><span class="si">{</span><span class="n">_facts_block</span><span class="p">(</span><span class="n">facts</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
-        <span class="p">)</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"REQUIREMENT: </span><span class="si">{</span><span class="n">requirement</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">FACTS:</span><span class="se">\n</span><span class="si">{</span><span class="n">_facts_block</span><span class="p">(</span><span class="n">facts</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
         <span class="n">gated</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">_gate</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_ask_json</span><span class="p">(</span><span class="n">_JUDGE_PROMPT</span><span class="p">,</span> <span class="n">prompt</span><span class="p">),</span>
@@ -1228,8 +1225,7 @@ window.runMermaid = runMermaid;</script>
             <span class="nb">list</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span> <span class="k">if</span> <span class="n">requirements</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">jd_text</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">records</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">classify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">facts</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">top_k</span><span class="p">)))</span>
-            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reqs</span>
+            <span class="n">classify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">facts</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">top_k</span><span class="p">)))</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reqs</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">records</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"no requirements to analyse: none were extracted"</span><span class="p">)</span>
@@ -1256,7 +1252,9 @@ window.runMermaid = runMermaid;</script>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">judgment</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_JUDGMENT_FIELDS</span> <span class="k">if</span> <span class="n">judgment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>  <span class="c1"># drop what does not validate (a made-up enum, say)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">RequirementRecord</span><span class="o">.</span><span class="n">model_validate</span><span class="p">({</span><span class="s2">"requirement"</span><span class="p">:</span> <span class="n">requirement</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="n">name</span><span class="p">]})</span>
+            <span class="n">RequirementRecord</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span>
+                <span class="p">{</span><span class="s2">"requirement"</span><span class="p">:</span> <span class="n">requirement</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="n">name</span><span class="p">]}</span>
+            <span class="p">)</span>
         <span class="k">except</span> <span class="n">ValidationError</span><span class="p">:</span>
             <span class="k">del</span> <span class="n">fields</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
     <span class="n">fact</span> <span class="o">=</span> <span class="n">facts_by_id</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">judgment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fact_id"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)))</span>

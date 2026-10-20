@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -451,7 +451,8 @@ and several candidates coexist under <code class="docutils literal notranslate">
 <p>The <em>intelligence</em> stays outside: <code class="docutils literal notranslate"><span class="pre">ingest</span></code> takes fact records an extractor (the
 <code class="docutils literal notranslate"><span class="pre">hired-profile-ingest</span></code> subagent, or an LLM) already produced, and <code class="docutils literal notranslate"><span class="pre">analyze</span></code>
 takes an analyst-drafted report; the commands validate, derive what is
-deterministic, and persist.</p>
+deterministic, and persist. <code class="docutils literal notranslate"><span class="pre">align</span></code> is the one exception: it runs the
+injected-LLM analyzer (<a class="reference internal" href="hired.alignment.analyzer.html#module-hired.alignment.analyzer" title="hired.alignment.analyzer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.alignment.analyzer</span></code></a>) on raw JD text.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">json</span><span class="o">,</span><span class="w"> </span><span class="nn">tempfile</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">'HIRED_DATA_DIR'</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">work</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
@@ -483,31 +484,34 @@ deterministic, and persist.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.add_source" title="hired.cli.add_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_source</span></code></a>(path, *[, name, user])</p></td>
 <td><p>Store a raw source document (CV, bio, publication list...) for a candidate.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.analyze" title="hired.cli.analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze</span></code></a>(report, jd, *[, job_id, company, user])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.align" title="hired.cli.align"><code class="xref py py-obj docutils literal notranslate"><span class="pre">align</span></code></a>(jd, *, jd_text[, job_id, job_title, ...])</p></td>
+<td><p>Analyse a raw job description (the file <code class="docutils literal notranslate"><span class="pre">jd_text</span></code>) with an LLM and save the report.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.analyze" title="hired.cli.analyze"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze</span></code></a>(report, jd, *[, job_id, company, user])</p></td>
 <td><p>Finalize an analyst-drafted alignment report (JSON) and save it under engagement <code class="docutils literal notranslate"><span class="pre">jd</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.facts" title="hired.cli.facts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">facts</span></code></a>(*[, category, tag, user])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.facts" title="hired.cli.facts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">facts</span></code></a>(*[, category, tag, user])</p></td>
 <td><p>List a candidate's current (asserted) fact statements.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.ingest" title="hired.cli.ingest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ingest</span></code></a>(records, *[, source, user])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.ingest" title="hired.cli.ingest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ingest</span></code></a>(records, *[, source, user])</p></td>
 <td><p>Add extracted fact records (a JSON list) to a candidate's knowledge base.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.jds" title="hired.cli.jds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jds</span></code></a>(*[, user])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.jds" title="hired.cli.jds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jds</span></code></a>(*[, user])</p></td>
 <td><p>List a candidate's engagements (one per company; 1+ roles each).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.report" title="hired.cli.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>(jd[, job_id, fmt, output, user])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.report" title="hired.cli.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>(jd[, job_id, fmt, output, user])</p></td>
 <td><p>Render a saved alignment report (<code class="docutils literal notranslate"><span class="pre">--fmt</span> <span class="pre">markdown|html</span></code>).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.reports" title="hired.cli.reports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reports</span></code></a>(jd, *[, user])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.reports" title="hired.cli.reports"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reports</span></code></a>(jd, *[, user])</p></td>
 <td><p>List the job ids that have an alignment report in engagement <code class="docutils literal notranslate"><span class="pre">jd</span></code>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.status" title="hired.cli.status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">status</span></code></a>(*[, user])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.status" title="hired.cli.status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">status</span></code></a>(*[, user])</p></td>
 <td><p>Summarize a candidate's knowledge base: counts, pending material, engagements.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.synopsis" title="hired.cli.synopsis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synopsis</span></code></a>(*[, regenerate, user])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.synopsis" title="hired.cli.synopsis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">synopsis</span></code></a>(*[, regenerate, user])</p></td>
 <td><p>Print a candidate's synopsis (<code class="docutils literal notranslate"><span class="pre">--regenerate</span></code> rebuilds it from the facts).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#hired.cli.users" title="hired.cli.users"><code class="xref py py-obj docutils literal notranslate"><span class="pre">users</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.cli.users" title="hired.cli.users"><code class="xref py py-obj docutils literal notranslate"><span class="pre">users</span></code></a>()</p></td>
 <td><p>List the candidates that have data (one <code class="docutils literal notranslate"><span class="pre">users/&lt;user&gt;/</span></code> directory each).</p></td>
 </tr>
 </tbody>
@@ -515,7 +519,7 @@ deterministic, and persist.</p>
 </div>
 <dl class="py data">
 <dt class="sig sig-object py" id="hired.cli.CLI_FUNCS">
-<span class="sig-prename descclassname"><span class="pre">hired.cli.</span></span><span class="sig-name descname"><span class="pre">CLI_FUNCS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;function</span> <span class="pre">users&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">status&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">add_source&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">ingest&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">facts&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">synopsis&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">jds&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">analyze&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">reports&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">report&gt;]</span></span><a class="headerlink" href="#hired.cli.CLI_FUNCS" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">hired.cli.</span></span><span class="sig-name descname"><span class="pre">CLI_FUNCS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;function</span> <span class="pre">users&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">status&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">add_source&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">ingest&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">facts&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">synopsis&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">jds&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">analyze&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">align&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">reports&gt;,</span> <span class="pre">&lt;function</span> <span class="pre">report&gt;]</span></span><a class="headerlink" href="#hired.cli.CLI_FUNCS" title="Link to this definition">#</a></dt>
 <dd><p>The operations the <code class="docutils literal notranslate"><span class="pre">hired</span></code> command exposes (SSOT for every surface).</p>
 </dd></dl>
 
@@ -524,6 +528,24 @@ deterministic, and persist.</p>
 <span class="sig-prename descclassname"><span class="pre">hired.cli.</span></span><span class="sig-name descname"><span class="pre">add_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/cli.html#add_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.cli.add_source" title="Link to this definition">#</a></dt>
 <dd><p>Store a raw source document (CV, bio, publication list…) for a candidate.</p>
 <p>Prints the source key. Its facts are added later with <code class="docutils literal notranslate"><span class="pre">ingest</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.cli.align">
+<span class="sig-prename descclassname"><span class="pre">hired.cli.</span></span><span class="sig-name descname"><span class="pre">align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jd</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">jd_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nli</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/cli.html#align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.cli.align" title="Link to this definition">#</a></dt>
+<dd><p>Analyse a raw job description (the file <code class="docutils literal notranslate"><span class="pre">jd_text</span></code>) with an LLM and save the report.</p>
+<p>The autonomous counterpart of <code class="docutils literal notranslate"><span class="pre">analyze</span></code>: an LLM (the <code class="docutils literal notranslate"><span class="pre">ai</span></code> extra, an
+<code class="docutils literal notranslate"><span class="pre">OPENAI_API_KEY</span></code>) decomposes the JD and judges each requirement against the
+candidate’s facts, every judgment must quote a fact verbatim, and the verdict
+is computed deterministically. The JD text is stored as the job under
+engagement <code class="docutils literal notranslate"><span class="pre">jd</span></code>. <code class="docutils literal notranslate"><span class="pre">job_id</span></code> defaults to the file’s name without extension;
+<code class="docutils literal notranslate"><span class="pre">--n-samples</span></code> &gt; 1 samples each judgment for calibrated confidence; <code class="docutils literal notranslate"><span class="pre">--nli</span></code>
+adds an entailment check on every match.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
@@ -694,6 +716,7 @@ otherwise it is printed.</p>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.cli.CLI_FUNCS"><code class="docutils literal notranslate"><span class="pre">CLI_FUNCS</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.cli.add_source"><code class="docutils literal notranslate"><span class="pre">add_source()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.cli.align"><code class="docutils literal notranslate"><span class="pre">align()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.cli.analyze"><code class="docutils literal notranslate"><span class="pre">analyze()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.cli.facts"><code class="docutils literal notranslate"><span class="pre">facts()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.cli.ingest"><code class="docutils literal notranslate"><span class="pre">ingest()</span></code></a></li>

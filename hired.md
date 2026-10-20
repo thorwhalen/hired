@@ -1,4 +1,4 @@
-> built 2026-10-20 11:28 UTC from d8b7654 (main) · hired 0.0.30. Details: build_info.json
+> built 2026-10-20 11:32 UTC from ac34989 (main) · hired 0.0.31. Details: build_info.json
 
 # index.html.md
 
@@ -3340,7 +3340,8 @@ and several candidates coexist under `users/<user>/`.
 The *intelligence* stays outside: `ingest` takes fact records an extractor (the
 `hired-profile-ingest` subagent, or an LLM) already produced, and `analyze`
 takes an analyst-drafted report; the commands validate, derive what is
-deterministic, and persist.
+deterministic, and persist. `align` is the one exception: it runs the
+injected-LLM analyzer ([`hired.alignment.analyzer`](_autosummary/hired.alignment.analyzer.html.md#module-hired.alignment.analyzer)) on raw JD text.
 
 ```pycon
 >>> import os, json, tempfile
@@ -3368,6 +3369,7 @@ deterministic, and persist.
 
 | [`add_source`](_autosummary/hired.cli.html.md#hired.cli.add_source)(path, \*[, name, user])               | Store a raw source document (CV, bio, publication list...) for a candidate.            |
 |---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| [`align`](_autosummary/hired.cli.html.md#hired.cli.align)(jd, \*, jd_text[, job_id, job_title, ...]) | Analyse a raw job description (the file `jd_text`) with an LLM and save the report.    |
 | [`analyze`](_autosummary/hired.cli.html.md#hired.cli.analyze)(report, jd, \*[, job_id, company, user]) | Finalize an analyst-drafted alignment report (JSON) and save it under engagement `jd`. |
 | [`facts`](_autosummary/hired.cli.html.md#hired.cli.facts)(\*[, category, tag, user])                 | List a candidate's current (asserted) fact statements.                                 |
 | [`ingest`](_autosummary/hired.cli.html.md#hired.cli.ingest)(records, \*[, source, user])              | Add extracted fact records (a JSON list) to a candidate's knowledge base.              |
@@ -3378,7 +3380,7 @@ deterministic, and persist.
 | [`synopsis`](_autosummary/hired.cli.html.md#hired.cli.synopsis)(\*[, regenerate, user])                 | Print a candidate's synopsis (`--regenerate` rebuilds it from the facts).              |
 | [`users`](_autosummary/hired.cli.html.md#hired.cli.users)()                                          | List the candidates that have data (one `users/<user>/` directory each).               |
 
-### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function reports>, <function report>]*
+### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function align>, <function reports>, <function report>]*
 
 The operations the `hired` command exposes (SSOT for every surface).
 
@@ -3387,6 +3389,21 @@ The operations the `hired` command exposes (SSOT for every surface).
 Store a raw source document (CV, bio, publication list…) for a candidate.
 
 Prints the source key. Its facts are added later with `ingest`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.cli.align(jd, , jd_text, job_id=None, job_title='', company=None, model=None, n_samples=1, nli=False, user=None)
+
+Analyse a raw job description (the file `jd_text`) with an LLM and save the report.
+
+The autonomous counterpart of `analyze`: an LLM (the `ai` extra, an
+`OPENAI_API_KEY`) decomposes the JD and judges each requirement against the
+candidate’s facts, every judgment must quote a fact verbatim, and the verdict
+is computed deterministically. The JD text is stored as the job under
+engagement `jd`. `job_id` defaults to the file’s name without extension;
+`--n-samples` > 1 samples each judgment for calibrated confidence; `--nli`
+adds an entailment check on every match.
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
@@ -8473,16 +8490,18 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-10-20 11:28 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/d8b7654763f35c586479e14e4314d0c222308583"><code>d8b7654</code></a> on branch <code>main</code>, for **hired 0.0.30** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 11:32 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/ac34989fefb5c7284cb21dda17b5b0616f732487"><code>ac34989</code></a> on branch <code>main</code>, for **hired 0.0.31** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.31) is behind the latest release on PyPI (0.0.32): `pip install hired` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/d8b7654763f35c586479e14e4314d0c222308583"><code>d8b7654763f35c586479e14e4314d0c222308583</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/ac34989fefb5c7284cb21dda17b5b0616f732487"><code>ac34989fefb5c7284cb21dda17b5b0616f732487</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -8493,9 +8512,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39414965039">39414965039</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39415519527">39415519527</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>d8b7654763f35c586479e14e4314d0c222308583</code> (in the history of the built commit) |
+| Event commit | <code>ac34989fefb5c7284cb21dda17b5b0616f732487</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -8520,13 +8539,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.30/">0.0.30</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.32/">0.0.32</a>, newer than the documented version (0.0.31).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout d8b7654763f35c586479e14e4314d0c222308583
+git checkout ac34989fefb5c7284cb21dda17b5b0616f732487
 pip install "epythet==0.2.19"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

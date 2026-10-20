@@ -14,7 +14,8 @@ and several candidates coexist under `users/<user>/`.
 The *intelligence* stays outside: `ingest` takes fact records an extractor (the
 `hired-profile-ingest` subagent, or an LLM) already produced, and `analyze`
 takes an analyst-drafted report; the commands validate, derive what is
-deterministic, and persist.
+deterministic, and persist. `align` is the one exception: it runs the
+injected-LLM analyzer ([`hired.alignment.analyzer`](hired.alignment.analyzer.html.md#module-hired.alignment.analyzer)) on raw JD text.
 
 ```pycon
 >>> import os, json, tempfile
@@ -42,6 +43,7 @@ deterministic, and persist.
 
 | [`add_source`](#hired.cli.add_source)(path, \*[, name, user])               | Store a raw source document (CV, bio, publication list...) for a candidate.            |
 |---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| [`align`](#hired.cli.align)(jd, \*, jd_text[, job_id, job_title, ...]) | Analyse a raw job description (the file `jd_text`) with an LLM and save the report.    |
 | [`analyze`](#hired.cli.analyze)(report, jd, \*[, job_id, company, user]) | Finalize an analyst-drafted alignment report (JSON) and save it under engagement `jd`. |
 | [`facts`](#hired.cli.facts)(\*[, category, tag, user])                 | List a candidate's current (asserted) fact statements.                                 |
 | [`ingest`](#hired.cli.ingest)(records, \*[, source, user])              | Add extracted fact records (a JSON list) to a candidate's knowledge base.              |
@@ -52,7 +54,7 @@ deterministic, and persist.
 | [`synopsis`](#hired.cli.synopsis)(\*[, regenerate, user])                 | Print a candidate's synopsis (`--regenerate` rebuilds it from the facts).              |
 | [`users`](#hired.cli.users)()                                          | List the candidates that have data (one `users/<user>/` directory each).               |
 
-### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function reports>, <function report>]*
+### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function align>, <function reports>, <function report>]*
 
 The operations the `hired` command exposes (SSOT for every surface).
 
@@ -61,6 +63,21 @@ The operations the `hired` command exposes (SSOT for every surface).
 Store a raw source document (CV, bio, publication list…) for a candidate.
 
 Prints the source key. Its facts are added later with `ingest`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.cli.align(jd, , jd_text, job_id=None, job_title='', company=None, model=None, n_samples=1, nli=False, user=None)
+
+Analyse a raw job description (the file `jd_text`) with an LLM and save the report.
+
+The autonomous counterpart of `analyze`: an LLM (the `ai` extra, an
+`OPENAI_API_KEY`) decomposes the JD and judges each requirement against the
+candidate’s facts, every judgment must quote a fact verbatim, and the verdict
+is computed deterministically. The JD text is stored as the job under
+engagement `jd`. `job_id` defaults to the file’s name without extension;
+`--n-samples` > 1 samples each judgment for calibrated confidence; `--nli`
+adds an entailment check on every match.
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)

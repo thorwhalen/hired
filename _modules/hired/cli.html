@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../../_static/documentation_options.js?v=c5dbc6bb"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.30" />
+  <meta name="docsearch:version" content="0.0.31" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -726,7 +726,8 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">The *intelligence* stays outside: ``ingest`` takes fact records an extractor (the</span>
 <span class="sd">``hired-profile-ingest`` subagent, or an LLM) already produced, and ``analyze``</span>
 <span class="sd">takes an analyst-drafted report; the commands validate, derive what is</span>
-<span class="sd">deterministic, and persist.</span>
+<span class="sd">deterministic, and persist. ``align`` is the one exception: it runs the</span>
+<span class="sd">injected-LLM analyzer (:mod:`hired.alignment.analyzer`) on raw JD text.</span>
 
 <span class="sd">&gt;&gt;&gt; import os, json, tempfile</span>
 <span class="sd">&gt;&gt;&gt; os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()</span>
@@ -936,6 +937,11 @@ window.runMermaid = runMermaid;</script>
     <span class="n">validate_name</span><span class="p">(</span><span class="n">job_id</span> <span class="ow">or</span> <span class="n">draft</span><span class="o">.</span><span class="n">job_id</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"job id"</span><span class="p">)</span>
     <span class="n">ws</span> <span class="o">=</span> <span class="n">_kb</span><span class="p">(</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">jd</span><span class="p">(</span><span class="n">jd</span><span class="p">,</span> <span class="n">company</span><span class="o">=</span><span class="n">company</span> <span class="ow">or</span> <span class="n">draft</span><span class="o">.</span><span class="n">company</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">)</span>
     <span class="n">final</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">save_alignment</span><span class="p">(</span><span class="n">draft</span><span class="p">,</span> <span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_verdict_line</span><span class="p">(</span><span class="n">jd</span><span class="p">,</span> <span class="n">final</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_verdict_line</span><span class="p">(</span><span class="n">jd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">final</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
     <span class="n">counts</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">final</span><span class="o">.</span><span class="n">score_summary</span><span class="o">.</span><span class="n">bucket_counts</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span>
     <span class="p">)</span>
@@ -944,7 +950,59 @@ window.runMermaid = runMermaid;</script>
         <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">jd</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">final</span><span class="o">.</span><span class="n">job_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">final</span><span class="o">.</span><span class="n">verdict</span><span class="o">.</span><span class="n">recommendation</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">"</span>
         <span class="sa">f</span><span class="s2">" (</span><span class="si">{</span><span class="n">counts</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">'no classified requirements'</span><span class="si">}</span><span class="s2">; unknown=</span><span class="si">{</span><span class="n">unknown</span><span class="si">}</span><span class="s2">;"</span>
         <span class="sa">f</span><span class="s2">" blocking=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">final</span><span class="o">.</span><span class="n">blocking_gaps</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span>
-    <span class="p">)</span></div>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="align">
+<a class="viewcode-back" href="../../_autosummary/hired.cli.html#hired.cli.align">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">align</span><span class="p">(</span>
+    <span class="n">jd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">jd_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">job_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">company</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">nli</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Analyse a raw job description (the file ``jd_text``) with an LLM and save the report.</span>
+
+<span class="sd">    The autonomous counterpart of ``analyze``: an LLM (the ``ai`` extra, an</span>
+<span class="sd">    ``OPENAI_API_KEY``) decomposes the JD and judges each requirement against the</span>
+<span class="sd">    candidate's facts, every judgment must quote a fact verbatim, and the verdict</span>
+<span class="sd">    is computed deterministically. The JD text is stored as the job under</span>
+<span class="sd">    engagement ``jd``. ``job_id`` defaults to the file's name without extension;</span>
+<span class="sd">    ``--n-samples`` &gt; 1 samples each judgment for calibrated confidence; ``--nli``</span>
+<span class="sd">    adds an entailment check on every match.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment</span><span class="w"> </span><span class="kn">import</span> <span class="n">analyzer</span> <span class="k">as</span> <span class="n">_analyzer</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">slug</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.persistence</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_name</span>
+
+    <span class="n">job_id</span> <span class="o">=</span> <span class="n">job_id</span> <span class="ow">or</span> <span class="n">slug</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">jd_text</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span>
+    <span class="n">validate_name</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"job id (pass --job-id)"</span><span class="p">)</span>  <span class="c1"># before anything is written</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">jd_text</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">UnicodeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Cannot read the JD text file </span><span class="si">{</span><span class="n">jd_text</span><span class="si">!r}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The JD text file </span><span class="si">{</span><span class="n">jd_text</span><span class="si">!r}</span><span class="s2"> is empty"</span><span class="p">)</span>
+    <span class="n">kb</span> <span class="o">=</span> <span class="n">_kb</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">must_exist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># a mistyped --user must not judge zero facts</span>
+    <span class="n">llm</span> <span class="o">=</span> <span class="n">_analyzer</span><span class="o">.</span><span class="n">LLMAlignmentAnalyzer</span><span class="p">(</span>
+        <span class="o">**</span><span class="p">({</span><span class="s2">"model"</span><span class="p">:</span> <span class="n">model</span><span class="p">}</span> <span class="k">if</span> <span class="n">model</span> <span class="k">else</span> <span class="p">{}),</span> <span class="n">n_samples</span><span class="o">=</span><span class="n">n_samples</span><span class="p">,</span> <span class="n">nli</span><span class="o">=</span><span class="n">nli</span>
+    <span class="p">)</span>
+    <span class="c1"># Analyse first: an LLM failure (no ai extra, no key) leaves nothing behind.</span>
+    <span class="n">draft</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span>
+        <span class="n">text</span><span class="p">,</span> <span class="n">kb</span><span class="o">.</span><span class="n">facts</span><span class="p">(),</span> <span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span> <span class="n">job_title</span><span class="o">=</span><span class="n">job_title</span><span class="p">,</span> <span class="n">company</span><span class="o">=</span><span class="n">company</span> <span class="ow">or</span> <span class="s2">""</span>
+    <span class="p">)</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="n">kb</span><span class="o">.</span><span class="n">jd</span><span class="p">(</span><span class="n">jd</span><span class="p">,</span> <span class="n">company</span><span class="o">=</span><span class="n">company</span><span class="p">)</span>
+    <span class="n">ws</span><span class="o">.</span><span class="n">save_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="n">job_title</span><span class="p">,</span> <span class="s2">"text"</span><span class="p">:</span> <span class="n">text</span><span class="p">})</span>
+    <span class="n">final</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">save_alignment</span><span class="p">(</span><span class="n">draft</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_verdict_line</span><span class="p">(</span><span class="n">jd</span><span class="p">,</span> <span class="n">final</span><span class="p">)</span></div>
 
 
 
@@ -1007,6 +1065,7 @@ window.runMermaid = runMermaid;</script>
     <span class="n">synopsis</span><span class="p">,</span>
     <span class="n">jds</span><span class="p">,</span>
     <span class="n">analyze</span><span class="p">,</span>
+    <span class="n">align</span><span class="p">,</span>
     <span class="n">reports</span><span class="p">,</span>
     <span class="n">report</span><span class="p">,</span>
 <span class="p">]</span>

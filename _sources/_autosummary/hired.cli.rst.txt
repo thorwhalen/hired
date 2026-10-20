@@ -15,6 +15,7 @@ hired.cli
    .. autosummary::
    
       add_source
+      align
       analyze
       facts
       ingest
