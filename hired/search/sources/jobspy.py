@@ -5,6 +5,8 @@ Wraps the python-jobspy package to search across multiple job boards
 (LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google) concurrently.
 """
 
+import importlib.util
+from functools import lru_cache
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 from hired.search.base import (
@@ -16,6 +18,19 @@ from hired.search.base import (
     CompensationInfo,
     SourceConfigError,
 )
+
+
+@lru_cache(maxsize=1)
+def _load_scrape_jobs():
+    """Import ``jobspy.scrape_jobs`` (the ``jobspy`` extra, pulls in pandas) on first use."""
+    try:
+        from jobspy import scrape_jobs
+    except ImportError as e:
+        raise SourceConfigError(
+            "python-jobspy is not installed. "
+            "Install it with: pip install python-jobspy"
+        ) from e
+    return scrape_jobs
 
 
 class JobSpySource(JobSearchSource):
@@ -49,12 +64,9 @@ class JobSpySource(JobSearchSource):
 
     def _check_jobspy_available(self) -> bool:
         """Check if python-jobspy package is available."""
-        try:
-            import jobspy  # noqa
-
-            return True
-        except ImportError:
-            return False
+        # Probe without importing: jobspy pulls in pandas, and the source is
+        # created at ``import hired`` time. It is imported on first search.
+        return importlib.util.find_spec("jobspy") is not None
 
     @property
     def name(self) -> str:
@@ -187,13 +199,7 @@ Documentation:
         """
         self.validate_configured()
 
-        try:
-            from jobspy import scrape_jobs
-        except ImportError:
-            raise SourceConfigError(
-                "python-jobspy is not installed. "
-                "Install it with: pip install python-jobspy"
-            )
+        scrape_jobs = _load_scrape_jobs()
 
         # Build JobSpy parameters
         params = {
