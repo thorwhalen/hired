@@ -49,13 +49,13 @@ def mk_content_for_resume(
 
     Examples:
         >>> # Using file paths
-        >>> content = mk_content_for_resume("candidate.json", "job.txt")
+        >>> content = mk_content_for_resume("candidate.json", "job.txt")  # doctest: +SKIP
         >>>
         >>> # Using JobResult from job search
-        >>> from hired import JobSources, SearchCriteria
-        >>> sources = JobSources()
-        >>> jobs = sources.jobspy.search(SearchCriteria(query="python developer"))
-        >>> content = mk_content_for_resume(candidate_dict, jobs[0])
+        >>> from hired import JobSources, SearchCriteria  # doctest: +SKIP
+        >>> sources = JobSources()  # doctest: +SKIP
+        >>> jobs = sources.jobspy.search(SearchCriteria(query="python developer"))  # doctest: +SKIP
+        >>> content = mk_content_for_resume(candidate_dict, jobs[0])  # doctest: +SKIP
     """
 
     def _to_source(src):

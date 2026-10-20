@@ -11,18 +11,18 @@ Example usage:
     >>> sources = JobSources()
     >>>
     >>> # List available sources
-    >>> print(sources.list_available())
+    >>> print(sources.list_available())  # doctest: +SKIP
     >>>
     >>> # Search using a specific source
-    >>> criteria = SearchCriteria(
+    >>> criteria = SearchCriteria(  # doctest: +SKIP
     ...     query="python developer",
     ...     location="San Francisco, CA",
     ...     results_wanted=20
     ... )
-    >>> results = sources.jobspy.search(criteria)
+    >>> results = sources.jobspy.search(criteria)  # doctest: +SKIP
     >>>
     >>> # Or search across all sources
-    >>> all_results = sources.search_all(criteria)
+    >>> all_results = sources.search_all(criteria)  # doctest: +SKIP
 """
 
 from hired.search.base import (

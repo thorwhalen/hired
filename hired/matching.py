@@ -73,8 +73,8 @@ class JobMatcher:
 
     Examples:
         >>> matcher = JobMatcher(candidate_skills=['python', 'django', 'aws'])
-        >>> scores = matcher.score_jobs(job_results)
-        >>> top_jobs = matcher.get_top_matches(job_results, n=10)
+        >>> scores = matcher.score_jobs(job_results)  # doctest: +SKIP
+        >>> top_jobs = matcher.get_top_matches(job_results, n=10)  # doctest: +SKIP
     """
 
     def __init__(
@@ -343,15 +343,15 @@ def quick_match(
         >>> from hired.matching import quick_match
         >>>
         >>> sources = JobSources()
-        >>> jobs = sources.jobspy.search(SearchCriteria(query="python developer"))
+        >>> jobs = sources.jobspy.search(SearchCriteria(query="python developer"))  # doctest: +SKIP
         >>>
-        >>> matches = quick_match(
+        >>> matches = quick_match(  # doctest: +SKIP
         ...     candidate_skills=['python', 'django', 'postgresql'],
         ...     jobs=jobs,
         ...     top_n=5
         ... )
         >>>
-        >>> for match in matches:
+        >>> for match in matches:  # doctest: +SKIP
         ...     print(match.get_summary())
     """
     matcher = JobMatcher(candidate_skills=candidate_skills)

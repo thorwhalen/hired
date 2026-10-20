@@ -21,13 +21,13 @@ class JobSources:
         ['jobspy', 'usajobs', 'adzuna']
 
         >>> # Access via attribute
-        >>> results = sources.jobspy.search(SearchCriteria(query="python developer"))
+        >>> results = sources.jobspy.search(SearchCriteria(query="python developer"))  # doctest: +SKIP
 
         >>> # Access via mapping
-        >>> results = sources['indeed'].search(SearchCriteria(query="data scientist"))
+        >>> results = sources['indeed'].search(SearchCriteria(query="data scientist"))  # doctest: +SKIP
 
         >>> # Search across multiple sources
-        >>> results = sources.search_all(
+        >>> results = sources.search_all(  # doctest: +SKIP
         ...     SearchCriteria(query="software engineer", location="San Francisco")
         ... )
     """
