@@ -418,19 +418,27 @@ def test_taxonomy_import_is_light():
 
 
 def _two_source_index(**kwargs):
-    """O*NET tech node with no edges of its own; ESCO graph links its namesake."""
+    """O*NET tech node with no ESCO link of its own; ESCO graph links its namesake."""
     nodes = [
         SkillNode(id="onet:tf", label="TensorFlow", source="onet", kind="technology"),
+        SkillNode(id="onet:lone", label="TensorFlow Lite", source="onet"),
         SkillNode(id="esco:tf", label="TensorFlow framework", source="esco"),
         SkillNode(id="esco:dl", label="deep learning", source="esco"),
         SkillNode(id="esco:cook", label="cooking", source="esco"),
+        SkillNode(id="esco:tfx", label="TensorFlow extended", source="esco"),
     ]
-    edges = {"esco:tf": [("esco:dl", 0.8)], "esco:dl": [("esco:tf", 0.8)]}
+    edges = {
+        "onet:tf": [("onet:lone", 0.3)],
+        "onet:lone": [("onet:tf", 0.3)],
+        "esco:tf": [("esco:dl", 0.8)],
+        "esco:dl": [("esco:tf", 0.8)],
+    }
     return SkillIndex(nodes, edges, **kwargs)
 
 
 def test_cross_source_bridge_lets_the_graph_propagate():
     idx = _two_source_index()
+    # esco:tfx matches as well, but has no edges: a bridge there would lead nowhere
     assert idx._bridges("onet:tf") == {"esco:tf": 0.5}
     p = idx.proximity("onet:tf", "deep learning")
     assert p.graph == pytest.approx(0.4)  # bridge 0.5 x ESCO link 0.8
@@ -439,7 +447,7 @@ def test_cross_source_bridge_lets_the_graph_propagate():
     assert no_bridge.proximity("onet:tf", "deep learning").graph == 0.0
 
 
-def test_no_shared_source_falls_back_to_cosine():
+def test_a_silent_graph_falls_back_to_cosine():
     np = pytest.importorskip("numpy")
     vocab = ["tensorflow", "deep", "learning", "cooking", "framework"]
 
@@ -453,14 +461,13 @@ def test_no_shared_source_falls_back_to_cosine():
     nodes = [
         SkillNode(id="onet:tf", label="TensorFlow deep learning", source="onet"),
         SkillNode(id="esco:dl", label="deep learning", source="esco"),
-        SkillNode(id="esco:cook", label="cooking", source="esco"),
+        SkillNode(id="esco:fw", label="deep learning framework", source="esco"),
     ]
-    # no bridges: the graph cannot see across sources, so cosine decides alone
-    idx = SkillIndex(nodes, {}, embedder=embed, bridge_k=0)
-    p = idx.proximity("onet:tf", "esco:dl")
-    assert p.alpha == 1.0 and p.score == pytest.approx(p.cosine, abs=1e-4)
-    # same source, graph says 0: that is evidence, so the blend stays
-    same = idx.proximity("esco:dl", "esco:cook")
-    assert same.alpha == 0.5
-    off = SkillIndex(nodes, {}, embedder=embed, bridge_k=0, cross_source_fallback=False)
+    edges = {"esco:dl": [("esco:fw", 0.6)], "esco:fw": [("esco:dl", 0.6)]}
+    idx = SkillIndex(nodes, edges, embedder=embed, bridge_k=0)
+    silent = idx.proximity("onet:tf", "esco:dl")  # no path: cosine decides alone
+    assert silent.alpha == 1.0 and silent.score == pytest.approx(silent.cosine, abs=1e-4)
+    linked = idx.proximity("esco:dl", "esco:fw")  # a path: the blend stays
+    assert linked.alpha == 0.5 and linked.graph == 0.6
+    off = SkillIndex(nodes, edges, embedder=embed, bridge_k=0, silent_graph_fallback=False)
     assert off.proximity("onet:tf", "esco:dl").alpha == 0.5
