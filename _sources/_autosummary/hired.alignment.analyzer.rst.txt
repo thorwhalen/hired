@@ -11,6 +11,8 @@ hired.alignment.analyzer
       aggregate_verdict
       analyze_jd
       coverage
+      make_embedding_retriever
+      openai_embed
       quote_is_grounded
       retrieve_facts
    

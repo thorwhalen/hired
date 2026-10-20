@@ -32,6 +32,8 @@ hired.alignment
       aggregate_verdict
       coverage
       retrieve_facts
+      make_embedding_retriever
+      openai_embed
       quote_is_grounded
    
    .. rubric:: Classes

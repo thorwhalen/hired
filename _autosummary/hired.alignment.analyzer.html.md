@@ -10,7 +10,8 @@ persists. The pipeline is a grounded per-requirement judge:
 
 1. **decompose** — the LLM splits the JD into atomic `Requirement` records;
 2. **retrieve** — the most relevant facts are pulled from the knowledge base
-   (lexical overlap by default; inject `retrieve` for anything better);
+   (lexical overlap by default, every fact when the KB fits in `k`; inject
+   `retrieve=make_embedding_retriever()` for semantic retrieval);
 3. **quote-then-answer** — the LLM must quote a verbatim span of a cited fact
    *before* it states a match;
 4. **gate** — a quote that is not verbatim in the cited fact, a CONTRADICTED
@@ -27,12 +28,14 @@ key is read at construction. `client` is anything exposing the OpenAI-style
 
 ### Functions
 
-| [`aggregate_verdict`](#hired.alignment.analyzer.aggregate_verdict)(records, \*[, apply_at, ...])   | The verdict and fit band, computed from classified records alone.                                                                       |
-|----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| [`analyze_jd`](#hired.alignment.analyzer.analyze_jd)(workspace, jd_text, \*, job_id[, ...]) | Analyse `jd_text` against the workspace candidate's facts and persist it.                                                               |
-| [`coverage`](#hired.alignment.analyzer.coverage)(records, \*[, class_weights, ...])       | `(coverage, resolved_share)`: weighted bucket credit over resolved records, and the weighted share of records that are resolved at all. |
-| [`quote_is_grounded`](#hired.alignment.analyzer.quote_is_grounded)(quote, fact, \*[, min_words])   | True when `quote` is a verbatim span (modulo case/whitespace) of `fact`, at least `min_words` long.                                     |
-| [`retrieve_facts`](#hired.alignment.analyzer.retrieve_facts)(requirement, facts, \*[, k])       | The `k` facts sharing the most words with the requirement (none if none do).                                                            |
+| [`aggregate_verdict`](#hired.alignment.analyzer.aggregate_verdict)(records, \*[, apply_at, ...])   | The verdict and fit band, computed from classified records alone.                                                                                                                                                             |
+|----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`analyze_jd`](#hired.alignment.analyzer.analyze_jd)(workspace, jd_text, \*, job_id[, ...]) | Analyse `jd_text` against the workspace candidate's facts and persist it.                                                                                                                                                     |
+| [`coverage`](#hired.alignment.analyzer.coverage)(records, \*[, class_weights, ...])       | `(coverage, resolved_share)`: weighted bucket credit over resolved records, and the weighted share of records that are resolved at all.                                                                                       |
+| [`make_embedding_retriever`](#hired.alignment.analyzer.make_embedding_retriever)([embed, min_similarity]) | A semantic `retrieve` for [`LLMAlignmentAnalyzer`](#hired.alignment.analyzer.LLMAlignmentAnalyzer): the `k` facts most cosine-similar to the requirement, so adjacent skills (RabbitMQ for a Kafka requirement) reach the judge. |
+| [`openai_embed`](#hired.alignment.analyzer.openai_embed)(\*[, client, model])                 | An `Embed` over OpenAI-style `client.embeddings.create` (`ai` extra).                                                                                                                                                         |
+| [`quote_is_grounded`](#hired.alignment.analyzer.quote_is_grounded)(quote, fact, \*[, min_words])   | True when `quote` is a verbatim span (modulo case/whitespace) of `fact`, at least `min_words` long.                                                                                                                           |
+| [`retrieve_facts`](#hired.alignment.analyzer.retrieve_facts)(requirement, facts, \*[, k, ...])  | The `k` facts sharing the most words with the requirement.                                                                                                                                                                    |
 
 ### Classes
 
@@ -50,7 +53,8 @@ agreement into [`apply_calibration()`](hired.alignment.calibration.html.md#hired
 `calibrator`, the conformal ask/auto-decide rule). `nli` adds an
 entailment check on every confirmed quote; `entails` replaces the default
 (an LLM call) with any `(premise, hypothesis) -> bool`. `retrieve`
-replaces the lexical [`retrieve_facts()`](#hired.alignment.analyzer.retrieve_facts).
+replaces the lexical [`retrieve_facts()`](#hired.alignment.analyzer.retrieve_facts), e.g. with
+[`make_embedding_retriever()`](#hired.alignment.analyzer.make_embedding_retriever) for semantic retrieval.
 
 ```pycon
 >>> class _Fake:
@@ -130,6 +134,38 @@ Records must be classified (see [`classify()`](hired.alignment.rubric.html.md#hi
 * **Return type:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`float`](https://docs.python.org/3/builtins/functions.html#float)]
 
+### hired.alignment.analyzer.make_embedding_retriever(embed=None, , min_similarity=0.0)
+
+A semantic `retrieve` for [`LLMAlignmentAnalyzer`](#hired.alignment.analyzer.LLMAlignmentAnalyzer): the `k` facts most
+cosine-similar to the requirement, so adjacent skills (RabbitMQ for a Kafka
+requirement) reach the judge.
+
+`embed` maps texts to vectors (default [`openai_embed()`](#hired.alignment.analyzer.openai_embed), the `ai` extra).
+Fact vectors are cached by text, so each fact is embedded once per retriever.
+
+```pycon
+>>> vocab = ('kafka', 'rabbitmq', 'queue', 'french')
+>>> def embed(texts):  # a fake: 'kafka' and 'rabbitmq' are both message queues
+...     return [[t.lower().count(w) + ('queue' == w) * ('kafka' in t.lower() or
+...              'rabbitmq' in t.lower()) for w in vocab] for t in texts]
+>>> fs = [Fact(statement='Ran RabbitMQ in prod'), Fact(statement='Speaks French')]
+>>> retrieve = make_embedding_retriever(embed)
+>>> [f.statement for f in retrieve(Requirement(text='Kafka'), fs, k=1)]
+['Ran RabbitMQ in prod']
+```
+
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[`...`](https://docs.python.org/3/builtins/constants.html#Ellipsis), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Fact`](hired.candidate.base.html.md#hired.candidate.base.Fact)]]
+
+### hired.alignment.analyzer.openai_embed(, client=None, model='text-embedding-3-small')
+
+An `Embed` over OpenAI-style `client.embeddings.create` (`ai` extra).
+
+`openai` is imported, and the client made, only at the first call.
+
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Sequence`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]], [`Sequence`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence)[[`Sequence`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence)[[`float`](https://docs.python.org/3/builtins/functions.html#float)]]]
+
 ### hired.alignment.analyzer.quote_is_grounded(quote, fact, , min_words=2)
 
 True when `quote` is a verbatim span (modulo case/whitespace) of `fact`,
@@ -147,17 +183,23 @@ False
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
-### hired.alignment.analyzer.retrieve_facts(requirement, facts, , k=5)
+### hired.alignment.analyzer.retrieve_facts(requirement, facts, , k=5, small_kb_passes_all=True)
 
-The `k` facts sharing the most words with the requirement (none if none do).
+The `k` facts sharing the most words with the requirement.
 
 Lexical, so it misses an adjacent skill named in different words (RabbitMQ
-for Kafka); inject a semantic `retrieve` into the analyzer for that.
+for Kafka). When the whole knowledge base fits in `k` (and
+`small_kb_passes_all`), every fact is passed, best overlap first, so the judge
+sees the adjacent skill anyway; a negation fact sharing no word is still dropped,
+so an unrelated “does not …” cannot back a contradiction. Otherwise facts
+sharing no word are dropped (none if none do). For large KBs, inject [`make_embedding_retriever()`](#hired.alignment.analyzer.make_embedding_retriever).
 
 ```pycon
 >>> from hired.candidate.base import Fact
 >>> fs = [Fact(statement='Ran Kafka clusters'), Fact(statement='Speaks French')]
 >>> [f.statement for f in retrieve_facts(Requirement(text='Kafka streaming'), fs)]
+['Ran Kafka clusters', 'Speaks French']
+>>> [f.statement for f in retrieve_facts(Requirement(text='Kafka streaming'), fs, k=1)]
 ['Ran Kafka clusters']
 ```
 
