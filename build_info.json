@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-20T12:50:08Z",
+  "built_at": "2026-10-20T13:33:25Z",
   "package": {
     "name": "hired",
-    "version": "0.0.33",
+    "version": "0.0.34",
     "display_name": "hired",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "dd22664eb21e7c173d2f6f57b84082454e9f76d3",
-    "short_commit": "dd22664",
+    "commit": "ef2185ee8b1564ceadc1cdfdda122189d042f9d5",
+    "short_commit": "ef2185e",
     "branch": "main",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/hired",
-    "commit_url": "https://github.com/thorwhalen/hired/commit/dd22664eb21e7c173d2f6f57b84082454e9f76d3",
+    "commit_url": "https://github.com/thorwhalen/hired/commit/ef2185ee8b1564ceadc1cdfdda122189d042f9d5",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/hired",
-    "sha": "dd22664eb21e7c173d2f6f57b84082454e9f76d3",
+    "sha": "ef2185ee8b1564ceadc1cdfdda122189d042f9d5",
     "sha_in_history": true,
     "ref": "refs/heads/main",
     "ref_name": "main",
-    "run_id": "39425176015",
-    "run_url": "https://github.com/thorwhalen/hired/actions/runs/39425176015",
+    "run_id": "39431169976",
+    "run_url": "https://github.com/thorwhalen/hired/actions/runs/39431169976",
     "server_url": "https://github.com"
   },
   "tools": {
@@ -60,14 +60,16 @@
   },
   "pypi": {
     "checked": true,
-    "latest": "0.0.33",
-    "relation": "same",
+    "latest": "0.0.35",
+    "relation": "behind",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/hired && cd hired\ngit checkout dd22664eb21e7c173d2f6f57b84082454e9f76d3\npip install \"epythet==0.2.20\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/hired && cd hired\ngit checkout ef2185ee8b1564ceadc1cdfdda122189d042f9d5\npip install \"epythet==0.2.20\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
-    "aligned": true,
-    "notes": []
+    "aligned": false,
+    "notes": [
+      "The documented version (0.0.34) is behind the latest release on PyPI (0.0.35): `pip install hired` gives newer code than these docs describe."
+    ]
   }
 }

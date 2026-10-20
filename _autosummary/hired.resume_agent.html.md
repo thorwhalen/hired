@@ -453,7 +453,7 @@ Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 Immutable snapshot of session state at a point in time.
 
 ```pycon
->>> snapshot = SessionSnapshot(turn_count=5, data={'skills': ['Python']})
+>>> snapshot = SessionSnapshot(turn_count=5, data={'skills': ['Python']}, mode='expand')
 >>> snapshot.turn_count
 5
 ```
