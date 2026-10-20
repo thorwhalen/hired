@@ -65,7 +65,10 @@ def should_ask(record: RequirementRecord) -> bool:
     """
     if not is_decision_relevant(record):
         return False
-    if record.calibrated_decision == Decision.ASK and record.match_state != MatchState.UNKNOWN:
+    if (
+        record.calibrated_decision == Decision.ASK
+        and record.match_state != MatchState.UNKNOWN
+    ):
         return True
     return (
         record.match_state == MatchState.UNKNOWN
@@ -97,8 +100,11 @@ def rank_clarifications(
                 requirement_id=r.requirement.id,
                 question="",  # filled by the analyst
                 reason=f"{r.requirement.requirement_class.value} requirement is "
-                + ("unknown" if r.match_state == MatchState.UNKNOWN
-                   else "too uncertain to decide (calibrated)")
+                + (
+                    "unknown"
+                    if r.match_state == MatchState.UNKNOWN
+                    else "too uncertain to decide (calibrated)"
+                )
                 + "; resolving it could move the verdict",
                 info_gain=r.info_gain,
             )
