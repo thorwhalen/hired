@@ -68,6 +68,7 @@ from hired.alignment.calibration import (
     Consistency,
     Decision,
     MatchCalibrator,
+    apply_calibration,
     calibrate_match,
     confidence_level,
     match_share,
@@ -117,6 +118,7 @@ __all__ = [
     "calibrate_match",
     "MatchCalibrator",
     "Decision",
+    "apply_calibration",
     # report
     "finalize_report",
     "is_blocking",

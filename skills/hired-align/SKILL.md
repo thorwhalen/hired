@@ -142,6 +142,23 @@ for rec in records:
 Use the `hired-requirement-analyst` subagent to classify many requirements in
 parallel when a JD is large.
 
+**Confidence comes from sampling, not self-report.** For a decision-relevant
+requirement whose match is not obvious, judge it several times independently
+(e.g. 5 analyst runs, or 5 samples at non-zero temperature) and hand the match
+states to `apply_calibration`. It sets `confidence` from their agreement and
+`match_score` from the share saying "confirmed"; with a fitted `MatchCalibrator`
+it also sets `calibrated_decision`, and an *ask* there makes `should_ask` route
+even a CONFIRMED record to a question (a shaky match is confirmed, never claimed).
+
+```python
+from hired.alignment import apply_calibration, calibrate_match
+
+apply_calibration(rec, ["confirmed", "confirmed", "unknown", "confirmed", "confirmed"])
+# with held-out (score, truth) pairs, e.g. from answered clarifications:
+cal = calibrate_match(scores, truths, false_accept_rate=0.05, miss_rate=0.1)
+apply_calibration(rec, samples, calibrator=cal)
+```
+
 ## Step 3 — Elicitation loop (the honesty engine)
 
 ```python
