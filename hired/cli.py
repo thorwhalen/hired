@@ -240,19 +240,28 @@ def align(
     from pathlib import Path
 
     from hired.alignment import analyzer as _analyzer
+    from hired.candidate.base import slug
     from hired.persistence import validate_name
 
-    job_id = job_id or Path(jd_text).stem
-    validate_name(job_id, kind="job id")  # before anything is written
-    text = Path(jd_text).read_text(encoding="utf-8")
+    job_id = job_id or slug(Path(jd_text).stem)
+    validate_name(job_id, kind="job id (pass --job-id)")  # before anything is written
+    try:
+        text = Path(jd_text).read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as e:
+        raise ValueError(f"Cannot read the JD text file {jd_text!r}: {e}") from e
+    if not text.strip():
+        raise ValueError(f"The JD text file {jd_text!r} is empty")
+    kb = _kb(user, must_exist=True)  # a mistyped --user must not judge zero facts
     llm = _analyzer.LLMAlignmentAnalyzer(
         **({"model": model} if model else {}), n_samples=n_samples, nli=nli
     )
-    ws = _kb(user).jd(jd, company=company)
-    ws.save_job(job_id, {"title": job_title, "text": text})
-    final = _analyzer.analyze_jd(
-        ws, text, job_id=job_id, job_title=job_title, analyzer=llm
+    # Analyse first: an LLM failure (no ai extra, no key) leaves nothing behind.
+    draft = llm.analyze(
+        text, kb.facts(), job_id=job_id, job_title=job_title, company=company or ""
     )
+    ws = kb.jd(jd, company=company)
+    ws.save_job(job_id, {"title": job_title, "text": text})
+    final = ws.save_alignment(draft)
     return _verdict_line(jd, final)
 
 

@@ -373,11 +373,16 @@ def test_cli_align_runs_the_injected_analyzer_and_stores_the_jd(data_dir, monkey
         def __init__(self, **kwargs):
             built.update(kwargs)
 
-        def analyze(self, jd_text, facts, *, job_id, job_title, company, requirements):
+        def analyze(self, jd_text, facts, *, job_id, **_):
+            assert [f.statement for f in facts] == ["knows SQL"]
             return _draft().model_copy(update={"job_id": job_id})
 
     monkeypatch.setattr(an, "LLMAlignmentAnalyzer", StubAnalyzer)
     jd_file = data_dir / "staff-ds.txt"
+    jd_file.write_text("We need Python and a PhD.")
+    with pytest.raises(ValueError, match="No candidate"):
+        cli.align("acme", jd_text=str(jd_file), user="alice")
+    CandidateKnowledgeBase("alice").add_fact(Fact(statement="knows SQL"))
     jd_file.write_text("We need Python and a PhD.")
     line = cli.align("acme", jd_text=str(jd_file), n_samples=3, user="alice")
     assert line.startswith("acme/staff-ds: ") and "blocking=1" in line
@@ -387,3 +392,11 @@ def test_cli_align_runs_the_injected_analyzer_and_stores_the_jd(data_dir, monkey
     assert ws.reports() == ["staff-ds"]
     with pytest.raises(ValueError, match="job id"):
         cli.align("acme", jd_text=str(jd_file), job_id="../x", user="alice")
+    odd = data_dir / "Job Ad (1).txt"
+    odd.write_text("Go.")
+    assert cli.align("acme", jd_text=str(odd), user="alice").startswith("acme/job-ad-1")
+    (data_dir / "empty.txt").write_text(" ")
+    with pytest.raises(ValueError, match="empty"):
+        cli.align("acme", jd_text=str(data_dir / "empty.txt"), user="alice")
+    with pytest.raises(ValueError, match="Cannot read"):
+        cli.align("acme", jd_text=str(data_dir), job_id="d", user="alice")
