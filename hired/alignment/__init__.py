@@ -13,6 +13,9 @@ Public surface:
   :class:`MatchCalibrator` ask/auto-decide rule),
 - deterministic report finalization in :mod:`hired.alignment.assemble`
   (:func:`finalize_report` — reclassify, recount, rebuild blockers/clarifications),
+- the injected-LLM analyzer in :mod:`hired.alignment.analyzer`
+  (:class:`LLMAlignmentAnalyzer`, :func:`analyze_jd` — decompose, retrieve,
+  quote-then-answer, grounding gate, deterministic :func:`aggregate_verdict`),
 - rendering in :mod:`hired.alignment.report` (:func:`render_report` dispatching to
   :func:`render_report_markdown` / :func:`render_report_html`).
 
@@ -75,6 +78,14 @@ from hired.alignment.calibration import (
     semantic_consistency,
 )
 from hired.alignment.diff import diff_reports, summarize_diff
+from hired.alignment.analyzer import (
+    LLMAlignmentAnalyzer,
+    aggregate_verdict,
+    analyze_jd,
+    coverage,
+    quote_is_grounded,
+    retrieve_facts,
+)
 
 __all__ = [
     # schemas
@@ -129,4 +140,11 @@ __all__ = [
     # diff (used by the alignment-review refresh)
     "diff_reports",
     "summarize_diff",
+    # library-mode analyzer (injected LLM)
+    "LLMAlignmentAnalyzer",
+    "analyze_jd",
+    "aggregate_verdict",
+    "coverage",
+    "retrieve_facts",
+    "quote_is_grounded",
 ]
