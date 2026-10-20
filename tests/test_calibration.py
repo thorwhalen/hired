@@ -168,3 +168,16 @@ def test_records_without_calibration_behave_as_before_and_round_trip():
     legacy = rec.model_dump()
     del legacy["match_score"], legacy["calibrated_decision"]
     assert RequirementRecord.model_validate(legacy).calibrated_decision is None
+
+
+def test_a_shaky_closed_field_unknown_stays_a_gap_and_reapplying_clears_ask():
+    from hired.alignment import apply_calibration, should_ask
+    from hired.alignment.base import FieldCompleteness
+
+    rec = apply_calibration(_record("unknown"), ["unknown", "confirmed"], calibrator=_calibrator())
+    rec.field_completeness = FieldCompleteness.CLOSED
+    assert rec.calibrated_decision is Decision.ASK and not should_ask(rec)
+    shaky = apply_calibration(_record(), ["confirmed", "unknown"], calibrator=_calibrator())
+    assert should_ask(shaky)
+    assert apply_calibration(shaky, ["confirmed"] * 5).calibrated_decision is None
+    assert not should_ask(shaky)
