@@ -27,8 +27,7 @@ def _load_scrape_jobs():
         from jobspy import scrape_jobs
     except ImportError as e:
         raise SourceConfigError(
-            "python-jobspy is not installed. "
-            "Install it with: pip install python-jobspy"
+            "python-jobspy is not installed. Install it with: pip install python-jobspy"
         ) from e
     return scrape_jobs
 
