@@ -351,8 +351,7 @@ def _valid_requirement(item: Any, index: int) -> Requirement | None:
 
 def _facts_block(facts: Sequence[Fact]) -> str:
     return "\n".join(
-        f"[{f.id}]{' (NEGATION)' if f.is_negation else ''} {f.statement}"
-        for f in facts
+        f"[{f.id}]{' (NEGATION)' if f.is_negation else ''} {f.statement}" for f in facts
     )
 
 
@@ -448,9 +447,7 @@ class LLMAlignmentAnalyzer:
                 uncertainty_reason="no fact in the knowledge base mentions this",
             )
         by_id = {f.id: f for f in facts}
-        prompt = (
-            f"REQUIREMENT: {requirement.text}\n\nFACTS:\n{_facts_block(facts)}"
-        )
+        prompt = f"REQUIREMENT: {requirement.text}\n\nFACTS:\n{_facts_block(facts)}"
         gated = [
             _gate(
                 self._ask_json(_JUDGE_PROMPT, prompt),
@@ -489,8 +486,7 @@ class LLMAlignmentAnalyzer:
             list(requirements) if requirements is not None else self.decompose(jd_text)
         )
         records = [
-            classify(self.judge(r, self.retrieve(r, facts, k=self.top_k)))
-            for r in reqs
+            classify(self.judge(r, self.retrieve(r, facts, k=self.top_k))) for r in reqs
         ]
         if not records:
             raise ValueError("no requirements to analyse: none were extracted")
@@ -515,7 +511,9 @@ def _record_from(
     fields = {k: judgment[k] for k in _JUDGMENT_FIELDS if judgment.get(k) is not None}
     for name in list(fields):  # drop what does not validate (a made-up enum, say)
         try:
-            RequirementRecord.model_validate({"requirement": requirement, name: fields[name]})
+            RequirementRecord.model_validate(
+                {"requirement": requirement, name: fields[name]}
+            )
         except ValidationError:
             del fields[name]
     fact = facts_by_id.get(str(judgment.get("fact_id", "")))
