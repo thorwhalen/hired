@@ -130,7 +130,11 @@ class CandidateKnowledgeBase:
 
     # --- Q&A ---------------------------------------------------------------
     def record_qa(
-        self, entry: QAEntry, *, derived_facts: "list[dict[str, Any]] | None" = None
+        self,
+        entry: QAEntry,
+        *,
+        derived_facts: "list[dict[str, Any]] | None" = None,
+        calibration: "tuple[float, bool] | None" = None,
     ) -> str:
         """Append a clarifying Q&A exchange; optionally distill it into facts.
 
@@ -139,6 +143,11 @@ class CandidateKnowledgeBase:
         = the Q&A id, quotes verified against the answer) and back-linked via the
         entry's ``derived_fact_ids`` — so a Q&A answer becomes reusable,
         discoverable knowledge rather than being buried in the history.
+
+        ``calibration`` = ``(match_score, truth)``: the requirement record's ``match_score``
+        before this answer and whether the answer showed it to be a match. The pair is
+        logged for conformal calibration, and the calibrator refitted once both classes
+        have enough pairs (see :class:`~hired.alignment.calibration_log.CalibrationLog`).
         """
         if derived_facts:
             ids = ingest_facts(
@@ -149,7 +158,16 @@ class CandidateKnowledgeBase:
                 source_text=entry.answer,
             )
             entry.derived_fact_ids = list(entry.derived_fact_ids) + ids
-        return self._qa.add(entry)
+        qa_id = self._qa.add(entry)
+        if calibration is not None:
+            self.calibration_log().add_and_refit(*calibration, qa_id=qa_id)
+        return qa_id
+
+    def calibration_log(self, **kwargs: Any):
+        """This candidate's :class:`~hired.alignment.calibration_log.CalibrationLog`."""
+        from hired.alignment.calibration_log import CalibrationLog
+
+        return CalibrationLog(self._store, **kwargs)
 
     def qa_entries(self) -> Iterator[QAEntry]:
         return self._qa.values()

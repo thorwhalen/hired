@@ -181,3 +181,48 @@ def test_a_shaky_closed_field_unknown_stays_a_gap_and_reapplying_clears_ask():
     assert should_ask(shaky)
     assert apply_calibration(shaky, ["confirmed"] * 5).calibrated_decision is None
     assert not should_ask(shaky)
+
+
+# --- collecting calibration pairs from answered questions (#47) -------------------------
+
+
+def test_record_qa_logs_pairs_and_fits_when_ready(tmp_path):
+    from hired.alignment.calibration_log import CalibrationLog, min_pairs
+    from hired.candidate import CandidateKnowledgeBase
+    from hired.candidate.base import QAEntry
+    from hired.persistence.base import UserStore
+
+    kb = CandidateKnowledgeBase(store=UserStore("cal", root=str(tmp_path)))
+    log = kb.calibration_log()
+    need_match, need_no = min_pairs(0.1), min_pairs(0.05)
+    rng = random.Random(0)
+    for i in range(need_match + need_no):
+        match = i < need_match
+        before = log.load_calibrator()
+        assert before is None  # nothing is fitted before both classes are covered
+        kb.record_qa(
+            QAEntry(question="q", answer="a"),
+            calibration=(_draw(rng, 1, match=match)[0], match),
+        )
+    cal = log.load_calibrator()
+    assert cal is not None and cal.n_match == need_match and cal.n_no_match == need_no
+    assert len(log.pairs()) == need_match + need_no
+    assert all(r["qa_id"] for r in log.rows())
+
+
+def test_record_qa_without_calibration_logs_nothing(tmp_path):
+    from hired.candidate import CandidateKnowledgeBase
+    from hired.candidate.base import QAEntry
+    from hired.persistence.base import UserStore
+
+    kb = CandidateKnowledgeBase(store=UserStore("cal", root=str(tmp_path)))
+    kb.record_qa(QAEntry(question="q", answer="a"))
+    assert kb.calibration_log().pairs() == []
+
+
+def test_calibration_log_rejects_bad_score(tmp_path):
+    from hired.alignment.calibration_log import CalibrationLog
+    from hired.persistence.base import UserStore
+
+    with pytest.raises(ValueError):
+        CalibrationLog(UserStore("cal", root=str(tmp_path))).add(1.5, True)
