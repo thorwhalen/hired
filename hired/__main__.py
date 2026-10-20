@@ -8,6 +8,7 @@ extra: ``pip install 'hired[cli]'``). Examples::
     hired add-source cv.pdf --user alice
     hired ingest facts.json --source cv.pdf --user alice
     hired analyze draft_report.json acme --user alice
+    hired align acme staff-ds.txt --user alice   # LLM analysis; needs the ai extra
     hired report acme --fmt html --output acme.html --user alice
 
 ``--user`` defaults to ``$HIRED_USER``, else ``me``.

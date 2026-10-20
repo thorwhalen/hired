@@ -35,7 +35,7 @@ tracking).
   `cli.py` holds plain operations + `CLI_FUNCS` (SSOT); `__main__.py` is the `cw`
   adapter (`cli` extra, console script `hired`). `alignment.finalize_report`
   re-derives a drafted report (`JDWorkspace.save_alignment` = finalize + archive + save, the one draft→persisted path); `render_report(report, fmt)` dispatches via
-  `REPORT_RENDERERS` (`markdown`, `html`).
+  `REPORT_RENDERERS` (`markdown`, `html`). `hired align <jd> <jd_text_file>` runs the injected-LLM `alignment.analyzer` (#11) on raw JD text.
 
 The public API is `hired/__init__.py` (eager core + `__all__`; the agent surface,
 candidate KB, and alignment surface are lazy via `__getattr__`).

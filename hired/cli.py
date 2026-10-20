@@ -12,7 +12,8 @@ and several candidates coexist under ``users/<user>/``.
 The *intelligence* stays outside: ``ingest`` takes fact records an extractor (the
 ``hired-profile-ingest`` subagent, or an LLM) already produced, and ``analyze``
 takes an analyst-drafted report; the commands validate, derive what is
-deterministic, and persist.
+deterministic, and persist. ``align`` is the one exception: it runs the
+injected-LLM analyzer (:mod:`hired.alignment.analyzer`) on raw JD text.
 
 >>> import os, json, tempfile
 >>> os.environ['HIRED_DATA_DIR'] = tempfile.mkdtemp()
@@ -199,6 +200,10 @@ def analyze(
     validate_name(job_id or draft.job_id, kind="job id")
     ws = _kb(user).jd(jd, company=company or draft.company or None)
     final = ws.save_alignment(draft, job_id=job_id)
+    return _verdict_line(jd, final)
+
+
+def _verdict_line(jd: str, final) -> str:
     counts = ", ".join(
         f"{k}={v}" for k, v in final.score_summary.bucket_counts.items() if v
     )
@@ -208,6 +213,47 @@ def analyze(
         f" ({counts or 'no classified requirements'}; unknown={unknown};"
         f" blocking={len(final.blocking_gaps)})"
     )
+
+
+def align(
+    jd: str,
+    *,
+    jd_text: str,
+    job_id: str | None = None,
+    job_title: str = "",
+    company: str | None = None,
+    model: str | None = None,
+    n_samples: int = 1,
+    nli: bool = False,
+    user: str | None = None,
+) -> str:
+    """Analyse a raw job description (the file ``jd_text``) with an LLM and save the report.
+
+    The autonomous counterpart of ``analyze``: an LLM (the ``ai`` extra, an
+    ``OPENAI_API_KEY``) decomposes the JD and judges each requirement against the
+    candidate's facts, every judgment must quote a fact verbatim, and the verdict
+    is computed deterministically. The JD text is stored as the job under
+    engagement ``jd``. ``job_id`` defaults to the file's name without extension;
+    ``--n-samples`` > 1 samples each judgment for calibrated confidence; ``--nli``
+    adds an entailment check on every match.
+    """
+    from pathlib import Path
+
+    from hired.alignment import analyzer as _analyzer
+    from hired.persistence import validate_name
+
+    job_id = job_id or Path(jd_text).stem
+    validate_name(job_id, kind="job id")  # before anything is written
+    text = Path(jd_text).read_text(encoding="utf-8")
+    llm = _analyzer.LLMAlignmentAnalyzer(
+        **({"model": model} if model else {}), n_samples=n_samples, nli=nli
+    )
+    ws = _kb(user).jd(jd, company=company)
+    ws.save_job(job_id, {"title": job_title, "text": text})
+    final = _analyzer.analyze_jd(
+        ws, text, job_id=job_id, job_title=job_title, analyzer=llm
+    )
+    return _verdict_line(jd, final)
 
 
 def reports(jd: str, *, user: str | None = None) -> list[str]:
@@ -263,6 +309,7 @@ CLI_FUNCS = [
     synopsis,
     jds,
     analyze,
+    align,
     reports,
     report,
 ]

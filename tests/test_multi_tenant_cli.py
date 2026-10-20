@@ -361,3 +361,29 @@ def test_main_reports_user_errors_without_traceback():
     code, _, err = _run(["status", "--user", "ghost"])
     assert code == 2 and err.startswith("hired: No candidate 'ghost'")
     assert "Traceback" not in err
+
+
+def test_cli_align_runs_the_injected_analyzer_and_stores_the_jd(data_dir, monkeypatch):
+    from hired import cli
+    from hired.alignment import analyzer as an
+
+    built = {}
+
+    class StubAnalyzer:
+        def __init__(self, **kwargs):
+            built.update(kwargs)
+
+        def analyze(self, jd_text, facts, *, job_id, job_title, company, requirements):
+            return _draft().model_copy(update={"job_id": job_id})
+
+    monkeypatch.setattr(an, "LLMAlignmentAnalyzer", StubAnalyzer)
+    jd_file = data_dir / "staff-ds.txt"
+    jd_file.write_text("We need Python and a PhD.")
+    line = cli.align("acme", jd_text=str(jd_file), n_samples=3, user="alice")
+    assert line.startswith("acme/staff-ds: ") and "blocking=1" in line
+    assert built == {"n_samples": 3, "nli": False}
+    ws = CandidateKnowledgeBase("alice").jd("acme")
+    assert ws.get_job("staff-ds")["text"] == "We need Python and a PhD."
+    assert ws.reports() == ["staff-ds"]
+    with pytest.raises(ValueError, match="job id"):
+        cli.align("acme", jd_text=str(jd_file), job_id="../x", user="alice")
