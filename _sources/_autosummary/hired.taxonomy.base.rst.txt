@@ -1,0 +1,22 @@
+hired.taxonomy.base
+===================
+
+.. automodule:: hired.taxonomy.base
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      attribution
+      dump_models
+      normalize_label
+      taxonomy_dir
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Occupation
+      SkillNode
+   

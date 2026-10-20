@@ -1,0 +1,26 @@
+hired.taxonomy.index
+====================
+
+.. automodule:: hired.taxonomy.index
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      DFLT_TRANSFER_BANDS
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      transferability_band
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Match
+      Proximity
+      SkillIndex
+   

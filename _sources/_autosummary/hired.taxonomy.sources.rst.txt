@@ -1,0 +1,19 @@
+hired.taxonomy.sources
+======================
+
+.. automodule:: hired.taxonomy.sources
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      esco_occupation
+      esco_skill_node
+      fetch_esco
+      fetch_onet
+      onet_tech_id
+      parse_onet_archive
+      requests_get_bytes
+      requests_get_json
+   

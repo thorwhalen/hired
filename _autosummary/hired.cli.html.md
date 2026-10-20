@@ -41,20 +41,23 @@ injected-LLM analyzer ([`hired.alignment.analyzer`](hired.alignment.analyzer.htm
 
 ### Functions
 
-| [`add_source`](#hired.cli.add_source)(path, \*[, name, user])               | Store a raw source document (CV, bio, publication list...) for a candidate.            |
-|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| [`align`](#hired.cli.align)(jd, \*, jd_text[, job_id, job_title, ...]) | Analyse a raw job description (the file `jd_text`) with an LLM and save the report.    |
-| [`analyze`](#hired.cli.analyze)(report, jd, \*[, job_id, company, user]) | Finalize an analyst-drafted alignment report (JSON) and save it under engagement `jd`. |
-| [`facts`](#hired.cli.facts)(\*[, category, tag, user])                 | List a candidate's current (asserted) fact statements.                                 |
-| [`ingest`](#hired.cli.ingest)(records, \*[, source, user])              | Add extracted fact records (a JSON list) to a candidate's knowledge base.              |
-| [`jds`](#hired.cli.jds)(\*[, user])                                  | List a candidate's engagements (one per company; 1+ roles each).                       |
-| [`report`](#hired.cli.report)(jd[, job_id, fmt, output, user])          | Render a saved alignment report (`--fmt markdown|html`).                               |
-| [`reports`](#hired.cli.reports)(jd, \*[, user])                          | List the job ids that have an alignment report in engagement `jd`.                     |
-| [`status`](#hired.cli.status)(\*[, user])                               | Summarize a candidate's knowledge base: counts, pending material, engagements.         |
-| [`synopsis`](#hired.cli.synopsis)(\*[, regenerate, user])                 | Print a candidate's synopsis (`--regenerate` rebuilds it from the facts).              |
-| [`users`](#hired.cli.users)()                                          | List the candidates that have data (one `users/<user>/` directory each).               |
+| [`add_source`](#hired.cli.add_source)(path, \*[, name, user])                 | Store a raw source document (CV, bio, publication list...) for a candidate.            |
+|-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| [`align`](#hired.cli.align)(jd, \*, jd_text[, job_id, job_title, ...])   | Analyse a raw job description (the file `jd_text`) with an LLM and save the report.    |
+| [`analyze`](#hired.cli.analyze)(report, jd, \*[, job_id, company, user])   | Finalize an analyst-drafted alignment report (JSON) and save it under engagement `jd`. |
+| [`build_skill_index`](#hired.cli.build_skill_index)(\*[, embeddings, no_onet, ...])  | Download ESCO (+ O\*NET) and build the skill-adjacency taxonomy (tens of minutes).     |
+| [`facts`](#hired.cli.facts)(\*[, category, tag, user])                   | List a candidate's current (asserted) fact statements.                                 |
+| [`ingest`](#hired.cli.ingest)(records, \*[, source, user])                | Add extracted fact records (a JSON list) to a candidate's knowledge base.              |
+| [`jds`](#hired.cli.jds)(\*[, user])                                    | List a candidate's engagements (one per company; 1+ roles each).                       |
+| [`report`](#hired.cli.report)(jd[, job_id, fmt, output, user])            | Render a saved alignment report (`--fmt markdown|html`).                               |
+| [`reports`](#hired.cli.reports)(jd, \*[, user])                            | List the job ids that have an alignment report in engagement `jd`.                     |
+| [`skill_adjacency`](#hired.cli.skill_adjacency)(requirement, candidate_skills, \*) | Rank the candidate's skills (comma-separated) by adjacency to `requirement`.           |
+| [`skill_lookup`](#hired.cli.skill_lookup)(text, \*[, k])                        | Taxonomy skills matching `text` (score, how matched, label, source, id).               |
+| [`status`](#hired.cli.status)(\*[, user])                                 | Summarize a candidate's knowledge base: counts, pending material, engagements.         |
+| [`synopsis`](#hired.cli.synopsis)(\*[, regenerate, user])                   | Print a candidate's synopsis (`--regenerate` rebuilds it from the facts).              |
+| [`users`](#hired.cli.users)()                                            | List the candidates that have data (one `users/<user>/` directory each).               |
 
-### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function align>, <function reports>, <function report>]*
+### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function align>, <function reports>, <function report>, <function build_skill_index>, <function skill_lookup>, <function skill_adjacency>]*
 
 The operations the `hired` command exposes (SSOT for every surface).
 
@@ -93,6 +96,17 @@ archived). Prints the saved job id and the resulting verdict line.
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.cli.build_skill_index(, embeddings=False, no_onet=False, refresh=False)
+
+Download ESCO (+ O\*NET) and build the skill-adjacency taxonomy (tens of minutes).
+
+`--embeddings` also embeds every label (needs `hired[embeddings]`);
+`--refresh` re-downloads instead of reusing cached pages. The data and its
+CC BY 4.0 attribution (`NOTICE.md`) go under `<data root>/taxonomy/`.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### hired.cli.facts(, category=None, tag=None, user=None)
 
@@ -136,6 +150,23 @@ otherwise it is printed.
 ### hired.cli.reports(jd, , user=None)
 
 List the job ids that have an alignment report in engagement `jd`.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.cli.skill_adjacency(requirement, candidate_skills, , k=3, alpha=0.5)
+
+Rank the candidate’s skills (comma-separated) by adjacency to `requirement`.
+
+Each line: blended score, suggested transferability band, and the evidence
+(shared taxonomy neighbour, relatedness, label similarity).
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.cli.skill_lookup(text, , k=5)
+
+Taxonomy skills matching `text` (score, how matched, label, source, id).
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]

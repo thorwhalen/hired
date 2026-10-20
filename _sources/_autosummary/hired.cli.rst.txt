@@ -17,11 +17,14 @@ hired.cli
       add_source
       align
       analyze
+      build_skill_index
       facts
       ingest
       jds
       report
       reports
+      skill_adjacency
+      skill_lookup
       status
       synopsis
       users

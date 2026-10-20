@@ -1,0 +1,19 @@
+hired.taxonomy.graph
+====================
+
+.. automodule:: hired.taxonomy.graph
+
+   
+   .. rubric:: Module Attributes
+
+   .. autosummary::
+   
+      Edges
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      merge_edges
+      relatedness_edges
+   

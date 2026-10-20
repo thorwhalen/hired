@@ -1,4 +1,4 @@
-> built 2026-10-20 13:33 UTC from ef2185e (main) · hired 0.0.34. Details: build_info.json
+> built 2026-10-20 14:36 UTC from 43f8f42 (main) · hired 0.0.35. Details: build_info.json
 
 # index.html.md
 
@@ -22,6 +22,7 @@ optional features are extras:
 | `hired[rendercv]`   | LaTeX/Typst-quality PDFs via rendercv                                           |
 | `hired[search]`     | multi-board job search (jobspy)                                                 |
 | `hired[ai]`         | real LLM resume tailoring (openai)                                              |
+| `hired[embeddings]` | label embeddings for skill adjacency (sentence-transformers; pulls torch)       |
 | `hired[cli]`        | the `hired` command (candidate knowledge + JD alignment from the shell)         |
 | `hired[all]`        | everything above                                                                |
 
@@ -76,6 +77,27 @@ hired status                                  # facts, pending sources, engageme
 ```
 
 Several candidates can share one data root (`~/.local/share/hired/users/<user>/`). Every command takes `--user`; without it, the candidate is `$HIRED_USER`, else `me`. `hired users` lists them. In Python, the same seam is the `user` argument: `CandidateKnowledgeBase("alice")`.
+
+## Skill adjacency (ESCO + O\*NET)
+
+How close is the candidate’s “TensorFlow” to the job’s “deep learning”? `hired.taxonomy` answers from labour-market data: skills that occupations require together are related. Build the taxonomy once (it downloads ESCO and O\*NET into the data root; tens of minutes), then query it:
+
+```bash
+hired build-skill-index                       # add --embeddings with hired[embeddings]
+hired skill-adjacency "deep learning" "TensorFlow, Excel, cooking"
+```
+
+```python
+from hired.taxonomy import load_skill_index
+
+idx = load_skill_index()
+best = idx.suggest_adjacency("deep learning", ["TensorFlow", "Excel"])[0]
+best.score, best.transferability(), best.basis
+```
+
+The score blends co-occurrence relatedness with label-embedding similarity when vectors are present (`alpha·cosine + (1−alpha)·graph`).
+
+**Attribution.** The taxonomy is built from ESCO (© European Union, https://esco.ec.europa.eu/) and the O*NET 30.0 Database (U.S. Department of Labor, Employment and Training Administration; O*NET® is a trademark of USDOL/ETA), both used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Labels were normalised and occupation links turned into relatedness scores. The full notice is written next to the data as `NOTICE.md`.
 
 ## Features
 
@@ -3450,20 +3472,23 @@ injected-LLM analyzer ([`hired.alignment.analyzer`](_autosummary/hired.alignment
 
 ### Functions
 
-| [`add_source`](_autosummary/hired.cli.html.md#hired.cli.add_source)(path, \*[, name, user])               | Store a raw source document (CV, bio, publication list...) for a candidate.            |
-|---------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-| [`align`](_autosummary/hired.cli.html.md#hired.cli.align)(jd, \*, jd_text[, job_id, job_title, ...]) | Analyse a raw job description (the file `jd_text`) with an LLM and save the report.    |
-| [`analyze`](_autosummary/hired.cli.html.md#hired.cli.analyze)(report, jd, \*[, job_id, company, user]) | Finalize an analyst-drafted alignment report (JSON) and save it under engagement `jd`. |
-| [`facts`](_autosummary/hired.cli.html.md#hired.cli.facts)(\*[, category, tag, user])                 | List a candidate's current (asserted) fact statements.                                 |
-| [`ingest`](_autosummary/hired.cli.html.md#hired.cli.ingest)(records, \*[, source, user])              | Add extracted fact records (a JSON list) to a candidate's knowledge base.              |
-| [`jds`](_autosummary/hired.cli.html.md#hired.cli.jds)(\*[, user])                                  | List a candidate's engagements (one per company; 1+ roles each).                       |
-| [`report`](_autosummary/hired.cli.html.md#hired.cli.report)(jd[, job_id, fmt, output, user])          | Render a saved alignment report (`--fmt markdown|html`).                               |
-| [`reports`](_autosummary/hired.cli.html.md#hired.cli.reports)(jd, \*[, user])                          | List the job ids that have an alignment report in engagement `jd`.                     |
-| [`status`](_autosummary/hired.cli.html.md#hired.cli.status)(\*[, user])                               | Summarize a candidate's knowledge base: counts, pending material, engagements.         |
-| [`synopsis`](_autosummary/hired.cli.html.md#hired.cli.synopsis)(\*[, regenerate, user])                 | Print a candidate's synopsis (`--regenerate` rebuilds it from the facts).              |
-| [`users`](_autosummary/hired.cli.html.md#hired.cli.users)()                                          | List the candidates that have data (one `users/<user>/` directory each).               |
+| [`add_source`](_autosummary/hired.cli.html.md#hired.cli.add_source)(path, \*[, name, user])                 | Store a raw source document (CV, bio, publication list...) for a candidate.            |
+|-----------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| [`align`](_autosummary/hired.cli.html.md#hired.cli.align)(jd, \*, jd_text[, job_id, job_title, ...])   | Analyse a raw job description (the file `jd_text`) with an LLM and save the report.    |
+| [`analyze`](_autosummary/hired.cli.html.md#hired.cli.analyze)(report, jd, \*[, job_id, company, user])   | Finalize an analyst-drafted alignment report (JSON) and save it under engagement `jd`. |
+| [`build_skill_index`](_autosummary/hired.cli.html.md#hired.cli.build_skill_index)(\*[, embeddings, no_onet, ...])  | Download ESCO (+ O\*NET) and build the skill-adjacency taxonomy (tens of minutes).     |
+| [`facts`](_autosummary/hired.cli.html.md#hired.cli.facts)(\*[, category, tag, user])                   | List a candidate's current (asserted) fact statements.                                 |
+| [`ingest`](_autosummary/hired.cli.html.md#hired.cli.ingest)(records, \*[, source, user])                | Add extracted fact records (a JSON list) to a candidate's knowledge base.              |
+| [`jds`](_autosummary/hired.cli.html.md#hired.cli.jds)(\*[, user])                                    | List a candidate's engagements (one per company; 1+ roles each).                       |
+| [`report`](_autosummary/hired.cli.html.md#hired.cli.report)(jd[, job_id, fmt, output, user])            | Render a saved alignment report (`--fmt markdown|html`).                               |
+| [`reports`](_autosummary/hired.cli.html.md#hired.cli.reports)(jd, \*[, user])                            | List the job ids that have an alignment report in engagement `jd`.                     |
+| [`skill_adjacency`](_autosummary/hired.cli.html.md#hired.cli.skill_adjacency)(requirement, candidate_skills, \*) | Rank the candidate's skills (comma-separated) by adjacency to `requirement`.           |
+| [`skill_lookup`](_autosummary/hired.cli.html.md#hired.cli.skill_lookup)(text, \*[, k])                        | Taxonomy skills matching `text` (score, how matched, label, source, id).               |
+| [`status`](_autosummary/hired.cli.html.md#hired.cli.status)(\*[, user])                                 | Summarize a candidate's knowledge base: counts, pending material, engagements.         |
+| [`synopsis`](_autosummary/hired.cli.html.md#hired.cli.synopsis)(\*[, regenerate, user])                   | Print a candidate's synopsis (`--regenerate` rebuilds it from the facts).              |
+| [`users`](_autosummary/hired.cli.html.md#hired.cli.users)()                                            | List the candidates that have data (one `users/<user>/` directory each).               |
 
-### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function align>, <function reports>, <function report>]*
+### hired.cli.CLI_FUNCS *= [<function users>, <function status>, <function add_source>, <function ingest>, <function facts>, <function synopsis>, <function jds>, <function analyze>, <function align>, <function reports>, <function report>, <function build_skill_index>, <function skill_lookup>, <function skill_adjacency>]*
 
 The operations the `hired` command exposes (SSOT for every surface).
 
@@ -3502,6 +3527,17 @@ archived). Prints the saved job id and the resulting verdict line.
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.cli.build_skill_index(, embeddings=False, no_onet=False, refresh=False)
+
+Download ESCO (+ O\*NET) and build the skill-adjacency taxonomy (tens of minutes).
+
+`--embeddings` also embeds every label (needs `hired[embeddings]`);
+`--refresh` re-downloads instead of reusing cached pages. The data and its
+CC BY 4.0 attribution (`NOTICE.md`) go under `<data root>/taxonomy/`.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### hired.cli.facts(, category=None, tag=None, user=None)
 
@@ -3545,6 +3581,23 @@ otherwise it is printed.
 ### hired.cli.reports(jd, , user=None)
 
 List the job ids that have an alignment report in engagement `jd`.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.cli.skill_adjacency(requirement, candidate_skills, , k=3, alpha=0.5)
+
+Rank the candidate’s skills (comma-separated) by adjacency to `requirement`.
+
+Each line: blended score, suggested transferability band, and the evidence
+(shared taxonomy neighbour, relatedness, label similarity).
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
+
+### hired.cli.skill_lookup(text, , k=5)
+
+Taxonomy skills matching `text` (score, how matched, label, source, id).
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
@@ -5143,6 +5196,7 @@ Render the report as a Markdown string.
 | [`resume_agent`](_autosummary/hired.resume_agent.html.md#module-hired.resume_agent)                             | Resume Generation System - Core Architecture                                       |
 | [`resumejson_pydantic_models`](_autosummary/hired.resumejson_pydantic_models.html.md#module-hired.resumejson_pydantic_models) | Pydantic models for resume json schema                                             |
 | [`search`](_autosummary/hired.search.html.md#module-hired.search)                                         | Job search functionality for the hired package.                                    |
+| [`taxonomy`](_autosummary/hired.taxonomy.html.md#module-hired.taxonomy)                                     | Skills taxonomy (ESCO + O\*NET) and skill adjacency for alignment's Axis A.        |
 | [`tools`](_autosummary/hired.tools.html.md#module-hired.tools)                                           | High-level orchestration functions - the main API.                                 |
 | [`tracking`](_autosummary/hired.tracking.html.md#module-hired.tracking)                                     | Application tracking system for managing job applications.                         |
 | [`util`](_autosummary/hired.util.html.md#module-hired.util)                                             | Utilities for external dependencies and general helpers.                           |
@@ -8220,6 +8274,803 @@ Get the default USAJobs source instance.
   [`USAJobsSource`](_autosummary/hired.search.sources.usajobs.html.md#hired.search.sources.usajobs.USAJobsSource)
 
 
+# _autosummary/hired.taxonomy.base.html.md
+
+# hired.taxonomy.base
+
+Schemas and on-disk layout for the skills taxonomy (ESCO + O\*NET).
+
+A taxonomy is two things:
+
+- **nodes** — skills (and, for O\*NET, technologies, knowledge areas, abilities),
+  each a [`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode) with a stable id (`esco:<uuid>`,
+  `onet:tech:<slug>`, `onet:<element-id>`), a preferred label, alternative
+  labels, and a KSAO `kind`;
+- **occupations** — each an [`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation) listing the nodes it requires
+  (`essential`) or may use (`optional`). Skill *adjacency* is learned from
+  which skills occupations require together (see [`hired.taxonomy.graph`](_autosummary/hired.taxonomy.graph.html.md#module-hired.taxonomy.graph)).
+
+The built taxonomy is shared reference data, not candidate data, so it lives at
+`<data root>/taxonomy/` (not under `users/`). It is built on demand by
+[`hired.taxonomy.build_skill_index()`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.build_skill_index) — nothing is vendored into the package.
+
+Attribution (both sources are CC BY 4.0) is in `ATTRIBUTION` and is written
+next to the data as `NOTICE.md`.
+
+### Functions
+
+| [`attribution`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.attribution)([sources, onet_version])   | The CC BY 4.0 notice for the sources a build used (written as `NOTICE.md`).   |
+|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| [`dump_models`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.dump_models)(models)                    | JSON-able dicts for a list of models, without empty/default noise.            |
+| [`normalize_label`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.normalize_label)(text)                  | Case-, accent- and punctuation-insensitive form of a label, for matching.     |
+| [`taxonomy_dir`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.taxonomy_dir)(\*subpaths[, root, make]) | Directory of the built taxonomy: `root` or `<data root>/taxonomy`.            |
+
+### Classes
+
+| [`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation)(\*, id, label, source[, ...])          | An occupation and the skill nodes it requires or may use.   |
+|----------------------------------------------------------------------------------------------------|-------------------------------------------------------------|
+| [`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode)(\*, id, label[, alt_labels, kind, ...]) | One skill-like concept from a source taxonomy.              |
+
+### *class* hired.taxonomy.base.Occupation(\*, id, label, source, essential=<factory>, optional=<factory>)
+
+Bases: `BaseModel`
+
+An occupation and the skill nodes it requires or may use.
+
+#### model_config *: [ClassVar](https://docs.python.org/3/library/typing.html#typing.ClassVar)[ConfigDict]* *= {}*
+
+Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+
+### *class* hired.taxonomy.base.SkillNode(\*, id, label, alt_labels=<factory>, source, kind='skill', reuse_level=None, uri=None)
+
+Bases: `BaseModel`
+
+One skill-like concept from a source taxonomy.
+
+#### kind *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+
+“skill”, “knowledge”, “ability”, “technology”, “competence”, …
+
+* **Type:**
+  KSAO kind
+
+#### model_config *: [ClassVar](https://docs.python.org/3/library/typing.html#typing.ClassVar)[ConfigDict]* *= {}*
+
+Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+
+#### reuse_level *: [str](https://docs.python.org/3/builtins/stdtypes.html#str) | [None](https://docs.python.org/3/builtins/constants.html#None)*
+
+ESCO skill-reuse level (“transversal”, “cross-sector”, “sector-specific”,
+“occupation-specific”), when known — a transferability hint.
+
+### hired.taxonomy.base.attribution(sources=('esco', 'onet'), , onet_version='30.0')
+
+The CC BY 4.0 notice for the sources a build used (written as `NOTICE.md`).
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.taxonomy.base.dump_models(models)
+
+JSON-able dicts for a list of models, without empty/default noise.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]]
+
+### hired.taxonomy.base.normalize_label(text)
+
+Case-, accent- and punctuation-insensitive form of a label, for matching.
+
+```pycon
+>>> normalize_label('  Machine-Learning (ML)! ')
+'machine learning ml'
+>>> normalize_label('Café')
+'cafe'
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.taxonomy.base.taxonomy_dir(\*subpaths, root=None, make=True)
+
+Directory of the built taxonomy: `root` or `<data root>/taxonomy`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+
+# _autosummary/hired.taxonomy.build.html.md
+
+# hired.taxonomy.build
+
+Build the skills taxonomy into the data root, and load it back as a `SkillIndex`.
+
+[`build_skill_index()`](_autosummary/hired.taxonomy.build.html.md#hired.taxonomy.build.build_skill_index) fetches the sources (ESCO via its API, O\*NET via its
+archive — see [`hired.taxonomy.sources`](_autosummary/hired.taxonomy.sources.html.md#module-hired.taxonomy.sources)), computes skill relatedness from
+occupational co-occurrence ([`hired.taxonomy.graph`](_autosummary/hired.taxonomy.graph.html.md#module-hired.taxonomy.graph)), optionally embeds every
+label (the `embeddings` extra), and writes the result under
+`<data root>/taxonomy/` with a `NOTICE.md` carrying the CC BY 4.0
+attribution. Raw pages and archives are cached under `taxonomy/raw/`, so an
+interrupted build resumes and a rebuild is offline (`refresh=True` re-fetches).
+
+A full ESCO fetch takes tens of minutes (the occupation pages are slow); O\*NET is
+one ~13 MB download. Nothing here runs at import time.
+
+### Functions
+
+| [`build_skill_index`](_autosummary/hired.taxonomy.build.html.md#hired.taxonomy.build.build_skill_index)(\*[, sources, embeddings, ...])   | Fetch, compute and persist the taxonomy; return its `meta` summary.       |
+|------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| [`load_skill_index`](_autosummary/hired.taxonomy.build.html.md#hired.taxonomy.build.load_skill_index)(\*[, root, embedder])              | Load the built taxonomy (raises `FileNotFoundError` with the build hint). |
+
+### hired.taxonomy.build.build_skill_index(, sources=('esco', 'onet'), embeddings=False, embedder=None, embedding_model='sentence-transformers/all-MiniLM-L6-v2', root=None, refresh=False, onet_version='30_0', graph_kwargs=None, get_json=None, get_bytes=None, progress=None)
+
+Fetch, compute and persist the taxonomy; return its `meta` summary.
+
+`embeddings=True` (or an explicit `embedder`) also stores one vector per
+node label. `graph_kwargs` go to [`relatedness_edges()`](_autosummary/hired.taxonomy.graph.html.md#hired.taxonomy.graph.relatedness_edges).
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.taxonomy.build.load_skill_index(, root=None, embedder='auto', \*\*index_kwargs)
+
+Load the built taxonomy (raises `FileNotFoundError` with the build hint).
+
+`embedder="auto"` uses the stored embedding model for *query* text when the
+taxonomy has vectors and the `embeddings` extra is installed (loaded on first
+use); pass `None` to compare stored vectors only, or any embedder.
+`index_kwargs` go to `SkillIndex` (e.g. `bridge_k`).
+
+* **Return type:**
+  [`SkillIndex`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.SkillIndex)
+
+
+# _autosummary/hired.taxonomy.embed.html.md
+
+# hired.taxonomy.embed
+
+The label-embedding seam (the `embeddings` extra).
+
+An *embedder* is any `Callable[[Sequence[str]], array-like (n, d)]`. The default,
+[`sentence_transformer_embedder()`](_autosummary/hired.taxonomy.embed.html.md#hired.taxonomy.embed.sentence_transformer_embedder), wraps `all-MiniLM-L6-v2` (384 dimensions,
+CPU, no API key), imported only when called. Any other embedder can be injected
+(an API model, or one from the fleet’s embedding packages) as long as it returns
+one vector per input text.
+
+Vectors are compared by cosine. Everything here needs `numpy`, which comes with
+the `embeddings` extra.
+
+### Functions
+
+| [`require_numpy`](_autosummary/hired.taxonomy.embed.html.md#hired.taxonomy.embed.require_numpy)()                                  | Import numpy, or raise an `ImportError` that names the extra.           |
+|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| [`sentence_transformer_embedder`](_autosummary/hired.taxonomy.embed.html.md#hired.taxonomy.embed.sentence_transformer_embedder)([model_name, ...]) | An embedder backed by a local sentence-transformers model (loaded now). |
+| [`unit_rows`](_autosummary/hired.taxonomy.embed.html.md#hired.taxonomy.embed.unit_rows)(matrix)                                | `matrix` as float32 rows of unit length (zero rows stay zero).          |
+
+### hired.taxonomy.embed.require_numpy()
+
+Import numpy, or raise an `ImportError` that names the extra.
+
+### hired.taxonomy.embed.sentence_transformer_embedder(model_name='sentence-transformers/all-MiniLM-L6-v2', , batch_size=256)
+
+An embedder backed by a local sentence-transformers model (loaded now).
+
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Sequence`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.taxonomy.embed.unit_rows(matrix)
+
+`matrix` as float32 rows of unit length (zero rows stay zero).
+
+
+# _autosummary/hired.taxonomy.graph.html.md
+
+# hired.taxonomy.graph
+
+Skill relatedness from occupational co-occurrence (pure Python, no numpy).
+
+Two skills are *related* when occupations require them together more often than
+chance predicts. For skills `i` and `j` over `N` occupations, with
+`n_i` the (weighted) number of occupations using `i` and `C_ij` the
+(weighted) number using both:
+
+```default
+RCA_ij = C_ij / (n_i * n_j / N)          # observed / expected co-occurrence
+SR_ij  = (RCA_ij - 1) / (RCA_ij + 1)     # in (-1, 1); clipped to [0, 1]
+```
+
+`SR` is the skill-relatedness measure of Neffke & Henning (2013), which the
+research note recommends (`misc/docs/research/skills-taxonomy-and-adjacency.md`).
+Essential links weigh `1`, optional ones `optional_weight`. Pairs seen in
+fewer than `min_cooccurrence` occupations are dropped (one shared occupation
+between two rare skills gives a huge, meaningless ratio), and each skill keeps
+only its `top_k` strongest links.
+
+```pycon
+>>> from hired.taxonomy.base import Occupation
+>>> occs = [Occupation(id=f'o{i}', label='', source='t', essential=es)
+...         for i, es in enumerate([['py', 'ml'], ['py', 'ml'], ['py', 'web'],
+...                                 ['cook', 'serve'], ['cook', 'serve']])]
+>>> edges = relatedness_edges(occs)
+>>> edges['py'][0][0], edges['py'][0][1] > 0
+('ml', True)
+>>> 'cook' in dict(edges['py'])
+False
+```
+
+### Module Attributes
+
+| [`Edges`](_autosummary/hired.taxonomy.graph.html.md#hired.taxonomy.graph.Edges)   | `{node_id: [(other_id, score), ...]}`, strongest first.   |
+|----------------------------------------------------------|-----------------------------------------------------------|
+
+### Functions
+
+| [`merge_edges`](_autosummary/hired.taxonomy.graph.html.md#hired.taxonomy.graph.merge_edges)(\*edge_sets)                  | Union of edge sets over disjoint id spaces (e.g. ESCO and O\*NET).     |
+|--------------------------------------------------------------------------------------------|------------------------------------------------------------------------|
+| [`relatedness_edges`](_autosummary/hired.taxonomy.graph.html.md#hired.taxonomy.graph.relatedness_edges)(occupations, \*[, ...]) | Skill-relatedness edges (`SR` in `(min_score, 1]`) from co-occurrence. |
+
+### hired.taxonomy.graph.Edges
+
+`{node_id: [(other_id, score), ...]}`, strongest first.
+
+alias of [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]]
+
+### hired.taxonomy.graph.merge_edges(\*edge_sets)
+
+Union of edge sets over disjoint id spaces (e.g. ESCO and O\*NET).
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]]
+
+### hired.taxonomy.graph.relatedness_edges(occupations, , optional_weight=0.5, min_cooccurrence=2.0, top_k=30, min_score=0.0)
+
+Skill-relatedness edges (`SR` in `(min_score, 1]`) from co-occurrence.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]]
+
+
+# _autosummary/hired.taxonomy.html.md
+
+# hired.taxonomy
+
+Skills taxonomy (ESCO + O\*NET) and skill adjacency for alignment’s Axis A.
+
+Strengthens *transfer distance* beyond keyword match and LLM judgment with two
+signals, blended as `alpha * cosine + (1 - alpha) * graph`:
+
+- a **relatedness graph** learned from which skills occupations require together
+  (ESCO occupation↔skill links, O\*NET technology and K/S/A ratings) — pure Python;
+- **label embeddings** (the `embeddings` extra) for similarity and for skills
+  absent from both taxonomies.
+
+Nothing is vendored: build the taxonomy once into the data root, then query it:
+
+```default
+from hired.taxonomy import build_skill_index, load_skill_index
+build_skill_index()                 # or `hired build-skill-index`; tens of minutes
+idx = load_skill_index()
+idx.suggest_adjacency("PyTorch", ["TensorFlow", "Excel"])
+```
+
+ESCO (© European Union) and O\*NET (USDOL/ETA) data are used under CC BY 4.0; see
+`hired.taxonomy.base.ATTRIBUTION`, written next to the data as `NOTICE.md`.
+Research basis: `misc/docs/research/skills-taxonomy-and-adjacency.md`.
+
+### Functions
+
+| [`build_skill_index`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.build_skill_index)(\*[, sources, embeddings, ...])   | Fetch, compute and persist the taxonomy; return its `meta` summary.         |
+|------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| [`load_skill_index`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.load_skill_index)(\*[, root, embedder])              | Load the built taxonomy (raises `FileNotFoundError` with the build hint).   |
+| [`sentence_transformer_embedder`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.sentence_transformer_embedder)([model_name, ...])    | An embedder backed by a local sentence-transformers model (loaded now).     |
+| [`relatedness_edges`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.relatedness_edges)(occupations, \*[, ...])           | Skill-relatedness edges (`SR` in `(min_score, 1]`) from co-occurrence.      |
+| [`merge_edges`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.merge_edges)(\*edge_sets)                            | Union of edge sets over disjoint id spaces (e.g. ESCO and O\*NET).          |
+| [`transferability_band`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.transferability_band)(score, \*[, bands])            | The `Transferability` band a proximity `score` falls in.                    |
+| [`fetch_esco`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.fetch_esco)(\*[, get_json, cache, page_size, ...])   | All ESCO skills and occupations (with their skill links).                   |
+| [`fetch_onet`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.fetch_onet)(\*[, get_bytes, cache, version, ...])    | O\*NET technology and K/S/A nodes, and occupations (downloads ~13 MB once). |
+| [`parse_onet_archive`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.parse_onet_archive)(data, \*[, min_importance])      | Nodes and occupations from the bytes of an O\*NET text-database archive.    |
+| [`normalize_label`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.normalize_label)(text)                               | Case-, accent- and punctuation-insensitive form of a label, for matching.   |
+| [`taxonomy_dir`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.taxonomy_dir)(\*subpaths[, root, make])              | Directory of the built taxonomy: `root` or `<data root>/taxonomy`.          |
+
+### Classes
+
+| [`SkillIndex`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.SkillIndex)(nodes, edges, \*[, vectors, ...])      | Lookup and adjacency over taxonomy nodes, edges and (optional) vectors.   |
+|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| [`Proximity`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.Proximity)(a, b, score, graph, cosine, alpha)      | How close two skills are, with the evidence behind the number.            |
+| [`Match`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.Match)(node, score, how)                           | A taxonomy node matched to a piece of text.                               |
+| [`SkillNode`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.SkillNode)(\*, id, label[, alt_labels, kind, ...]) | One skill-like concept from a source taxonomy.                            |
+| [`Occupation`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.Occupation)(\*, id, label, source[, ...])          | An occupation and the skill nodes it requires or may use.                 |
+
+### *class* hired.taxonomy.Match(node, score, how)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A taxonomy node matched to a piece of text.
+
+### *class* hired.taxonomy.Occupation(\*, id, label, source, essential=<factory>, optional=<factory>)
+
+Bases: `BaseModel`
+
+An occupation and the skill nodes it requires or may use.
+
+#### model_config *: [ClassVar](https://docs.python.org/3/library/typing.html#typing.ClassVar)[ConfigDict]* *= {}*
+
+Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+
+### *class* hired.taxonomy.Proximity(a, b, score, graph, cosine, alpha, a_node=None, b_node=None, via=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+How close two skills are, with the evidence behind the number.
+
+#### *property* basis *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+
+One readable line of evidence, for a record’s `adjacency_basis`.
+
+#### transferability(\*\*kwargs)
+
+The band `score` falls in (see [`transferability_band()`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.transferability_band)).
+
+* **Return type:**
+  [`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)
+
+### *class* hired.taxonomy.SkillIndex(nodes, edges, , vectors=None, vector_ids=None, embedder=None, meta=None, bridge_k=3, bridge_min_score=0.5, graph_trust=0.2)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Lookup and adjacency over taxonomy nodes, edges and (optional) vectors.
+
+```pycon
+>>> from hired.taxonomy.base import SkillNode
+>>> nodes = [SkillNode(id='s:py', label='Python (computer programming)',
+...                    alt_labels=['Python'], source='s'),
+...          SkillNode(id='s:ml', label='machine learning', source='s'),
+...          SkillNode(id='s:cook', label='cooking', source='s')]
+>>> idx = SkillIndex(nodes, {'s:py': [('s:ml', 0.6)], 's:ml': [('s:py', 0.6)]})
+>>> idx.lookup('python')[0].node.id
+'s:py'
+>>> p = idx.proximity('Python', 'machine learning')
+>>> p.score, p.alpha, p.transferability().value
+(0.6, 0.0, 'contextual')
+>>> idx.proximity('Python', 'cooking').score
+0.0
+```
+
+#### graph_score(a_id, b_id)
+
+Relatedness of two nodes (direct, or via one shared neighbour) and the via id.
+
+Equivalent nodes count fully; cross-source bridges count with their weight.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)]
+
+#### lookup(text, , k=5, min_score=0.5)
+
+Nodes best matching `text`: exact label, alt label, token overlap, embedding.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Match`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Match)]
+
+#### neighbors(text, , k=10)
+
+The skills most related to `text` in the co-occurrence graph.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+
+#### proximity(a, b, , alpha=0.5)
+
+Blended adjacency of two skill texts (or node ids).
+
+* **Return type:**
+  [`Proximity`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Proximity)
+
+#### resolve(text, , min_score=0.5)
+
+The single best node for `text` (or `None`).
+
+* **Return type:**
+  [`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### suggest_adjacency(requirement, candidate_skills, , k=3, alpha=0.5)
+
+The candidate’s skills closest to `requirement`, strongest first.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Proximity`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Proximity)]
+
+### *class* hired.taxonomy.SkillNode(\*, id, label, alt_labels=<factory>, source, kind='skill', reuse_level=None, uri=None)
+
+Bases: `BaseModel`
+
+One skill-like concept from a source taxonomy.
+
+#### kind *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+
+“skill”, “knowledge”, “ability”, “technology”, “competence”, …
+
+* **Type:**
+  KSAO kind
+
+#### model_config *: [ClassVar](https://docs.python.org/3/library/typing.html#typing.ClassVar)[ConfigDict]* *= {}*
+
+Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+
+#### reuse_level *: [str](https://docs.python.org/3/builtins/stdtypes.html#str) | [None](https://docs.python.org/3/builtins/constants.html#None)*
+
+ESCO skill-reuse level (“transversal”, “cross-sector”, “sector-specific”,
+“occupation-specific”), when known — a transferability hint.
+
+### hired.taxonomy.build_skill_index(, sources=('esco', 'onet'), embeddings=False, embedder=None, embedding_model='sentence-transformers/all-MiniLM-L6-v2', root=None, refresh=False, onet_version='30_0', graph_kwargs=None, get_json=None, get_bytes=None, progress=None)
+
+Fetch, compute and persist the taxonomy; return its `meta` summary.
+
+`embeddings=True` (or an explicit `embedder`) also stores one vector per
+node label. `graph_kwargs` go to [`relatedness_edges()`](_autosummary/hired.taxonomy.graph.html.md#hired.taxonomy.graph.relatedness_edges).
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.taxonomy.fetch_esco(, get_json=None, cache=None, page_size=100, language='en', progress=None)
+
+All ESCO skills and occupations (with their skill links).
+
+Occupation↔skill links are the union of both sides — an occupation’s
+`hasEssential/OptionalSkill` and a skill’s `isEssential/OptionalForOccupation`
+— so a record that only came back in brief form still gets its links.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation)]]
+
+### hired.taxonomy.fetch_onet(, get_bytes=None, cache=None, version='30_0', min_importance=3.5, progress=None)
+
+O\*NET technology and K/S/A nodes, and occupations (downloads ~13 MB once).
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation)]]
+
+### hired.taxonomy.load_skill_index(, root=None, embedder='auto', \*\*index_kwargs)
+
+Load the built taxonomy (raises `FileNotFoundError` with the build hint).
+
+`embedder="auto"` uses the stored embedding model for *query* text when the
+taxonomy has vectors and the `embeddings` extra is installed (loaded on first
+use); pass `None` to compare stored vectors only, or any embedder.
+`index_kwargs` go to [`SkillIndex`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.SkillIndex) (e.g. `bridge_k`).
+
+* **Return type:**
+  [`SkillIndex`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.SkillIndex)
+
+### hired.taxonomy.merge_edges(\*edge_sets)
+
+Union of edge sets over disjoint id spaces (e.g. ESCO and O\*NET).
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]]
+
+### hired.taxonomy.normalize_label(text)
+
+Case-, accent- and punctuation-insensitive form of a label, for matching.
+
+```pycon
+>>> normalize_label('  Machine-Learning (ML)! ')
+'machine learning ml'
+>>> normalize_label('Café')
+'cafe'
+```
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.taxonomy.parse_onet_archive(data, , min_importance=3.5)
+
+Nodes and occupations from the bytes of an O\*NET text-database archive.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation)]]
+
+### hired.taxonomy.relatedness_edges(occupations, , optional_weight=0.5, min_cooccurrence=2.0, top_k=30, min_score=0.0)
+
+Skill-relatedness edges (`SR` in `(min_score, 1]`) from co-occurrence.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]]
+
+### hired.taxonomy.sentence_transformer_embedder(model_name='sentence-transformers/all-MiniLM-L6-v2', , batch_size=256)
+
+An embedder backed by a local sentence-transformers model (loaded now).
+
+* **Return type:**
+  [`Callable`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable)[[[`Sequence`](https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]], [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.taxonomy.taxonomy_dir(\*subpaths, root=None, make=True)
+
+Directory of the built taxonomy: `root` or `<data root>/taxonomy`.
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.taxonomy.transferability_band(score, , bands=((0.75, Transferability.DIRECT), (0.5, Transferability.CONTEXTUAL), (0.25, Transferability.FOUNDATIONAL)))
+
+The `Transferability` band a proximity `score` falls in.
+
+```pycon
+>>> transferability_band(0.8).value, transferability_band(0.1).value
+('direct', 'limited')
+```
+
+* **Return type:**
+  [`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)
+
+### Modules
+
+| [`base`](_autosummary/hired.taxonomy.base.html.md#module-hired.taxonomy.base)       | Schemas and on-disk layout for the skills taxonomy (ESCO + O\*NET).                                                                                                 |
+|----------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`build`](_autosummary/hired.taxonomy.build.html.md#module-hired.taxonomy.build)     | Build the skills taxonomy into the data root, and load it back as a [`SkillIndex`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.SkillIndex).                                    |
+| [`embed`](_autosummary/hired.taxonomy.embed.html.md#module-hired.taxonomy.embed)     | The label-embedding seam (the `embeddings` extra).                                                                                                                  |
+| [`graph`](_autosummary/hired.taxonomy.graph.html.md#module-hired.taxonomy.graph)     | Skill relatedness from occupational co-occurrence (pure Python, no numpy).                                                                                          |
+| [`index`](_autosummary/hired.taxonomy.index.html.md#module-hired.taxonomy.index)     | Query a built skills taxonomy: resolve skill text, score adjacency (Axis A).                                                                                        |
+| [`sources`](_autosummary/hired.taxonomy.sources.html.md#module-hired.taxonomy.sources) | Fetch the ESCO and O\*NET taxonomies into [`SkillNode`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.SkillNode) / [`Occupation`](_autosummary/hired.taxonomy.html.md#hired.taxonomy.Occupation). |
+
+
+# _autosummary/hired.taxonomy.index.html.md
+
+# hired.taxonomy.index
+
+Query a built skills taxonomy: resolve skill text, score adjacency (Axis A).
+
+[`SkillIndex`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.SkillIndex) answers \*how close is the candidate’s skill X to the job’s
+requirement Y?\* by blending two signals:
+
+```default
+proximity = alpha * cosine(label vectors) + (1 - alpha) * graph relatedness
+```
+
+- **graph relatedness** (always available): the co-occurrence `SR` score of
+  [`hired.taxonomy.graph`](_autosummary/hired.taxonomy.graph.html.md#module-hired.taxonomy.graph), direct or through one shared neighbour (the
+  > `via` skill, which makes a readable adjacency basis). Labels that name the
+  > same concept in ESCO and O\*NET are treated as one node.
+- **cosine** (with the `embeddings` extra): similarity of label embeddings,
+  which also covers skills absent from both taxonomies. Without vectors,
+  `alpha` is effectively 0 and the score is graph-only — [`Proximity`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Proximity)
+  records the `alpha` actually used.
+- **bridges** across sources: the ESCO and O\*NET graphs share no occupations,
+  so a node is also linked to its closest *connected* nodes in the other sources
+  (label token overlap or embedding similarity, whichever is higher), weighted by
+  that closeness. Graph relatedness then propagates through the bridge.
+- **graph trust**: a graph score of 0 (no path among each node’s strongest links)
+  is missing evidence more often than unrelatedness, so cosine’s weight grows as
+  the graph evidence weakens: `alpha` is used as given from a graph score of
+  `graph_trust` up, and rises linearly to 1 (cosine alone) at a graph score of 0,
+  so weak evidence never ranks below none.
+
+The index *suggests*; the analyst (skill or LLM) still decides the record’s
+`match_type` / `transferability`. [`SkillIndex.suggest_adjacency()`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.SkillIndex.suggest_adjacency) ranks
+the candidate’s skills against one requirement and proposes a
+[`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability) band for each.
+
+### Module Attributes
+
+| [`DFLT_TRANSFER_BANDS`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.DFLT_TRANSFER_BANDS)   | Score floors for each transferability band, strongest first; below the last, `LIMITED`.   |
+|------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+
+### Functions
+
+| [`transferability_band`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.transferability_band)(score, \*[, bands])   | The `Transferability` band a proximity `score` falls in.   |
+|---------------------------------------------------------------------------------------------|------------------------------------------------------------|
+
+### Classes
+
+| [`Match`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Match)(node, score, how)                      | A taxonomy node matched to a piece of text.                             |
+|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| [`Proximity`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Proximity)(a, b, score, graph, cosine, alpha) | How close two skills are, with the evidence behind the number.          |
+| [`SkillIndex`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.SkillIndex)(nodes, edges, \*[, vectors, ...]) | Lookup and adjacency over taxonomy nodes, edges and (optional) vectors. |
+
+### hired.taxonomy.index.DFLT_TRANSFER_BANDS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[float](https://docs.python.org/3/builtins/functions.html#float), [Transferability](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)], ...]* *= ((0.75, Transferability.DIRECT), (0.5, Transferability.CONTEXTUAL), (0.25, Transferability.FOUNDATIONAL))*
+
+Score floors for each transferability band, strongest first; below the last,
+`LIMITED`. Keyword-overridable wherever bands are used. Calibrated on the real
+ESCO + O\*NET build (MiniLM vectors, #10): clearly unrelated pairs (cooking~Python,
+welding~accounting, carpentry~software testing) score 0.06-0.11 and loosely related
+ones 0.2; Python~machine learning 0.27, Excel~financial analysis 0.39,
+TensorFlow~deep learning 0.54, SQL~data analytics 0.63, Java~Python 0.66.
+
+### *class* hired.taxonomy.index.Match(node, score, how)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A taxonomy node matched to a piece of text.
+
+### *class* hired.taxonomy.index.Proximity(a, b, score, graph, cosine, alpha, a_node=None, b_node=None, via=None)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+How close two skills are, with the evidence behind the number.
+
+#### *property* basis *: [str](https://docs.python.org/3/builtins/stdtypes.html#str)*
+
+One readable line of evidence, for a record’s `adjacency_basis`.
+
+#### transferability(\*\*kwargs)
+
+The band `score` falls in (see [`transferability_band()`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.transferability_band)).
+
+* **Return type:**
+  [`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)
+
+### *class* hired.taxonomy.index.SkillIndex(nodes, edges, , vectors=None, vector_ids=None, embedder=None, meta=None, bridge_k=3, bridge_min_score=0.5, graph_trust=0.2)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+Lookup and adjacency over taxonomy nodes, edges and (optional) vectors.
+
+```pycon
+>>> from hired.taxonomy.base import SkillNode
+>>> nodes = [SkillNode(id='s:py', label='Python (computer programming)',
+...                    alt_labels=['Python'], source='s'),
+...          SkillNode(id='s:ml', label='machine learning', source='s'),
+...          SkillNode(id='s:cook', label='cooking', source='s')]
+>>> idx = SkillIndex(nodes, {'s:py': [('s:ml', 0.6)], 's:ml': [('s:py', 0.6)]})
+>>> idx.lookup('python')[0].node.id
+'s:py'
+>>> p = idx.proximity('Python', 'machine learning')
+>>> p.score, p.alpha, p.transferability().value
+(0.6, 0.0, 'contextual')
+>>> idx.proximity('Python', 'cooking').score
+0.0
+```
+
+#### graph_score(a_id, b_id)
+
+Relatedness of two nodes (direct, or via one shared neighbour) and the via id.
+
+Equivalent nodes count fully; cross-source bridges count with their weight.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`float`](https://docs.python.org/3/builtins/functions.html#float), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str) | [`None`](https://docs.python.org/3/builtins/constants.html#None)]
+
+#### lookup(text, , k=5, min_score=0.5)
+
+Nodes best matching `text`: exact label, alt label, token overlap, embedding.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Match`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Match)]
+
+#### neighbors(text, , k=10)
+
+The skills most related to `text` in the co-occurrence graph.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode), [`float`](https://docs.python.org/3/builtins/functions.html#float)]]
+
+#### proximity(a, b, , alpha=0.5)
+
+Blended adjacency of two skill texts (or node ids).
+
+* **Return type:**
+  [`Proximity`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Proximity)
+
+#### resolve(text, , min_score=0.5)
+
+The single best node for `text` (or `None`).
+
+* **Return type:**
+  [`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### suggest_adjacency(requirement, candidate_skills, , k=3, alpha=0.5)
+
+The candidate’s skills closest to `requirement`, strongest first.
+
+* **Return type:**
+  [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Proximity`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Proximity)]
+
+### hired.taxonomy.index.transferability_band(score, , bands=((0.75, Transferability.DIRECT), (0.5, Transferability.CONTEXTUAL), (0.25, Transferability.FOUNDATIONAL)))
+
+The `Transferability` band a proximity `score` falls in.
+
+```pycon
+>>> transferability_band(0.8).value, transferability_band(0.1).value
+('direct', 'limited')
+```
+
+* **Return type:**
+  [`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)
+
+
+# _autosummary/hired.taxonomy.sources.html.md
+
+# hired.taxonomy.sources
+
+Fetch the ESCO and O\*NET taxonomies into `SkillNode` / `Occupation`.
+
+Network access is a seam: `get_json(url, params) -> dict` for the ESCO API and
+`get_bytes(url) -> bytes` for the O\*NET archive, defaulting to `requests`
+(a core dependency) with timeouts and retries. Every page or archive fetched is
+written to a `cache` mapping first, so an interrupted build resumes where it
+stopped (the ESCO occupation pages are slow — tens of seconds each).
+
+- **ESCO** ([`fetch_esco()`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.fetch_esco)): all skills (labels, alternative labels, skill
+  type → KSAO kind, reuse level) and all occupations with their essential and
+  optional skills, paged through the public search API (no key needed).
+- **O\*NET** ([`fetch_onet()`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.fetch_onet)): the text database archive. Technology examples
+  (`Technology Skills.txt`; hot technologies essential, others optional) and the
+  Skills / Knowledge / Abilities descriptors an occupation rates at or above
+  `min_importance` on the importance scale.
+
+### Functions
+
+| [`esco_occupation`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.esco_occupation)(record, \*[, language])            | An `Occupation` from one ESCO search result (full or brief).                |
+|-----------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| [`esco_skill_node`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.esco_skill_node)(record, \*[, language])            | A `SkillNode` from one ESCO search result (full or brief).                  |
+| [`fetch_esco`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.fetch_esco)(\*[, get_json, cache, page_size, ...])  | All ESCO skills and occupations (with their skill links).                   |
+| [`fetch_onet`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.fetch_onet)(\*[, get_bytes, cache, version, ...])   | O\*NET technology and K/S/A nodes, and occupations (downloads ~13 MB once). |
+| [`onet_tech_id`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.onet_tech_id)(example)                              | Stable node id for an O\*NET technology example (`C++` → `onet:tech:c++`).  |
+| [`parse_onet_archive`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.parse_onet_archive)(data, \*[, min_importance])     | Nodes and occupations from the bytes of an O\*NET text-database archive.    |
+| [`requests_get_bytes`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.requests_get_bytes)(url, \*[, timeout, retries])    | Default O\*NET fetcher: the archive's bytes, with retries.                  |
+| [`requests_get_json`](_autosummary/hired.taxonomy.sources.html.md#hired.taxonomy.sources.requests_get_json)(url, params, \*[, timeout, ...]) | Default ESCO fetcher: `requests.get(...).json()` with retries.              |
+
+### hired.taxonomy.sources.esco_occupation(record, , language='en')
+
+An `Occupation` from one ESCO search result (full or brief).
+
+* **Return type:**
+  [`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation)
+
+### hired.taxonomy.sources.esco_skill_node(record, , language='en')
+
+A `SkillNode` from one ESCO search result (full or brief).
+
+* **Return type:**
+  [`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode)
+
+### hired.taxonomy.sources.fetch_esco(, get_json=None, cache=None, page_size=100, language='en', progress=None)
+
+All ESCO skills and occupations (with their skill links).
+
+Occupation↔skill links are the union of both sides — an occupation’s
+`hasEssential/OptionalSkill` and a skill’s `isEssential/OptionalForOccupation`
+— so a record that only came back in brief form still gets its links.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation)]]
+
+### hired.taxonomy.sources.fetch_onet(, get_bytes=None, cache=None, version='30_0', min_importance=3.5, progress=None)
+
+O\*NET technology and K/S/A nodes, and occupations (downloads ~13 MB once).
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation)]]
+
+### hired.taxonomy.sources.onet_tech_id(example)
+
+Stable node id for an O\*NET technology example (`C++` → `onet:tech:c++`).
+
+* **Return type:**
+  [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
+
+### hired.taxonomy.sources.parse_onet_archive(data, , min_importance=3.5)
+
+Nodes and occupations from the bytes of an O\*NET text-database archive.
+
+* **Return type:**
+  [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`SkillNode`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.SkillNode)], [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Occupation`](_autosummary/hired.taxonomy.base.html.md#hired.taxonomy.base.Occupation)]]
+
+### hired.taxonomy.sources.requests_get_bytes(url, , timeout=300, retries=3)
+
+Default O\*NET fetcher: the archive’s bytes, with retries.
+
+* **Return type:**
+  [`bytes`](https://docs.python.org/3/builtins/stdtypes.html#bytes)
+
+### hired.taxonomy.sources.requests_get_json(url, params, , timeout=180, retries=3)
+
+Default ESCO fetcher: `requests.get(...).json()` with retries.
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+
 # _autosummary/hired.tools.html.md
 
 # hired.tools
@@ -8573,18 +9424,16 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-10-20 13:33 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/ef2185ee8b1564ceadc1cdfdda122189d042f9d5"><code>ef2185e</code></a> on branch <code>main</code>, for **hired 0.0.34** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 14:36 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/43f8f42d9d48ba5fbec8b59c781e134fd9306016"><code>43f8f42</code></a> on branch <code>main</code>, for **hired 0.0.35** (from <code>pyproject.toml</code>).
 
-#### WARNING
-The documentation and the package may be misaligned:
-
-- The documented version (0.0.34) is behind the latest release on PyPI (0.0.35): `pip install hired` gives newer code than these docs describe.
+#### NOTE
+Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/ef2185ee8b1564ceadc1cdfdda122189d042f9d5"><code>ef2185ee8b1564ceadc1cdfdda122189d042f9d5</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/43f8f42d9d48ba5fbec8b59c781e134fd9306016"><code>43f8f42d9d48ba5fbec8b59c781e134fd9306016</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -8595,15 +9444,15 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39431169976">39431169976</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39440552600">39440552600</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>ef2185ee8b1564ceadc1cdfdda122189d042f9d5</code> (in the history of the built commit) |
+| Event commit | <code>43f8f42d9d48ba5fbec8b59c781e134fd9306016</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.20  |
+| epythet  | 0.2.21  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
@@ -8622,14 +9471,14 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.35/">0.0.35</a>, newer than the documented version (0.0.34).
+Latest release: <a href="https://pypi.org/project/hired/0.0.35/">0.0.35</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout ef2185ee8b1564ceadc1cdfdda122189d042f9d5
-pip install "epythet==0.2.20"
+git checkout 43f8f42d9d48ba5fbec8b59c781e134fd9306016
+pip install "epythet==0.2.21"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

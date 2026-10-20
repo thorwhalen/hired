@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="_static/documentation_options.js?v=9dd25805"></script>
+    <script src="_static/documentation_options.js?v=39aadc1c"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -57,7 +57,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.34" />
+  <meta name="docsearch:version" content="0.0.35" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -366,10 +366,13 @@ optional features are extras:</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hired[ai]</span></code></p></td>
 <td><p>real LLM resume tailoring (openai)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hired[cli]</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hired[embeddings]</span></code></p></td>
+<td><p>label embeddings for skill adjacency (sentence-transformers; pulls torch)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hired[cli]</span></code></p></td>
 <td><p>the <code class="docutils literal notranslate"><span class="pre">hired</span></code> command (candidate knowledge + JD alignment from the shell)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">hired[all]</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">hired[all]</span></code></p></td>
 <td><p>everything above</p></td>
 </tr>
 </tbody>
@@ -421,6 +424,23 @@ hired<span class="w"> </span>status<span class="w">                             
 </pre></div>
 </div>
 <p>Several candidates can share one data root (<code class="docutils literal notranslate"><span class="pre">~/.local/share/hired/users/&lt;user&gt;/</span></code>). Every command takes <code class="docutils literal notranslate"><span class="pre">--user</span></code>; without it, the candidate is <code class="docutils literal notranslate"><span class="pre">$HIRED_USER</span></code>, else <code class="docutils literal notranslate"><span class="pre">me</span></code>. <code class="docutils literal notranslate"><span class="pre">hired</span> <span class="pre">users</span></code> lists them. In Python, the same seam is the <code class="docutils literal notranslate"><span class="pre">user</span></code> argument: <code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase(&quot;alice&quot;)</span></code>.</p>
+</section>
+<section id="skill-adjacency-esco-o-net">
+<h2>Skill adjacency (ESCO + O*NET)<a class="headerlink" href="#skill-adjacency-esco-o-net" title="Link to this heading">#</a></h2>
+<p>How close is the candidate’s “TensorFlow” to the job’s “deep learning”? <code class="docutils literal notranslate"><span class="pre">hired.taxonomy</span></code> answers from labour-market data: skills that occupations require together are related. Build the taxonomy once (it downloads ESCO and O*NET into the data root; tens of minutes), then query it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hired<span class="w"> </span>build-skill-index<span class="w">                       </span><span class="c1"># add --embeddings with hired[embeddings]</span>
+hired<span class="w"> </span>skill-adjacency<span class="w"> </span><span class="s2">"deep learning"</span><span class="w"> </span><span class="s2">"TensorFlow, Excel, cooking"</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.taxonomy</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_skill_index</span>
+
+<span class="n">idx</span> <span class="o">=</span> <span class="n">load_skill_index</span><span class="p">()</span>
+<span class="n">best</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">suggest_adjacency</span><span class="p">(</span><span class="s2">"deep learning"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"TensorFlow"</span><span class="p">,</span> <span class="s2">"Excel"</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">best</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">best</span><span class="o">.</span><span class="n">transferability</span><span class="p">(),</span> <span class="n">best</span><span class="o">.</span><span class="n">basis</span>
+</pre></div>
+</div>
+<p>The score blends co-occurrence relatedness with label-embedding similarity when vectors are present (<code class="docutils literal notranslate"><span class="pre">alpha·cosine</span> <span class="pre">+</span> <span class="pre">(1−alpha)·graph</span></code>).</p>
+<p><strong>Attribution.</strong> The taxonomy is built from ESCO (© European Union, https://esco.ec.europa.eu/) and the O<em>NET 30.0 Database (U.S. Department of Labor, Employment and Training Administration; O</em>NET® is a trademark of USDOL/ETA), both used under <a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Labels were normalised and occupation links turned into relatedness scores. The full notice is written next to the data as <code class="docutils literal notranslate"><span class="pre">NOTICE.md</span></code>.</p>
 </section>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading">#</a></h2>
@@ -568,7 +588,7 @@ hired<span class="w"> </span>status<span class="w">                             
 </section>
 </section>
 
-<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-20 13:33 UTC from <a href="https://github.com/thorwhalen/hired/commit/ef2185ee8b1564ceadc1cdfdda122189d042f9d5">ef2185e</a> (main) · hired 0.0.34 · <a href="about-this-build.html">about this build</a></p>
+<p class="epythet-provenance" style="font-size:.8em;opacity:.65;margin-top:2.5em;text-align:right">built 2026-10-20 14:36 UTC from <a href="https://github.com/thorwhalen/hired/commit/43f8f42d9d48ba5fbec8b59c781e134fd9306016">43f8f42</a> (main) · hired 0.0.35 · <a href="about-this-build.html">about this build</a></p>
 
                 </article>
               
@@ -612,6 +632,7 @@ hired<span class="w"> </span>status<span class="w">                             
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-tailor-and-render-a-resume">Quick start — tailor and render a resume</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start-job-search">Quick start — job search</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#candidate-knowledge-jd-alignment-from-the-shell">Candidate knowledge + JD alignment from the shell</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#skill-adjacency-esco-o-net">Skill adjacency (ESCO + O*NET)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#job-search-new">1. Job Search (NEW!)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#content-generation">2. Content Generation</a></li>

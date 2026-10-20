@@ -1,0 +1,13 @@
+hired.taxonomy.build
+====================
+
+.. automodule:: hired.taxonomy.build
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_skill_index
+      load_skill_index
+   

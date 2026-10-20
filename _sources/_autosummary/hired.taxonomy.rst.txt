@@ -1,0 +1,44 @@
+hired.taxonomy
+==============
+
+.. automodule:: hired.taxonomy
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      build_skill_index
+      load_skill_index
+      sentence_transformer_embedder
+      relatedness_edges
+      merge_edges
+      transferability_band
+      fetch_esco
+      fetch_onet
+      parse_onet_archive
+      normalize_label
+      taxonomy_dir
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      SkillIndex
+      Proximity
+      Match
+      SkillNode
+      Occupation
+   
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   base
+   build
+   embed
+   graph
+   index
+   sources

@@ -26,6 +26,7 @@
    resume_agent
    resumejson_pydantic_models
    search
+   taxonomy
    tools
    tracking
    util

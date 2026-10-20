@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=9dd25805"></script>
+    <script src="../../_static/documentation_options.js?v=39aadc1c"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.34" />
+  <meta name="docsearch:version" content="0.0.35" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -1055,6 +1055,71 @@ window.runMermaid = runMermaid;</script>
 
 
 
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<span class="c1"># Skills taxonomy (Axis A adjacency)</span>
+<span class="c1"># --------------------------------------------------------------------------- #</span>
+<div class="viewcode-block" id="build_skill_index">
+<a class="viewcode-back" href="../../_autosummary/hired.cli.html#hired.cli.build_skill_index">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_skill_index</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span> <span class="n">embeddings</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">no_onet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">refresh</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Download ESCO (+ O*NET) and build the skill-adjacency taxonomy (tens of minutes).</span>
+
+<span class="sd">    ``--embeddings`` also embeds every label (needs ``hired[embeddings]``);</span>
+<span class="sd">    ``--refresh`` re-downloads instead of reusing cached pages. The data and its</span>
+<span class="sd">    CC BY 4.0 attribution (``NOTICE.md``) go under ``&lt;data root&gt;/taxonomy/``.</span>
+<span class="sd">    """</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.taxonomy</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_skill_index</span> <span class="k">as</span> <span class="n">build</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">progress</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">build</span><span class="p">(</span>
+        <span class="n">sources</span><span class="o">=</span><span class="p">(</span><span class="s2">"esco"</span><span class="p">,)</span> <span class="k">if</span> <span class="n">no_onet</span> <span class="k">else</span> <span class="p">(</span><span class="s2">"esco"</span><span class="p">,</span> <span class="s2">"onet"</span><span class="p">),</span>
+        <span class="n">embeddings</span><span class="o">=</span><span class="n">embeddings</span><span class="p">,</span>
+        <span class="n">refresh</span><span class="o">=</span><span class="n">refresh</span><span class="p">,</span>
+        <span class="n">progress</span><span class="o">=</span><span class="n">progress</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="skill_lookup">
+<a class="viewcode-back" href="../../_autosummary/hired.cli.html#hired.cli.skill_lookup">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">skill_lookup</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Taxonomy skills matching ``text`` (score, how matched, label, source, id)."""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.taxonomy</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_skill_index</span>
+
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">how</span><span class="si">:</span><span class="s2">&lt;9</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">label</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2">)  </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">load_skill_index</span><span class="p">()</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="skill_adjacency">
+<a class="viewcode-back" href="../../_autosummary/hired.cli.html#hired.cli.skill_adjacency">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">skill_adjacency</span><span class="p">(</span>
+    <span class="n">requirement</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">candidate_skills</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Rank the candidate's skills (comma-separated) by adjacency to ``requirement``.</span>
+
+<span class="sd">    Each line: blended score, suggested transferability band, and the evidence</span>
+<span class="sd">    (shared taxonomy neighbour, relatedness, label similarity).</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.taxonomy</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_skill_index</span>
+
+    <span class="n">skills</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">candidate_skills</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">score</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">transferability</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="si">:</span><span class="s2">&lt;12</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">basis</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">load_skill_index</span><span class="p">()</span><span class="o">.</span><span class="n">suggest_adjacency</span><span class="p">(</span>
+            <span class="n">requirement</span><span class="p">,</span> <span class="n">skills</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span>
+        <span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+
 <span class="c1">#: The operations the ``hired`` command exposes (SSOT for every surface).</span>
 <span class="n">CLI_FUNCS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">users</span><span class="p">,</span>
@@ -1068,6 +1133,9 @@ window.runMermaid = runMermaid;</script>
     <span class="n">align</span><span class="p">,</span>
     <span class="n">reports</span><span class="p">,</span>
     <span class="n">report</span><span class="p">,</span>
+    <span class="n">build_skill_index</span><span class="p">,</span>
+    <span class="n">skill_lookup</span><span class="p">,</span>
+    <span class="n">skill_adjacency</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 

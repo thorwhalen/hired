@@ -1,0 +1,14 @@
+hired.taxonomy.embed
+====================
+
+.. automodule:: hired.taxonomy.embed
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      require_numpy
+      sentence_transformer_embedder
+      unit_rows
+   

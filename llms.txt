@@ -51,11 +51,18 @@
 - [hired.search.sources.adzuna](_autosummary/hired.search.sources.adzuna.html.md): Adzuna source adapter.
 - [hired.search.sources.jobspy](_autosummary/hired.search.sources.jobspy.html.md): JobSpy source adapter.
 - [hired.search.sources.usajobs](_autosummary/hired.search.sources.usajobs.html.md): USAJobs source adapter.
+- [hired.taxonomy](_autosummary/hired.taxonomy.html.md): Skills taxonomy (ESCO + O&#92;&#42;NET) and skill adjacency for alignment’s Axis A.
+- [hired.taxonomy.base](_autosummary/hired.taxonomy.base.html.md): Schemas and on-disk layout for the skills taxonomy (ESCO + O&#92;&#42;NET).
+- [hired.taxonomy.build](_autosummary/hired.taxonomy.build.html.md): Build the skills taxonomy into the data root, and load it back as a &#96;SkillIndex&#96;.
+- [hired.taxonomy.embed](_autosummary/hired.taxonomy.embed.html.md): The label-embedding seam (the &#96;embeddings&#96; extra).
+- [hired.taxonomy.graph](_autosummary/hired.taxonomy.graph.html.md): Skill relatedness from occupational co-occurrence (pure Python, no numpy).
+- [hired.taxonomy.index](_autosummary/hired.taxonomy.index.html.md): Query a built skills taxonomy: resolve skill text, score adjacency (Axis A).
+- [hired.taxonomy.sources](_autosummary/hired.taxonomy.sources.html.md): Fetch the ESCO and O&#92;&#42;NET taxonomies into &#96;SkillNode&#96; / &#96;Occupation&#96;.
 - [hired.tools](_autosummary/hired.tools.html.md): High-level orchestration functions - the main API.
 - [hired.tracking](_autosummary/hired.tracking.html.md): Application tracking system for managing job applications.
 - [hired.util](_autosummary/hired.util.html.md): Utilities for external dependencies and general helpers.
 - [For AI agents](ai-agents.html.md): &#96;hired&#96; ships artifacts for coding agents alongside its code. This page lists
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 13:33 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 14:36 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 

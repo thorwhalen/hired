@@ -1377,6 +1377,7 @@ Render the report as a Markdown string.
 | [`resume_agent`](hired.resume_agent.html.md#module-hired.resume_agent)                             | Resume Generation System - Core Architecture                                       |
 | [`resumejson_pydantic_models`](hired.resumejson_pydantic_models.html.md#module-hired.resumejson_pydantic_models) | Pydantic models for resume json schema                                             |
 | [`search`](hired.search.html.md#module-hired.search)                                         | Job search functionality for the hired package.                                    |
+| [`taxonomy`](hired.taxonomy.html.md#module-hired.taxonomy)                                     | Skills taxonomy (ESCO + O\*NET) and skill adjacency for alignment's Axis A.        |
 | [`tools`](hired.tools.html.md#module-hired.tools)                                           | High-level orchestration functions - the main API.                                 |
 | [`tracking`](hired.tracking.html.md#module-hired.tracking)                                     | Application tracking system for managing job applications.                         |
 | [`util`](hired.util.html.md#module-hired.util)                                             | Utilities for external dependencies and general helpers.                           |

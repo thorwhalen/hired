@@ -18,6 +18,7 @@ optional features are extras:
 | `hired[rendercv]`   | LaTeX/Typst-quality PDFs via rendercv                                           |
 | `hired[search]`     | multi-board job search (jobspy)                                                 |
 | `hired[ai]`         | real LLM resume tailoring (openai)                                              |
+| `hired[embeddings]` | label embeddings for skill adjacency (sentence-transformers; pulls torch)       |
 | `hired[cli]`        | the `hired` command (candidate knowledge + JD alignment from the shell)         |
 | `hired[all]`        | everything above                                                                |
 
@@ -72,6 +73,27 @@ hired status                                  # facts, pending sources, engageme
 ```
 
 Several candidates can share one data root (`~/.local/share/hired/users/<user>/`). Every command takes `--user`; without it, the candidate is `$HIRED_USER`, else `me`. `hired users` lists them. In Python, the same seam is the `user` argument: `CandidateKnowledgeBase("alice")`.
+
+## Skill adjacency (ESCO + O\*NET)
+
+How close is the candidate’s “TensorFlow” to the job’s “deep learning”? `hired.taxonomy` answers from labour-market data: skills that occupations require together are related. Build the taxonomy once (it downloads ESCO and O\*NET into the data root; tens of minutes), then query it:
+
+```bash
+hired build-skill-index                       # add --embeddings with hired[embeddings]
+hired skill-adjacency "deep learning" "TensorFlow, Excel, cooking"
+```
+
+```python
+from hired.taxonomy import load_skill_index
+
+idx = load_skill_index()
+best = idx.suggest_adjacency("deep learning", ["TensorFlow", "Excel"])[0]
+best.score, best.transferability(), best.basis
+```
+
+The score blends co-occurrence relatedness with label-embedding similarity when vectors are present (`alpha·cosine + (1−alpha)·graph`).
+
+**Attribution.** The taxonomy is built from ESCO (© European Union, https://esco.ec.europa.eu/) and the O*NET 30.0 Database (U.S. Department of Labor, Employment and Training Administration; O*NET® is a trademark of USDOL/ETA), both used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Labels were normalised and occupation links turned into relatedness scores. The full notice is written next to the data as `NOTICE.md`.
 
 ## Features
 
