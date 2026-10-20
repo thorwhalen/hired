@@ -46,6 +46,12 @@ from hired.taxonomy.embed import Embedder, unit_rows
 #: welding~accounting, carpentry~software testing) score 0.06-0.11 and loosely related
 #: ones 0.2; Python~machine learning 0.27, Excel~financial analysis 0.39,
 #: TensorFlow~deep learning 0.54, SQL~data analytics 0.63, Java~Python 0.66.
+#: Ranking weight of a node's ``kind`` when free text resolves by token overlap or
+#: embedding (exact label matches are unaffected): a short query such as "sales" or
+#: "deep learning" names a skill more often than a product, so O*NET technology nodes
+#: ("Sales software", "NeuralWare") rank behind skill/knowledge nodes (#58).
+DFLT_KIND_WEIGHTS: dict[str, float] = {"technology": 0.8}
+
 DFLT_TRANSFER_BANDS: tuple[tuple[float, Transferability], ...] = (
     (0.75, Transferability.DIRECT),
     (0.5, Transferability.CONTEXTUAL),
@@ -150,6 +156,7 @@ class SkillIndex:
         bridge_k: int = 3,
         bridge_min_score: float = 0.5,
         graph_trust: float = 0.2,
+        kind_weights: dict[str, float] | None = None,
     ) -> None:
         self.nodes: dict[str, SkillNode] = {n.id: n for n in nodes}
         self._edges = edges
@@ -160,6 +167,7 @@ class SkillIndex:
         self.bridge_k = bridge_k
         self.bridge_min_score = bridge_min_score
         self.graph_trust = graph_trust
+        self.kind_weights = DFLT_KIND_WEIGHTS if kind_weights is None else kind_weights
         self._bridge_cache: dict[str, dict[str, float]] = {}
 
     def __len__(self) -> int:
@@ -196,7 +204,21 @@ class SkillIndex:
 
     # --- lookup ------------------------------------------------------------
     def lookup(self, text: str, *, k: int = 5, min_score: float = 0.5) -> list[Match]:
-        """Nodes best matching ``text``: exact label, alt label, token overlap, embedding."""
+        """Nodes best matching ``text``: exact label, alt label, token overlap, embedding.
+
+        Token and embedding matches are ranked by ``kind_weights`` times their
+        similarity to ``text``: the label embedding's cosine when vectors exist
+        (so a token overlap that is only a shared word ranks low), else the token
+        score. ``Match.score`` stays the stage's own score.
+
+        >>> from hired.taxonomy.base import SkillNode
+        >>> idx = SkillIndex([
+        ...     SkillNode(id='o:s', label='Sales software', source='o', kind='technology'),
+        ...     SkillNode(id='e:s', label='sales activities', source='e'),
+        ... ], {})
+        >>> idx.resolve('sales').label
+        'sales activities'
+        """
         if text in self.nodes:
             return [Match(self.nodes[text], 1.0, "id")]
         key = normalize_label(text)
@@ -210,12 +232,33 @@ class SkillIndex:
         ]
         if exact:
             return exact[:k]
-        matches = self._token_matches(key, k=k, min_score=min_score)
+        matches = self._token_matches(key, k=None, min_score=min_score)
         if not matches and self._unit_vectors is not None and self.embedder is not None:
             matches = self._embedding_matches(text, k=k, min_score=min_score)
-        return matches
+        return self._ranked(text, matches)[:k]
 
-    def _token_matches(self, key: str, *, k: int, min_score: float) -> list[Match]:
+    def _ranked(self, text: str, matches: list[Match]) -> list[Match]:
+        """``matches`` by kind weight times similarity to ``text`` (see ``lookup``)."""
+        similarity = {m.node.id: m.score for m in matches}
+        if matches and matches[0].how == "tokens" and self._can_embed:
+            query = unit_rows(self.embedder([text]))[0]
+            for m in matches:
+                if (row := self._vector_row.get(m.node.id)) is not None:
+                    similarity[m.node.id] = float(self._unit_vectors[row] @ query)
+
+        def rank(m: Match) -> tuple:
+            weight = self.kind_weights.get(m.node.kind, 1.0)
+            return (-weight * similarity[m.node.id], -m.score, m.node.label.lower())
+
+        return sorted(matches, key=rank)
+
+    @property
+    def _can_embed(self) -> bool:
+        return self._unit_vectors is not None and self.embedder is not None
+
+    def _token_matches(
+        self, key: str, *, k: int | None, min_score: float
+    ) -> list[Match]:
         query = set(key.split())
         if not query:
             return []
