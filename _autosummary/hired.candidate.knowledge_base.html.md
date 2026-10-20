@@ -67,6 +67,10 @@ re-reading everything. Facts extracted from a source cite it by this key.
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
+#### calibration_log(\*\*kwargs)
+
+This candidate’s [`CalibrationLog`](hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog).
+
 #### facts(, category=None, tags=None, status=FactStatus.ASSERTED, include_negations=True)
 
 Iterate facts, optionally filtered by category/tags/status.
@@ -126,7 +130,7 @@ Raw sources new, changed, or not yet distilled into facts.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-#### record_qa(entry, , derived_facts=None)
+#### record_qa(entry, , derived_facts=None, calibration=None)
 
 Append a clarifying Q&A exchange; optionally distill it into facts.
 
@@ -135,6 +139,11 @@ given, they are ingested with `SourceKind.QA` provenance (`source_id`
 = the Q&A id, quotes verified against the answer) and back-linked via the
 entry’s `derived_fact_ids` — so a Q&A answer becomes reusable,
 discoverable knowledge rather than being buried in the history.
+
+`calibration` = `(match_score, truth)`: the requirement record’s `match_score`
+before this answer and whether the answer showed it to be a match. The pair is
+logged for conformal calibration, and the calibrator refitted once both classes
+have enough pairs (see [`CalibrationLog`](hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog)).
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)

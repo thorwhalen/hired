@@ -2,7 +2,7 @@
 
 # About this build
 
-This documentation was built on **2026-10-20 10:35 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/fb5061010c83d0e247c82b1419dff03689478b38"><code>fb50610</code></a> on branch <code>main</code>, for **hired 0.0.28** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 11:21 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/4799f75093dd34061c162437df15c00628f034a1"><code>4799f75</code></a> on branch <code>main</code>, for **hired 0.0.29** (from <code>pyproject.toml</code>).
 
 #### NOTE
 Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
@@ -11,7 +11,7 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/fb5061010c83d0e247c82b1419dff03689478b38"><code>fb5061010c83d0e247c82b1419dff03689478b38</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/4799f75093dd34061c162437df15c00628f034a1"><code>4799f75093dd34061c162437df15c00628f034a1</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -22,15 +22,15 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39408787658">39408787658</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39414169888">39414169888</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>fb5061010c83d0e247c82b1419dff03689478b38</code> (in the history of the built commit) |
+| Event commit | <code>4799f75093dd34061c162437df15c00628f034a1</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.18  |
+| epythet  | 0.2.19  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
@@ -49,14 +49,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.28/">0.0.28</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.29/">0.0.29</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout fb5061010c83d0e247c82b1419dff03689478b38
-pip install "epythet==0.2.18"
+git checkout 4799f75093dd34061c162437df15c00628f034a1
+pip install "epythet==0.2.19"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

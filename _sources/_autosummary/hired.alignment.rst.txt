@@ -67,6 +67,7 @@ hired.alignment
    assemble
    base
    calibration
+   calibration_log
    diff
    elicitation
    report

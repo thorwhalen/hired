@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=26ffa1e9"></script>
+    <script src="../_static/documentation_options.js?v=828725f0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.28" />
+  <meta name="docsearch:version" content="0.0.29" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -324,6 +324,7 @@
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.assemble.html">hired.alignment.assemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.base.html">hired.alignment.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.calibration.html">hired.alignment.calibration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hired.alignment.calibration_log.html">hired.alignment.calibration_log</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.diff.html">hired.alignment.diff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.elicitation.html">hired.alignment.elicitation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.report.html">hired.alignment.report</a></li>
@@ -520,6 +521,14 @@ re-reading everything. Facts extracted from a source cite it by this key.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.calibration_log">
+<span class="sig-name descname"><span class="pre">calibration_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.calibration_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.calibration_log" title="Link to this definition">#</a></dt>
+<dd><p>This candidate’s <a class="reference internal" href="hired.alignment.calibration_log.html#hired.alignment.calibration_log.CalibrationLog" title="hired.alignment.calibration_log.CalibrationLog"><code class="xref py py-class docutils literal notranslate"><span class="pre">CalibrationLog</span></code></a>.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.facts">
 <span class="sig-name descname"><span class="pre">facts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FactStatus.ASSERTED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_negations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.facts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.facts" title="Link to this definition">#</a></dt>
 <dd><p>Iterate facts, optionally filtered by category/tags/status.</p>
@@ -605,13 +614,17 @@ same source are superseded, and the source stops being pending. Returns
 
 <dl class="py method">
 <dt class="sig sig-object py" id="hired.candidate.knowledge_base.CandidateKnowledgeBase.record_qa">
-<span class="sig-name descname"><span class="pre">record_qa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">derived_facts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.record_qa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.record_qa" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">record_qa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entry</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">derived_facts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/candidate/knowledge_base.html#CandidateKnowledgeBase.record_qa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.record_qa" title="Link to this definition">#</a></dt>
 <dd><p>Append a clarifying Q&amp;A exchange; optionally distill it into facts.</p>
 <p>When <code class="docutils literal notranslate"><span class="pre">derived_facts</span></code> (atomic fact records extracted from the answer) are
 given, they are ingested with <code class="docutils literal notranslate"><span class="pre">SourceKind.QA</span></code> provenance (<code class="docutils literal notranslate"><span class="pre">source_id</span></code>
 = the Q&amp;A id, quotes verified against the answer) and back-linked via the
 entry’s <code class="docutils literal notranslate"><span class="pre">derived_fact_ids</span></code> — so a Q&amp;A answer becomes reusable,
 discoverable knowledge rather than being buried in the history.</p>
+<p><code class="docutils literal notranslate"><span class="pre">calibration</span></code> = <code class="docutils literal notranslate"><span class="pre">(match_score,</span> <span class="pre">truth)</span></code>: the requirement record’s <code class="docutils literal notranslate"><span class="pre">match_score</span></code>
+before this answer and whether the answer showed it to be a match. The pair is
+logged for conformal calibration, and the calibrator refitted once both classes
+have enough pairs (see <a class="reference internal" href="hired.alignment.calibration_log.html#hired.alignment.calibration_log.CalibrationLog" title="hired.alignment.calibration_log.CalibrationLog"><code class="xref py py-class docutils literal notranslate"><span class="pre">CalibrationLog</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
@@ -762,6 +775,7 @@ hand-edited — so it can be regenerated at any time without loss.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_fact"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_fact()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_note"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_note()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.add_source"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.add_source()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.calibration_log"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.calibration_log()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.facts"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.facts()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.ingest_source"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.ingest_source()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.candidate.knowledge_base.CandidateKnowledgeBase.jd"><code class="docutils literal notranslate"><span class="pre">CandidateKnowledgeBase.jd()</span></code></a></li>

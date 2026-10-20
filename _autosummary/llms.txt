@@ -10,6 +10,7 @@
 - [hired.alignment.assemble](hired.alignment.assemble.html.md): Deterministically finalize an analyst-drafted &#96;AlignmentReport&#96;.
 - [hired.alignment.base](hired.alignment.base.html.md): Schemas for JD-vs-candidate alignment analysis.
 - [hired.alignment.calibration](hired.alignment.calibration.html.md): Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.
+- [hired.alignment.calibration_log](hired.alignment.calibration_log.html.md): Collect held-out (score, truth) pairs from answered clarifications and fit a calibrator.
 - [hired.alignment.diff](hired.alignment.diff.html.md): Deterministic diff between two alignment reports.
 - [hired.alignment.elicitation](hired.alignment.elicitation.html.md): The honesty loop: rank unknowns into the most informative questions first.
 - [hired.alignment.report](hired.alignment.report.html.md): Render an &#96;AlignmentReport&#96; to Markdown or HTML.

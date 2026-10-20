@@ -1,0 +1,18 @@
+hired.alignment.calibration\_log
+================================
+
+.. automodule:: hired.alignment.calibration_log
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      min_pairs
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CalibrationLog
+   

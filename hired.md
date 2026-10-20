@@ -1,4 +1,4 @@
-> built 2026-10-20 10:35 UTC from fb50610 (main) · hired 0.0.28. Details: build_info.json
+> built 2026-10-20 11:21 UTC from 4799f75 (main) · hired 0.0.29. Details: build_info.json
 
 # index.html.md
 
@@ -688,6 +688,99 @@ cluster id. Answers that mean the same count as agreeing however worded.
   [`Consistency`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.Consistency)
 
 
+# _autosummary/hired.alignment.calibration_log.html.md
+
+# hired.alignment.calibration_log
+
+Collect held-out (score, truth) pairs from answered clarifications and fit a calibrator.
+
+[`calibrate_match()`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.calibrate_match) needs scored judgments with known
+truth. The truth arrives when the candidate answers a clarifying question
+([`record_qa()`](_autosummary/hired.candidate.html.md#hired.candidate.CandidateKnowledgeBase.record_qa)): the record’s `match_score`
+*before* the answer, plus what the answer established. [`CalibrationLog`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog) appends
+each pair to the user’s `info/calibration/pairs.jsonl` and, once both classes have enough
+pairs for the chosen levels, fits and persists a `MatchCalibrator`
+(`info/calibration/calibrator.json`) that the `hired-align` workflow loads with
+[`CalibrationLog.load_calibrator()`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog.load_calibrator).
+
+Keep these pairs out of anything used to tune the scoring: the conformal bound only holds
+for data the scorer never saw.
+
+```pycon
+>>> import tempfile
+>>> from hired.persistence.base import UserStore
+>>> log = CalibrationLog(UserStore("t", root=tempfile.mkdtemp()))
+>>> log.add(0.9, True, qa_id="qa-1")
+>>> log.pairs()
+[(0.9, True)]
+>>> log.fit() is None  # too few pairs for the default levels
+True
+```
+
+### Functions
+
+| [`min_pairs`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.min_pairs)(rate)   | Pairs a class needs for a finite threshold at `rate`: `ceil(1/rate) - 1`.   |
+|--------------------------------------------------------------------|-----------------------------------------------------------------------------|
+
+### Classes
+
+| [`CalibrationLog`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog)([store, false_accept_rate, ...])   | The user's calibration pairs and fitted calibrator, kept under `info/calibration/`.   |
+|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+
+### *class* hired.alignment.calibration_log.CalibrationLog(store=None, , false_accept_rate=0.05, miss_rate=0.1)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+The user’s calibration pairs and fitted calibrator, kept under `info/calibration/`.
+
+#### add(match_score, truth, , qa_id=None)
+
+Append one pair (the score before the answer, the truth the answer established).
+
+* **Return type:**
+  [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### add_and_refit(match_score, truth, , qa_id=None)
+
+[`add()`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog.add) a pair, then refit and persist when ready; return the calibrator.
+
+* **Return type:**
+  [`MatchCalibrator`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.MatchCalibrator) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### fit(, persist=False)
+
+Fit on the logged pairs; `None` until [`ready()`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog.ready). `persist` saves the result.
+
+* **Return type:**
+  [`MatchCalibrator`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.MatchCalibrator) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### load_calibrator()
+
+The persisted calibrator, or `None` if none has been fitted yet.
+
+* **Return type:**
+  [`MatchCalibrator`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.MatchCalibrator) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
+
+#### ready()
+
+Whether each class has enough pairs for its level.
+
+* **Return type:**
+  [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
+
+### hired.alignment.calibration_log.min_pairs(rate)
+
+Pairs a class needs for a finite threshold at `rate`: `ceil(1/rate) - 1`.
+
+```pycon
+>>> min_pairs(0.05), min_pairs(0.1)
+(19, 9)
+```
+
+* **Return type:**
+  [`int`](https://docs.python.org/3/builtins/functions.html#int)
+
+
 # _autosummary/hired.alignment.diff.html.md
 
 # hired.alignment.diff
@@ -1369,14 +1462,15 @@ A short human-readable summary of [`diff_reports()`](_autosummary/hired.alignmen
 
 ### Modules
 
-| [`assemble`](_autosummary/hired.alignment.assemble.html.md#module-hired.alignment.assemble)       | Deterministically finalize an analyst-drafted [`AlignmentReport`](_autosummary/hired.alignment.html.md#hired.alignment.AlignmentReport).                      |
-|-------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| [`base`](_autosummary/hired.alignment.base.html.md#module-hired.alignment.base)               | Schemas for JD-vs-candidate alignment analysis.                                                                                      |
-| [`calibration`](_autosummary/hired.alignment.calibration.html.md#module-hired.alignment.calibration) | Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.                                                |
-| [`diff`](_autosummary/hired.alignment.diff.html.md#module-hired.alignment.diff)               | Deterministic diff between two alignment reports.                                                                                    |
-| [`elicitation`](_autosummary/hired.alignment.elicitation.html.md#module-hired.alignment.elicitation) | The honesty loop: rank unknowns into the most informative questions first.                                                           |
-| [`report`](_autosummary/hired.alignment.report.html.md#module-hired.alignment.report)           | Render an [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown or HTML. |
-| [`rubric`](_autosummary/hired.alignment.rubric.html.md#module-hired.alignment.rubric)           | Deterministic bucket assignment — the two-axis rubric in code.                                                                       |
+| [`assemble`](_autosummary/hired.alignment.assemble.html.md#module-hired.alignment.assemble)               | Deterministically finalize an analyst-drafted [`AlignmentReport`](_autosummary/hired.alignment.html.md#hired.alignment.AlignmentReport).                      |
+|---------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| [`base`](_autosummary/hired.alignment.base.html.md#module-hired.alignment.base)                       | Schemas for JD-vs-candidate alignment analysis.                                                                                      |
+| [`calibration`](_autosummary/hired.alignment.calibration.html.md#module-hired.alignment.calibration)         | Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.                                                |
+| [`calibration_log`](_autosummary/hired.alignment.calibration_log.html.md#module-hired.alignment.calibration_log) | Collect held-out (score, truth) pairs from answered clarifications and fit a calibrator.                                             |
+| [`diff`](_autosummary/hired.alignment.diff.html.md#module-hired.alignment.diff)                       | Deterministic diff between two alignment reports.                                                                                    |
+| [`elicitation`](_autosummary/hired.alignment.elicitation.html.md#module-hired.alignment.elicitation)         | The honesty loop: rank unknowns into the most informative questions first.                                                           |
+| [`report`](_autosummary/hired.alignment.report.html.md#module-hired.alignment.report)                   | Render an [`AlignmentReport`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown or HTML. |
+| [`rubric`](_autosummary/hired.alignment.rubric.html.md#module-hired.alignment.rubric)                   | Deterministic bucket assignment — the two-axis rubric in code.                                                                       |
 
 
 # _autosummary/hired.alignment.report.html.md
@@ -1975,6 +2069,10 @@ re-reading everything. Facts extracted from a source cite it by this key.
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
+#### calibration_log(\*\*kwargs)
+
+This candidate’s [`CalibrationLog`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog).
+
 #### facts(, category=None, tags=None, status=FactStatus.ASSERTED, include_negations=True)
 
 Iterate facts, optionally filtered by category/tags/status.
@@ -2034,7 +2132,7 @@ Raw sources new, changed, or not yet distilled into facts.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-#### record_qa(entry, , derived_facts=None)
+#### record_qa(entry, , derived_facts=None, calibration=None)
 
 Append a clarifying Q&A exchange; optionally distill it into facts.
 
@@ -2043,6 +2141,11 @@ given, they are ingested with `SourceKind.QA` provenance (`source_id`
 = the Q&A id, quotes verified against the answer) and back-linked via the
 entry’s `derived_fact_ids` — so a Q&A answer becomes reusable,
 discoverable knowledge rather than being buried in the history.
+
+`calibration` = `(match_score, truth)`: the requirement record’s `match_score`
+before this answer and whether the answer showed it to be a match. The pair is
+logged for conformal calibration, and the calibrator refitted once both classes
+have enough pairs (see [`CalibrationLog`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog)).
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
@@ -2549,6 +2652,10 @@ re-reading everything. Facts extracted from a source cite it by this key.
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
+#### calibration_log(\*\*kwargs)
+
+This candidate’s [`CalibrationLog`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog).
+
 #### facts(, category=None, tags=None, status=FactStatus.ASSERTED, include_negations=True)
 
 Iterate facts, optionally filtered by category/tags/status.
@@ -2608,7 +2715,7 @@ Raw sources new, changed, or not yet distilled into facts.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-#### record_qa(entry, , derived_facts=None)
+#### record_qa(entry, , derived_facts=None, calibration=None)
 
 Append a clarifying Q&A exchange; optionally distill it into facts.
 
@@ -2617,6 +2724,11 @@ given, they are ingested with `SourceKind.QA` provenance (`source_id`
 = the Q&A id, quotes verified against the answer) and back-linked via the
 entry’s `derived_fact_ids` — so a Q&A answer becomes reusable,
 discoverable knowledge rather than being buried in the history.
+
+`calibration` = `(match_score, truth)`: the requirement record’s `match_score`
+before this answer and whether the answer showed it to be a match. The pair is
+logged for conformal calibration, and the calibrator refitted once both classes
+have enough pairs (see [`CalibrationLog`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog)).
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
@@ -3556,6 +3668,10 @@ re-reading everything. Facts extracted from a source cite it by this key.
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
+#### calibration_log(\*\*kwargs)
+
+This candidate’s [`CalibrationLog`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog).
+
 #### facts(, category=None, tags=None, status=FactStatus.ASSERTED, include_negations=True)
 
 Iterate facts, optionally filtered by category/tags/status.
@@ -3615,7 +3731,7 @@ Raw sources new, changed, or not yet distilled into facts.
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str)]
 
-#### record_qa(entry, , derived_facts=None)
+#### record_qa(entry, , derived_facts=None, calibration=None)
 
 Append a clarifying Q&A exchange; optionally distill it into facts.
 
@@ -3624,6 +3740,11 @@ given, they are ingested with `SourceKind.QA` provenance (`source_id`
 = the Q&A id, quotes verified against the answer) and back-linked via the
 entry’s `derived_fact_ids` — so a Q&A answer becomes reusable,
 discoverable knowledge rather than being buried in the history.
+
+`calibration` = `(match_score, truth)`: the requirement record’s `match_score`
+before this answer and whether the answer showed it to be a match. The pair is
+logged for conformal calibration, and the calibrator refitted once both classes
+have enough pairs (see [`CalibrationLog`](_autosummary/hired.alignment.calibration_log.html.md#hired.alignment.calibration_log.CalibrationLog)).
 
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
@@ -8048,7 +8169,7 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-10-20 10:35 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/fb5061010c83d0e247c82b1419dff03689478b38"><code>fb50610</code></a> on branch <code>main</code>, for **hired 0.0.28** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 11:21 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/4799f75093dd34061c162437df15c00628f034a1"><code>4799f75</code></a> on branch <code>main</code>, for **hired 0.0.29** (from <code>pyproject.toml</code>).
 
 #### NOTE
 Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
@@ -8057,7 +8178,7 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/fb5061010c83d0e247c82b1419dff03689478b38"><code>fb5061010c83d0e247c82b1419dff03689478b38</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/4799f75093dd34061c162437df15c00628f034a1"><code>4799f75093dd34061c162437df15c00628f034a1</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -8068,15 +8189,15 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39408787658">39408787658</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39414169888">39414169888</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>fb5061010c83d0e247c82b1419dff03689478b38</code> (in the history of the built commit) |
+| Event commit | <code>4799f75093dd34061c162437df15c00628f034a1</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.18  |
+| epythet  | 0.2.19  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
@@ -8095,14 +8216,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.28/">0.0.28</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.29/">0.0.29</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout fb5061010c83d0e247c82b1419dff03689478b38
-pip install "epythet==0.2.18"
+git checkout 4799f75093dd34061c162437df15c00628f034a1
+pip install "epythet==0.2.19"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

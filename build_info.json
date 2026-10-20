@@ -1,36 +1,36 @@
 {
   "schema_version": 1,
-  "built_at": "2026-10-20T10:35:23Z",
+  "built_at": "2026-10-20T11:21:16Z",
   "package": {
     "name": "hired",
-    "version": "0.0.28",
+    "version": "0.0.29",
     "display_name": "hired",
     "source": "pyproject.toml"
   },
   "git": {
     "available": true,
-    "commit": "fb5061010c83d0e247c82b1419dff03689478b38",
-    "short_commit": "fb50610",
+    "commit": "4799f75093dd34061c162437df15c00628f034a1",
+    "short_commit": "4799f75",
     "branch": "main",
     "tags": [],
     "dirty": false,
     "remote_url": "https://github.com/thorwhalen/hired",
-    "commit_url": "https://github.com/thorwhalen/hired/commit/fb5061010c83d0e247c82b1419dff03689478b38",
+    "commit_url": "https://github.com/thorwhalen/hired/commit/4799f75093dd34061c162437df15c00628f034a1",
     "error": null
   },
   "ci": {
     "provider": "github",
     "repository": "thorwhalen/hired",
-    "sha": "fb5061010c83d0e247c82b1419dff03689478b38",
+    "sha": "4799f75093dd34061c162437df15c00628f034a1",
     "sha_in_history": true,
     "ref": "refs/heads/main",
     "ref_name": "main",
-    "run_id": "39408787658",
-    "run_url": "https://github.com/thorwhalen/hired/actions/runs/39408787658",
+    "run_id": "39414169888",
+    "run_url": "https://github.com/thorwhalen/hired/actions/runs/39414169888",
     "server_url": "https://github.com"
   },
   "tools": {
-    "epythet": "0.2.18",
+    "epythet": "0.2.19",
     "sphinx": "9.1.1",
     "docutils": "0.22.4",
     "python": "3.12.15"
@@ -55,16 +55,16 @@
     "docs_dir": "docsrc"
   },
   "site": {
-    "modules_documented": 45,
-    "objects_documented": 707
+    "modules_documented": 46,
+    "objects_documented": 717
   },
   "pypi": {
     "checked": true,
-    "latest": "0.0.28",
+    "latest": "0.0.29",
     "relation": "same",
     "error": null
   },
-  "reproduce": "git clone https://github.com/thorwhalen/hired && cd hired\ngit checkout fb5061010c83d0e247c82b1419dff03689478b38\npip install \"epythet==0.2.18\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
+  "reproduce": "git clone https://github.com/thorwhalen/hired && cd hired\ngit checkout 4799f75093dd34061c162437df15c00628f034a1\npip install \"epythet==0.2.19\"\nepythet quickstart . --ignore tests/ scrap/ examples/",
   "warnings": [],
   "alignment": {
     "aligned": true,

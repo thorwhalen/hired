@@ -556,11 +556,12 @@ A short human-readable summary of [`diff_reports()`](#hired.alignment.diff_repor
 
 ### Modules
 
-| [`assemble`](hired.alignment.assemble.html.md#module-hired.alignment.assemble)       | Deterministically finalize an analyst-drafted [`AlignmentReport`](#hired.alignment.AlignmentReport).                      |
-|-------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| [`base`](hired.alignment.base.html.md#module-hired.alignment.base)               | Schemas for JD-vs-candidate alignment analysis.                                                                                      |
-| [`calibration`](hired.alignment.calibration.html.md#module-hired.alignment.calibration) | Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.                                                |
-| [`diff`](hired.alignment.diff.html.md#module-hired.alignment.diff)               | Deterministic diff between two alignment reports.                                                                                    |
-| [`elicitation`](hired.alignment.elicitation.html.md#module-hired.alignment.elicitation) | The honesty loop: rank unknowns into the most informative questions first.                                                           |
-| [`report`](hired.alignment.report.html.md#module-hired.alignment.report)           | Render an [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown or HTML. |
-| [`rubric`](hired.alignment.rubric.html.md#module-hired.alignment.rubric)           | Deterministic bucket assignment — the two-axis rubric in code.                                                                       |
+| [`assemble`](hired.alignment.assemble.html.md#module-hired.alignment.assemble)               | Deterministically finalize an analyst-drafted [`AlignmentReport`](#hired.alignment.AlignmentReport).                      |
+|---------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| [`base`](hired.alignment.base.html.md#module-hired.alignment.base)                       | Schemas for JD-vs-candidate alignment analysis.                                                                                      |
+| [`calibration`](hired.alignment.calibration.html.md#module-hired.alignment.calibration)         | Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.                                                |
+| [`calibration_log`](hired.alignment.calibration_log.html.md#module-hired.alignment.calibration_log) | Collect held-out (score, truth) pairs from answered clarifications and fit a calibrator.                                             |
+| [`diff`](hired.alignment.diff.html.md#module-hired.alignment.diff)                       | Deterministic diff between two alignment reports.                                                                                    |
+| [`elicitation`](hired.alignment.elicitation.html.md#module-hired.alignment.elicitation)         | The honesty loop: rank unknowns into the most informative questions first.                                                           |
+| [`report`](hired.alignment.report.html.md#module-hired.alignment.report)                   | Render an [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown or HTML. |
+| [`rubric`](hired.alignment.rubric.html.md#module-hired.alignment.rubric)                   | Deterministic bucket assignment — the two-axis rubric in code.                                                                       |

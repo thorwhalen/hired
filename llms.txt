@@ -12,6 +12,7 @@
 - [hired.alignment.assemble](_autosummary/hired.alignment.assemble.html.md): Deterministically finalize an analyst-drafted &#96;AlignmentReport&#96;.
 - [hired.alignment.base](_autosummary/hired.alignment.base.html.md): Schemas for JD-vs-candidate alignment analysis.
 - [hired.alignment.calibration](_autosummary/hired.alignment.calibration.html.md): Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.
+- [hired.alignment.calibration_log](_autosummary/hired.alignment.calibration_log.html.md): Collect held-out (score, truth) pairs from answered clarifications and fit a calibrator.
 - [hired.alignment.diff](_autosummary/hired.alignment.diff.html.md): Deterministic diff between two alignment reports.
 - [hired.alignment.elicitation](_autosummary/hired.alignment.elicitation.html.md): The honesty loop: rank unknowns into the most informative questions first.
 - [hired.alignment.report](_autosummary/hired.alignment.report.html.md): Render an &#96;AlignmentReport&#96; to Markdown or HTML.
@@ -53,7 +54,7 @@
 - [hired.tracking](_autosummary/hired.tracking.html.md): Application tracking system for managing job applications.
 - [hired.util](_autosummary/hired.util.html.md): Utilities for external dependencies and general helpers.
 - [For AI agents](ai-agents.html.md): &#96;hired&#96; ships artifacts for coding agents alongside its code. This page lists
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 10:35 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 11:21 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 
