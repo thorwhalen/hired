@@ -123,8 +123,9 @@ def retrieve_facts(
     Lexical, so it misses an adjacent skill named in different words (RabbitMQ
     for Kafka). When the whole knowledge base fits in ``k`` (and
     ``small_kb_passes_all``), every fact is passed, best overlap first, so the judge
-    sees the adjacent skill anyway; otherwise facts sharing no word are dropped
-    (none if none do). For large KBs, inject :func:`make_embedding_retriever`.
+    sees the adjacent skill anyway; a negation fact sharing no word is still dropped,
+    so an unrelated "does not ..." cannot back a contradiction. Otherwise facts
+    sharing no word are dropped (none if none do). For large KBs, inject :func:`make_embedding_retriever`.
 
     >>> from hired.candidate.base import Fact
     >>> fs = [Fact(statement='Ran Kafka clusters'), Fact(statement='Speaks French')]
@@ -139,7 +140,8 @@ def retrieve_facts(
     for i, fact in enumerate(facts):
         have = _tokens(_fact_text(fact))
         overlap = len(want & have)
-        if overlap or (small_kb_passes_all and len(facts) <= k):
+        small = small_kb_passes_all and len(facts) <= k and not fact.is_negation
+        if overlap or small:
             scored.append((overlap / math.sqrt(len(have) or 1), -i, fact))
     scored.sort(key=lambda t: t[:2], reverse=True)
     return [fact for *_, fact in scored[:k]]
@@ -199,10 +201,17 @@ def make_embedding_retriever(
         requirement: Requirement, facts: Iterable[Fact], *, k: int = DFLT_TOP_K
     ) -> list[Fact]:
         facts = list(facts)
+        if not facts or k < 1:
+            return []
         texts = [_fact_text(f) for f in facts]
         missing = [t for t in dict.fromkeys(texts) if t not in cache]
         if missing:
-            cache.update(zip(missing, embed(missing)))
+            vectors = list(embed(missing))
+            if len(vectors) != len(missing):
+                raise ValueError(
+                    f"embed returned {len(vectors)} vectors for {len(missing)} texts"
+                )
+            cache.update(zip(missing, vectors, strict=True))
         (query,) = embed([requirement.text])
         scored = [
             (sim, -i, fact)

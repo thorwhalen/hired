@@ -333,3 +333,23 @@ def test_embedding_retriever_reaches_adjacent_skills_and_caches():
     assert retrieve(Requirement(text="Kafka"), many, k=1) == [rabbit]
     assert retrieve(Requirement(text="French"), many, k=1) == [french]
     assert sum(len(c) for c in calls) == len(many) + 2  # facts embedded once
+
+
+def test_small_kb_fallback_keeps_out_unrelated_negations():
+    from hired.candidate.base import Fact
+
+    no_french = Fact(statement="Does not speak French", is_negation=True)
+    rabbit = Fact(statement="Ran RabbitMQ")
+    assert retrieve_facts(Requirement(text="Kafka"), [no_french, rabbit]) == [rabbit]
+
+
+def test_embedding_retriever_edge_cases():
+    import pytest
+    from hired.alignment import make_embedding_retriever
+    from hired.candidate.base import Fact
+
+    calls = []
+    retrieve = make_embedding_retriever(lambda texts: calls.append(texts) or [[1.0]])
+    assert retrieve(Requirement(text="x"), [], k=3) == [] and calls == []
+    with pytest.raises(ValueError, match="1 vectors for 2 texts"):
+        retrieve(Requirement(text="x"), [Fact(statement="a"), Fact(statement="b")])
