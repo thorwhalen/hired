@@ -20,6 +20,7 @@ See `misc/docs/DESIGN.md` §6.
 | [`Clarification`](#hired.alignment.base.Clarification)(\*, requirement_id, question[, ...]) | A question to ask the candidate to resolve a decision-relevant unknown.  |
 | [`CloseMethod`](#hired.alignment.base.CloseMethod)(\*values)                              |                                                                          |
 | [`Closeability`](#hired.alignment.base.Closeability)(\*values)                             | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
+| [`Decision`](#hired.alignment.base.Decision)(\*values)                                 | What to do with a judgment: take it as a match, as no match, or ask.     |
 | [`Evidence`](#hired.alignment.base.Evidence)(\*, quote[, source_document_id, locator]) | A verbatim grounding span for a match judgment.                          |
 | [`FieldCompleteness`](#hired.alignment.base.FieldCompleteness)(\*values)                        | Local closed-world flag: may a missing value be read as a real negative? |
 | [`FitBand`](#hired.alignment.base.FitBand)(\*values)                                  |                                                                          |
@@ -80,6 +81,12 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How hard a gap is to close (Axis B), after the AI-leverage modifier.
+
+### *class* hired.alignment.base.Decision(\*values)
+
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+
+What to do with a judgment: take it as a match, as no match, or ask.
 
 ### *class* hired.alignment.base.Evidence(, quote, source_document_id='', locator='')
 
@@ -143,7 +150,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How decision-critical a requirement is.
 
-### *class* hired.alignment.base.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
+### *class* hired.alignment.base.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, match_score=None, calibrated_decision=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 

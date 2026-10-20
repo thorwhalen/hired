@@ -14,6 +14,7 @@ hired.alignment.base
       Clarification
       CloseMethod
       Closeability
+      Decision
       Evidence
       FieldCompleteness
       FitBand

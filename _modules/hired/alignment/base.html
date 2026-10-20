@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -870,6 +870,17 @@ window.runMermaid = runMermaid;</script>
 
 
 
+<div class="viewcode-block" id="Decision">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.calibration.html#hired.Decision">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Decision</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""What to do with a judgment: take it as a match, as no match, or ask."""</span>
+
+    <span class="n">AUTO_MATCH</span> <span class="o">=</span> <span class="s2">"auto_match"</span>
+    <span class="n">AUTO_NO_MATCH</span> <span class="o">=</span> <span class="s2">"auto_no_match"</span>
+    <span class="n">ASK</span> <span class="o">=</span> <span class="s2">"ask"</span></div>
+
+
+
 <div class="viewcode-block" id="Requirement">
 <a class="viewcode-back" href="../../../_autosummary/hired.alignment.base.html#hired.Requirement">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Requirement</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -924,6 +935,10 @@ window.runMermaid = runMermaid;</script>
     <span class="n">confidence</span><span class="p">:</span> <span class="n">ConfidenceLevel</span> <span class="o">=</span> <span class="n">ConfidenceLevel</span><span class="o">.</span><span class="n">LOW</span>
     <span class="n">uncertainty_reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">evidence</span><span class="p">:</span> <span class="n">Evidence</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># sampled + calibrated (hired.alignment.calibration): the share of independent</span>
+    <span class="c1"># judgments saying "match", and the conformal ask/auto-decide verdict on it</span>
+    <span class="n">match_score</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">calibrated_decision</span><span class="p">:</span> <span class="n">Decision</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># --- prioritization + loop --------------------------------------------</span>
     <span class="n">impact</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># 1-5 decision criticality</span>

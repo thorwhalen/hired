@@ -20,6 +20,7 @@ hired.alignment
       match_share
       confidence_level
       calibrate_match
+      apply_calibration
       finalize_report
       is_blocking
       render_report

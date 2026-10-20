@@ -8,6 +8,7 @@ hired.alignment.calibration
 
    .. autosummary::
    
+      apply_calibration
       calibrate_match
       conformal_quantile
       confidence_level

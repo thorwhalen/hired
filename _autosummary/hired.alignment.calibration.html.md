@@ -35,12 +35,13 @@ See `misc/docs/research/jd-candidate-matching.md` (unknown vs absent) and #12.
 
 ### Functions
 
-| [`calibrate_match`](#hired.alignment.calibration.calibrate_match)(scores, labels, \*[, ...])      | Fit the ask/auto-decide rule on held-out judgments with known truth.          |
-|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| [`conformal_quantile`](#hired.alignment.calibration.conformal_quantile)(scores, alpha)               | The split-conformal threshold: the `ceil((n+1)(1-alpha))`-th smallest score.  |
-| [`confidence_level`](#hired.alignment.calibration.confidence_level)(agreement, \*[, high, medium]) | A `ConfidenceLevel` from sampled agreement rather than self-report.           |
-| [`match_share`](#hired.alignment.calibration.match_share)(samples, \*[, is_match])            | The share of sampled judgments that say "match": a score in `[0, 1]`.         |
-| [`semantic_consistency`](#hired.alignment.calibration.semantic_consistency)(samples, \*[, meaning])    | The agreement of sampled answers, clustered by `meaning` (default: equality). |
+| [`apply_calibration`](#hired.alignment.calibration.apply_calibration)(record, samples, \*[, ...])   | Set `record`'s confidence from sampled judgments, and its decision if calibrated.   |
+|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| [`calibrate_match`](#hired.alignment.calibration.calibrate_match)(scores, labels, \*[, ...])      | Fit the ask/auto-decide rule on held-out judgments with known truth.                |
+| [`conformal_quantile`](#hired.alignment.calibration.conformal_quantile)(scores, alpha)               | The split-conformal threshold: the `ceil((n+1)(1-alpha))`-th smallest score.        |
+| [`confidence_level`](#hired.alignment.calibration.confidence_level)(agreement, \*[, high, medium]) | A `ConfidenceLevel` from sampled agreement rather than self-report.                 |
+| [`match_share`](#hired.alignment.calibration.match_share)(samples, \*[, is_match])            | The share of sampled judgments that say "match": a score in `[0, 1]`.               |
+| [`semantic_consistency`](#hired.alignment.calibration.semantic_consistency)(samples, \*[, meaning])    | The agreement of sampled answers, clustered by `meaning` (default: equality).       |
 
 ### Classes
 
@@ -57,7 +58,7 @@ How far several sampled answers to one question agree.
 
 `majority` is the most common meaning (`None` without samples),
 `agreement` its share, `entropy` the Shannon entropy of the meanings
-normalised to `[0, 1]` (0: all agree; 1: all differ), `counts` the
+normalised to `[0, 1]` (0: all agree; 1: spread evenly over the meanings found), `counts` the
 number of samples per meaning.
 
 ### *class* hired.alignment.calibration.Decision(\*values)
@@ -82,7 +83,7 @@ A singleton set decides; two labels (or none) mean ask. JSON-ready through
 Auto-decide on a singleton prediction set; otherwise ask.
 
 * **Return type:**
-  [`Decision`](#hired.alignment.calibration.Decision)
+  [`Decision`](hired.alignment.base.html.md#hired.alignment.base.Decision)
 
 #### *classmethod* from_dict(d)
 
@@ -104,6 +105,30 @@ A JSON-ready dict (an infinite threshold is written as `None`).
 
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.alignment.calibration.apply_calibration(record, samples, , calibrator=None, meaning=None, is_match=None)
+
+Set `record`’s confidence from sampled judgments, and its decision if calibrated.
+
+`samples` are several independent judgments of the same requirement (match
+states, by default). The record’s `confidence` becomes
+[`confidence_level()`](#hired.alignment.calibration.confidence_level) of their agreement and its `match_score`
+[`match_share()`](#hired.alignment.calibration.match_share); with a `calibrator`, `calibrated_decision` is its
+[`decide()`](#hired.alignment.calibration.MatchCalibrator.decide), which [`should_ask()`](hired.alignment.elicitation.html.md#hired.alignment.elicitation.should_ask)
+honours (without one it is cleared: new samples supersede an old decision, so
+re-apply, or clear it, once an answer settles the requirement). The match state stays the analyst’s: an *ask* questions a claim, it
+does not overturn it. Returns the record, changed in place.
+
+```pycon
+>>> from hired.alignment.base import Requirement
+>>> rec = RequirementRecord(requirement=Requirement(text="Kafka"), match_state="confirmed")
+>>> rec = apply_calibration(rec, ["confirmed", "confirmed", "unknown"])
+>>> rec.confidence.value, round(rec.match_score, 2), rec.calibrated_decision
+('medium', 0.67, None)
+```
+
+* **Return type:**
+  [`RequirementRecord`](hired.alignment.base.html.md#hired.alignment.base.RequirementRecord)
 
 ### hired.alignment.calibration.calibrate_match(scores, labels, , false_accept_rate=0.05, miss_rate=0.1)
 

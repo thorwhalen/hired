@@ -38,6 +38,7 @@ provides the schemas, deterministic scoring, and rendering. See
 | [`match_share`](#hired.alignment.match_share)(samples, \*[, is_match])              | The share of sampled judgments that say "match": a score in `[0, 1]`.                                     |
 | [`confidence_level`](#hired.alignment.confidence_level)(agreement, \*[, high, medium])   | A `ConfidenceLevel` from sampled agreement rather than self-report.                                       |
 | [`calibrate_match`](#hired.alignment.calibrate_match)(scores, labels, \*[, ...])        | Fit the ask/auto-decide rule on held-out judgments with known truth.                                      |
+| [`apply_calibration`](#hired.alignment.apply_calibration)(record, samples, \*[, ...])     | Set `record`'s confidence from sampled judgments, and its decision if calibrated.                         |
 | [`finalize_report`](#hired.alignment.finalize_report)(report)                           | Return a copy of `report` with every derivable field recomputed.                                          |
 | [`is_blocking`](#hired.alignment.is_blocking)(record)                               | True for a gate-keeper requirement that is a hard gap or contradicted.                                    |
 | [`render_report`](#hired.alignment.render_report)(report[, fmt])                      | Render `report` (a model or its JSON dict) in the named format.                                           |
@@ -127,7 +128,7 @@ How far several sampled answers to one question agree.
 
 `majority` is the most common meaning (`None` without samples),
 `agreement` its share, `entropy` the Shannon entropy of the meanings
-normalised to `[0, 1]` (0: all agree; 1: all differ), `counts` the
+normalised to `[0, 1]` (0: all agree; 1: spread evenly over the meanings found), `counts` the
 number of samples per meaning.
 
 ### *class* hired.alignment.Decision(\*values)
@@ -180,7 +181,7 @@ A singleton set decides; two labels (or none) mean ask. JSON-ready through
 Auto-decide on a singleton prediction set; otherwise ask.
 
 * **Return type:**
-  [`Decision`](hired.alignment.calibration.html.md#hired.alignment.calibration.Decision)
+  [`Decision`](hired.alignment.base.html.md#hired.alignment.base.Decision)
 
 #### *classmethod* from_dict(d)
 
@@ -237,7 +238,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How decision-critical a requirement is.
 
-### *class* hired.alignment.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
+### *class* hired.alignment.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, match_score=None, calibrated_decision=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -293,6 +294,30 @@ extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 
 * **Return type:**
   [`Closeability`](hired.alignment.base.html.md#hired.alignment.base.Closeability)
+
+### hired.alignment.apply_calibration(record, samples, , calibrator=None, meaning=None, is_match=None)
+
+Set `record`’s confidence from sampled judgments, and its decision if calibrated.
+
+`samples` are several independent judgments of the same requirement (match
+states, by default). The record’s `confidence` becomes
+[`confidence_level()`](#hired.alignment.confidence_level) of their agreement and its `match_score`
+[`match_share()`](#hired.alignment.match_share); with a `calibrator`, `calibrated_decision` is its
+[`decide()`](#hired.alignment.MatchCalibrator.decide), which [`should_ask()`](hired.alignment.elicitation.html.md#hired.alignment.elicitation.should_ask)
+honours (without one it is cleared: new samples supersede an old decision, so
+re-apply, or clear it, once an answer settles the requirement). The match state stays the analyst’s: an *ask* questions a claim, it
+does not overturn it. Returns the record, changed in place.
+
+```pycon
+>>> from hired.alignment.base import Requirement
+>>> rec = RequirementRecord(requirement=Requirement(text="Kafka"), match_state="confirmed")
+>>> rec = apply_calibration(rec, ["confirmed", "confirmed", "unknown"])
+>>> rec.confidence.value, round(rec.match_score, 2), rec.calibrated_decision
+('medium', 0.67, None)
+```
+
+* **Return type:**
+  [`RequirementRecord`](hired.alignment.base.html.md#hired.alignment.base.RequirementRecord)
 
 ### hired.alignment.assign_bucket(record)
 
@@ -513,7 +538,11 @@ Whether to route this record to a clarifying question.
 
 Ask only when it’s `UNKNOWN` on an OPEN field and decision-relevant — the
 “don’t assume absence from silence” rule. CONTRADICTED facts and closed-field
-unknowns are real gaps, not questions.
+unknowns are real gaps, not questions. A decision-relevant CONFIRMED or
+CONTRADICTED record whose calibrated decision is *ask* (sampled judgments too
+inconsistent for the conformal rule, see [`hired.alignment.calibration`](hired.alignment.calibration.html.md#module-hired.alignment.calibration))
+is asked about too: “never exaggerate” means a shaky match is confirmed first,
+and a shaky absence is not assumed. An UNKNOWN follows the rule above.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)

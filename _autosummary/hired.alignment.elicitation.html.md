@@ -62,7 +62,11 @@ Whether to route this record to a clarifying question.
 
 Ask only when it’s `UNKNOWN` on an OPEN field and decision-relevant — the
 “don’t assume absence from silence” rule. CONTRADICTED facts and closed-field
-unknowns are real gaps, not questions.
+unknowns are real gaps, not questions. A decision-relevant CONFIRMED or
+CONTRADICTED record whose calibrated decision is *ask* (sampled judgments too
+inconsistent for the conformal rule, see [`hired.alignment.calibration`](hired.alignment.calibration.html.md#module-hired.alignment.calibration))
+is asked about too: “never exaggerate” means a shaky match is confirmed first,
+and a shaky absence is not assumed. An UNKNOWN follows the rule above.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)

@@ -1,4 +1,4 @@
-> built 2026-10-20 10:33 UTC from 05e1adb (main) · hired 0.0.27. Details: build_info.json
+> built 2026-10-20 10:35 UTC from fb50610 (main) · hired 0.0.28. Details: build_info.json
 
 # index.html.md
 
@@ -307,6 +307,7 @@ See `misc/docs/DESIGN.md` §6.
 | [`Clarification`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Clarification)(\*, requirement_id, question[, ...]) | A question to ask the candidate to resolve a decision-relevant unknown.  |
 | [`CloseMethod`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.CloseMethod)(\*values)                              |                                                                          |
 | [`Closeability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Closeability)(\*values)                             | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
+| [`Decision`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Decision)(\*values)                                 | What to do with a judgment: take it as a match, as no match, or ask.     |
 | [`Evidence`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Evidence)(\*, quote[, source_document_id, locator]) | A verbatim grounding span for a match judgment.                          |
 | [`FieldCompleteness`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.FieldCompleteness)(\*values)                        | Local closed-world flag: may a missing value be read as a real negative? |
 | [`FitBand`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.FitBand)(\*values)                                  |                                                                          |
@@ -367,6 +368,12 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
 
 How hard a gap is to close (Axis B), after the AI-leverage modifier.
+
+### *class* hired.alignment.base.Decision(\*values)
+
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+
+What to do with a judgment: take it as a match, as no match, or ask.
 
 ### *class* hired.alignment.base.Evidence(, quote, source_document_id='', locator='')
 
@@ -430,7 +437,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How decision-critical a requirement is.
 
-### *class* hired.alignment.base.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
+### *class* hired.alignment.base.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, match_score=None, calibrated_decision=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -508,12 +515,13 @@ See `misc/docs/research/jd-candidate-matching.md` (unknown vs absent) and #12.
 
 ### Functions
 
-| [`calibrate_match`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.calibrate_match)(scores, labels, \*[, ...])      | Fit the ask/auto-decide rule on held-out judgments with known truth.          |
-|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| [`conformal_quantile`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.conformal_quantile)(scores, alpha)               | The split-conformal threshold: the `ceil((n+1)(1-alpha))`-th smallest score.  |
-| [`confidence_level`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.confidence_level)(agreement, \*[, high, medium]) | A `ConfidenceLevel` from sampled agreement rather than self-report.           |
-| [`match_share`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.match_share)(samples, \*[, is_match])            | The share of sampled judgments that say "match": a score in `[0, 1]`.         |
-| [`semantic_consistency`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.semantic_consistency)(samples, \*[, meaning])    | The agreement of sampled answers, clustered by `meaning` (default: equality). |
+| [`apply_calibration`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.apply_calibration)(record, samples, \*[, ...])   | Set `record`'s confidence from sampled judgments, and its decision if calibrated.   |
+|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| [`calibrate_match`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.calibrate_match)(scores, labels, \*[, ...])      | Fit the ask/auto-decide rule on held-out judgments with known truth.                |
+| [`conformal_quantile`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.conformal_quantile)(scores, alpha)               | The split-conformal threshold: the `ceil((n+1)(1-alpha))`-th smallest score.        |
+| [`confidence_level`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.confidence_level)(agreement, \*[, high, medium]) | A `ConfidenceLevel` from sampled agreement rather than self-report.                 |
+| [`match_share`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.match_share)(samples, \*[, is_match])            | The share of sampled judgments that say "match": a score in `[0, 1]`.               |
+| [`semantic_consistency`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.semantic_consistency)(samples, \*[, meaning])    | The agreement of sampled answers, clustered by `meaning` (default: equality).       |
 
 ### Classes
 
@@ -530,7 +538,7 @@ How far several sampled answers to one question agree.
 
 `majority` is the most common meaning (`None` without samples),
 `agreement` its share, `entropy` the Shannon entropy of the meanings
-normalised to `[0, 1]` (0: all agree; 1: all differ), `counts` the
+normalised to `[0, 1]` (0: all agree; 1: spread evenly over the meanings found), `counts` the
 number of samples per meaning.
 
 ### *class* hired.alignment.calibration.Decision(\*values)
@@ -555,7 +563,7 @@ A singleton set decides; two labels (or none) mean ask. JSON-ready through
 Auto-decide on a singleton prediction set; otherwise ask.
 
 * **Return type:**
-  [`Decision`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.Decision)
+  [`Decision`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Decision)
 
 #### *classmethod* from_dict(d)
 
@@ -577,6 +585,30 @@ A JSON-ready dict (an infinite threshold is written as `None`).
 
 * **Return type:**
   [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+### hired.alignment.calibration.apply_calibration(record, samples, , calibrator=None, meaning=None, is_match=None)
+
+Set `record`’s confidence from sampled judgments, and its decision if calibrated.
+
+`samples` are several independent judgments of the same requirement (match
+states, by default). The record’s `confidence` becomes
+[`confidence_level()`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.confidence_level) of their agreement and its `match_score`
+[`match_share()`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.match_share); with a `calibrator`, `calibrated_decision` is its
+[`decide()`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.MatchCalibrator.decide), which [`should_ask()`](_autosummary/hired.alignment.elicitation.html.md#hired.alignment.elicitation.should_ask)
+honours (without one it is cleared: new samples supersede an old decision, so
+re-apply, or clear it, once an answer settles the requirement). The match state stays the analyst’s: an *ask* questions a claim, it
+does not overturn it. Returns the record, changed in place.
+
+```pycon
+>>> from hired.alignment.base import Requirement
+>>> rec = RequirementRecord(requirement=Requirement(text="Kafka"), match_state="confirmed")
+>>> rec = apply_calibration(rec, ["confirmed", "confirmed", "unknown"])
+>>> rec.confidence.value, round(rec.match_score, 2), rec.calibrated_decision
+('medium', 0.67, None)
+```
+
+* **Return type:**
+  [`RequirementRecord`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.RequirementRecord)
 
 ### hired.alignment.calibration.calibrate_match(scores, labels, , false_accept_rate=0.05, miss_rate=0.1)
 
@@ -767,7 +799,11 @@ Whether to route this record to a clarifying question.
 
 Ask only when it’s `UNKNOWN` on an OPEN field and decision-relevant — the
 “don’t assume absence from silence” rule. CONTRADICTED facts and closed-field
-unknowns are real gaps, not questions.
+unknowns are real gaps, not questions. A decision-relevant CONFIRMED or
+CONTRADICTED record whose calibrated decision is *ask* (sampled judgments too
+inconsistent for the conformal rule, see [`hired.alignment.calibration`](_autosummary/hired.alignment.calibration.html.md#module-hired.alignment.calibration))
+is asked about too: “never exaggerate” means a shaky match is confirmed first,
+and a shaky absence is not assumed. An UNKNOWN follows the rule above.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
@@ -815,6 +851,7 @@ provides the schemas, deterministic scoring, and rendering. See
 | [`match_share`](_autosummary/hired.alignment.html.md#hired.alignment.match_share)(samples, \*[, is_match])              | The share of sampled judgments that say "match": a score in `[0, 1]`.                                     |
 | [`confidence_level`](_autosummary/hired.alignment.html.md#hired.alignment.confidence_level)(agreement, \*[, high, medium])   | A `ConfidenceLevel` from sampled agreement rather than self-report.                                       |
 | [`calibrate_match`](_autosummary/hired.alignment.html.md#hired.alignment.calibrate_match)(scores, labels, \*[, ...])        | Fit the ask/auto-decide rule on held-out judgments with known truth.                                      |
+| [`apply_calibration`](_autosummary/hired.alignment.html.md#hired.alignment.apply_calibration)(record, samples, \*[, ...])     | Set `record`'s confidence from sampled judgments, and its decision if calibrated.                         |
 | [`finalize_report`](_autosummary/hired.alignment.html.md#hired.alignment.finalize_report)(report)                           | Return a copy of `report` with every derivable field recomputed.                                          |
 | [`is_blocking`](_autosummary/hired.alignment.html.md#hired.alignment.is_blocking)(record)                               | True for a gate-keeper requirement that is a hard gap or contradicted.                                    |
 | [`render_report`](_autosummary/hired.alignment.html.md#hired.alignment.render_report)(report[, fmt])                      | Render `report` (a model or its JSON dict) in the named format.                                           |
@@ -904,7 +941,7 @@ How far several sampled answers to one question agree.
 
 `majority` is the most common meaning (`None` without samples),
 `agreement` its share, `entropy` the Shannon entropy of the meanings
-normalised to `[0, 1]` (0: all agree; 1: all differ), `counts` the
+normalised to `[0, 1]` (0: all agree; 1: spread evenly over the meanings found), `counts` the
 number of samples per meaning.
 
 ### *class* hired.alignment.Decision(\*values)
@@ -957,7 +994,7 @@ A singleton set decides; two labels (or none) mean ask. JSON-ready through
 Auto-decide on a singleton prediction set; otherwise ask.
 
 * **Return type:**
-  [`Decision`](_autosummary/hired.alignment.calibration.html.md#hired.alignment.calibration.Decision)
+  [`Decision`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Decision)
 
 #### *classmethod* from_dict(d)
 
@@ -1014,7 +1051,7 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How decision-critical a requirement is.
 
-### *class* hired.alignment.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
+### *class* hired.alignment.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, match_score=None, calibrated_decision=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -1070,6 +1107,30 @@ extend *breadth of codified knowledge*, not judgment or enduring aptitude.
 
 * **Return type:**
   [`Closeability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Closeability)
+
+### hired.alignment.apply_calibration(record, samples, , calibrator=None, meaning=None, is_match=None)
+
+Set `record`’s confidence from sampled judgments, and its decision if calibrated.
+
+`samples` are several independent judgments of the same requirement (match
+states, by default). The record’s `confidence` becomes
+[`confidence_level()`](_autosummary/hired.alignment.html.md#hired.alignment.confidence_level) of their agreement and its `match_score`
+[`match_share()`](_autosummary/hired.alignment.html.md#hired.alignment.match_share); with a `calibrator`, `calibrated_decision` is its
+[`decide()`](_autosummary/hired.alignment.html.md#hired.alignment.MatchCalibrator.decide), which [`should_ask()`](_autosummary/hired.alignment.elicitation.html.md#hired.alignment.elicitation.should_ask)
+honours (without one it is cleared: new samples supersede an old decision, so
+re-apply, or clear it, once an answer settles the requirement). The match state stays the analyst’s: an *ask* questions a claim, it
+does not overturn it. Returns the record, changed in place.
+
+```pycon
+>>> from hired.alignment.base import Requirement
+>>> rec = RequirementRecord(requirement=Requirement(text="Kafka"), match_state="confirmed")
+>>> rec = apply_calibration(rec, ["confirmed", "confirmed", "unknown"])
+>>> rec.confidence.value, round(rec.match_score, 2), rec.calibrated_decision
+('medium', 0.67, None)
+```
+
+* **Return type:**
+  [`RequirementRecord`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.RequirementRecord)
 
 ### hired.alignment.assign_bucket(record)
 
@@ -1290,7 +1351,11 @@ Whether to route this record to a clarifying question.
 
 Ask only when it’s `UNKNOWN` on an OPEN field and decision-relevant — the
 “don’t assume absence from silence” rule. CONTRADICTED facts and closed-field
-unknowns are real gaps, not questions.
+unknowns are real gaps, not questions. A decision-relevant CONFIRMED or
+CONTRADICTED record whose calibrated decision is *ask* (sampled judgments too
+inconsistent for the conformal rule, see [`hired.alignment.calibration`](_autosummary/hired.alignment.calibration.html.md#module-hired.alignment.calibration))
+is asked about too: “never exaggerate” means a shaky match is confirmed first,
+and a shaky absence is not assumed. An UNKNOWN follows the rule above.
 
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
@@ -4145,7 +4210,7 @@ One atomic requirement extracted verbatim from a job description.
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
-### *class* hired.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
+### *class* hired.RequirementRecord(, requirement, match_state=MatchState.UNKNOWN, field_completeness=FieldCompleteness.OPEN, bucket=None, match_type=MatchType.NONE, candidate_level=0, gap_size=0, source_skill=None, adjacency_basis=None, transferability=None, closeability=None, close_method=None, time_to_close=None, ai_leverage=AILeverage.NONE, confidence=ConfidenceLevel.LOW, uncertainty_reason=None, evidence=None, match_score=None, calibrated_decision=None, impact=3, info_gain=0.0, needs_clarification=False, talking_point=None)
 
 Bases: `BaseModel`
 
@@ -7983,7 +8048,7 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-10-20 10:33 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/05e1adbb44c488ed787b59f3deb10d4657ebfaf5"><code>05e1adb</code></a> on branch <code>main</code>, for **hired 0.0.27** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 10:35 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/fb5061010c83d0e247c82b1419dff03689478b38"><code>fb50610</code></a> on branch <code>main</code>, for **hired 0.0.28** (from <code>pyproject.toml</code>).
 
 #### NOTE
 Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
@@ -7992,7 +8057,7 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/05e1adbb44c488ed787b59f3deb10d4657ebfaf5"><code>05e1adbb44c488ed787b59f3deb10d4657ebfaf5</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/fb5061010c83d0e247c82b1419dff03689478b38"><code>fb5061010c83d0e247c82b1419dff03689478b38</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -8003,9 +8068,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39408552077">39408552077</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39408787658">39408787658</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>05e1adbb44c488ed787b59f3deb10d4657ebfaf5</code> (in the history of the built commit) |
+| Event commit | <code>fb5061010c83d0e247c82b1419dff03689478b38</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -8030,13 +8095,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.27/">0.0.27</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.28/">0.0.28</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout 05e1adbb44c488ed787b59f3deb10d4657ebfaf5
+git checkout fb5061010c83d0e247c82b1419dff03689478b38
 pip install "epythet==0.2.18"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```

@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=cee5022b"></script>
+    <script src="../../../_static/documentation_options.js?v=26ffa1e9"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.27" />
+  <meta name="docsearch:version" content="0.0.28" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -726,6 +726,7 @@ window.runMermaid = runMermaid;</script>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Clarification</span><span class="p">,</span>
+    <span class="n">Decision</span><span class="p">,</span>
     <span class="n">FieldCompleteness</span><span class="p">,</span>
     <span class="n">RequirementClass</span><span class="p">,</span>
     <span class="n">RequirementRecord</span><span class="p">,</span>
@@ -778,12 +779,19 @@ window.runMermaid = runMermaid;</script>
 
 <span class="sd">    Ask only when it's ``UNKNOWN`` on an OPEN field and decision-relevant — the</span>
 <span class="sd">    "don't assume absence from silence" rule. CONTRADICTED facts and closed-field</span>
-<span class="sd">    unknowns are real gaps, not questions.</span>
+<span class="sd">    unknowns are real gaps, not questions. A decision-relevant CONFIRMED or</span>
+<span class="sd">    CONTRADICTED record whose calibrated decision is *ask* (sampled judgments too</span>
+<span class="sd">    inconsistent for the conformal rule, see :mod:`hired.alignment.calibration`)</span>
+<span class="sd">    is asked about too: "never exaggerate" means a shaky match is confirmed first,</span>
+<span class="sd">    and a shaky absence is not assumed. An UNKNOWN follows the rule above.</span>
 <span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_decision_relevant</span><span class="p">(</span><span class="n">record</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">calibrated_decision</span> <span class="o">==</span> <span class="n">Decision</span><span class="o">.</span><span class="n">ASK</span> <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">match_state</span> <span class="o">!=</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">record</span><span class="o">.</span><span class="n">match_state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span>
         <span class="ow">and</span> <span class="n">record</span><span class="o">.</span><span class="n">field_completeness</span> <span class="o">==</span> <span class="n">FieldCompleteness</span><span class="o">.</span><span class="n">OPEN</span>
-        <span class="ow">and</span> <span class="n">is_decision_relevant</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
     <span class="p">)</span></div>
 
 
@@ -814,7 +822,9 @@ window.runMermaid = runMermaid;</script>
                 <span class="n">requirement_id</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">requirement</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
                 <span class="n">question</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>  <span class="c1"># filled by the analyst</span>
                 <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">requirement</span><span class="o">.</span><span class="n">requirement_class</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> requirement is "</span>
-                <span class="sa">f</span><span class="s2">"unknown; resolving it could move the verdict"</span><span class="p">,</span>
+                <span class="o">+</span> <span class="p">(</span><span class="s2">"unknown"</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">match_state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span>
+                   <span class="k">else</span> <span class="s2">"too uncertain to decide (calibrated)"</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">"; resolving it could move the verdict"</span><span class="p">,</span>
                 <span class="n">info_gain</span><span class="o">=</span><span class="n">r</span><span class="o">.</span><span class="n">info_gain</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
