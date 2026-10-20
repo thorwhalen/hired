@@ -120,6 +120,14 @@ class FitBand(str, Enum):
     GREAT = "great"
 
 
+class Decision(str, Enum):
+    """What to do with a judgment: take it as a match, as no match, or ask."""
+
+    AUTO_MATCH = "auto_match"
+    AUTO_NO_MATCH = "auto_no_match"
+    ASK = "ask"
+
+
 class Requirement(BaseModel):
     """One atomic requirement extracted verbatim from a job description."""
 
@@ -166,6 +174,10 @@ class RequirementRecord(BaseModel):
     confidence: ConfidenceLevel = ConfidenceLevel.LOW
     uncertainty_reason: str | None = None
     evidence: Evidence | None = None
+    # sampled + calibrated (hired.alignment.calibration): the share of independent
+    # judgments saying "match", and the conformal ask/auto-decide verdict on it
+    match_score: float | None = None
+    calibrated_decision: Decision | None = None
 
     # --- prioritization + loop --------------------------------------------
     impact: int = 3  # 1-5 decision criticality

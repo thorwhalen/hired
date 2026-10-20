@@ -109,3 +109,62 @@ def test_consistency_feeds_confidence_and_match_share():
         match_share([])
     with pytest.raises(ValueError, match="medium"):
         confidence_level(0.5, high=0.5, medium=0.8)
+
+
+# --------------------------------------------------------------------------- #
+# Wiring: records and elicitation (#12, part 2)
+# --------------------------------------------------------------------------- #
+
+
+def _record(state="confirmed", cls="gate_keeper"):
+    from hired.alignment import Requirement, RequirementRecord
+
+    return RequirementRecord(
+        requirement=Requirement(text="Kafka", requirement_class=cls), match_state=state
+    )
+
+
+def _calibrator():
+    return calibrate_match([0.9] * 40 + [0.1] * 40, [True] * 40 + [False] * 40)
+
+
+def test_a_shaky_confirmed_match_is_asked_about():
+    from hired.alignment import apply_calibration, rank_clarifications, should_ask
+
+    rec = apply_calibration(_record(), ["confirmed"] * 3 + ["unknown"] * 2,
+                            calibrator=_calibrator())
+    assert rec.calibrated_decision is Decision.ASK
+    assert rec.match_state is MatchState.CONFIRMED  # the analyst's state stands
+    assert should_ask(rec)
+    (q,) = rank_clarifications([rec])
+    assert "calibrated" in q.reason
+
+
+def test_a_consistent_match_is_not_asked_about():
+    from hired.alignment import apply_calibration, should_ask
+
+    rec = apply_calibration(_record(), ["confirmed"] * 10, calibrator=_calibrator())
+    assert rec.calibrated_decision is Decision.AUTO_MATCH
+    assert rec.confidence is ConfidenceLevel.HIGH
+    assert not should_ask(rec)
+
+
+def test_value_add_requirements_are_never_asked_even_when_shaky():
+    from hired.alignment import apply_calibration, should_ask
+
+    rec = apply_calibration(_record(cls="value_add"), ["confirmed", "unknown"],
+                            calibrator=_calibrator())
+    assert rec.calibrated_decision is Decision.ASK and not should_ask(rec)
+
+
+def test_records_without_calibration_behave_as_before_and_round_trip():
+    from hired.alignment import RequirementRecord, should_ask
+
+    assert should_ask(_record("unknown")) and not should_ask(_record("confirmed"))
+    rec = _record()
+    rec.match_score, rec.calibrated_decision = 0.4, Decision.ASK
+    back = RequirementRecord.model_validate_json(rec.model_dump_json())
+    assert back.calibrated_decision is Decision.ASK and back.match_score == 0.4
+    legacy = rec.model_dump()
+    del legacy["match_score"], legacy["calibrated_decision"]
+    assert RequirementRecord.model_validate(legacy).calibrated_decision is None
