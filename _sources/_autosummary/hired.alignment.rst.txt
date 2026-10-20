@@ -16,6 +16,10 @@ hired.alignment
       is_decision_stable
       should_ask
       info_gain
+      semantic_consistency
+      match_share
+      confidence_level
+      calibrate_match
       finalize_report
       is_blocking
       render_report
@@ -49,6 +53,9 @@ hired.alignment
       FieldCompleteness
       Recommendation
       FitBand
+      Consistency
+      MatchCalibrator
+      Decision
    
 .. rubric:: Modules
 
@@ -58,6 +65,7 @@ hired.alignment
 
    assemble
    base
+   calibration
    diff
    elicitation
    report

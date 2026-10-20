@@ -1,0 +1,24 @@
+hired.alignment.calibration
+===========================
+
+.. automodule:: hired.alignment.calibration
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      calibrate_match
+      conformal_quantile
+      confidence_level
+      match_share
+      semantic_consistency
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Consistency
+      Decision
+      MatchCalibrator
+   

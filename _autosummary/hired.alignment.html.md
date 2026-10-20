@@ -10,6 +10,9 @@ Public surface:
   ([`classify()`](#hired.alignment.classify), [`assign_bucket()`](#hired.alignment.assign_bucket), [`apply_ai_leverage()`](#hired.alignment.apply_ai_leverage)),
 - the elicitation helpers in [`hired.alignment.elicitation`](hired.alignment.elicitation.html.md#module-hired.alignment.elicitation)
   ([`rank_clarifications()`](#hired.alignment.rank_clarifications), [`is_decision_stable()`](#hired.alignment.is_decision_stable)),
+- calibrated confidence in [`hired.alignment.calibration`](hired.alignment.calibration.html.md#module-hired.alignment.calibration)
+  ([`semantic_consistency()`](#hired.alignment.semantic_consistency), [`calibrate_match()`](#hired.alignment.calibrate_match) and its conformal
+  [`MatchCalibrator`](#hired.alignment.MatchCalibrator) ask/auto-decide rule),
 - deterministic report finalization in [`hired.alignment.assemble`](hired.alignment.assemble.html.md#module-hired.alignment.assemble)
   ([`finalize_report()`](#hired.alignment.finalize_report) — reclassify, recount, rebuild blockers/clarifications),
 - rendering in [`hired.alignment.report`](hired.alignment.report.html.md#module-hired.alignment.report) ([`render_report()`](#hired.alignment.render_report) dispatching to
@@ -31,6 +34,10 @@ provides the schemas, deterministic scoring, and rendering. See
 | [`is_decision_stable`](#hired.alignment.is_decision_stable)(records)                       | True when no remaining open unknown could flip the verdict.                                               |
 | [`should_ask`](#hired.alignment.should_ask)(record)                                | Whether to route this record to a clarifying question.                                                    |
 | [`info_gain`](#hired.alignment.info_gain)(record)                                 | Expected information gain of resolving this requirement, wrt the verdict.                                 |
+| [`semantic_consistency`](#hired.alignment.semantic_consistency)(samples, \*[, meaning])      | The agreement of sampled answers, clustered by `meaning` (default: equality).                             |
+| [`match_share`](#hired.alignment.match_share)(samples, \*[, is_match])              | The share of sampled judgments that say "match": a score in `[0, 1]`.                                     |
+| [`confidence_level`](#hired.alignment.confidence_level)(agreement, \*[, high, medium])   | A `ConfidenceLevel` from sampled agreement rather than self-report.                                       |
+| [`calibrate_match`](#hired.alignment.calibrate_match)(scores, labels, \*[, ...])        | Fit the ask/auto-decide rule on held-out judgments with known truth.                                      |
 | [`finalize_report`](#hired.alignment.finalize_report)(report)                           | Return a copy of `report` with every derivable field recomputed.                                          |
 | [`is_blocking`](#hired.alignment.is_blocking)(record)                               | True for a gate-keeper requirement that is a hard gap or contradicted.                                    |
 | [`render_report`](#hired.alignment.render_report)(report[, fmt])                      | Render `report` (a model or its JSON dict) in the named format.                                           |
@@ -41,28 +48,31 @@ provides the schemas, deterministic scoring, and rendering. See
 
 ### Classes
 
-| [`Requirement`](#hired.alignment.Requirement)(\*[, id, skill_type, ...])             | One atomic requirement extracted verbatim from a job description.        |
-|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
-| [`RequirementRecord`](#hired.alignment.RequirementRecord)(\*, requirement[, ...])          | The analysis of one requirement against the candidate's knowledge.       |
-| [`Evidence`](#hired.alignment.Evidence)(\*, quote[, source_document_id, locator]) | A verbatim grounding span for a match judgment.                          |
-| [`AlignmentReport`](#hired.alignment.AlignmentReport)(\*, job_id[, job_title, ...])      | A complete, verdict-first alignment analysis for one JD.                 |
-| [`Verdict`](#hired.alignment.Verdict)(\*, recommendation[, confidence, ...])     |                                                                          |
-| [`ScoreSummary`](#hired.alignment.ScoreSummary)(\*[, fit_band, bucket_counts, ...])   |                                                                          |
-| [`NextAction`](#hired.alignment.NextAction)(\*, action[, addresses, priority, ...]) |                                                                          |
-| [`Clarification`](#hired.alignment.Clarification)(\*, requirement_id, question[, ...]) | A question to ask the candidate to resolve a decision-relevant unknown.  |
-| [`InterviewPrep`](#hired.alignment.InterviewPrep)(\*[, summary, talking_points, ...])  |                                                                          |
-| [`Bucket`](#hired.alignment.Bucket)(\*values)                                   | The four alignment buckets.                                              |
-| [`MatchType`](#hired.alignment.MatchType)(\*values)                                | How the candidate's background relates to the requirement (Axis A).      |
-| [`RequirementClass`](#hired.alignment.RequirementClass)(\*values)                         | How decision-critical a requirement is.                                  |
-| [`SkillType`](#hired.alignment.SkillType)(\*values)                                |                                                                          |
-| [`Closeability`](#hired.alignment.Closeability)(\*values)                             | How hard a gap is to close (Axis B), after the AI-leverage modifier.     |
-| [`CloseMethod`](#hired.alignment.CloseMethod)(\*values)                              |                                                                          |
-| [`TimeToClose`](#hired.alignment.TimeToClose)(\*values)                              |                                                                          |
-| [`Transferability`](#hired.alignment.Transferability)(\*values)                          |                                                                          |
-| [`AILeverage`](#hired.alignment.AILeverage)(\*values)                               | How much the candidate's standing AI-agent capability lowers the ramp.   |
-| [`FieldCompleteness`](#hired.alignment.FieldCompleteness)(\*values)                        | Local closed-world flag: may a missing value be read as a real negative? |
-| [`Recommendation`](#hired.alignment.Recommendation)(\*values)                           |                                                                          |
-| [`FitBand`](#hired.alignment.FitBand)(\*values)                                  |                                                                          |
+| [`Requirement`](#hired.alignment.Requirement)(\*[, id, skill_type, ...])             | One atomic requirement extracted verbatim from a job description.             |
+|-----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| [`RequirementRecord`](#hired.alignment.RequirementRecord)(\*, requirement[, ...])          | The analysis of one requirement against the candidate's knowledge.            |
+| [`Evidence`](#hired.alignment.Evidence)(\*, quote[, source_document_id, locator]) | A verbatim grounding span for a match judgment.                               |
+| [`AlignmentReport`](#hired.alignment.AlignmentReport)(\*, job_id[, job_title, ...])      | A complete, verdict-first alignment analysis for one JD.                      |
+| [`Verdict`](#hired.alignment.Verdict)(\*, recommendation[, confidence, ...])     |                                                                               |
+| [`ScoreSummary`](#hired.alignment.ScoreSummary)(\*[, fit_band, bucket_counts, ...])   |                                                                               |
+| [`NextAction`](#hired.alignment.NextAction)(\*, action[, addresses, priority, ...]) |                                                                               |
+| [`Clarification`](#hired.alignment.Clarification)(\*, requirement_id, question[, ...]) | A question to ask the candidate to resolve a decision-relevant unknown.       |
+| [`InterviewPrep`](#hired.alignment.InterviewPrep)(\*[, summary, talking_points, ...])  |                                                                               |
+| [`Bucket`](#hired.alignment.Bucket)(\*values)                                   | The four alignment buckets.                                                   |
+| [`MatchType`](#hired.alignment.MatchType)(\*values)                                | How the candidate's background relates to the requirement (Axis A).           |
+| [`RequirementClass`](#hired.alignment.RequirementClass)(\*values)                         | How decision-critical a requirement is.                                       |
+| [`SkillType`](#hired.alignment.SkillType)(\*values)                                |                                                                               |
+| [`Closeability`](#hired.alignment.Closeability)(\*values)                             | How hard a gap is to close (Axis B), after the AI-leverage modifier.          |
+| [`CloseMethod`](#hired.alignment.CloseMethod)(\*values)                              |                                                                               |
+| [`TimeToClose`](#hired.alignment.TimeToClose)(\*values)                              |                                                                               |
+| [`Transferability`](#hired.alignment.Transferability)(\*values)                          |                                                                               |
+| [`AILeverage`](#hired.alignment.AILeverage)(\*values)                               | How much the candidate's standing AI-agent capability lowers the ramp.        |
+| [`FieldCompleteness`](#hired.alignment.FieldCompleteness)(\*values)                        | Local closed-world flag: may a missing value be read as a real negative?      |
+| [`Recommendation`](#hired.alignment.Recommendation)(\*values)                           |                                                                               |
+| [`FitBand`](#hired.alignment.FitBand)(\*values)                                  |                                                                               |
+| [`Consistency`](#hired.alignment.Consistency)(majority, agreement, entropy, ...)     | How far several sampled answers to one question agree.                        |
+| [`MatchCalibrator`](#hired.alignment.MatchCalibrator)(match_threshold, ...[, ...])       | A fitted class-conditional conformal rule over a match score `s` in `[0, 1]`. |
+| [`Decision`](#hired.alignment.Decision)(\*values)                                 | What to do with a judgment: take it as a match, as no match, or ask.          |
 
 ### *class* hired.alignment.AILeverage(\*values)
 
@@ -109,6 +119,23 @@ Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](h
 
 How hard a gap is to close (Axis B), after the AI-leverage modifier.
 
+### *class* hired.alignment.Consistency(majority, agreement, entropy, n_samples, counts=dict())
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+How far several sampled answers to one question agree.
+
+`majority` is the most common meaning (`None` without samples),
+`agreement` its share, `entropy` the Shannon entropy of the meanings
+normalised to `[0, 1]` (0: all agree; 1: all differ), `counts` the
+number of samples per meaning.
+
+### *class* hired.alignment.Decision(\*values)
+
+Bases: [`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Enum`](https://docs.python.org/3/library/enum.html#enum.Enum)
+
+What to do with a judgment: take it as a match, as no match, or ask.
+
 ### *class* hired.alignment.Evidence(, quote, source_document_id='', locator='')
 
 Bases: `BaseModel`
@@ -136,6 +163,45 @@ Bases: `BaseModel`
 #### model_config *: [ClassVar](https://docs.python.org/3/library/typing.html#typing.ClassVar)[ConfigDict]* *= {}*
 
 Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+
+### *class* hired.alignment.MatchCalibrator(match_threshold, no_match_threshold, false_accept_rate=0.05, miss_rate=0.1, n_match=0, n_no_match=0)
+
+Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
+
+A fitted class-conditional conformal rule over a match score `s` in `[0, 1]`.
+
+“Match” stays in the prediction set while its nonconformity `1 - s` is at most
+`match_threshold`; “no match” while `s` is at most `no_match_threshold`.
+A singleton set decides; two labels (or none) mean ask. JSON-ready through
+[`to_dict()`](#hired.alignment.MatchCalibrator.to_dict) / [`from_dict()`](#hired.alignment.MatchCalibrator.from_dict), so a fitted rule can be stored and reviewed.
+
+#### decide(score)
+
+Auto-decide on a singleton prediction set; otherwise ask.
+
+* **Return type:**
+  [`Decision`](hired.alignment.calibration.html.md#hired.alignment.calibration.Decision)
+
+#### *classmethod* from_dict(d)
+
+Inverse of [`to_dict()`](#hired.alignment.MatchCalibrator.to_dict).
+
+* **Return type:**
+  [`MatchCalibrator`](hired.alignment.calibration.html.md#hired.alignment.calibration.MatchCalibrator)
+
+#### prediction_set(score)
+
+The labels (`True`: match) not excluded at their levels.
+
+* **Return type:**
+  [`frozenset`](https://docs.python.org/3/builtins/stdtypes.html#frozenset)[[`bool`](https://docs.python.org/3/builtins/functions.html#bool)]
+
+#### to_dict()
+
+A JSON-ready dict (an infinite threshold is written as `None`).
+
+* **Return type:**
+  [`dict`](https://docs.python.org/3/builtins/stdtypes.html#dict)[[`str`](https://docs.python.org/3/builtins/stdtypes.html#str), [`Any`](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 ### *class* hired.alignment.MatchType(\*values)
 
@@ -240,6 +306,20 @@ absence” rule). `UNKNOWN` on a CLOSED field is treated as a real gap.
 * **Return type:**
   [`Bucket`](hired.alignment.base.html.md#hired.alignment.base.Bucket) | [`None`](https://docs.python.org/3/builtins/constants.html#None)
 
+### hired.alignment.calibrate_match(scores, labels, , false_accept_rate=0.05, miss_rate=0.1)
+
+Fit the ask/auto-decide rule on held-out judgments with known truth.
+
+`scores` are match scores in `[0, 1]` (say [`match_share()`](#hired.alignment.match_share) of sampled
+judgments), `labels` whether each was truly a match. Each class gets its own
+threshold (Mondrian split conformal): `false_accept_rate` bounds how often a
+true non-match is auto-accepted, `miss_rate` how often a true match is
+auto-rejected. Keep the held-out set apart from anything used to tune the
+scoring, or the bound does not hold.
+
+* **Return type:**
+  [`MatchCalibrator`](hired.alignment.calibration.html.md#hired.alignment.calibration.MatchCalibrator)
+
 ### hired.alignment.classify(record)
 
 Fill `gap_size` and `bucket` (and `needs_clarification`) in place.
@@ -255,6 +335,18 @@ Residual gap, floored at zero.
 
 * **Return type:**
   [`int`](https://docs.python.org/3/builtins/functions.html#int)
+
+### hired.alignment.confidence_level(agreement, , high=0.9, medium=0.6)
+
+A `ConfidenceLevel` from sampled agreement rather than self-report.
+
+```pycon
+>>> confidence_level(0.95), confidence_level(0.7), confidence_level(0.5)
+(<ConfidenceLevel.HIGH: 'high'>, <ConfidenceLevel.MEDIUM: 'medium'>, <ConfidenceLevel.LOW: 'low'>)
+```
+
+* **Return type:**
+  [`ConfidenceLevel`](hired.candidate.base.html.md#hired.candidate.base.ConfidenceLevel)
 
 ### hired.alignment.diff_reports(old, new)
 
@@ -332,6 +424,21 @@ requirements left. This is the sharpest stop criterion from the research.
 * **Return type:**
   [`bool`](https://docs.python.org/3/builtins/functions.html#bool)
 
+### hired.alignment.match_share(samples, , is_match=None)
+
+The share of sampled judgments that say “match”: a score in `[0, 1]`.
+
+By default a sample matches when it is (or names) `MatchState.CONFIRMED`;
+`is_match` overrides that. This is the score [`calibrate_match()`](#hired.alignment.calibrate_match) takes.
+
+```pycon
+>>> match_share(["confirmed", "confirmed", "unknown", "contradicted"])
+0.5
+```
+
+* **Return type:**
+  [`float`](https://docs.python.org/3/builtins/functions.html#float)
+
 ### hired.alignment.rank_clarifications(records, , max_questions=None, min_info_gain=0.0)
 
 Produce clarifying questions for askable records, highest info-gain first.
@@ -382,6 +489,24 @@ Render the report as a Markdown string.
 * **Return type:**
   [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)
 
+### hired.alignment.semantic_consistency(samples, , meaning=None)
+
+The agreement of sampled answers, clustered by `meaning` (default: equality).
+
+`meaning` maps an answer to its meaning: a normalised label, an entailment
+cluster id. Answers that mean the same count as agreeing however worded.
+
+```pycon
+>>> c = semantic_consistency(["Yes", "yes", "no", "YES "], meaning=lambda s: s.strip().lower())
+>>> c.majority, c.agreement, round(c.entropy, 3)
+('yes', 0.75, 0.811)
+>>> semantic_consistency([]).agreement
+0.0
+```
+
+* **Return type:**
+  [`Consistency`](hired.alignment.calibration.html.md#hired.alignment.calibration.Consistency)
+
 ### hired.alignment.should_ask(record)
 
 Whether to route this record to a clarifying question.
@@ -405,6 +530,7 @@ A short human-readable summary of [`diff_reports()`](#hired.alignment.diff_repor
 | [`assemble`](hired.alignment.assemble.html.md#module-hired.alignment.assemble)       | Deterministically finalize an analyst-drafted [`AlignmentReport`](#hired.alignment.AlignmentReport).                      |
 |-------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
 | [`base`](hired.alignment.base.html.md#module-hired.alignment.base)               | Schemas for JD-vs-candidate alignment analysis.                                                                                      |
+| [`calibration`](hired.alignment.calibration.html.md#module-hired.alignment.calibration) | Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.                                                |
 | [`diff`](hired.alignment.diff.html.md#module-hired.alignment.diff)               | Deterministic diff between two alignment reports.                                                                                    |
 | [`elicitation`](hired.alignment.elicitation.html.md#module-hired.alignment.elicitation) | The honesty loop: rank unknowns into the most informative questions first.                                                           |
 | [`report`](hired.alignment.report.html.md#module-hired.alignment.report)           | Render an [`AlignmentReport`](hired.alignment.base.html.md#hired.alignment.base.AlignmentReport) to Markdown or HTML. |

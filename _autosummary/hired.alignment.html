@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=6a9d8632"></script>
+    <script src="../_static/documentation_options.js?v=cee5022b"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +58,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.26" />
+  <meta name="docsearch:version" content="0.0.27" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -323,6 +323,7 @@
 <li class="toctree-l2 current active has-children"><a aria-current="page" class="current reference internal" href="#">hired.alignment</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.assemble.html">hired.alignment.assemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.base.html">hired.alignment.base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hired.alignment.calibration.html">hired.alignment.calibration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.diff.html">hired.alignment.diff</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.elicitation.html">hired.alignment.elicitation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.report.html">hired.alignment.report</a></li>
@@ -446,6 +447,9 @@
 (<a class="reference internal" href="#hired.alignment.classify" title="hired.alignment.classify"><code class="xref py py-func docutils literal notranslate"><span class="pre">classify()</span></code></a>, <a class="reference internal" href="#hired.alignment.assign_bucket" title="hired.alignment.assign_bucket"><code class="xref py py-func docutils literal notranslate"><span class="pre">assign_bucket()</span></code></a>, <a class="reference internal" href="#hired.alignment.apply_ai_leverage" title="hired.alignment.apply_ai_leverage"><code class="xref py py-func docutils literal notranslate"><span class="pre">apply_ai_leverage()</span></code></a>),</p></li>
 <li><p>the elicitation helpers in <a class="reference internal" href="hired.alignment.elicitation.html#module-hired.alignment.elicitation" title="hired.alignment.elicitation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.alignment.elicitation</span></code></a>
 (<a class="reference internal" href="#hired.alignment.rank_clarifications" title="hired.alignment.rank_clarifications"><code class="xref py py-func docutils literal notranslate"><span class="pre">rank_clarifications()</span></code></a>, <a class="reference internal" href="#hired.alignment.is_decision_stable" title="hired.alignment.is_decision_stable"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_decision_stable()</span></code></a>),</p></li>
+<li><p>calibrated confidence in <a class="reference internal" href="hired.alignment.calibration.html#module-hired.alignment.calibration" title="hired.alignment.calibration"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.alignment.calibration</span></code></a>
+(<a class="reference internal" href="#hired.alignment.semantic_consistency" title="hired.alignment.semantic_consistency"><code class="xref py py-func docutils literal notranslate"><span class="pre">semantic_consistency()</span></code></a>, <a class="reference internal" href="#hired.alignment.calibrate_match" title="hired.alignment.calibrate_match"><code class="xref py py-func docutils literal notranslate"><span class="pre">calibrate_match()</span></code></a> and its conformal
+<a class="reference internal" href="#hired.alignment.MatchCalibrator" title="hired.alignment.MatchCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatchCalibrator</span></code></a> ask/auto-decide rule),</p></li>
 <li><p>deterministic report finalization in <a class="reference internal" href="hired.alignment.assemble.html#module-hired.alignment.assemble" title="hired.alignment.assemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.alignment.assemble</span></code></a>
 (<a class="reference internal" href="#hired.alignment.finalize_report" title="hired.alignment.finalize_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">finalize_report()</span></code></a> — reclassify, recount, rebuild blockers/clarifications),</p></li>
 <li><p>rendering in <a class="reference internal" href="hired.alignment.report.html#module-hired.alignment.report" title="hired.alignment.report"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.alignment.report</span></code></a> (<a class="reference internal" href="#hired.alignment.render_report" title="hired.alignment.render_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">render_report()</span></code></a> dispatching to
@@ -481,6 +485,18 @@ provides the schemas, deterministic scoring, and rendering. See
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.info_gain" title="hired.alignment.info_gain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info_gain</span></code></a>(record)</p></td>
 <td><p>Expected information gain of resolving this requirement, wrt the verdict.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.semantic_consistency" title="hired.alignment.semantic_consistency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">semantic_consistency</span></code></a>(samples, *[, meaning])</p></td>
+<td><p>The agreement of sampled answers, clustered by <code class="docutils literal notranslate"><span class="pre">meaning</span></code> (default: equality).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.match_share" title="hired.alignment.match_share"><code class="xref py py-obj docutils literal notranslate"><span class="pre">match_share</span></code></a>(samples, *[, is_match])</p></td>
+<td><p>The share of sampled judgments that say &quot;match&quot;: a score in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.confidence_level" title="hired.alignment.confidence_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">confidence_level</span></code></a>(agreement, *[, high, medium])</p></td>
+<td><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceLevel</span></code> from sampled agreement rather than self-report.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.calibrate_match" title="hired.alignment.calibrate_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibrate_match</span></code></a>(scores, labels, *[, ...])</p></td>
+<td><p>Fit the ask/auto-decide rule on held-out judgments with known truth.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.finalize_report" title="hired.alignment.finalize_report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">finalize_report</span></code></a>(report)</p></td>
 <td><p>Return a copy of <code class="docutils literal notranslate"><span class="pre">report</span></code> with every derivable field recomputed.</p></td>
@@ -572,6 +588,15 @@ provides the schemas, deterministic scoring, and rendering. See
 <tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.FitBand" title="hired.alignment.FitBand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FitBand</span></code></a>(*values)</p></td>
 <td><p></p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.Consistency" title="hired.alignment.Consistency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Consistency</span></code></a>(majority, agreement, entropy, ...)</p></td>
+<td><p>How far several sampled answers to one question agree.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.MatchCalibrator" title="hired.alignment.MatchCalibrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatchCalibrator</span></code></a>(match_threshold, ...[, ...])</p></td>
+<td><p>A fitted class-conditional conformal rule over a match score <code class="docutils literal notranslate"><span class="pre">s</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.Decision" title="hired.alignment.Decision"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Decision</span></code></a>(*values)</p></td>
+<td><p>What to do with a judgment: take it as a match, as no match, or ask.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -635,6 +660,26 @@ enduring-aptitude gaps (those it cannot rescue).</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="hired.alignment.Consistency">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">Consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">majority</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agreement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entropy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">dict()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#Consistency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.Consistency" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>How far several sampled answers to one question agree.</p>
+<p><code class="docutils literal notranslate"><span class="pre">majority</span></code> is the most common meaning (<code class="docutils literal notranslate"><span class="pre">None</span></code> without samples),
+<code class="docutils literal notranslate"><span class="pre">agreement</span></code> its share, <code class="docutils literal notranslate"><span class="pre">entropy</span></code> the Shannon entropy of the meanings
+normalised to <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> (0: all agree; 1: all differ), <code class="docutils literal notranslate"><span class="pre">counts</span></code> the
+number of samples per meaning.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.alignment.Decision">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">Decision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#Decision"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.Decision" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></a></p>
+<p>What to do with a judgment: take it as a match, as no match, or ask.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="hired.alignment.Evidence">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">Evidence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">quote</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_document_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/base.html#Evidence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.Evidence" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
@@ -672,6 +717,63 @@ enduring-aptitude gaps (those it cannot rescue).</p>
 <dt class="sig sig-object py" id="hired.alignment.InterviewPrep.model_config">
 <span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.15)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#hired.alignment.InterviewPrep.model_config" title="Link to this definition">#</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<code class="code docutils literal notranslate"><span class="pre">ConfigDict</span></code>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.alignment.MatchCalibrator">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">MatchCalibrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match_threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_match_threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">false_accept_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">miss_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_no_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#MatchCalibrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.MatchCalibrator" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A fitted class-conditional conformal rule over a match score <code class="docutils literal notranslate"><span class="pre">s</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p>
+<p>“Match” stays in the prediction set while its nonconformity <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">s</span></code> is at most
+<code class="docutils literal notranslate"><span class="pre">match_threshold</span></code>; “no match” while <code class="docutils literal notranslate"><span class="pre">s</span></code> is at most <code class="docutils literal notranslate"><span class="pre">no_match_threshold</span></code>.
+A singleton set decides; two labels (or none) mean ask. JSON-ready through
+<a class="reference internal" href="#hired.alignment.MatchCalibrator.to_dict" title="hired.alignment.MatchCalibrator.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a> / <a class="reference internal" href="#hired.alignment.MatchCalibrator.from_dict" title="hired.alignment.MatchCalibrator.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a>, so a fitted rule can be stored and reviewed.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.alignment.MatchCalibrator.decide">
+<span class="sig-name descname"><span class="pre">decide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#MatchCalibrator.decide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.MatchCalibrator.decide" title="Link to this definition">#</a></dt>
+<dd><p>Auto-decide on a singleton prediction set; otherwise ask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.calibration.html#hired.alignment.calibration.Decision" title="hired.alignment.calibration.Decision"><code class="xref py py-class docutils literal notranslate"><span class="pre">Decision</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.alignment.MatchCalibrator.from_dict">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#MatchCalibrator.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.MatchCalibrator.from_dict" title="Link to this definition">#</a></dt>
+<dd><p>Inverse of <a class="reference internal" href="#hired.alignment.MatchCalibrator.to_dict" title="hired.alignment.MatchCalibrator.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.calibration.html#hired.alignment.calibration.MatchCalibrator" title="hired.alignment.calibration.MatchCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatchCalibrator</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.alignment.MatchCalibrator.prediction_set">
+<span class="sig-name descname"><span class="pre">prediction_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">score</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#MatchCalibrator.prediction_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.MatchCalibrator.prediction_set" title="Link to this definition">#</a></dt>
+<dd><p>The labels (<code class="docutils literal notranslate"><span class="pre">True</span></code>: match) not excluded at their levels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#frozenset" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.alignment.MatchCalibrator.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#MatchCalibrator.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.MatchCalibrator.to_dict" title="Link to this definition">#</a></dt>
+<dd><p>A JSON-ready dict (an infinite threshold is written as <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></a>]</span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -823,6 +925,23 @@ absence” rule). <code class="docutils literal notranslate"><span class="pre">U
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.calibrate_match">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">calibrate_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">false_accept_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">miss_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#calibrate_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.calibrate_match" title="Link to this definition">#</a></dt>
+<dd><p>Fit the ask/auto-decide rule on held-out judgments with known truth.</p>
+<p><code class="docutils literal notranslate"><span class="pre">scores</span></code> are match scores in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code> (say <a class="reference internal" href="#hired.alignment.match_share" title="hired.alignment.match_share"><code class="xref py py-func docutils literal notranslate"><span class="pre">match_share()</span></code></a> of sampled
+judgments), <code class="docutils literal notranslate"><span class="pre">labels</span></code> whether each was truly a match. Each class gets its own
+threshold (Mondrian split conformal): <code class="docutils literal notranslate"><span class="pre">false_accept_rate</span></code> bounds how often a
+true non-match is auto-accepted, <code class="docutils literal notranslate"><span class="pre">miss_rate</span></code> how often a true match is
+auto-rejected. Keep the held-out set apart from anything used to tune the
+scoring, or the bound does not hold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.calibration.html#hired.alignment.calibration.MatchCalibrator" title="hired.alignment.calibration.MatchCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatchCalibrator</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="hired.alignment.classify">
 <span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">classify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/rubric.html#classify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.classify" title="Link to this definition">#</a></dt>
 <dd><p>Fill <code class="docutils literal notranslate"><span class="pre">gap_size</span></code> and <code class="docutils literal notranslate"><span class="pre">bucket</span></code> (and <code class="docutils literal notranslate"><span class="pre">needs_clarification</span></code>) in place.</p>
@@ -841,6 +960,21 @@ absence” rule). <code class="docutils literal notranslate"><span class="pre">U
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.confidence_level">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">confidence_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agreement</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">medium</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#confidence_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.confidence_level" title="Link to this definition">#</a></dt>
+<dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceLevel</span></code> from sampled agreement rather than self-report.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">confidence_level</span><span class="p">(</span><span class="mf">0.95</span><span class="p">),</span> <span class="n">confidence_level</span><span class="p">(</span><span class="mf">0.7</span><span class="p">),</span> <span class="n">confidence_level</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(&lt;ConfidenceLevel.HIGH: 'high'&gt;, &lt;ConfidenceLevel.MEDIUM: 'medium'&gt;, &lt;ConfidenceLevel.LOW: 'low'&gt;)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.candidate.base.html#hired.candidate.base.ConfidenceLevel" title="hired.candidate.base.ConfidenceLevel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfidenceLevel</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -938,6 +1072,23 @@ requirements left. This is the sharpest stop criterion from the research.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.match_share">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">match_share</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#match_share"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.match_share" title="Link to this definition">#</a></dt>
+<dd><p>The share of sampled judgments that say “match”: a score in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.</p>
+<p>By default a sample matches when it is (or names) <code class="xref py py-attr docutils literal notranslate"><span class="pre">MatchState.CONFIRMED</span></code>;
+<code class="docutils literal notranslate"><span class="pre">is_match</span></code> overrides that. This is the score <a class="reference internal" href="#hired.alignment.calibrate_match" title="hired.alignment.calibrate_match"><code class="xref py py-func docutils literal notranslate"><span class="pre">calibrate_match()</span></code></a> takes.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">match_share</span><span class="p">([</span><span class="s2">"confirmed"</span><span class="p">,</span> <span class="s2">"confirmed"</span><span class="p">,</span> <span class="s2">"unknown"</span><span class="p">,</span> <span class="s2">"contradicted"</span><span class="p">])</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="hired.alignment.rank_clarifications">
 <span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">rank_clarifications</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_questions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_info_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/elicitation.html#rank_clarifications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.rank_clarifications" title="Link to this definition">#</a></dt>
 <dd><p>Produce clarifying questions for askable records, highest info-gain first.</p>
@@ -1001,6 +1152,26 @@ skeleton (requirement, reason, info_gain) so the caller can fill <code class="do
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.semantic_consistency">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">semantic_consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">meaning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#semantic_consistency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.semantic_consistency" title="Link to this definition">#</a></dt>
+<dd><p>The agreement of sampled answers, clustered by <code class="docutils literal notranslate"><span class="pre">meaning</span></code> (default: equality).</p>
+<p><code class="docutils literal notranslate"><span class="pre">meaning</span></code> maps an answer to its meaning: a normalised label, an entailment
+cluster id. Answers that mean the same count as agreeing however worded.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">semantic_consistency</span><span class="p">([</span><span class="s2">"Yes"</span><span class="p">,</span> <span class="s2">"yes"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"YES "</span><span class="p">],</span> <span class="n">meaning</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">majority</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">agreement</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">entropy</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">('yes', 0.75, 0.811)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">semantic_consistency</span><span class="p">([])</span><span class="o">.</span><span class="n">agreement</span>
+<span class="go">0.0</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.calibration.html#hired.alignment.calibration.Consistency" title="hired.alignment.calibration.Consistency"><code class="xref py py-class docutils literal notranslate"><span class="pre">Consistency</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="hired.alignment.should_ask">
 <span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">should_ask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/elicitation.html#should_ask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.should_ask" title="Link to this definition">#</a></dt>
 <dd><p>Whether to route this record to a clarifying question.</p>
@@ -1034,16 +1205,19 @@ unknowns are real gaps, not questions.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.base.html#module-hired.alignment.base" title="hired.alignment.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base</span></code></a></p></td>
 <td><p>Schemas for JD-vs-candidate alignment analysis.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.diff.html#module-hired.alignment.diff" title="hired.alignment.diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">diff</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.calibration.html#module-hired.alignment.calibration" title="hired.alignment.calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration</span></code></a></p></td>
+<td><p>Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.diff.html#module-hired.alignment.diff" title="hired.alignment.diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">diff</span></code></a></p></td>
 <td><p>Deterministic diff between two alignment reports.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.elicitation.html#module-hired.alignment.elicitation" title="hired.alignment.elicitation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elicitation</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.elicitation.html#module-hired.alignment.elicitation" title="hired.alignment.elicitation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elicitation</span></code></a></p></td>
 <td><p>The honesty loop: rank unknowns into the most informative questions first.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.report.html#module-hired.alignment.report" title="hired.alignment.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.report.html#module-hired.alignment.report" title="hired.alignment.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a></p></td>
 <td><p>Render an <a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a> to Markdown or HTML.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.rubric.html#module-hired.alignment.rubric" title="hired.alignment.rubric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rubric</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.rubric.html#module-hired.alignment.rubric" title="hired.alignment.rubric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rubric</span></code></a></p></td>
 <td><p>Deterministic bucket assignment — the two-axis rubric in code.</p></td>
 </tr>
 </tbody>
@@ -1110,6 +1284,8 @@ unknowns are real gaps, not questions.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.CloseMethod"><code class="docutils literal notranslate"><span class="pre">CloseMethod</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.Closeability"><code class="docutils literal notranslate"><span class="pre">Closeability</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.Consistency"><code class="docutils literal notranslate"><span class="pre">Consistency</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.Decision"><code class="docutils literal notranslate"><span class="pre">Decision</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.Evidence"><code class="docutils literal notranslate"><span class="pre">Evidence</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.Evidence.model_config"><code class="docutils literal notranslate"><span class="pre">Evidence.model_config</span></code></a></li>
 </ul>
@@ -1118,6 +1294,13 @@ unknowns are real gaps, not questions.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.FitBand"><code class="docutils literal notranslate"><span class="pre">FitBand</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.InterviewPrep"><code class="docutils literal notranslate"><span class="pre">InterviewPrep</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.InterviewPrep.model_config"><code class="docutils literal notranslate"><span class="pre">InterviewPrep.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchCalibrator"><code class="docutils literal notranslate"><span class="pre">MatchCalibrator</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchCalibrator.decide"><code class="docutils literal notranslate"><span class="pre">MatchCalibrator.decide()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchCalibrator.from_dict"><code class="docutils literal notranslate"><span class="pre">MatchCalibrator.from_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchCalibrator.prediction_set"><code class="docutils literal notranslate"><span class="pre">MatchCalibrator.prediction_set()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchCalibrator.to_dict"><code class="docutils literal notranslate"><span class="pre">MatchCalibrator.to_dict()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchType"><code class="docutils literal notranslate"><span class="pre">MatchType</span></code></a></li>
@@ -1148,17 +1331,21 @@ unknowns are real gaps, not questions.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.apply_ai_leverage"><code class="docutils literal notranslate"><span class="pre">apply_ai_leverage()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.assign_bucket"><code class="docutils literal notranslate"><span class="pre">assign_bucket()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.calibrate_match"><code class="docutils literal notranslate"><span class="pre">calibrate_match()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.classify"><code class="docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.compute_gap_size"><code class="docutils literal notranslate"><span class="pre">compute_gap_size()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.confidence_level"><code class="docutils literal notranslate"><span class="pre">confidence_level()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.diff_reports"><code class="docutils literal notranslate"><span class="pre">diff_reports()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.finalize_report"><code class="docutils literal notranslate"><span class="pre">finalize_report()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.info_gain"><code class="docutils literal notranslate"><span class="pre">info_gain()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.is_blocking"><code class="docutils literal notranslate"><span class="pre">is_blocking()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.is_decision_stable"><code class="docutils literal notranslate"><span class="pre">is_decision_stable()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.match_share"><code class="docutils literal notranslate"><span class="pre">match_share()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.rank_clarifications"><code class="docutils literal notranslate"><span class="pre">rank_clarifications()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.render_report"><code class="docutils literal notranslate"><span class="pre">render_report()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.render_report_html"><code class="docutils literal notranslate"><span class="pre">render_report_html()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.render_report_markdown"><code class="docutils literal notranslate"><span class="pre">render_report_markdown()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.semantic_consistency"><code class="docutils literal notranslate"><span class="pre">semantic_consistency()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.should_ask"><code class="docutils literal notranslate"><span class="pre">should_ask()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.summarize_diff"><code class="docutils literal notranslate"><span class="pre">summarize_diff()</span></code></a></li>
 </ul>
