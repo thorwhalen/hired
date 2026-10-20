@@ -183,6 +183,24 @@ answer:
   )
   ```
   This makes each answer reusable across *every* future JD, not just this one.
+- **when the answer settles a requirement, also log a calibration pair.** Pass
+  `calibration=(record.match_score, truth)` to the same `record_qa` call: the
+  requirement record's `match_score` *as it stood before this answer*, and `truth`
+  = `True` if the answer showed the candidate does meet it, `False` if not. Skip it
+  when the answer leaves the requirement open (no ground truth, no pair).
+  ```python
+  kb.record_qa(
+      QAEntry(question=..., answer=..., asked_for_job=job_id),
+      derived_facts=[...],
+      calibration=(rec.match_score, True),  # the answer confirmed the requirement
+  )
+  ```
+  The pair is stored in the candidate's calibration log, and the calibrator is
+  refitted automatically once both classes have enough pairs. Feed it back at the
+  next classification: `cal = kb.calibration_log().load_calibrator()` (`None` until
+  there are enough pairs) and `apply_calibration(rec, samples, calibrator=cal)` (see
+  Step 2). Keep these pairs out of any scoring-threshold tuning: they exist only to
+  fit the calibrator, and tuning thresholds on them would make it grade its own work.
 - re-build/re-`classify()` the affected requirement(s) — verdicts may change.
 
 Stop when `is_decision_stable(records)` is True, or you hit a sensible question
