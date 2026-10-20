@@ -28,6 +28,11 @@ hired.alignment
       render_report_html
       diff_reports
       summarize_diff
+      analyze_jd
+      aggregate_verdict
+      coverage
+      retrieve_facts
+      quote_is_grounded
    
    .. rubric:: Classes
 
@@ -57,6 +62,7 @@ hired.alignment
       Consistency
       MatchCalibrator
       Decision
+      LLMAlignmentAnalyzer
    
 .. rubric:: Modules
 
@@ -64,6 +70,7 @@ hired.alignment
    :toctree:
    :recursive:
 
+   analyzer
    assemble
    base
    calibration

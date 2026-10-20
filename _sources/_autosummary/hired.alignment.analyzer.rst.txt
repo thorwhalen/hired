@@ -1,0 +1,22 @@
+hired.alignment.analyzer
+========================
+
+.. automodule:: hired.alignment.analyzer
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      aggregate_verdict
+      analyze_jd
+      coverage
+      quote_is_grounded
+      retrieve_facts
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      LLMAlignmentAnalyzer
+   

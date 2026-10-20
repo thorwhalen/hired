@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="alternate" type="text/markdown" href="analyzer.html.md">
+<link rel="describedby" href="../../../llms.txt" type="text/markdown">
+    <title>hired.alignment.analyzer &#8212; hired</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_autodoc_typehints.css?v=057ac668" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/epythet.css?v=c5337052" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=61a342a2"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=fd10adb8"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
+
+
+
+
+
+const initStyles = () => {
+    const defaultStyle = document.createElement('style');
+    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
+    document.head.appendChild(defaultStyle);
+
+    const fullscreenStyle = document.createElement('style');
+    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
+    document.head.appendChild(fullscreenStyle);
+}
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    // We use a set of heuristics:
+    // 1. Check for common dark mode classes or attributes
+    // 2. Check computed background color brightness
+    if (document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        document.body.classList.contains('dark') ||
+        document.body.getAttribute('data-theme') === 'dark') {
+        // console.log("Dark theme detected via class/attribute");
+        return true;
+    }
+    if (document.documentElement.classList.contains('light') ||
+        document.documentElement.getAttribute('data-theme') === 'light' ||
+        document.body.classList.contains('light') ||
+        document.body.getAttribute('data-theme') === 'light') {
+        // console.log("Light theme detected via class/attribute");
+        return false;
+    }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // console.log("Dark theme detected via prefers-color-scheme");
+        return true;
+    }
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        // console.log("Background color brightness:", brightness);
+        return brightness < 128;
+    }
+    // console.log("No dark or light theme detected, defaulting to light theme");
+    return false;
+};
+
+let darkTheme = isDarkTheme();
+let modal = null;
+let modalContent = null;
+let previousScrollOffset = [window.scrollX, window.scrollY];
+let _lazyObserver = null;
+let _renderQueue = Promise.resolve();
+let closeModal = () => {};
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal?.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
+// so this is safe to call both for the initial batch and for diagrams that
+// render lazily once they become visible.
+const addZoomToSvgs = (svgs) => {
+    svgs.each(function() {
+        if (this.getAttribute('data-zoom-applied') === 'true') return;
+        var svg = d3.select(this);
+        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+        var inner = svg.select("g");
+        var zoom = d3.zoom().on("zoom", function(event) {
+            inner.attr("transform", event.transform);
+        });
+        svg.call(zoom);
+        this.setAttribute('data-zoom-applied', 'true');
+    });
+};
+
+const runMermaid = async (rerun) => {
+    console.log("Running mermaid diagrams, rerun =", rerun);
+    // clear all existing mermaid charts
+    let all_mermaids = document.querySelectorAll(".mermaid");
+
+    if (rerun) {
+        // Disconnect any previous lazy rendering observer
+        if (_lazyObserver) {
+            _lazyObserver.disconnect();
+            _lazyObserver = null;
+        }
+
+        all_mermaids.forEach((el) => {
+            el.removeAttribute('data-mermaid-deferred');
+            el.removeAttribute('data-mermaid-render-failed');
+            if(!el.hasAttribute("data-original-code")) {
+                // store original code
+                // console.log(`Storing original code for first run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+            if(el.getAttribute("data-processed") === "true") {
+                // remove and restore original
+                el.removeAttribute("data-processed");
+                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
+                el.innerHTML = el.getAttribute('data-original-code');
+            } else {
+                // store original code
+                // console.log(`Storing original code for re-run: `, el.innerHTML);
+                el.setAttribute('data-original-code', el.innerHTML);
+            }
+        });
+
+        // Separate visible and hidden elements. Mermaid's layout engine measures
+        // text dimensions via the DOM, which fails for elements hidden by a parent
+        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
+        // producing broken SVGs. Render visible elements now, defer hidden ones.
+        const visible = [];
+        const hidden = [];
+        all_mermaids.forEach((el) => {
+            // offsetParent is null for display:none ancestors.
+            // getClientRects().length > 0 catches position:fixed elements
+            // (which also have null offsetParent but are still visible).
+            if (el.offsetParent !== null || el.getClientRects().length > 0) {
+                visible.push(el);
+            } else {
+                hidden.push(el);
+                el.setAttribute('data-mermaid-deferred', 'true');
+            }
+        });
+
+        if (visible.length > 0) {
+            try {
+                await mermaid.run({ nodes: visible });
+            } catch (e) {
+                console.error("Mermaid rendering failed:", e);
+            }
+        }
+
+        // Lazily render hidden elements when they become visible.
+        // Uses a promise chain (_renderQueue) to serialize rendering,
+        // since IntersectionObserver may report multiple entries at once
+        // and mermaid.run() is not safe to call concurrently.
+        if (hidden.length > 0) {
+            if (typeof IntersectionObserver === 'undefined') {
+                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
+            } else {
+                _renderQueue = Promise.resolve();
+                _lazyObserver = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
+                            _lazyObserver.unobserve(entry.target);
+                            const el = entry.target;
+                            _renderQueue = _renderQueue.then(async () => {
+                                try {
+                                    await mermaid.run({ nodes: [el] });
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    // Apply zoom to the now-rendered diagram, matching
+                                    // the decoration visible diagrams receive.
+                                    if (false) {
+                                        addZoomToSvgs(d3.selectAll("").select(function() {
+                                            return this.querySelector("svg");
+                                        }));
+                                    }
+                                } catch (e) {
+                                    console.error("Mermaid deferred rendering failed:", e);
+                                    el.removeAttribute('data-mermaid-deferred');
+                                    el.setAttribute('data-mermaid-render-failed', 'true');
+                                }
+                            });
+                        }
+                    }
+                });
+                hidden.forEach((el) => _lazyObserver.observe(el));
+            }
+        }
+    }
+
+    all_mermaids = document.querySelectorAll(".mermaid");
+    // Exclude deferred (hidden) and render-failed elements from completion checks
+    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
+    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
+
+    if (false) {
+        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("").select(function() {
+                return this.querySelector("svg");
+            });
+            // Wait until every active (visible) diagram has rendered. Deferred
+            // diagrams are excluded, so a fixed d3_node_count that counts a
+            // hidden diagram no longer loops forever waiting for its SVG.
+            if(mermaids_active.length !== mermaids_processed.length) {
+                setTimeout(() => runMermaid(false), 200);
+                return;
+            }
+            addZoomToSvgs(svgs);
+        }
+    } else if(mermaids_active.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(() => runMermaid(false), 200);
+        return;
+    }
+
+    // Stop here if not adding fullscreen capability
+    if (!true) return;
+
+    if (modal !== null ) {
+        // Destroy existing modal
+        modal.remove();
+        modal = null;
+        modalContent = null;
+    }
+
+    modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            // Already processed, adjust button class if needed
+            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
+            if (existingBtn) {
+                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+            }
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = "\u26f6";
+        fullscreenBtn.style.opacity = "50%";
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scrollX, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.display = 'block';
+
+                if (false) {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        container.appendChild(fullscreenBtn);
+    });
+};
+
+
+
+const load = async () => {
+    initStyles();
+
+
+    await runMermaid(true);
+
+    const reRunIfThemeChanges = async () => {
+        const newDarkTheme = isDarkTheme();
+        if (newDarkTheme !== darkTheme) {
+            darkTheme = newDarkTheme;
+            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
+            await mermaid.initialize(
+                {...{"startOnLoad": false},
+                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+                }
+            );
+            await runMermaid(true);
+        }
+    };
+
+    // Update theme classes when theme changes
+    const themeObserver = new MutationObserver(reRunIfThemeChanges);
+    themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    themeObserver.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+};
+
+
+
+
+
+console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
+mermaid.initialize(
+    {...{"startOnLoad": false},
+    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
+    }
+);
+
+window.addEventListener("load", load);
+window.runMermaid = runMermaid;</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/hired/alignment/analyzer';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.0.30" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">hired</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/hired" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../ai-agents.html">
+    For AI agents
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/thorwhalen/hired" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">hired.alignment.analyzer</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for hired.alignment.analyzer</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Library-mode autonomous alignment analysis, driven by an injected LLM.</span>
+
+<span class="sd">The non-interactive counterpart of the ``hired-align`` skill: given a job</span>
+<span class="sd">description's text and a candidate's facts, produce a *draft*</span>
+<span class="sd">:class:`~hired.alignment.base.AlignmentReport` that</span>
+<span class="sd">:meth:`~hired.candidate.workspace.JDWorkspace.save_alignment` finalizes and</span>
+<span class="sd">persists. The pipeline is a grounded per-requirement judge:</span>
+
+<span class="sd">1. **decompose** — the LLM splits the JD into atomic :class:`Requirement` records;</span>
+<span class="sd">2. **retrieve** — the most relevant facts are pulled from the knowledge base</span>
+<span class="sd">   (lexical overlap by default; inject ``retrieve`` for anything better);</span>
+<span class="sd">3. **quote-then-answer** — the LLM must quote a verbatim span of a cited fact</span>
+<span class="sd">   *before* it states a match;</span>
+<span class="sd">4. **gate** — a quote that is not verbatim in the cited fact, a CONTRADICTED</span>
+<span class="sd">   judgment not backed by a negation fact, or (with ``nli``) a quote that does</span>
+<span class="sd">   not entail the requirement, drops the judgment to UNKNOWN: it becomes a</span>
+<span class="sd">   question for the candidate, never an invented match or gap;</span>
+<span class="sd">5. **aggregate** — the verdict and fit band are computed deterministically from</span>
+<span class="sd">   the records (:func:`aggregate_verdict`). The LLM explains; it never sets the score.</span>
+
+<span class="sd">Like :class:`~hired.content.LLMResumeAgent`, the analyzer is lazy and injectable:</span>
+<span class="sd">``openai`` (the ``ai`` extra) is imported only when no ``client`` is given, and no</span>
+<span class="sd">key is read at construction. ``client`` is anything exposing the OpenAI-style</span>
+<span class="sd">``chat.completions.create``.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.assemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_blocking</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AlignmentReport</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="p">,</span>
+    <span class="n">Evidence</span><span class="p">,</span>
+    <span class="n">FitBand</span><span class="p">,</span>
+    <span class="n">Recommendation</span><span class="p">,</span>
+    <span class="n">Requirement</span><span class="p">,</span>
+    <span class="n">RequirementClass</span><span class="p">,</span>
+    <span class="n">RequirementRecord</span><span class="p">,</span>
+    <span class="n">ScoreSummary</span><span class="p">,</span>
+    <span class="n">Verdict</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.calibration</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MatchCalibrator</span><span class="p">,</span>
+    <span class="n">apply_calibration</span><span class="p">,</span>
+    <span class="n">confidence_level</span><span class="p">,</span>
+    <span class="n">semantic_consistency</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.rubric</span><span class="w"> </span><span class="kn">import</span> <span class="n">classify</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fact</span><span class="p">,</span> <span class="n">MatchState</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.workspace</span><span class="w"> </span><span class="kn">import</span> <span class="n">JDWorkspace</span>
+
+<span class="n">DFLT_ANALYZER_MODEL</span> <span class="o">=</span> <span class="s2">"gpt-4o-mini"</span>
+<span class="n">DFLT_TOP_K</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">DFLT_N_SAMPLES</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># How much each requirement class weighs in the coverage score, and how much</span>
+<span class="c1"># credit each bucket earns. Unresolved (UNKNOWN, open) records are left out.</span>
+<span class="n">DFLT_CLASS_WEIGHTS</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">RequirementClass</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">RequirementClass</span><span class="o">.</span><span class="n">GATE_KEEPER</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span>
+    <span class="n">RequirementClass</span><span class="o">.</span><span class="n">DIFFERENTIATOR</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">RequirementClass</span><span class="o">.</span><span class="n">VALUE_ADD</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">DFLT_BUCKET_CREDIT</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Bucket</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">STRONG_MATCH</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">ADJACENT_TRANSFERABLE</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_LEARNABLE</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">Bucket</span><span class="o">.</span><span class="n">GAP_HARD</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">DFLT_APPLY_AT</span> <span class="o">=</span> <span class="mf">0.7</span>
+<span class="n">DFLT_STRETCH_AT</span> <span class="o">=</span> <span class="mf">0.4</span>
+<span class="c1"># Lower edges of the fit bands, by coverage, highest first.</span>
+<span class="n">DFLT_FIT_BANDS</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">FitBand</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="mf">0.85</span><span class="p">,</span> <span class="n">FitBand</span><span class="o">.</span><span class="n">GREAT</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">FitBand</span><span class="o">.</span><span class="n">GOOD</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">FitBand</span><span class="o">.</span><span class="n">FAIR</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">FitBand</span><span class="o">.</span><span class="n">WEAK</span><span class="p">),</span>
+    <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">FitBand</span><span class="o">.</span><span class="n">POOR</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">_MAX_KEY_REASONS</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">DFLT_MIN_QUOTE_WORDS</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># a one-word "quote" grounds nothing</span>
+
+<span class="n">_STOPWORDS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="s2">"a an and as at be by for from has have in is it of on or the to with "</span>
+    <span class="s2">"experience years year strong knowledge ability skills skill using work"</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="p">)</span>
+
+
+<span class="c1"># --- retrieval ---------------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tokens</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">"[a-z0-9+#.]+"</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+    <span class="p">}</span> <span class="o">-</span> <span class="n">_STOPWORDS</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_fact_text</span><span class="p">(</span><span class="n">fact</span><span class="p">:</span> <span class="n">Fact</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">quotes</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">quote</span> <span class="ow">or</span> <span class="s2">""</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">fact</span><span class="o">.</span><span class="n">provenance</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">fact</span><span class="o">.</span><span class="n">statement</span><span class="p">,</span> <span class="n">quotes</span><span class="p">,</span> <span class="o">*</span><span class="n">fact</span><span class="o">.</span><span class="n">tags</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="retrieve_facts">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.retrieve_facts">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">retrieve_facts</span><span class="p">(</span>
+    <span class="n">requirement</span><span class="p">:</span> <span class="n">Requirement</span><span class="p">,</span> <span class="n">facts</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Fact</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DFLT_TOP_K</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Fact</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""The ``k`` facts sharing the most words with the requirement (none if none do).</span>
+
+<span class="sd">    Lexical, so it misses an adjacent skill named in different words (RabbitMQ</span>
+<span class="sd">    for Kafka); inject a semantic ``retrieve`` into the analyzer for that.</span>
+
+<span class="sd">    &gt;&gt;&gt; from hired.candidate.base import Fact</span>
+<span class="sd">    &gt;&gt;&gt; fs = [Fact(statement='Ran Kafka clusters'), Fact(statement='Speaks French')]</span>
+<span class="sd">    &gt;&gt;&gt; [f.statement for f in retrieve_facts(Requirement(text='Kafka streaming'), fs)]</span>
+<span class="sd">    ['Ran Kafka clusters']</span>
+<span class="sd">    """</span>
+    <span class="n">want</span> <span class="o">=</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">requirement</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">scored</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fact</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">facts</span><span class="p">):</span>
+        <span class="n">have</span> <span class="o">=</span> <span class="n">_tokens</span><span class="p">(</span><span class="n">_fact_text</span><span class="p">(</span><span class="n">fact</span><span class="p">))</span>
+        <span class="n">overlap</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">want</span> <span class="o">&amp;</span> <span class="n">have</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overlap</span><span class="p">:</span>
+            <span class="n">scored</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">overlap</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">have</span><span class="p">)),</span> <span class="o">-</span><span class="n">i</span><span class="p">,</span> <span class="n">fact</span><span class="p">))</span>
+    <span class="n">scored</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">fact</span> <span class="k">for</span> <span class="o">*</span><span class="n">_</span><span class="p">,</span> <span class="n">fact</span> <span class="ow">in</span> <span class="n">scored</span><span class="p">[:</span><span class="n">k</span><span class="p">]]</span></div>
+
+
+
+<span class="c1"># --- the grounding gate -------------------------------------------------------</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_norm</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">())</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="quote_is_grounded">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.quote_is_grounded">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">quote_is_grounded</span><span class="p">(</span>
+    <span class="n">quote</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fact</span><span class="p">:</span> <span class="n">Fact</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">min_words</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DFLT_MIN_QUOTE_WORDS</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""True when ``quote`` is a verbatim span (modulo case/whitespace) of ``fact``,</span>
+<span class="sd">    at least ``min_words`` long.</span>
+
+<span class="sd">    &gt;&gt;&gt; quote_is_grounded('kafka  CLUSTERS', Fact(statement='Ran Kafka clusters'))</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; quote_is_grounded('Kafka expert', Fact(statement='Ran Kafka clusters'))</span>
+<span class="sd">    False</span>
+<span class="sd">    &gt;&gt;&gt; quote_is_grounded('Kafka', Fact(statement='Ran Kafka clusters'))</span>
+<span class="sd">    False</span>
+<span class="sd">    """</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">_norm</span><span class="p">(</span><span class="n">quote</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_words</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">spans</span> <span class="o">=</span> <span class="p">[</span><span class="n">fact</span><span class="o">.</span><span class="n">statement</span><span class="p">,</span> <span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">quote</span> <span class="ow">or</span> <span class="s2">""</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">fact</span><span class="o">.</span><span class="n">provenance</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">q</span> <span class="ow">in</span> <span class="n">_norm</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spans</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_state</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MatchState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""The match state ``value`` names, or UNKNOWN for anything unrecognised."""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MatchState</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_gate</span><span class="p">(</span>
+    <span class="n">judgment</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">requirement</span><span class="p">:</span> <span class="n">Requirement</span><span class="p">,</span>
+    <span class="n">facts_by_id</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Fact</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">entails</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Return the judgment, downgraded to UNKNOWN if its grounding fails, and why."""</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">judgment</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">_parse_state</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"match_state"</span><span class="p">))</span>
+    <span class="n">j</span><span class="p">[</span><span class="s2">"match_state"</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"uncertainty_reason"</span><span class="p">)</span>
+    <span class="n">fact</span> <span class="o">=</span> <span class="n">facts_by_id</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fact_id"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)))</span>
+    <span class="n">quote</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"quote"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="n">reason</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">fact</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">quote_is_grounded</span><span class="p">(</span><span class="n">quote</span><span class="p">,</span> <span class="n">fact</span><span class="p">):</span>
+        <span class="n">reason</span> <span class="o">=</span> <span class="s2">"the cited quote is not verbatim in any retrieved fact"</span>
+    <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">CONTRADICTED</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">fact</span><span class="o">.</span><span class="n">is_negation</span><span class="p">:</span>
+        <span class="n">reason</span> <span class="o">=</span> <span class="s2">"a contradiction needs a negation fact; silence is not absence"</span>
+    <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">CONFIRMED</span> <span class="ow">and</span> <span class="n">fact</span><span class="o">.</span><span class="n">is_negation</span><span class="p">:</span>
+        <span class="n">reason</span> <span class="o">=</span> <span class="s2">"a match cannot rest on a fact saying the candidate lacks it"</span>
+    <span class="k">elif</span> <span class="p">(</span>
+        <span class="n">state</span> <span class="o">==</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">CONFIRMED</span>
+        <span class="ow">and</span> <span class="n">entails</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="ow">not</span> <span class="n">entails</span><span class="p">(</span><span class="n">quote</span><span class="p">,</span> <span class="n">requirement</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+    <span class="p">):</span>
+        <span class="n">reason</span> <span class="o">=</span> <span class="s2">"the quote does not entail the requirement"</span>
+    <span class="k">if</span> <span class="n">reason</span><span class="p">:</span>
+        <span class="n">j</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">match_state</span><span class="o">=</span><span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="s2">"none"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">j</span><span class="p">,</span> <span class="n">reason</span>
+
+
+<span class="c1"># --- deterministic aggregation -----------------------------------------------</span>
+
+
+<div class="viewcode-block" id="coverage">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.coverage">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">coverage</span><span class="p">(</span>
+    <span class="n">records</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">class_weights</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">RequirementClass</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">DFLT_CLASS_WEIGHTS</span><span class="p">,</span>
+    <span class="n">bucket_credit</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Bucket</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">DFLT_BUCKET_CREDIT</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""``(coverage, resolved_share)``: weighted bucket credit over resolved records,</span>
+<span class="sd">    and the weighted share of records that are resolved at all.</span>
+
+<span class="sd">    Records must be classified (see :func:`~hired.alignment.rubric.classify`).</span>
+<span class="sd">    """</span>
+    <span class="n">earned</span> <span class="o">=</span> <span class="n">resolved</span> <span class="o">=</span> <span class="n">total</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">class_weights</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">requirement</span><span class="o">.</span><span class="n">requirement_class</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">w</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">resolved</span> <span class="o">+=</span> <span class="n">w</span>
+            <span class="n">earned</span> <span class="o">+=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">bucket_credit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">bucket</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">earned</span> <span class="o">/</span> <span class="n">resolved</span> <span class="k">if</span> <span class="n">resolved</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span>
+        <span class="n">resolved</span> <span class="o">/</span> <span class="n">total</span> <span class="k">if</span> <span class="n">total</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="aggregate_verdict">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.aggregate_verdict">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aggregate_verdict</span><span class="p">(</span>
+    <span class="n">records</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">RequirementRecord</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">apply_at</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DFLT_APPLY_AT</span><span class="p">,</span>
+    <span class="n">stretch_at</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">DFLT_STRETCH_AT</span><span class="p">,</span>
+    <span class="n">fit_bands</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">FitBand</span><span class="p">]]</span> <span class="o">=</span> <span class="n">DFLT_FIT_BANDS</span><span class="p">,</span>
+    <span class="n">class_weights</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">RequirementClass</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">DFLT_CLASS_WEIGHTS</span><span class="p">,</span>
+    <span class="n">bucket_credit</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="n">Bucket</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">DFLT_BUCKET_CREDIT</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Verdict</span><span class="p">,</span> <span class="n">FitBand</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""The verdict and fit band, computed from classified records alone.</span>
+
+<span class="sd">    A blocking gap (a gate-keeper that is a hard gap or contradicted) means</span>
+<span class="sd">    *do not apply*; otherwise the weighted coverage picks the recommendation.</span>
+<span class="sd">    Confidence comes from how much of the JD is resolved, not from the LLM.</span>
+
+<span class="sd">    &gt;&gt;&gt; from hired.alignment.base import MatchType</span>
+<span class="sd">    &gt;&gt;&gt; rec = classify(RequirementRecord(requirement=Requirement(text='Python'),</span>
+<span class="sd">    ...     match_state='confirmed', match_type=MatchType.DIRECT, candidate_level=4))</span>
+<span class="sd">    &gt;&gt;&gt; verdict, band = aggregate_verdict([rec])</span>
+<span class="sd">    &gt;&gt;&gt; verdict.recommendation.value, band.value, verdict.confidence.value</span>
+<span class="sd">    ('apply', 'great', 'high')</span>
+<span class="sd">    """</span>
+    <span class="n">cov</span><span class="p">,</span> <span class="n">resolved</span> <span class="o">=</span> <span class="n">coverage</span><span class="p">(</span>
+        <span class="n">records</span><span class="p">,</span> <span class="n">class_weights</span><span class="o">=</span><span class="n">class_weights</span><span class="p">,</span> <span class="n">bucket_credit</span><span class="o">=</span><span class="n">bucket_credit</span>
+    <span class="p">)</span>
+    <span class="n">blockers</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">records</span> <span class="k">if</span> <span class="n">is_blocking</span><span class="p">(</span><span class="n">r</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="n">blockers</span><span class="p">:</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">Recommendation</span><span class="o">.</span><span class="n">DO_NOT_APPLY</span>
+    <span class="k">elif</span> <span class="n">cov</span> <span class="o">&gt;=</span> <span class="n">apply_at</span><span class="p">:</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">Recommendation</span><span class="o">.</span><span class="n">APPLY</span>
+    <span class="k">elif</span> <span class="n">cov</span> <span class="o">&gt;=</span> <span class="n">stretch_at</span><span class="p">:</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">Recommendation</span><span class="o">.</span><span class="n">STRETCH</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rec</span> <span class="o">=</span> <span class="n">Recommendation</span><span class="o">.</span><span class="n">DO_NOT_APPLY</span>
+    <span class="n">band</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">b</span> <span class="k">for</span> <span class="n">edge</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">fit_bands</span> <span class="k">if</span> <span class="n">cov</span> <span class="o">&gt;=</span> <span class="n">edge</span><span class="p">),</span> <span class="n">fit_bands</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">n_open</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">records</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">reasons</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"Blocking gap: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">requirement</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">blockers</span><span class="p">]</span>
+    <span class="n">reasons</span> <span class="o">+=</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">bucket</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span><span class="w"> </span><span class="s1">' '</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">requirement</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">records</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">bucket</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">r</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">blockers</span>
+    <span class="p">]</span>
+    <span class="n">verdict</span> <span class="o">=</span> <span class="n">Verdict</span><span class="p">(</span>
+        <span class="n">recommendation</span><span class="o">=</span><span class="n">rec</span><span class="p">,</span>
+        <span class="n">confidence</span><span class="o">=</span><span class="n">confidence_level</span><span class="p">(</span><span class="n">resolved</span><span class="p">),</span>
+        <span class="n">confidence_basis</span><span class="o">=</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">resolved</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> of the weighted requirements resolved; "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n_open</span><span class="si">}</span><span class="s2"> open question(s)"</span>
+        <span class="p">),</span>
+        <span class="n">headline</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rec</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'_'</span><span class="p">,</span><span class="w"> </span><span class="s1">' '</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cov</span><span class="si">:</span><span class="s2">.0%</span><span class="si">}</span><span class="s2"> weighted coverage"</span><span class="p">,</span>
+        <span class="n">key_reasons</span><span class="o">=</span><span class="n">reasons</span><span class="p">[:</span><span class="n">_MAX_KEY_REASONS</span><span class="p">],</span>
+        <span class="n">has_blocking_gaps</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">blockers</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">verdict</span><span class="p">,</span> <span class="n">band</span></div>
+
+
+
+<span class="c1"># --- the LLM side --------------------------------------------------------------</span>
+
+<span class="n">_DECOMPOSE_PROMPT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"Split the job description into atomic requirements. Copy each requirement's "</span>
+    <span class="s2">"text verbatim from the JD. Return ONLY a JSON object "</span>
+    <span class="s1">'{"requirements": [{"text": str, "skill_type": one of technical|domain_knowledge|'</span>
+    <span class="s1">'soft_skill|credential, "requirement_class": one of gate_keeper|differentiator|'</span>
+    <span class="s1">'value_add, "required_level": int 0-5}]}.'</span>
+<span class="p">)</span>
+
+<span class="n">_JUDGE_PROMPT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"You judge whether a candidate meets ONE job requirement, using ONLY the "</span>
+    <span class="s2">"numbered facts given. First copy a verbatim quote from one fact, then answer. "</span>
+    <span class="s2">"If no fact settles it, answer unknown: never assume absence. Answer "</span>
+    <span class="s2">"contradicted only when a fact says the candidate lacks it. Return ONLY a JSON "</span>
+    <span class="s1">'object {"fact_id": str, "quote": str, "match_state": confirmed|contradicted|'</span>
+    <span class="s1">'unknown, "match_type": direct|adjacent|none, "candidate_level": int 0-5, '</span>
+    <span class="s1">'"source_skill": str|null, "adjacency_basis": str|null, "closeability": '</span>
+    <span class="s2">"quick_win|learnable|requires_experience|structurally_hard|null, "</span>
+    <span class="s1">'"ai_leverage": high|medium|low|none, "explanation": str}.'</span>
+<span class="p">)</span>
+
+<span class="n">_ENTAIL_PROMPT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"Does the PREMISE, on its own, establish the HYPOTHESIS about the candidate? "</span>
+    <span class="s1">'Return ONLY a JSON object {"entails": true|false}.'</span>
+<span class="p">)</span>
+
+<span class="n">_JUDGMENT_FIELDS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"match_state"</span><span class="p">,</span>
+    <span class="s2">"match_type"</span><span class="p">,</span>
+    <span class="s2">"candidate_level"</span><span class="p">,</span>
+    <span class="s2">"source_skill"</span><span class="p">,</span>
+    <span class="s2">"adjacency_basis"</span><span class="p">,</span>
+    <span class="s2">"closeability"</span><span class="p">,</span>
+    <span class="s2">"ai_leverage"</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_json_object</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""The JSON object in an LLM reply (code fences tolerated), else ``{}``.</span>
+
+<span class="sd">    An unparseable reply reads as "no answer", so the judgment stays UNKNOWN.</span>
+
+<span class="sd">    &gt;&gt;&gt; _parse_json_object('```json {"a": 1} ```'), _parse_json_object('sorry')</span>
+<span class="sd">    ({'a': 1}, {})</span>
+<span class="sd">    """</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="p">(</span><span class="n">content</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"```"</span><span class="p">):</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">"`"</span><span class="p">)</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"json"</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">data</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="p">{}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_valid_requirement</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Requirement</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"text"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">item</span><span class="p">,</span> <span class="s2">"id"</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">)</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">"req-</span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Requirement</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">ValidationError</span><span class="p">:</span>  <span class="c1"># an invalid enum: keep the text, default the rest</span>
+        <span class="k">return</span> <span class="n">Requirement</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span> <span class="n">text</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_facts_block</span><span class="p">(</span><span class="n">facts</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Fact</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">]</span><span class="si">{</span><span class="s1">' (NEGATION)'</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">f</span><span class="o">.</span><span class="n">is_negation</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">''</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">statement</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">facts</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="LLMAlignmentAnalyzer">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.LLMAlignmentAnalyzer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LLMAlignmentAnalyzer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Draft an alignment report from JD text and facts, with an injected LLM.</span>
+
+<span class="sd">    ``n_samples`` &gt; 1 judges each requirement several times and feeds the</span>
+<span class="sd">    agreement into :func:`~hired.alignment.calibration.apply_calibration` (with</span>
+<span class="sd">    ``calibrator``, the conformal ask/auto-decide rule). ``nli`` adds an</span>
+<span class="sd">    entailment check on every confirmed quote; ``entails`` replaces the default</span>
+<span class="sd">    (an LLM call) with any ``(premise, hypothesis) -&gt; bool``. ``retrieve``</span>
+<span class="sd">    replaces the lexical :func:`retrieve_facts`.</span>
+
+<span class="sd">    &gt;&gt;&gt; class _Fake:  # doctest: +SKIP</span>
+<span class="sd">    ...     class chat:</span>
+<span class="sd">    ...         class completions:</span>
+<span class="sd">    ...             @staticmethod</span>
+<span class="sd">    ...             def create(**_): ...</span>
+<span class="sd">    &gt;&gt;&gt; LLMAlignmentAnalyzer(client=_Fake()).analyze(jd_text, facts)  # doctest: +SKIP</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DFLT_ANALYZER_MODEL</span><span class="p">,</span>
+        <span class="n">client</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">n_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DFLT_N_SAMPLES</span><span class="p">,</span>
+        <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">calibrator</span><span class="p">:</span> <span class="n">MatchCalibrator</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">retrieve</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Fact</span><span class="p">]]</span> <span class="o">=</span> <span class="n">retrieve_facts</span><span class="p">,</span>
+        <span class="n">top_k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DFLT_TOP_K</span><span class="p">,</span>
+        <span class="n">nli</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">entails</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n_samples</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"n_samples must be &gt;= 1, got </span><span class="si">{</span><span class="n">n_samples</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">=</span> <span class="n">n_samples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">temperature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibrator</span> <span class="o">=</span> <span class="n">calibrator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span> <span class="o">=</span> <span class="n">retrieve</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top_k</span> <span class="o">=</span> <span class="n">top_k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entails</span> <span class="o">=</span> <span class="n">entails</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">llm_entails</span> <span class="k">if</span> <span class="n">nli</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">openai</span>  <span class="c1"># lazy: only required when actually analysing</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">openai</span><span class="o">.</span><span class="n">OpenAI</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_api_key</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ask_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"temperature"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">system</span><span class="p">},</span>
+                <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">user</span><span class="p">},</span>
+            <span class="p">],</span>
+            <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"json_object"</span><span class="p">},</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">_parse_json_object</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="c1"># --- steps --------------------------------------------------------------</span>
+<div class="viewcode-block" id="LLMAlignmentAnalyzer.decompose">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.LLMAlignmentAnalyzer.decompose">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jd_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Requirement</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""The JD's atomic requirements, as the LLM extracts them."""</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ask_json</span><span class="p">(</span><span class="n">_DECOMPOSE_PROMPT</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"JOB DESCRIPTION:</span><span class="se">\n</span><span class="si">{</span><span class="n">jd_text</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"requirements"</span><span class="p">)</span>
+        <span class="n">reqs</span> <span class="o">=</span> <span class="p">(</span><span class="n">_valid_requirement</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span> <span class="ow">or</span> <span class="p">[]))</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reqs</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LLMAlignmentAnalyzer.llm_entails">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.LLMAlignmentAnalyzer.llm_entails">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">llm_entails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">premise</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">hypothesis</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""The LLM's yes/no on whether ``premise`` establishes ``hypothesis``."""</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ask_json</span><span class="p">(</span>
+            <span class="n">_ENTAIL_PROMPT</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"PREMISE: </span><span class="si">{</span><span class="n">premise</span><span class="si">}</span><span class="se">\n</span><span class="s2">HYPOTHESIS: </span><span class="si">{</span><span class="n">hypothesis</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"entails"</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LLMAlignmentAnalyzer.judge">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.LLMAlignmentAnalyzer.judge">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">judge</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">requirement</span><span class="p">:</span> <span class="n">Requirement</span><span class="p">,</span> <span class="n">facts</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Fact</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RequirementRecord</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""One gated, optionally sampled-and-calibrated record for ``requirement``."""</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">facts</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">RequirementRecord</span><span class="p">(</span>
+                <span class="n">requirement</span><span class="o">=</span><span class="n">requirement</span><span class="p">,</span>
+                <span class="n">uncertainty_reason</span><span class="o">=</span><span class="s2">"no fact in the knowledge base mentions this"</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="n">by_id</span> <span class="o">=</span> <span class="p">{</span><span class="n">f</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">facts</span><span class="p">}</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"REQUIREMENT: </span><span class="si">{</span><span class="n">requirement</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">FACTS:</span><span class="se">\n</span><span class="si">{</span><span class="n">_facts_block</span><span class="p">(</span><span class="n">facts</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+        <span class="n">gated</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">_gate</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ask_json</span><span class="p">(</span><span class="n">_JUDGE_PROMPT</span><span class="p">,</span> <span class="n">prompt</span><span class="p">),</span>
+                <span class="n">requirement</span><span class="p">,</span>
+                <span class="n">by_id</span><span class="p">,</span>
+                <span class="n">entails</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">entails</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">MatchState</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="s2">"match_state"</span><span class="p">])</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">gated</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">semantic_consistency</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+        <span class="n">tied</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">counts</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">majority</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">tied</span><span class="p">:</span>  <span class="c1"># no majority: an open question, never the optimistic first sample</span>
+            <span class="n">judgment</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"match_state"</span><span class="p">:</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="o">.</span><span class="n">value</span><span class="p">}</span>
+            <span class="n">reason</span> <span class="o">=</span> <span class="s2">"independent judgments split evenly"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">judgment</span><span class="p">,</span> <span class="n">reason</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">g</span> <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">gated</span><span class="p">,</span> <span class="n">states</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">c</span><span class="o">.</span><span class="n">majority</span><span class="p">)</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">_record_from</span><span class="p">(</span><span class="n">requirement</span><span class="p">,</span> <span class="n">judgment</span><span class="p">,</span> <span class="n">by_id</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="n">reason</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_samples</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">apply_calibration</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">calibrator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">calibrator</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">record</span></div>
+
+
+<div class="viewcode-block" id="LLMAlignmentAnalyzer.analyze">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.LLMAlignmentAnalyzer.analyze">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">jd_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">facts</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Fact</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"job"</span><span class="p">,</span>
+        <span class="n">job_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="n">company</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="n">requirements</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Requirement</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AlignmentReport</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""A draft report: decompose (unless ``requirements`` given), judge, aggregate."""</span>
+        <span class="n">facts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">facts</span><span class="p">)</span>
+        <span class="n">reqs</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span> <span class="k">if</span> <span class="n">requirements</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">jd_text</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">classify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">judge</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">facts</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">top_k</span><span class="p">)))</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">reqs</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">records</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"no requirements to analyse: none were extracted"</span><span class="p">)</span>
+        <span class="n">verdict</span><span class="p">,</span> <span class="n">band</span> <span class="o">=</span> <span class="n">aggregate_verdict</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AlignmentReport</span><span class="p">(</span>
+            <span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span>
+            <span class="n">job_title</span><span class="o">=</span><span class="n">job_title</span><span class="p">,</span>
+            <span class="n">company</span><span class="o">=</span><span class="n">company</span><span class="p">,</span>
+            <span class="n">verdict</span><span class="o">=</span><span class="n">verdict</span><span class="p">,</span>
+            <span class="n">score_summary</span><span class="o">=</span><span class="n">ScoreSummary</span><span class="p">(</span><span class="n">fit_band</span><span class="o">=</span><span class="n">band</span><span class="p">),</span>
+            <span class="n">requirements</span><span class="o">=</span><span class="n">records</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_record_from</span><span class="p">(</span>
+    <span class="n">requirement</span><span class="p">:</span> <span class="n">Requirement</span><span class="p">,</span>
+    <span class="n">judgment</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">facts_by_id</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Fact</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RequirementRecord</span><span class="p">:</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">judgment</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_JUDGMENT_FIELDS</span> <span class="k">if</span> <span class="n">judgment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>  <span class="c1"># drop what does not validate (a made-up enum, say)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">RequirementRecord</span><span class="o">.</span><span class="n">model_validate</span><span class="p">({</span><span class="s2">"requirement"</span><span class="p">:</span> <span class="n">requirement</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">fields</span><span class="p">[</span><span class="n">name</span><span class="p">]})</span>
+        <span class="k">except</span> <span class="n">ValidationError</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">fields</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="n">fact</span> <span class="o">=</span> <span class="n">facts_by_id</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">judgment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"fact_id"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)))</span>
+    <span class="n">evidence</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">grounded</span> <span class="o">=</span> <span class="n">reason</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">judgment</span><span class="p">[</span><span class="s2">"match_state"</span><span class="p">]</span> <span class="o">!=</span> <span class="n">MatchState</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="o">.</span><span class="n">value</span>
+    <span class="k">if</span> <span class="n">fact</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">grounded</span> <span class="ow">and</span> <span class="n">judgment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"quote"</span><span class="p">):</span>
+        <span class="n">evidence</span> <span class="o">=</span> <span class="n">Evidence</span><span class="p">(</span>
+            <span class="n">quote</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">judgment</span><span class="p">[</span><span class="s2">"quote"</span><span class="p">]),</span>
+            <span class="n">source_document_id</span><span class="o">=</span><span class="n">fact</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="n">locator</span><span class="o">=</span><span class="n">fact</span><span class="o">.</span><span class="n">provenance</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">locator</span> <span class="k">if</span> <span class="n">fact</span><span class="o">.</span><span class="n">provenance</span> <span class="k">else</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">RequirementRecord</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">"requirement"</span><span class="p">:</span> <span class="n">requirement</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">fields</span><span class="p">,</span>
+            <span class="s2">"evidence"</span><span class="p">:</span> <span class="n">evidence</span><span class="p">,</span>
+            <span class="s2">"uncertainty_reason"</span><span class="p">:</span> <span class="n">reason</span><span class="p">,</span>
+            <span class="s2">"talking_point"</span><span class="p">:</span> <span class="n">judgment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"explanation"</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="analyze_jd">
+<a class="viewcode-back" href="../../../_autosummary/hired.alignment.analyzer.html#hired.alignment.analyze_jd">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">analyze_jd</span><span class="p">(</span>
+    <span class="n">workspace</span><span class="p">:</span> <span class="n">JDWorkspace</span><span class="p">,</span>
+    <span class="n">jd_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">job_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">job_title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="n">analyzer</span><span class="p">:</span> <span class="n">LLMAlignmentAnalyzer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">requirements</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Requirement</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AlignmentReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Analyse ``jd_text`` against the workspace candidate's facts and persist it.</span>
+
+<span class="sd">    The draft goes through :meth:`JDWorkspace.save_alignment` (finalize + archive +</span>
+<span class="sd">    save), the one path from a draft to a stored report. ``analyzer`` defaults to</span>
+<span class="sd">    an :class:`LLMAlignmentAnalyzer` on the ``ai`` extra.</span>
+<span class="sd">    """</span>
+    <span class="n">analyzer</span> <span class="o">=</span> <span class="n">analyzer</span> <span class="ow">or</span> <span class="n">LLMAlignmentAnalyzer</span><span class="p">()</span>
+    <span class="n">draft</span> <span class="o">=</span> <span class="n">analyzer</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span>
+        <span class="n">jd_text</span><span class="p">,</span>
+        <span class="n">workspace</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">facts</span><span class="p">(),</span>
+        <span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span>
+        <span class="n">job_title</span><span class="o">=</span><span class="n">job_title</span><span class="p">,</span>
+        <span class="n">company</span><span class="o">=</span><span class="n">workspace</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"company"</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">,</span>
+        <span class="n">requirements</span><span class="o">=</span><span class="n">requirements</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">workspace</span><span class="o">.</span><span class="n">save_alignment</span><span class="p">(</span><span class="n">draft</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

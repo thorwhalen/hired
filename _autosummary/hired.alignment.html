@@ -44,7 +44,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=828725f0"></script>
+    <script src="../_static/documentation_options.js?v=61a342a2"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -53,12 +53,12 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="hired.alignment.assemble" href="hired.alignment.assemble.html" />
+    <link rel="next" title="hired.alignment.analyzer" href="hired.alignment.analyzer.html" />
     <link rel="prev" title="hired" href="hired.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.29" />
+  <meta name="docsearch:version" content="0.0.30" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -321,6 +321,7 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="hired.html">hired</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active has-children"><a aria-current="page" class="current reference internal" href="#">hired.alignment</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="hired.alignment.analyzer.html">hired.alignment.analyzer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.assemble.html">hired.alignment.assemble</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.base.html">hired.alignment.base</a></li>
 <li class="toctree-l3"><a class="reference internal" href="hired.alignment.calibration.html">hired.alignment.calibration</a></li>
@@ -453,6 +454,9 @@
 <a class="reference internal" href="#hired.alignment.MatchCalibrator" title="hired.alignment.MatchCalibrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatchCalibrator</span></code></a> ask/auto-decide rule),</p></li>
 <li><p>deterministic report finalization in <a class="reference internal" href="hired.alignment.assemble.html#module-hired.alignment.assemble" title="hired.alignment.assemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.alignment.assemble</span></code></a>
 (<a class="reference internal" href="#hired.alignment.finalize_report" title="hired.alignment.finalize_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">finalize_report()</span></code></a> — reclassify, recount, rebuild blockers/clarifications),</p></li>
+<li><p>the injected-LLM analyzer in <a class="reference internal" href="hired.alignment.analyzer.html#module-hired.alignment.analyzer" title="hired.alignment.analyzer"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.alignment.analyzer</span></code></a>
+(<a class="reference internal" href="#hired.alignment.LLMAlignmentAnalyzer" title="hired.alignment.LLMAlignmentAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">LLMAlignmentAnalyzer</span></code></a>, <a class="reference internal" href="#hired.alignment.analyze_jd" title="hired.alignment.analyze_jd"><code class="xref py py-func docutils literal notranslate"><span class="pre">analyze_jd()</span></code></a> — decompose, retrieve,
+quote-then-answer, grounding gate, deterministic <a class="reference internal" href="#hired.alignment.aggregate_verdict" title="hired.alignment.aggregate_verdict"><code class="xref py py-func docutils literal notranslate"><span class="pre">aggregate_verdict()</span></code></a>),</p></li>
 <li><p>rendering in <a class="reference internal" href="hired.alignment.report.html#module-hired.alignment.report" title="hired.alignment.report"><code class="xref py py-mod docutils literal notranslate"><span class="pre">hired.alignment.report</span></code></a> (<a class="reference internal" href="#hired.alignment.render_report" title="hired.alignment.render_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">render_report()</span></code></a> dispatching to
 <a class="reference internal" href="#hired.alignment.render_report_markdown" title="hired.alignment.render_report_markdown"><code class="xref py py-func docutils literal notranslate"><span class="pre">render_report_markdown()</span></code></a> / <a class="reference internal" href="#hired.alignment.render_report_html" title="hired.alignment.render_report_html"><code class="xref py py-func docutils literal notranslate"><span class="pre">render_report_html()</span></code></a>).</p></li>
 </ul>
@@ -522,6 +526,21 @@ provides the schemas, deterministic scoring, and rendering. See
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.summarize_diff" title="hired.alignment.summarize_diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summarize_diff</span></code></a>(diff)</p></td>
 <td><p>A short human-readable summary of <a class="reference internal" href="#hired.alignment.diff_reports" title="hired.alignment.diff_reports"><code class="xref py py-func docutils literal notranslate"><span class="pre">diff_reports()</span></code></a> output.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.analyze_jd" title="hired.alignment.analyze_jd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyze_jd</span></code></a>(workspace, jd_text, *, job_id[, ...])</p></td>
+<td><p>Analyse <code class="docutils literal notranslate"><span class="pre">jd_text</span></code> against the workspace candidate's facts and persist it.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.aggregate_verdict" title="hired.alignment.aggregate_verdict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aggregate_verdict</span></code></a>(records, *[, apply_at, ...])</p></td>
+<td><p>The verdict and fit band, computed from classified records alone.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.coverage" title="hired.alignment.coverage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coverage</span></code></a>(records, *[, class_weights, ...])</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">(coverage,</span> <span class="pre">resolved_share)</span></code>: weighted bucket credit over resolved records, and the weighted share of records that are resolved at all.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.retrieve_facts" title="hired.alignment.retrieve_facts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">retrieve_facts</span></code></a>(requirement, facts, *[, k])</p></td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">k</span></code> facts sharing the most words with the requirement (none if none do).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.quote_is_grounded" title="hired.alignment.quote_is_grounded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quote_is_grounded</span></code></a>(quote, fact, *[, min_words])</p></td>
+<td><p>True when <code class="docutils literal notranslate"><span class="pre">quote</span></code> is a verbatim span (modulo case/whitespace) of <code class="docutils literal notranslate"><span class="pre">fact</span></code>, at least <code class="docutils literal notranslate"><span class="pre">min_words</span></code> long.</p></td>
 </tr>
 </tbody>
 </table>
@@ -600,6 +619,9 @@ provides the schemas, deterministic scoring, and rendering. See
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#hired.alignment.Decision" title="hired.alignment.Decision"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Decision</span></code></a>(*values)</p></td>
 <td><p>What to do with a judgment: take it as a match, as no match, or ask.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hired.alignment.LLMAlignmentAnalyzer" title="hired.alignment.LLMAlignmentAnalyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LLMAlignmentAnalyzer</span></code></a>(*[, model, client, ...])</p></td>
+<td><p>Draft an alignment report from JD text and facts, with an injected LLM.</p></td>
 </tr>
 </tbody>
 </table>
@@ -721,6 +743,73 @@ number of samples per meaning.</p>
 <dt class="sig sig-object py" id="hired.alignment.InterviewPrep.model_config">
 <span class="sig-name descname"><span class="pre">model_config</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.ClassVar" title="(in Python v3.15)"><span class="pre">ClassVar</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></span><a class="headerlink" href="#hired.alignment.InterviewPrep.model_config" title="Link to this definition">#</a></dt>
 <dd><p>Configuration for the model, should be a dictionary conforming to [<code class="code docutils literal notranslate"><span class="pre">ConfigDict</span></code>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hired.alignment.LLMAlignmentAnalyzer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">LLMAlignmentAnalyzer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gpt-4o-mini'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibrator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retrieve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;function</span> <span class="pre">retrieve_facts&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nli</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entails</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#LLMAlignmentAnalyzer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.LLMAlignmentAnalyzer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Draft an alignment report from JD text and facts, with an injected LLM.</p>
+<p><code class="docutils literal notranslate"><span class="pre">n_samples</span></code> &gt; 1 judges each requirement several times and feeds the
+agreement into <a class="reference internal" href="hired.alignment.calibration.html#hired.alignment.calibration.apply_calibration" title="hired.alignment.calibration.apply_calibration"><code class="xref py py-func docutils literal notranslate"><span class="pre">apply_calibration()</span></code></a> (with
+<code class="docutils literal notranslate"><span class="pre">calibrator</span></code>, the conformal ask/auto-decide rule). <code class="docutils literal notranslate"><span class="pre">nli</span></code> adds an
+entailment check on every confirmed quote; <code class="docutils literal notranslate"><span class="pre">entails</span></code> replaces the default
+(an LLM call) with any <code class="docutils literal notranslate"><span class="pre">(premise,</span> <span class="pre">hypothesis)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code>. <code class="docutils literal notranslate"><span class="pre">retrieve</span></code>
+replaces the lexical <a class="reference internal" href="#hired.alignment.retrieve_facts" title="hired.alignment.retrieve_facts"><code class="xref py py-func docutils literal notranslate"><span class="pre">retrieve_facts()</span></code></a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">_Fake</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">class</span><span class="w"> </span><span class="nc">chat</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">class</span><span class="w"> </span><span class="nc">completions</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="nd">@staticmethod</span>
+<span class="gp">... </span>            <span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="o">**</span><span class="n">_</span><span class="p">):</span> <span class="o">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LLMAlignmentAnalyzer</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">_Fake</span><span class="p">())</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">jd_text</span><span class="p">,</span> <span class="n">facts</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.alignment.LLMAlignmentAnalyzer.analyze">
+<span class="sig-name descname"><span class="pre">analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jd_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facts</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'job'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">company</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requirements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#LLMAlignmentAnalyzer.analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.LLMAlignmentAnalyzer.analyze" title="Link to this definition">#</a></dt>
+<dd><p>A draft report: decompose (unless <code class="docutils literal notranslate"><span class="pre">requirements</span></code> given), judge, aggregate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.alignment.LLMAlignmentAnalyzer.decompose">
+<span class="sig-name descname"><span class="pre">decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jd_text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#LLMAlignmentAnalyzer.decompose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.LLMAlignmentAnalyzer.decompose" title="Link to this definition">#</a></dt>
+<dd><p>The JD’s atomic requirements, as the LLM extracts them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.Requirement" title="hired.alignment.base.Requirement"><code class="xref py py-class docutils literal notranslate"><span class="pre">Requirement</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.alignment.LLMAlignmentAnalyzer.judge">
+<span class="sig-name descname"><span class="pre">judge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#LLMAlignmentAnalyzer.judge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.LLMAlignmentAnalyzer.judge" title="Link to this definition">#</a></dt>
+<dd><p>One gated, optionally sampled-and-calibrated record for <code class="docutils literal notranslate"><span class="pre">requirement</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.RequirementRecord" title="hired.alignment.base.RequirementRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">RequirementRecord</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hired.alignment.LLMAlignmentAnalyzer.llm_entails">
+<span class="sig-name descname"><span class="pre">llm_entails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">premise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hypothesis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#LLMAlignmentAnalyzer.llm_entails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.LLMAlignmentAnalyzer.llm_entails" title="Link to this definition">#</a></dt>
+<dd><p>The LLM’s yes/no on whether <code class="docutils literal notranslate"><span class="pre">premise</span></code> establishes <code class="docutils literal notranslate"><span class="pre">hypothesis</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -893,6 +982,42 @@ A singleton set decides; two labels (or none) mean ask. JSON-ready through
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.aggregate_verdict">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">aggregate_verdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stretch_at</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_bands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">((0.85,</span> <span class="pre">FitBand.GREAT),</span> <span class="pre">(0.7,</span> <span class="pre">FitBand.GOOD),</span> <span class="pre">(0.5,</span> <span class="pre">FitBand.FAIR),</span> <span class="pre">(0.3,</span> <span class="pre">FitBand.WEAK),</span> <span class="pre">(0.0,</span> <span class="pre">FitBand.POOR))</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{RequirementClass.DIFFERENTIATOR:</span> <span class="pre">2.0,</span> <span class="pre">RequirementClass.GATE_KEEPER:</span> <span class="pre">3.0,</span> <span class="pre">RequirementClass.VALUE_ADD:</span> <span class="pre">1.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_credit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{Bucket.ADJACENT_TRANSFERABLE:</span> <span class="pre">0.5,</span> <span class="pre">Bucket.GAP_HARD:</span> <span class="pre">0.0,</span> <span class="pre">Bucket.GAP_LEARNABLE:</span> <span class="pre">0.25,</span> <span class="pre">Bucket.STRONG_MATCH:</span> <span class="pre">1.0}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#aggregate_verdict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.aggregate_verdict" title="Link to this definition">#</a></dt>
+<dd><p>The verdict and fit band, computed from classified records alone.</p>
+<p>A blocking gap (a gate-keeper that is a hard gap or contradicted) means
+<em>do not apply</em>; otherwise the weighted coverage picks the recommendation.
+Confidence comes from how much of the JD is resolved, not from the LLM.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.alignment.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MatchType</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rec</span> <span class="o">=</span> <span class="n">classify</span><span class="p">(</span><span class="n">RequirementRecord</span><span class="p">(</span><span class="n">requirement</span><span class="o">=</span><span class="n">Requirement</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">'Python'</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">match_state</span><span class="o">=</span><span class="s1">'confirmed'</span><span class="p">,</span> <span class="n">match_type</span><span class="o">=</span><span class="n">MatchType</span><span class="o">.</span><span class="n">DIRECT</span><span class="p">,</span> <span class="n">candidate_level</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verdict</span><span class="p">,</span> <span class="n">band</span> <span class="o">=</span> <span class="n">aggregate_verdict</span><span class="p">([</span><span class="n">rec</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verdict</span><span class="o">.</span><span class="n">recommendation</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">band</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">verdict</span><span class="o">.</span><span class="n">confidence</span><span class="o">.</span><span class="n">value</span>
+<span class="go">('apply', 'great', 'high')</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.Verdict" title="hired.alignment.base.Verdict"><code class="xref py py-class docutils literal notranslate"><span class="pre">Verdict</span></code></a>, <a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.FitBand" title="hired.alignment.base.FitBand"><code class="xref py py-class docutils literal notranslate"><span class="pre">FitBand</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.analyze_jd">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">analyze_jd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jd_text</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">analyzer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requirements</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#analyze_jd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.analyze_jd" title="Link to this definition">#</a></dt>
+<dd><p>Analyse <code class="docutils literal notranslate"><span class="pre">jd_text</span></code> against the workspace candidate’s facts and persist it.</p>
+<p>The draft goes through <code class="xref py py-meth docutils literal notranslate"><span class="pre">JDWorkspace.save_alignment()</span></code> (finalize + archive +
+save), the one path from a draft to a stored report. <code class="docutils literal notranslate"><span class="pre">analyzer</span></code> defaults to
+an <a class="reference internal" href="#hired.alignment.LLMAlignmentAnalyzer" title="hired.alignment.LLMAlignmentAnalyzer"><code class="xref py py-class docutils literal notranslate"><span class="pre">LLMAlignmentAnalyzer</span></code></a> on the <code class="docutils literal notranslate"><span class="pre">ai</span></code> extra.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="hired.alignment.apply_ai_leverage">
 <span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">apply_ai_leverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">closeability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ai_leverage</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">skill_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_tacit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/rubric.html#apply_ai_leverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.apply_ai_leverage" title="Link to this definition">#</a></dt>
 <dd><p>Soften a <em>codified</em> gap’s closeability by the candidate’s AI leverage.</p>
@@ -1010,6 +1135,19 @@ scoring, or the bound does not hold.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.coverage">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">coverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{RequirementClass.DIFFERENTIATOR:</span> <span class="pre">2.0,</span> <span class="pre">RequirementClass.GATE_KEEPER:</span> <span class="pre">3.0,</span> <span class="pre">RequirementClass.VALUE_ADD:</span> <span class="pre">1.0}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_credit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{Bucket.ADJACENT_TRANSFERABLE:</span> <span class="pre">0.5,</span> <span class="pre">Bucket.GAP_HARD:</span> <span class="pre">0.0,</span> <span class="pre">Bucket.GAP_LEARNABLE:</span> <span class="pre">0.25,</span> <span class="pre">Bucket.STRONG_MATCH:</span> <span class="pre">1.0}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#coverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.coverage" title="Link to this definition">#</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">(coverage,</span> <span class="pre">resolved_share)</span></code>: weighted bucket credit over resolved records,
+and the weighted share of records that are resolved at all.</p>
+<p>Records must be classified (see <a class="reference internal" href="hired.alignment.rubric.html#hired.alignment.rubric.classify" title="hired.alignment.rubric.classify"><code class="xref py py-func docutils literal notranslate"><span class="pre">classify()</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="hired.alignment.diff_reports">
 <span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">diff_reports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/diff.html#diff_reports"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.diff_reports" title="Link to this definition">#</a></dt>
 <dd><p>Return a structured diff of two alignment-report dicts.</p>
@@ -1119,6 +1257,26 @@ requirements left. This is the sharpest stop criterion from the research.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.quote_is_grounded">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">quote_is_grounded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">quote</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fact</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#quote_is_grounded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.quote_is_grounded" title="Link to this definition">#</a></dt>
+<dd><p>True when <code class="docutils literal notranslate"><span class="pre">quote</span></code> is a verbatim span (modulo case/whitespace) of <code class="docutils literal notranslate"><span class="pre">fact</span></code>,
+at least <code class="docutils literal notranslate"><span class="pre">min_words</span></code> long.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">quote_is_grounded</span><span class="p">(</span><span class="s1">'kafka  CLUSTERS'</span><span class="p">,</span> <span class="n">Fact</span><span class="p">(</span><span class="n">statement</span><span class="o">=</span><span class="s1">'Ran Kafka clusters'</span><span class="p">))</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">quote_is_grounded</span><span class="p">(</span><span class="s1">'Kafka expert'</span><span class="p">,</span> <span class="n">Fact</span><span class="p">(</span><span class="n">statement</span><span class="o">=</span><span class="s1">'Ran Kafka clusters'</span><span class="p">))</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">quote_is_grounded</span><span class="p">(</span><span class="s1">'Kafka'</span><span class="p">,</span> <span class="n">Fact</span><span class="p">(</span><span class="n">statement</span><span class="o">=</span><span class="s1">'Ran Kafka clusters'</span><span class="p">))</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="hired.alignment.rank_clarifications">
 <span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">rank_clarifications</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">records</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_questions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_info_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/elicitation.html#rank_clarifications"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.rank_clarifications" title="Link to this definition">#</a></dt>
 <dd><p>Produce clarifying questions for askable records, highest info-gain first.</p>
@@ -1182,6 +1340,25 @@ skeleton (requirement, reason, info_gain) so the caller can fill <code class="do
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="hired.alignment.retrieve_facts">
+<span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">retrieve_facts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">facts</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/analyzer.html#retrieve_facts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.retrieve_facts" title="Link to this definition">#</a></dt>
+<dd><p>The <code class="docutils literal notranslate"><span class="pre">k</span></code> facts sharing the most words with the requirement (none if none do).</p>
+<p>Lexical, so it misses an adjacent skill named in different words (RabbitMQ
+for Kafka); inject a semantic <code class="docutils literal notranslate"><span class="pre">retrieve</span></code> into the analyzer for that.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">hired.candidate.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fact</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Fact</span><span class="p">(</span><span class="n">statement</span><span class="o">=</span><span class="s1">'Ran Kafka clusters'</span><span class="p">),</span> <span class="n">Fact</span><span class="p">(</span><span class="n">statement</span><span class="o">=</span><span class="s1">'Speaks French'</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">statement</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">retrieve_facts</span><span class="p">(</span><span class="n">Requirement</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">'Kafka streaming'</span><span class="p">),</span> <span class="n">fs</span><span class="p">)]</span>
+<span class="go">['Ran Kafka clusters']</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>[<a class="reference internal" href="hired.candidate.base.html#hired.candidate.base.Fact" title="hired.candidate.base.Fact"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fact</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="hired.alignment.semantic_consistency">
 <span class="sig-prename descclassname"><span class="pre">hired.alignment.</span></span><span class="sig-name descname"><span class="pre">semantic_consistency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">meaning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hired/alignment/calibration.html#semantic_consistency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hired.alignment.semantic_consistency" title="Link to this definition">#</a></dt>
 <dd><p>The agreement of sampled answers, clustered by <code class="docutils literal notranslate"><span class="pre">meaning</span></code> (default: equality).</p>
@@ -1233,28 +1410,31 @@ and a shaky absence is not assumed. An UNKNOWN follows the rule above.</p>
 <p class="rubric">Modules</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.assemble.html#module-hired.alignment.assemble" title="hired.alignment.assemble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assemble</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.analyzer.html#module-hired.alignment.analyzer" title="hired.alignment.analyzer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">analyzer</span></code></a></p></td>
+<td><p>Library-mode autonomous alignment analysis, driven by an injected LLM.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.assemble.html#module-hired.alignment.assemble" title="hired.alignment.assemble"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assemble</span></code></a></p></td>
 <td><p>Deterministically finalize an analyst-drafted <a class="reference internal" href="#hired.alignment.AlignmentReport" title="hired.alignment.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.base.html#module-hired.alignment.base" title="hired.alignment.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.base.html#module-hired.alignment.base" title="hired.alignment.base"><code class="xref py py-obj docutils literal notranslate"><span class="pre">base</span></code></a></p></td>
 <td><p>Schemas for JD-vs-candidate alignment analysis.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.calibration.html#module-hired.alignment.calibration" title="hired.alignment.calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.calibration.html#module-hired.alignment.calibration" title="hired.alignment.calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration</span></code></a></p></td>
 <td><p>Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.calibration_log.html#module-hired.alignment.calibration_log" title="hired.alignment.calibration_log"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration_log</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.calibration_log.html#module-hired.alignment.calibration_log" title="hired.alignment.calibration_log"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration_log</span></code></a></p></td>
 <td><p>Collect held-out (score, truth) pairs from answered clarifications and fit a calibrator.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.diff.html#module-hired.alignment.diff" title="hired.alignment.diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">diff</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.diff.html#module-hired.alignment.diff" title="hired.alignment.diff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">diff</span></code></a></p></td>
 <td><p>Deterministic diff between two alignment reports.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.elicitation.html#module-hired.alignment.elicitation" title="hired.alignment.elicitation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elicitation</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.elicitation.html#module-hired.alignment.elicitation" title="hired.alignment.elicitation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elicitation</span></code></a></p></td>
 <td><p>The honesty loop: rank unknowns into the most informative questions first.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.report.html#module-hired.alignment.report" title="hired.alignment.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.report.html#module-hired.alignment.report" title="hired.alignment.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a></p></td>
 <td><p>Render an <a class="reference internal" href="hired.alignment.base.html#hired.alignment.base.AlignmentReport" title="hired.alignment.base.AlignmentReport"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentReport</span></code></a> to Markdown or HTML.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="hired.alignment.rubric.html#module-hired.alignment.rubric" title="hired.alignment.rubric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rubric</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="hired.alignment.rubric.html#module-hired.alignment.rubric" title="hired.alignment.rubric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rubric</span></code></a></p></td>
 <td><p>Deterministic bucket assignment — the two-axis rubric in code.</p></td>
 </tr>
 </tbody>
@@ -1282,11 +1462,11 @@ and a shaky absence is not assumed. An UNKNOWN follows the rule above.</p>
       </div>
     </a>
     <a class="right-next"
-       href="hired.alignment.assemble.html"
+       href="hired.alignment.analyzer.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">hired.alignment.assemble</p>
+        <p class="prev-next-title">hired.alignment.analyzer</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1333,6 +1513,13 @@ and a shaky absence is not assumed. An UNKNOWN follows the rule above.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.InterviewPrep.model_config"><code class="docutils literal notranslate"><span class="pre">InterviewPrep.model_config</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.LLMAlignmentAnalyzer"><code class="docutils literal notranslate"><span class="pre">LLMAlignmentAnalyzer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.LLMAlignmentAnalyzer.analyze"><code class="docutils literal notranslate"><span class="pre">LLMAlignmentAnalyzer.analyze()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.LLMAlignmentAnalyzer.decompose"><code class="docutils literal notranslate"><span class="pre">LLMAlignmentAnalyzer.decompose()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.LLMAlignmentAnalyzer.judge"><code class="docutils literal notranslate"><span class="pre">LLMAlignmentAnalyzer.judge()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.LLMAlignmentAnalyzer.llm_entails"><code class="docutils literal notranslate"><span class="pre">LLMAlignmentAnalyzer.llm_entails()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchCalibrator"><code class="docutils literal notranslate"><span class="pre">MatchCalibrator</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchCalibrator.decide"><code class="docutils literal notranslate"><span class="pre">MatchCalibrator.decide()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.MatchCalibrator.from_dict"><code class="docutils literal notranslate"><span class="pre">MatchCalibrator.from_dict()</span></code></a></li>
@@ -1366,6 +1553,8 @@ and a shaky absence is not assumed. An UNKNOWN follows the rule above.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.Verdict.model_config"><code class="docutils literal notranslate"><span class="pre">Verdict.model_config</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.aggregate_verdict"><code class="docutils literal notranslate"><span class="pre">aggregate_verdict()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.analyze_jd"><code class="docutils literal notranslate"><span class="pre">analyze_jd()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.apply_ai_leverage"><code class="docutils literal notranslate"><span class="pre">apply_ai_leverage()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.apply_calibration"><code class="docutils literal notranslate"><span class="pre">apply_calibration()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.assign_bucket"><code class="docutils literal notranslate"><span class="pre">assign_bucket()</span></code></a></li>
@@ -1373,16 +1562,19 @@ and a shaky absence is not assumed. An UNKNOWN follows the rule above.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.classify"><code class="docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.compute_gap_size"><code class="docutils literal notranslate"><span class="pre">compute_gap_size()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.confidence_level"><code class="docutils literal notranslate"><span class="pre">confidence_level()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.coverage"><code class="docutils literal notranslate"><span class="pre">coverage()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.diff_reports"><code class="docutils literal notranslate"><span class="pre">diff_reports()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.finalize_report"><code class="docutils literal notranslate"><span class="pre">finalize_report()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.info_gain"><code class="docutils literal notranslate"><span class="pre">info_gain()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.is_blocking"><code class="docutils literal notranslate"><span class="pre">is_blocking()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.is_decision_stable"><code class="docutils literal notranslate"><span class="pre">is_decision_stable()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.match_share"><code class="docutils literal notranslate"><span class="pre">match_share()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.quote_is_grounded"><code class="docutils literal notranslate"><span class="pre">quote_is_grounded()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.rank_clarifications"><code class="docutils literal notranslate"><span class="pre">rank_clarifications()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.render_report"><code class="docutils literal notranslate"><span class="pre">render_report()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.render_report_html"><code class="docutils literal notranslate"><span class="pre">render_report_html()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.render_report_markdown"><code class="docutils literal notranslate"><span class="pre">render_report_markdown()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.retrieve_facts"><code class="docutils literal notranslate"><span class="pre">retrieve_facts()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.semantic_consistency"><code class="docutils literal notranslate"><span class="pre">semantic_consistency()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.should_ask"><code class="docutils literal notranslate"><span class="pre">should_ask()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hired.alignment.summarize_diff"><code class="docutils literal notranslate"><span class="pre">summarize_diff()</span></code></a></li>

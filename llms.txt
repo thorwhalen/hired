@@ -9,6 +9,7 @@
 - [API reference](api.html.md): | &#96;hired&#96;   | Public API for the hired package.   |
 - [hired](_autosummary/hired.html.md): Public API for the hired package.
 - [hired.alignment](_autosummary/hired.alignment.html.md): JD-vs-candidate alignment: classify each requirement honestly into four buckets.
+- [hired.alignment.analyzer](_autosummary/hired.alignment.analyzer.html.md): Library-mode autonomous alignment analysis, driven by an injected LLM.
 - [hired.alignment.assemble](_autosummary/hired.alignment.assemble.html.md): Deterministically finalize an analyst-drafted &#96;AlignmentReport&#96;.
 - [hired.alignment.base](_autosummary/hired.alignment.base.html.md): Schemas for JD-vs-candidate alignment analysis.
 - [hired.alignment.calibration](_autosummary/hired.alignment.calibration.html.md): Calibrated confidence: multi-sample consistency and a conformal ask/auto-decide rule.
@@ -54,7 +55,7 @@
 - [hired.tracking](_autosummary/hired.tracking.html.md): Application tracking system for managing job applications.
 - [hired.util](_autosummary/hired.util.html.md): Utilities for external dependencies and general helpers.
 - [For AI agents](ai-agents.html.md): &#96;hired&#96; ships artifacts for coding agents alongside its code. This page lists
-- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 11:21 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
+- [About this build](about-this-build.html.md): This documentation was built on &#42;&#42;2026-10-20 11:28 UTC&#42;&#42; from commit &lt;a href="https://github.com/tho...
 
 ## Optional
 
