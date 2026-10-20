@@ -41,22 +41,41 @@ META_FILE = "meta.json"
 NOTICE_FILE = "NOTICE.md"
 RAW_DIR = "raw"  # cached source pages/archives, so an interrupted build resumes
 
-ATTRIBUTION = """\
-# Skills taxonomy — attribution
-
-This directory holds data derived from two sources, both licensed under
-[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/):
-
+_ESCO_CREDIT = """\
 - **ESCO** — European Skills, Competences, Qualifications and Occupations.
   © European Union, https://esco.ec.europa.eu/. Retrieved through the ESCO API.
   Licence notice: https://esco.ec.europa.eu/en/copyright-notice-esco-skills-competences
-- **O*NET** — O*NET 30.0 Database by the U.S. Department of Labor, Employment and
-  Training Administration (USDOL/ETA). Used under the CC BY 4.0 license.
-  O*NET® is a trademark of USDOL/ETA. https://www.onetcenter.org/database.html
-
-Changes made: labels were normalised, occupation↔skill links were used to
-compute skill-relatedness scores, and (optionally) label embeddings were added.
 """
+
+_ONET_CREDIT = """\
+- **O*NET** — O*NET {version} Database by the U.S. Department of Labor, Employment
+  and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license.
+  O*NET® is a trademark of USDOL/ETA. This data was modified (see below); USDOL/ETA
+  has not approved, endorsed, or tested these modifications.
+  https://www.onetcenter.org/database.html
+"""
+
+
+def attribution(
+    sources: tuple[str, ...] | list[str] = ("esco", "onet"), *, onet_version: str = "30.0"
+) -> str:
+    """The CC BY 4.0 notice for the sources a build used (written as ``NOTICE.md``)."""
+    credits = ([_ESCO_CREDIT] if "esco" in sources else []) + (
+        [_ONET_CREDIT.format(version=onet_version.replace("_", "."))]
+        if "onet" in sources
+        else []
+    )
+    return (
+        "# Skills taxonomy — attribution\n\n"
+        "This directory holds data derived from the sources below, licensed under\n"
+        "[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/):\n\n"
+        + "".join(credits)
+        + "\nChanges made: labels were normalised, occupation↔skill links were used to\n"
+        "compute skill-relatedness scores, and (optionally) label embeddings were added.\n"
+    )
+
+
+ATTRIBUTION = attribution()
 
 
 def taxonomy_dir(*subpaths: str, root: str | None = None, make: bool = True) -> str:

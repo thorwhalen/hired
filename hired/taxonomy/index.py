@@ -17,9 +17,11 @@ requirement Y?* by blending two signals::
   so a node is also linked to its closest *connected* nodes in the other sources
   (label token overlap or embedding similarity, whichever is higher), weighted by
   that closeness. Graph relatedness then propagates through the bridge.
-- **silent graph**: when the graph finds no path at all (score 0), that is
-  missing evidence more often than unrelatedness (each node keeps only its
-  strongest links), so the score falls back to cosine alone (``alpha`` 1).
+- **graph trust**: a graph score of 0 (no path among each node's strongest links)
+  is missing evidence more often than unrelatedness, so cosine's weight grows as
+  the graph evidence weakens: ``alpha`` is used as given from a graph score of
+  ``graph_trust`` up, and rises linearly to 1 (cosine alone) at a graph score of 0,
+  so weak evidence never ranks below none.
 
 The index *suggests*; the analyst (skill or LLM) still decides the record's
 ``match_type`` / ``transferability``. :meth:`SkillIndex.suggest_adjacency` ranks
@@ -147,7 +149,7 @@ class SkillIndex:
         meta: dict[str, Any] | None = None,
         bridge_k: int = 3,
         bridge_min_score: float = 0.5,
-        silent_graph_fallback: bool = True,
+        graph_trust: float = 0.2,
     ) -> None:
         self.nodes: dict[str, SkillNode] = {n.id: n for n in nodes}
         self._edges = edges
@@ -157,7 +159,7 @@ class SkillIndex:
         self.meta: dict[str, Any] = meta or {}
         self.bridge_k = bridge_k
         self.bridge_min_score = bridge_min_score
-        self.silent_graph_fallback = silent_graph_fallback
+        self.graph_trust = graph_trust
         self._bridge_cache: dict[str, dict[str, float]] = {}
 
     def __len__(self) -> int:
@@ -314,8 +316,8 @@ class SkillIndex:
             for y, wy in b_set.items():
                 w = wx * wy
                 if x == y:
-                    if w > best:  # a bridge lands on the other side itself
-                        best, via = w, (None if w == 1.0 else x)
+                    if w > best:  # equivalent, or a bridge lands on the other side
+                        best, via = w, None
                     continue
                 if w * x_links.get(y, 0.0) > best:
                     best, via = w * x_links[y], None
@@ -358,8 +360,9 @@ class SkillIndex:
         va, vb = self._vector(a, a_node), self._vector(b, b_node)
         cosine = None if va is None or vb is None else round(float(va @ vb), 4)
         used = alpha if cosine is not None else 0.0
-        if cosine is not None and self.silent_graph_fallback and graph == 0.0:
-            used = 1.0  # no path in the graph: missing evidence, not unrelatedness
+        if cosine is not None and self.graph_trust > 0 and graph < self.graph_trust:
+            # weak graph evidence: cosine's weight rises to 1 as the graph score -> 0
+            used = 1 - (1 - alpha) * graph / self.graph_trust
         score = used * max(cosine or 0.0, 0.0) + (1 - used) * graph
         return Proximity(
             a=a,

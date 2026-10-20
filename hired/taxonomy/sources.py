@@ -205,7 +205,7 @@ def _esco_pages(
     """
     page_no, total, seen = 0, None, 0
     while total is None or seen < total:
-        key = f"esco-{concept_type}-p{page_no:05d}-n{page_size}"
+        key = f"esco-{language}-{concept_type}-p{page_no:05d}-n{page_size}"
         page = cache.get(key) if cache is not None else None
         if page is None:
             page = _search_items(
@@ -216,7 +216,8 @@ def _esco_pages(
                 language=language,
                 progress=progress,
             )
-            if cache is not None:
+            results = (page.get("_embedded") or {}).get("results") or []
+            if cache is not None and results:  # an empty page may be transient
                 cache[key] = page
         total = page.get("total", 0)
         results = (page.get("_embedded") or {}).get("results") or []

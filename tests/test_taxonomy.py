@@ -469,5 +469,62 @@ def test_a_silent_graph_falls_back_to_cosine():
     assert silent.alpha == 1.0 and silent.score == pytest.approx(silent.cosine, abs=1e-4)
     linked = idx.proximity("esco:dl", "esco:fw")  # a path: the blend stays
     assert linked.alpha == 0.5 and linked.graph == 0.6
-    off = SkillIndex(nodes, edges, embedder=embed, bridge_k=0, silent_graph_fallback=False)
+    off = SkillIndex(nodes, edges, embedder=embed, bridge_k=0, graph_trust=0)
     assert off.proximity("onet:tf", "esco:dl").alpha == 0.5
+
+
+def test_weak_graph_evidence_never_ranks_below_none():
+    """Review of #43: cosine's weight rises smoothly as the graph score falls to 0."""
+    np = pytest.importorskip("numpy")
+    nodes = [SkillNode(id=i, label=i, source="s") for i in ("a", "b", "c")]
+    vecs = {"a": [1.0, 0.0], "b": [0.6, 0.8], "c": [0.6, 0.8]}
+    idx = SkillIndex(
+        nodes,
+        {"a": [("c", 0.01)], "c": [("a", 0.01)]},
+        vectors=np.asarray([vecs[n.id] for n in nodes]),
+        vector_ids=[n.id for n in nodes],
+    )
+    none, weak = idx.proximity("a", "b"), idx.proximity("a", "c")
+    assert none.graph == 0 and none.alpha == 1.0
+    assert weak.graph == 0.01 and abs(weak.score - none.score) < 0.05
+
+
+def test_an_empty_page_is_not_cached_so_a_rerun_recovers(tmp_path):
+    flaky = {"down": True}
+    real = fake_esco()
+
+    def get_json(url, params):
+        if flaky["down"] and params["type"] == "skill" and params["offset"] == 0:
+            return {"total": 3, "_embedded": {"results": []}}  # a transient empty page
+        return real(url, params)
+
+    root = str(tmp_path / "taxo")
+    kwargs = dict(root=root, get_json=get_json, sources=["esco"])
+    with pytest.raises(RuntimeError, match="rerun"):
+        build_skill_index(**kwargs)
+    flaky["down"] = False
+    assert build_skill_index(**kwargs)["nodes"] > 0
+
+
+def test_notice_credits_only_the_sources_used(tmp_path):
+    from hired.taxonomy.base import attribution
+
+    esco_only = attribution(["esco"])
+    assert "ESCO" in esco_only and "O*NET" not in esco_only
+    assert "not approved, endorsed, or tested" in attribution(["onet"], onet_version="29_1")
+    assert "O*NET 29.1" in attribution(["onet"], onet_version="29_1")
+
+
+def test_a_missing_embedder_fails_before_fetching(tmp_path, monkeypatch):
+    import hired.taxonomy.build as build_mod
+
+    def no_numpy():
+        raise ImportError("numpy is needed")
+
+    monkeypatch.setattr(build_mod, "require_numpy", no_numpy)
+    calls = []
+    with pytest.raises(ImportError):
+        build_skill_index(
+            root=str(tmp_path / "t"), embeddings=True, get_json=lambda u, p: calls.append(p)
+        )
+    assert calls == []

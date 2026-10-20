@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import os
 import shutil
+from datetime import datetime, timezone
 from collections.abc import Sequence
 from typing import Any
 
@@ -27,7 +28,7 @@ from hired.persistence.base import (
     write_text_file,
 )
 from hired.taxonomy.base import (
-    ATTRIBUTION,
+    attribution,
     EDGES_FILE,
     META_FILE,
     NODES_FILE,
@@ -90,6 +91,10 @@ def build_skill_index(
         raise ValueError(
             f"sources must be a non-empty subset of {SOURCES}, got {sources!r}"
         )
+    embed = None
+    if embeddings or embedder is not None:  # fail before a long fetch, not after it
+        require_numpy()
+        embed = embedder or sentence_transformer_embedder(embedding_model)
     raw_dir = taxonomy_dir(RAW_DIR, root=root)
     if refresh:
         shutil.rmtree(raw_dir, ignore_errors=True)
@@ -115,31 +120,34 @@ def build_skill_index(
         edge_sets.append(relatedness_edges(src_occs, **(graph_kwargs or {})))
     edges = merge_edges(*edge_sets)
 
+    vectors = None
+    if embed is not None:  # before any file is written: a failure leaves the old build
+        if progress:
+            progress(f"embedding {len(nodes)} labels")
+        vectors = require_numpy().asarray(embed([n.label for n in nodes]), dtype="float16")
+
     path = taxonomy_dir(root=root)
+    meta_path = os.path.join(path, META_FILE)
+    if os.path.exists(meta_path):
+        os.remove(meta_path)  # written last: no meta means an unfinished build
     write_json_file(os.path.join(path, NODES_FILE), dump_models(nodes))
     write_json_file(os.path.join(path, OCCUPATIONS_FILE), dump_models(occupations))
     write_json_file(os.path.join(path, EDGES_FILE), edges)
-    write_text_file(os.path.join(path, NOTICE_FILE), ATTRIBUTION)
-
-    model_name = None
-    if embeddings or embedder is not None:
-        if progress:
-            progress(f"embedding {len(nodes)} labels")
-        model_name = None if embedder is not None else embedding_model
-        embed = embedder or sentence_transformer_embedder(embedding_model)
-        np = require_numpy()
-        vectors = np.asarray(embed([n.label for n in nodes]), dtype="float16")
-        np.save(os.path.join(path, VECTORS_FILE), vectors)
+    write_text_file(
+        os.path.join(path, NOTICE_FILE),
+        attribution(list(sources), onet_version=onet_version),
+    )
+    if vectors is not None:
+        require_numpy().save(os.path.join(path, VECTORS_FILE), vectors)
         write_json_file(os.path.join(path, VECTOR_IDS_FILE), [n.id for n in nodes])
     else:
         for stale in (VECTORS_FILE, VECTOR_IDS_FILE):
             if os.path.exists(os.path.join(path, stale)):
                 os.remove(os.path.join(path, stale))
-
-    from hired.candidate.base import _utcnow
+    model_name = None if embedder is not None or embed is None else embedding_model
 
     meta = {
-        "built_at": _utcnow(),
+        "built_at": datetime.now(timezone.utc).isoformat(),
         "sources": list(sources),
         "onet_version": onet_version if "onet" in sources else None,
         "nodes": len(nodes),
