@@ -2,7 +2,7 @@
 
 # About this build
 
-This documentation was built on **2026-10-20 12:01 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/f791504034eb168ad665a58d1ee6c760ef4c2e97"><code>f791504</code></a> on branch <code>main</code>, for **hired 0.0.32** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 12:50 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/dd22664eb21e7c173d2f6f57b84082454e9f76d3"><code>dd22664</code></a> on branch <code>main</code>, for **hired 0.0.33** (from <code>pyproject.toml</code>).
 
 #### NOTE
 Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
@@ -11,7 +11,7 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/f791504034eb168ad665a58d1ee6c760ef4c2e97"><code>f791504034eb168ad665a58d1ee6c760ef4c2e97</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/dd22664eb21e7c173d2f6f57b84082454e9f76d3"><code>dd22664eb21e7c173d2f6f57b84082454e9f76d3</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -22,9 +22,9 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39418947530">39418947530</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39425176015">39425176015</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>f791504034eb168ad665a58d1ee6c760ef4c2e97</code> (in the history of the built commit) |
+| Event commit | <code>dd22664eb21e7c173d2f6f57b84082454e9f76d3</code> (in the history of the built commit) |
 
 ## Tools
 
@@ -49,13 +49,13 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.32/">0.0.32</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.33/">0.0.33</a>, the same as the documented version.
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout f791504034eb168ad665a58d1ee6c760ef4c2e97
+git checkout dd22664eb21e7c173d2f6f57b84082454e9f76d3
 pip install "epythet==0.2.20"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
