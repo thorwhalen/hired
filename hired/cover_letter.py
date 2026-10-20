@@ -279,9 +279,9 @@ def mk_cover_letter(
         >>>
         >>> # From job search result
         >>> sources = JobSources()
-        >>> jobs = sources.jobspy.search(SearchCriteria(query="software engineer"))
+        >>> jobs = sources.jobspy.search(SearchCriteria(query="software engineer"))  # doctest: +SKIP
         >>>
-        >>> letter = mk_cover_letter(
+        >>> letter = mk_cover_letter(  # doctest: +SKIP
         ...     candidate_info={'basics': {'name': 'Jane Doe', 'email': 'jane@example.com'}},
         ...     job_info=jobs[0],
         ...     format='html'

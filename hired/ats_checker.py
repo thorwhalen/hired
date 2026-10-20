@@ -111,11 +111,11 @@ class ATSChecker:
         >>> from hired.ats_checker import ATSChecker
         >>>
         >>> checker = ATSChecker()
-        >>> report = checker.check_resume(resume_dict)
-        >>> print(report.get_summary())
+        >>> report = checker.check_resume(resume_dict)  # doctest: +SKIP
+        >>> print(report.get_summary())  # doctest: +SKIP
         >>>
         >>> # Check against specific job
-        >>> report = checker.check_resume(resume_dict, job_result)
+        >>> report = checker.check_resume(resume_dict, job_result)  # doctest: +SKIP
     """
 
     # Standard section names that ATS systems recognize
@@ -491,9 +491,9 @@ def check_resume_ats(
         >>> from hired import mk_content_for_resume
         >>> from hired.ats_checker import check_resume_ats
         >>>
-        >>> resume = mk_content_for_resume(candidate_info, job_info)
-        >>> report = check_resume_ats(resume.model_dump(), job_result)
-        >>> print(report.get_summary())
+        >>> resume = mk_content_for_resume(candidate_info, job_info)  # doctest: +SKIP
+        >>> report = check_resume_ats(resume.model_dump(), job_result)  # doctest: +SKIP
+        >>> print(report.get_summary())  # doctest: +SKIP
     """
     checker = ATSChecker()
     return checker.check_resume(resume_content, job)

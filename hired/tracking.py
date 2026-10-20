@@ -143,23 +143,23 @@ class ApplicationTracker:
     Track job applications in a SQLite database.
 
     Examples:
-        >>> tracker = ApplicationTracker()
+        >>> tracker = ApplicationTracker()  # doctest: +SKIP
         >>>
         >>> # Add application from job search
-        >>> app_id = tracker.add_application(
+        >>> app_id = tracker.add_application(  # doctest: +SKIP
         ...     job=job_result,
         ...     resume_path="resume.pdf",
         ...     status="applied"
         ... )
         >>>
         >>> # Update status
-        >>> tracker.update_status(app_id, "interview")
+        >>> tracker.update_status(app_id, "interview")  # doctest: +SKIP
         >>>
         >>> # Get all applications in interview stage
-        >>> interviews = tracker.get_applications(status="interview")
+        >>> interviews = tracker.get_applications(status="interview")  # doctest: +SKIP
         >>>
         >>> # Get statistics
-        >>> stats = tracker.get_statistics()
+        >>> stats = tracker.get_statistics()  # doctest: +SKIP
     """
 
     def __init__(self, db_path: Optional[Path] = None) -> None:
@@ -230,14 +230,14 @@ class ApplicationTracker:
 
         Examples:
             >>> # From JobResult
-            >>> app_id = tracker.add_application(
+            >>> app_id = tracker.add_application(  # doctest: +SKIP
             ...     job=job_result,
             ...     resume_path="resume.pdf",
             ...     status="applied"
             ... )
             >>>
             >>> # Manual entry
-            >>> app_id = tracker.add_application(
+            >>> app_id = tracker.add_application(  # doctest: +SKIP
             ...     job_title="Software Engineer",
             ...     company="TechCorp",
             ...     status="applied"
