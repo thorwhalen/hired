@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 from importlib.resources import files
 import os
+from functools import lru_cache
 from typing import TYPE_CHECKING, Any, Union
 from collections.abc import Iterator
 from collections.abc import Mapping
@@ -71,7 +72,9 @@ def dump_yaml(d: dict[str, Any], yaml_path: str) -> None:
 # --------------------------------------------------------------------------------------
 # Helpers
 from pydantic import ValidationError as PydanticValidationError
-from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
+
+if TYPE_CHECKING:
+    from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
 
 
 def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
@@ -81,13 +84,27 @@ def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, An
     return result
 
 
-ValidationErrorType = Union[PydanticValidationError, JsonSchemaValidationError]
-ValidationErrors: tuple[
-    type[PydanticValidationError], type[JsonSchemaValidationError]
-] = (
-    PydanticValidationError,
-    JsonSchemaValidationError,
-)
+ValidationErrorType = Union[PydanticValidationError, "JsonSchemaValidationError"]
+
+
+@lru_cache(maxsize=1)
+def _validation_errors() -> tuple[type[Exception], ...]:
+    """Pydantic + jsonschema validation error types.
+
+    ``jsonschema`` is imported here, on first need, not at module level: it costs
+    most of ``import hired`` (via ``rfc3987_syntax``).
+    """
+    from jsonschema.exceptions import ValidationError as JsonSchemaValidationError
+
+    return (PydanticValidationError, JsonSchemaValidationError)
+
+
+def __getattr__(name: str) -> Any:  # lazy ``ValidationErrors`` (module attribute)
+    if name == "ValidationErrors":
+        return _validation_errors()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
 JsonContentStr = str  # JSON string
 PathStr = str  # filesystem path
 ResumeSource = Union[PathStr, JsonContentStr, Path, Mapping[str, Any]]
@@ -114,7 +131,7 @@ def extract_friendly_errors(
             field = error["loc"][0]
             message = error["msg"]
             yield field, message
-    elif isinstance(error_obj, JsonSchemaValidationError):
+    elif isinstance(error_obj, _validation_errors()[1]):
         # The jsonschema.exceptions.ValidationError object might only represent the first error.
         # It's best to use jsonschema.iter_errors() to get all errors.
         # This requires the schema and data, which are not directly available in the exception object.
@@ -246,7 +263,7 @@ def validate_resume_content_dict(
 
     try:
         _ = ResumeSchemaExtended(**content)
-    except ValidationErrors as e:
+    except _validation_errors() as e:
         print(validation_friendly_errors_string(e))
         if raise_errors:
             raise

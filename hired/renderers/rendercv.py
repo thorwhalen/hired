@@ -1,19 +1,37 @@
 """RenderCV renderer implementation using the RenderCV backend."""
 
+import importlib.util
 import tempfile
 import os
 import warnings
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List
 from hired.base import Renderer, RenderingConfig
 
-try:
-    from jsonresume_to_rendercv.converter import convert
-    from rendercv import api as rendercv_api
+# Availability is probed without importing: ``import hired`` must not load the
+# ``rendercv`` extra (see tests/test_import_safety.py).
+RENDERCV_AVAILABLE = all(
+    importlib.util.find_spec(name) is not None
+    for name in ("rendercv", "jsonresume_to_rendercv")
+)
 
-    RENDERCV_AVAILABLE = True
-except ImportError:
-    RENDERCV_AVAILABLE = False
+
+@lru_cache(maxsize=1)
+def _load_rendercv() -> tuple:
+    """Import the ``rendercv`` extra on first use; returns ``(convert, rendercv_api)``.
+
+    Raises ``ImportError`` with install instructions if the extra is unusable.
+    """
+    try:
+        from jsonresume_to_rendercv.converter import convert
+        from rendercv import api as rendercv_api
+    except ImportError as e:
+        raise ImportError(
+            "RenderCV renderer requires 'rendercv' and 'jsonresume-to-rendercv' packages. "
+            "Install with: pip install hired[rendercv]"
+        ) from e
+    return convert, rendercv_api
 
 
 class RenderCVRenderer(Renderer):
@@ -50,6 +68,7 @@ class RenderCVRenderer(Renderer):
     ) -> bytes:  # content is ResumeSchemaExtended
         """Render resume content using RenderCV backend."""
         self.warnings = []  # Reset warnings for each render
+        convert, rendercv_api = _load_rendercv()
 
         # Convert ResumeSchemaExtended to JSON Resume dict with robust handling
         json_resume = self._content_to_json_resume_robust(content)

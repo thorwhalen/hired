@@ -110,3 +110,39 @@ def test_import_hired_does_not_import_weasyprint(tmp_path):
         "assert 'weasyprint' not in sys.modules, 'weasyprint imported by hired'"
     )
     subprocess.run([sys.executable, "-c", code], check=True, env=env)
+
+
+@pytest.mark.parametrize(
+    "module", ["rendercv", "jsonresume_to_rendercv", "jobspy"]
+)
+def test_import_hired_does_not_import_optional_extra(tmp_path, module):
+    # rendercv and jobspy (which pulls in pandas) load on first use only. Stub
+    # modules on the path make an eager import show, even where the real extra is
+    # not installed (as in CI).
+    import os
+    import subprocess
+
+    (tmp_path / f"{module}.py").write_text('"""Stub: importable, so an eager import shows."""\n')
+    env = {
+        **os.environ,
+        "PYTHONPATH": os.pathsep.join(
+            [str(tmp_path), *filter(None, [os.environ.get("PYTHONPATH")])]
+        ),
+    }
+    code = (
+        f"import sys, hired, hired.render, hired.search; "
+        f"assert {module!r} not in sys.modules, '{module} imported by hired'"
+    )
+    subprocess.run([sys.executable, "-c", code], check=True, env=env)
+
+
+def test_import_hired_does_not_import_jsonschema():
+    # jsonschema (-> rfc3987_syntax) is most of the import time; it loads on the
+    # first validation error / schema validation only.
+    import subprocess
+
+    code = (
+        "import sys, hired; "
+        "assert 'jsonschema' not in sys.modules, 'jsonschema imported by hired'"
+    )
+    subprocess.run([sys.executable, "-c", code], check=True)
