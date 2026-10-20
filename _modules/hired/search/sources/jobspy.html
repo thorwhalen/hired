@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../../_static/documentation_options.js?v=5d650c58"></script>
+    <script src="../../../../_static/documentation_options.js?v=6a9d8632"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.25" />
+  <meta name="docsearch:version" content="0.0.26" />
   
     
     <script src="../../../../_static/searchtools.js"></script>
@@ -719,6 +719,8 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">(LinkedIn, Indeed, Glassdoor, ZipRecruiter, Google) concurrently.</span>
 <span class="sd">"""</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hired.search.base</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -730,6 +732,19 @@ window.runMermaid = runMermaid;</script>
     <span class="n">CompensationInfo</span><span class="p">,</span>
     <span class="n">SourceConfigError</span><span class="p">,</span>
 <span class="p">)</span>
+
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_load_scrape_jobs</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""Import ``jobspy.scrape_jobs`` (the ``jobspy`` extra, pulls in pandas) on first use."""</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">jobspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">scrape_jobs</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SourceConfigError</span><span class="p">(</span>
+            <span class="s2">"python-jobspy is not installed. "</span>
+            <span class="s2">"Install it with: pip install python-jobspy"</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+    <span class="k">return</span> <span class="n">scrape_jobs</span>
 
 
 <div class="viewcode-block" id="JobSpySource">
@@ -765,12 +780,9 @@ window.runMermaid = runMermaid;</script>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_check_jobspy_available</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Check if python-jobspy package is available."""</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">jobspy</span>  <span class="c1"># noqa</span>
-
-            <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1"># Probe without importing: jobspy pulls in pandas, and the source is</span>
+        <span class="c1"># created at ``import hired`` time. It is imported on first search.</span>
+        <span class="k">return</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">"jobspy"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -911,13 +923,7 @@ window.runMermaid = runMermaid;</script>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">validate_configured</span><span class="p">()</span>
 
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">jobspy</span><span class="w"> </span><span class="kn">import</span> <span class="n">scrape_jobs</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SourceConfigError</span><span class="p">(</span>
-                <span class="s2">"python-jobspy is not installed. "</span>
-                <span class="s2">"Install it with: pip install python-jobspy"</span>
-            <span class="p">)</span>
+        <span class="n">scrape_jobs</span> <span class="o">=</span> <span class="n">_load_scrape_jobs</span><span class="p">()</span>
 
         <span class="c1"># Build JobSpy parameters</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>

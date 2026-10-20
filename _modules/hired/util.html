@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../_static/documentation_options.js?v=5d650c58"></script>
+    <script src="../../_static/documentation_options.js?v=6a9d8632"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -411,7 +411,7 @@ window.runMermaid = runMermaid;</script>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.0.25" />
+  <meta name="docsearch:version" content="0.0.26" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -722,6 +722,7 @@ window.runMermaid = runMermaid;</script>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">files</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Mapping</span>
@@ -791,7 +792,9 @@ window.runMermaid = runMermaid;</script>
 <span class="c1"># --------------------------------------------------------------------------------------</span>
 <span class="c1"># Helpers</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">PydanticValidationError</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">jsonschema.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">JsonSchemaValidationError</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">jsonschema.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">JsonSchemaValidationError</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_merge_dicts</span><span class="p">(</span><span class="n">base</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">override</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -801,13 +804,27 @@ window.runMermaid = runMermaid;</script>
     <span class="k">return</span> <span class="n">result</span>
 
 
-<span class="n">ValidationErrorType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">PydanticValidationError</span><span class="p">,</span> <span class="n">JsonSchemaValidationError</span><span class="p">]</span>
-<span class="n">ValidationErrors</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span>
-    <span class="nb">type</span><span class="p">[</span><span class="n">PydanticValidationError</span><span class="p">],</span> <span class="nb">type</span><span class="p">[</span><span class="n">JsonSchemaValidationError</span><span class="p">]</span>
-<span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">PydanticValidationError</span><span class="p">,</span>
-    <span class="n">JsonSchemaValidationError</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="n">ValidationErrorType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">PydanticValidationError</span><span class="p">,</span> <span class="s2">"JsonSchemaValidationError"</span><span class="p">]</span>
+
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_validation_errors</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="ne">Exception</span><span class="p">],</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Pydantic + jsonschema validation error types.</span>
+
+<span class="sd">    ``jsonschema`` is imported here, on first need, not at module level: it costs</span>
+<span class="sd">    most of ``import hired`` (via ``rfc3987_syntax``).</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">jsonschema.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">JsonSchemaValidationError</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">PydanticValidationError</span><span class="p">,</span> <span class="n">JsonSchemaValidationError</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># lazy ``ValidationErrors`` (module attribute)</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"ValidationErrors"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_validation_errors</span><span class="p">()</span>
+    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"module </span><span class="si">{</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> has no attribute </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+
+
 <span class="n">JsonContentStr</span> <span class="o">=</span> <span class="nb">str</span>  <span class="c1"># JSON string</span>
 <span class="n">PathStr</span> <span class="o">=</span> <span class="nb">str</span>  <span class="c1"># filesystem path</span>
 <span class="n">ResumeSource</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">PathStr</span><span class="p">,</span> <span class="n">JsonContentStr</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
@@ -836,7 +853,7 @@ window.runMermaid = runMermaid;</script>
             <span class="n">field</span> <span class="o">=</span> <span class="n">error</span><span class="p">[</span><span class="s2">"loc"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">message</span> <span class="o">=</span> <span class="n">error</span><span class="p">[</span><span class="s2">"msg"</span><span class="p">]</span>
             <span class="k">yield</span> <span class="n">field</span><span class="p">,</span> <span class="n">message</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">error_obj</span><span class="p">,</span> <span class="n">JsonSchemaValidationError</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">error_obj</span><span class="p">,</span> <span class="n">_validation_errors</span><span class="p">()[</span><span class="mi">1</span><span class="p">]):</span>
         <span class="c1"># The jsonschema.exceptions.ValidationError object might only represent the first error.</span>
         <span class="c1"># It's best to use jsonschema.iter_errors() to get all errors.</span>
         <span class="c1"># This requires the schema and data, which are not directly available in the exception object.</span>
@@ -980,7 +997,7 @@ window.runMermaid = runMermaid;</script>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">_</span> <span class="o">=</span> <span class="n">ResumeSchemaExtended</span><span class="p">(</span><span class="o">**</span><span class="n">content</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">ValidationErrors</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">except</span> <span class="n">_validation_errors</span><span class="p">()</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">validation_friendly_errors_string</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">raise_errors</span><span class="p">:</span>
             <span class="k">raise</span>

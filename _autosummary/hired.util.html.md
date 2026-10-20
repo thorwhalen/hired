@@ -44,7 +44,7 @@ ValidationError to provide a consistent output.
 * **Yields:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)] – A tuple of (field, message) for each validation error.
 * **Return type:**
-  [*Iterator*](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[*tuple*](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any), [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+  *Iterator*[[*tuple*](https://docs.python.org/3/builtins/stdtypes.html#tuple)[*Any*, [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ### hired.util.get_jsonschema_errors(content, schema_path=None)
 

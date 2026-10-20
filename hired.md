@@ -1,4 +1,4 @@
-> built 2026-10-19 13:01 UTC from b82c8ae (main) · hired 0.0.25. Details: build_info.json
+> built 2026-10-20 03:08 UTC from 08f50ae (main) · hired 0.0.26. Details: build_info.json
 
 # index.html.md
 
@@ -7621,7 +7621,7 @@ ValidationError to provide a consistent output.
 * **Yields:**
   [`tuple`](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[`Any`](https://docs.python.org/3/library/typing.html#typing.Any), [`str`](https://docs.python.org/3/builtins/stdtypes.html#str)] – A tuple of (field, message) for each validation error.
 * **Return type:**
-  [*Iterator*](https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator)[[*tuple*](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any), [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)]]
+  *Iterator*[[*tuple*](https://docs.python.org/3/builtins/stdtypes.html#tuple)[*Any*, [*str*](https://docs.python.org/3/builtins/stdtypes.html#str)]]
 
 ### hired.util.get_jsonschema_errors(content, schema_path=None)
 
@@ -7670,18 +7670,18 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-10-19 13:01 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/b82c8ae43243672e3dde4545541183213d4194df"><code>b82c8ae</code></a> on branch <code>main</code>, for **hired 0.0.25** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 03:08 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/08f50ae52c8d64d2cd658e7d2086a3135f25904f"><code>08f50ae</code></a> on branch <code>main</code>, for **hired 0.0.26** (from <code>pyproject.toml</code>).
 
 #### WARNING
 The documentation and the package may be misaligned:
 
-- The documented version (0.0.25) is behind the latest release on PyPI (0.0.26): `pip install hired` gives newer code than these docs describe.
+- The documented version (0.0.26) is behind the latest release on PyPI (0.0.27): `pip install hired` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/b82c8ae43243672e3dde4545541183213d4194df"><code>b82c8ae43243672e3dde4545541183213d4194df</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/08f50ae52c8d64d2cd658e7d2086a3135f25904f"><code>08f50ae52c8d64d2cd658e7d2086a3135f25904f</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -7692,16 +7692,16 @@ The documentation and the package may be misaligned:
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39256406508">39256406508</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39362562186">39362562186</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>b82c8ae43243672e3dde4545541183213d4194df</code> (in the history of the built commit) |
+| Event commit | <code>08f50ae52c8d64d2cd658e7d2086a3135f25904f</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
 | epythet  | 0.2.18  |
-| Sphinx   | 9.1.0   |
+| Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
 
@@ -7719,13 +7719,13 @@ The documentation and the package may be misaligned:
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.26/">0.0.26</a>, newer than the documented version (0.0.25).
+Latest release: <a href="https://pypi.org/project/hired/0.0.27/">0.0.27</a>, newer than the documented version (0.0.26).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout b82c8ae43243672e3dde4545541183213d4194df
+git checkout 08f50ae52c8d64d2cd658e7d2086a3135f25904f
 pip install "epythet==0.2.18"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
