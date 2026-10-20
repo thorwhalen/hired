@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from hired.alignment.base import (
     Clarification,
+    Decision,
     FieldCompleteness,
     RequirementClass,
     RequirementRecord,
@@ -56,12 +57,19 @@ def should_ask(record: RequirementRecord) -> bool:
 
     Ask only when it's ``UNKNOWN`` on an OPEN field and decision-relevant — the
     "don't assume absence from silence" rule. CONTRADICTED facts and closed-field
-    unknowns are real gaps, not questions.
+    unknowns are real gaps, not questions. A decision-relevant CONFIRMED or
+    CONTRADICTED record whose calibrated decision is *ask* (sampled judgments too
+    inconsistent for the conformal rule, see :mod:`hired.alignment.calibration`)
+    is asked about too: "never exaggerate" means a shaky match is confirmed first,
+    and a shaky absence is not assumed. An UNKNOWN follows the rule above.
     """
+    if not is_decision_relevant(record):
+        return False
+    if record.calibrated_decision == Decision.ASK and record.match_state != MatchState.UNKNOWN:
+        return True
     return (
         record.match_state == MatchState.UNKNOWN
         and record.field_completeness == FieldCompleteness.OPEN
-        and is_decision_relevant(record)
     )
 
 
@@ -89,7 +97,9 @@ def rank_clarifications(
                 requirement_id=r.requirement.id,
                 question="",  # filled by the analyst
                 reason=f"{r.requirement.requirement_class.value} requirement is "
-                f"unknown; resolving it could move the verdict",
+                + ("unknown" if r.match_state == MatchState.UNKNOWN
+                   else "too uncertain to decide (calibrated)")
+                + "; resolving it could move the verdict",
                 info_gain=r.info_gain,
             )
         )

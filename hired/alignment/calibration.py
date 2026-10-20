@@ -36,15 +36,16 @@ import math
 from collections import Counter
 from collections.abc import Callable, Hashable, Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass, field
-from enum import Enum
 from typing import Any
 
+from hired.alignment.base import Decision, RequirementRecord
 from hired.candidate.base import ConfidenceLevel, MatchState
 
 __all__ = [
     "Consistency",
     "Decision",
     "MatchCalibrator",
+    "apply_calibration",
     "calibrate_match",
     "conformal_quantile",
     "confidence_level",
@@ -64,7 +65,7 @@ class Consistency:
 
     ``majority`` is the most common meaning (``None`` without samples),
     ``agreement`` its share, ``entropy`` the Shannon entropy of the meanings
-    normalised to ``[0, 1]`` (0: all agree; 1: all differ), ``counts`` the
+    normalised to ``[0, 1]`` (0: all agree; 1: spread evenly over the meanings found), ``counts`` the
     number of samples per meaning.
     """
 
@@ -161,14 +162,6 @@ def conformal_quantile(scores: Sequence[float], alpha: float) -> float:
     return sorted(scores)[rank - 1]
 
 
-class Decision(str, Enum):
-    """What to do with a judgment: take it as a match, as no match, or ask."""
-
-    AUTO_MATCH = "auto_match"
-    AUTO_NO_MATCH = "auto_no_match"
-    ASK = "ask"
-
-
 @dataclass(frozen=True)
 class MatchCalibrator:
     """A fitted class-conditional conformal rule over a match score ``s`` in ``[0, 1]``.
@@ -258,3 +251,37 @@ def _unit(score: float) -> float:
     if not 0.0 <= s <= 1.0:
         raise ValueError(f"a match score must be in [0, 1], got {score!r}")
     return s
+
+
+def apply_calibration(
+    record: RequirementRecord,
+    samples: Iterable[Any],
+    *,
+    calibrator: MatchCalibrator | None = None,
+    meaning: Callable[[Any], Hashable] | None = None,
+    is_match: Callable[[Any], bool] | None = None,
+) -> RequirementRecord:
+    """Set ``record``'s confidence from sampled judgments, and its decision if calibrated.
+
+    ``samples`` are several independent judgments of the same requirement (match
+    states, by default). The record's ``confidence`` becomes
+    :func:`confidence_level` of their agreement and its ``match_score``
+    :func:`match_share`; with a ``calibrator``, ``calibrated_decision`` is its
+    :meth:`~MatchCalibrator.decide`, which :func:`~hired.alignment.elicitation.should_ask`
+    honours (without one it is cleared: new samples supersede an old decision, so
+    re-apply, or clear it, once an answer settles the requirement). The match state stays the analyst's: an *ask* questions a claim, it
+    does not overturn it. Returns the record, changed in place.
+
+    >>> from hired.alignment.base import Requirement
+    >>> rec = RequirementRecord(requirement=Requirement(text="Kafka"), match_state="confirmed")
+    >>> rec = apply_calibration(rec, ["confirmed", "confirmed", "unknown"])
+    >>> rec.confidence.value, round(rec.match_score, 2), rec.calibrated_decision
+    ('medium', 0.67, None)
+    """
+    samples = list(samples)
+    record.confidence = confidence_level(semantic_consistency(samples, meaning=meaning))
+    record.match_score = match_share(samples, is_match=is_match)
+    record.calibrated_decision = (
+        calibrator.decide(record.match_score) if calibrator is not None else None
+    )
+    return record
