@@ -303,3 +303,33 @@ def test_confirmed_on_a_negation_fact_and_ties_stay_unknown():
         Requirement(text="Python"), [PY]
     )
     assert rec.match_state == MatchState.UNKNOWN and rec.match_score == 0.5
+
+
+def test_small_kb_passes_every_fact_and_large_kb_stays_lexical():
+    from hired.candidate.base import Fact
+
+    rabbit = Fact(statement="Ran RabbitMQ in production")
+    req = Requirement(text="Kafka streaming")
+    assert retrieve_facts(req, [rabbit], k=5) == [rabbit]  # fits in k: passed
+    assert retrieve_facts(req, [rabbit], k=5, small_kb_passes_all=False) == []
+    many = [rabbit] + [Fact(statement=f"Skill number {i}") for i in range(5)]
+    assert retrieve_facts(req, many, k=5) == []  # beyond k: lexical only
+
+
+def test_embedding_retriever_reaches_adjacent_skills_and_caches():
+    from hired.alignment import make_embedding_retriever
+    from hired.candidate.base import Fact
+
+    calls = []
+
+    def embed(texts):
+        calls.append(list(texts))
+        queue = lambda t: float("kafka" in t.lower() or "rabbitmq" in t.lower())
+        return [[queue(t), float("french" in t.lower())] for t in texts]
+
+    rabbit, french = Fact(statement="Ran RabbitMQ"), Fact(statement="Speaks French")
+    many = [french, rabbit] + [Fact(statement=f"Other {i}") for i in range(10)]
+    retrieve = make_embedding_retriever(embed)
+    assert retrieve(Requirement(text="Kafka"), many, k=1) == [rabbit]
+    assert retrieve(Requirement(text="French"), many, k=1) == [french]
+    assert sum(len(c) for c in calls) == len(many) + 2  # facts embedded once

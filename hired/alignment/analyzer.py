@@ -8,7 +8,8 @@ persists. The pipeline is a grounded per-requirement judge:
 
 1. **decompose** — the LLM splits the JD into atomic :class:`Requirement` records;
 2. **retrieve** — the most relevant facts are pulled from the knowledge base
-   (lexical overlap by default; inject ``retrieve`` for anything better);
+   (lexical overlap by default, every fact when the KB fits in ``k``; inject
+   ``retrieve=make_embedding_retriever()`` for semantic retrieval);
 3. **quote-then-answer** — the LLM must quote a verbatim span of a cited fact
    *before* it states a match;
 4. **gate** — a quote that is not verbatim in the cited fact, a CONTRADICTED
@@ -61,6 +62,7 @@ if TYPE_CHECKING:
 
 DFLT_ANALYZER_MODEL = "gpt-4o-mini"
 DFLT_TOP_K = 5
+DFLT_EMBEDDING_MODEL = "text-embedding-3-small"
 DFLT_N_SAMPLES = 1
 
 # How much each requirement class weighs in the coverage score, and how much
@@ -110,27 +112,107 @@ def _fact_text(fact: Fact) -> str:
 
 
 def retrieve_facts(
-    requirement: Requirement, facts: Iterable[Fact], *, k: int = DFLT_TOP_K
+    requirement: Requirement,
+    facts: Iterable[Fact],
+    *,
+    k: int = DFLT_TOP_K,
+    small_kb_passes_all: bool = True,
 ) -> list[Fact]:
-    """The ``k`` facts sharing the most words with the requirement (none if none do).
+    """The ``k`` facts sharing the most words with the requirement.
 
     Lexical, so it misses an adjacent skill named in different words (RabbitMQ
-    for Kafka); inject a semantic ``retrieve`` into the analyzer for that.
+    for Kafka). When the whole knowledge base fits in ``k`` (and
+    ``small_kb_passes_all``), every fact is passed, best overlap first, so the judge
+    sees the adjacent skill anyway; otherwise facts sharing no word are dropped
+    (none if none do). For large KBs, inject :func:`make_embedding_retriever`.
 
     >>> from hired.candidate.base import Fact
     >>> fs = [Fact(statement='Ran Kafka clusters'), Fact(statement='Speaks French')]
     >>> [f.statement for f in retrieve_facts(Requirement(text='Kafka streaming'), fs)]
+    ['Ran Kafka clusters', 'Speaks French']
+    >>> [f.statement for f in retrieve_facts(Requirement(text='Kafka streaming'), fs, k=1)]
     ['Ran Kafka clusters']
     """
+    facts = list(facts)
     want = _tokens(requirement.text)
     scored = []
     for i, fact in enumerate(facts):
         have = _tokens(_fact_text(fact))
         overlap = len(want & have)
-        if overlap:
-            scored.append((overlap / math.sqrt(len(have)), -i, fact))
+        if overlap or (small_kb_passes_all and len(facts) <= k):
+            scored.append((overlap / math.sqrt(len(have) or 1), -i, fact))
     scored.sort(key=lambda t: t[:2], reverse=True)
     return [fact for *_, fact in scored[:k]]
+
+
+Embed = Callable[[Sequence[str]], Sequence[Sequence[float]]]
+
+
+def openai_embed(
+    *, client: Any | None = None, model: str = DFLT_EMBEDDING_MODEL
+) -> Embed:
+    """An :data:`Embed` over OpenAI-style ``client.embeddings.create`` (``ai`` extra).
+
+    ``openai`` is imported, and the client made, only at the first call.
+    """
+    state = {"client": client}
+
+    def embed(texts: Sequence[str]) -> list[list[float]]:
+        if state["client"] is None:
+            import openai  # lazy: only required when actually embedding
+
+            state["client"] = openai.OpenAI()
+        resp = state["client"].embeddings.create(model=model, input=list(texts))
+        return [list(d.embedding) for d in resp.data]
+
+    return embed
+
+
+def _cosine(u: Sequence[float], v: Sequence[float]) -> float:
+    norm = math.sqrt(sum(x * x for x in u)) * math.sqrt(sum(x * x for x in v))
+    return sum(x * y for x, y in zip(u, v)) / norm if norm else 0.0
+
+
+def make_embedding_retriever(
+    embed: Embed | None = None, *, min_similarity: float = 0.0
+) -> Callable[..., list[Fact]]:
+    """A semantic ``retrieve`` for :class:`LLMAlignmentAnalyzer`: the ``k`` facts most
+    cosine-similar to the requirement, so adjacent skills (RabbitMQ for a Kafka
+    requirement) reach the judge.
+
+    ``embed`` maps texts to vectors (default :func:`openai_embed`, the ``ai`` extra).
+    Fact vectors are cached by text, so each fact is embedded once per retriever.
+
+    >>> vocab = ('kafka', 'rabbitmq', 'queue', 'french')
+    >>> def embed(texts):  # a fake: 'kafka' and 'rabbitmq' are both message queues
+    ...     return [[t.lower().count(w) + ('queue' == w) * ('kafka' in t.lower() or
+    ...              'rabbitmq' in t.lower()) for w in vocab] for t in texts]
+    >>> fs = [Fact(statement='Ran RabbitMQ in prod'), Fact(statement='Speaks French')]
+    >>> retrieve = make_embedding_retriever(embed)
+    >>> [f.statement for f in retrieve(Requirement(text='Kafka'), fs, k=1)]
+    ['Ran RabbitMQ in prod']
+    """
+    embed = embed or openai_embed()
+    cache: dict[str, Sequence[float]] = {}
+
+    def retrieve(
+        requirement: Requirement, facts: Iterable[Fact], *, k: int = DFLT_TOP_K
+    ) -> list[Fact]:
+        facts = list(facts)
+        texts = [_fact_text(f) for f in facts]
+        missing = [t for t in dict.fromkeys(texts) if t not in cache]
+        if missing:
+            cache.update(zip(missing, embed(missing)))
+        (query,) = embed([requirement.text])
+        scored = [
+            (sim, -i, fact)
+            for i, (fact, text) in enumerate(zip(facts, texts))
+            if (sim := _cosine(query, cache[text])) > min_similarity
+        ]
+        scored.sort(key=lambda t: t[:2], reverse=True)
+        return [fact for *_, fact in scored[:k]]
+
+    return retrieve
 
 
 # --- the grounding gate -------------------------------------------------------
@@ -363,7 +445,8 @@ class LLMAlignmentAnalyzer:
     ``calibrator``, the conformal ask/auto-decide rule). ``nli`` adds an
     entailment check on every confirmed quote; ``entails`` replaces the default
     (an LLM call) with any ``(premise, hypothesis) -> bool``. ``retrieve``
-    replaces the lexical :func:`retrieve_facts`.
+    replaces the lexical :func:`retrieve_facts`, e.g. with
+    :func:`make_embedding_retriever` for semantic retrieval.
 
     >>> class _Fake:  # doctest: +SKIP
     ...     class chat:

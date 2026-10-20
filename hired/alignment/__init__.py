@@ -84,6 +84,8 @@ from hired.alignment.analyzer import (
     analyze_jd,
     coverage,
     quote_is_grounded,
+    make_embedding_retriever,
+    openai_embed,
     retrieve_facts,
 )
 
@@ -146,5 +148,7 @@ __all__ = [
     "aggregate_verdict",
     "coverage",
     "retrieve_facts",
+    "make_embedding_retriever",
+    "openai_embed",
     "quote_is_grounded",
 ]
