@@ -241,3 +241,65 @@ def test_constructing_reads_no_key_and_imports_no_openai():
     with pytest.raises(ValueError):
         LLMAlignmentAnalyzer(n_samples=0)
     _ = RequirementClass  # re-exported surface stays importable
+
+
+def test_malformed_llm_output_degrades_to_unknown_not_a_crash():
+    replies = iter(
+        [
+            "not json at all",
+            '```json\n{"fact_id": "f-py", "quote": "ML pipelines in Python", '
+            '"match_state": "PARTIAL", "closeability": "soonish"}\n```',
+        ]
+    )
+
+    class Raw(FakeLLM):
+        def _create(self, *, model, messages, **kwargs):
+            msg = SimpleNamespace(content=next(replies))
+            return SimpleNamespace(choices=[SimpleNamespace(message=msg)])
+
+    an = LLMAlignmentAnalyzer(client=Raw(honest_judge))
+    for _ in range(2):
+        rec = an.judge(Requirement(text="Python"), [PY])
+        assert rec.match_state == MatchState.UNKNOWN and rec.evidence is None
+
+
+def test_bad_decomposition_items_are_skipped_or_defaulted():
+    global DECOMPOSITION
+    saved = DECOMPOSITION
+    DECOMPOSITION = {
+        "requirements": [
+            "Python",
+            {"skill_type": "technical"},
+            {"text": "Go", "requirement_class": "must_have"},
+        ]
+    }
+    try:
+        reqs = LLMAlignmentAnalyzer(client=FakeLLM(honest_judge)).decompose(JD)
+    finally:
+        DECOMPOSITION = saved
+    assert [(r.text, r.requirement_class) for r in reqs] == [
+        ("Go", RequirementClass.DIFFERENTIATOR)
+    ]
+    with pytest.raises(ValueError, match="no requirements"):
+        LLMAlignmentAnalyzer(client=FakeLLM(honest_judge)).analyze(
+            JD, FACTS, requirements=[]
+        )
+
+
+def test_confirmed_on_a_negation_fact_and_ties_stay_unknown():
+    def confirms_negation(user):
+        return {"fact_id": "f-phd", "quote": "a PhD in physics", "match_state": "confirmed"}
+
+    an = LLMAlignmentAnalyzer(client=FakeLLM(confirms_negation))
+    assert an.judge(Requirement(text="PhD physics"), [NO_PHD]).match_state == (
+        MatchState.UNKNOWN
+    )
+    answers = iter(["confirmed", "unknown"])
+
+    def split(user):
+        return {**honest_judge("REQUIREMENT: Python"), "match_state": next(answers)}
+
+    rec = LLMAlignmentAnalyzer(client=FakeLLM(split), n_samples=2).judge(
+        Requirement(text="Python"), [PY]
+    )
+    assert rec.match_state == MatchState.UNKNOWN and rec.match_score == 0.5

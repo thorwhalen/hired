@@ -32,6 +32,8 @@ import re
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import TYPE_CHECKING, Any
 
+from pydantic import ValidationError
+
 from hired.alignment.assemble import is_blocking
 from hired.alignment.base import (
     AlignmentReport,
@@ -85,6 +87,7 @@ DFLT_FIT_BANDS: Sequence[tuple[float, FitBand]] = (
     (0.0, FitBand.POOR),
 )
 _MAX_KEY_REASONS = 5
+DFLT_MIN_QUOTE_WORDS = 2  # a one-word "quote" grounds nothing
 
 _STOPWORDS = frozenset(
     "a an and as at be by for from has have in is it of on or the to with "
@@ -137,19 +140,32 @@ def _norm(text: str) -> str:
     return " ".join(text.split()).lower()
 
 
-def quote_is_grounded(quote: str, fact: Fact) -> bool:
-    """True when ``quote`` is a verbatim span (modulo case/whitespace) of ``fact``.
+def quote_is_grounded(
+    quote: str, fact: Fact, *, min_words: int = DFLT_MIN_QUOTE_WORDS
+) -> bool:
+    """True when ``quote`` is a verbatim span (modulo case/whitespace) of ``fact``,
+    at least ``min_words`` long.
 
     >>> quote_is_grounded('kafka  CLUSTERS', Fact(statement='Ran Kafka clusters'))
     True
     >>> quote_is_grounded('Kafka expert', Fact(statement='Ran Kafka clusters'))
     False
+    >>> quote_is_grounded('Kafka', Fact(statement='Ran Kafka clusters'))
+    False
     """
     q = _norm(quote)
-    if not q:
+    if len(q.split()) < max(min_words, 1):
         return False
     spans = [fact.statement, *(p.quote or "" for p in fact.provenance)]
     return any(q in _norm(s) for s in spans)
+
+
+def _parse_state(value: Any) -> MatchState:
+    """The match state ``value`` names, or UNKNOWN for anything unrecognised."""
+    try:
+        return MatchState(str(value).strip().lower())
+    except ValueError:
+        return MatchState.UNKNOWN
 
 
 def _gate(
@@ -161,7 +177,8 @@ def _gate(
 ) -> tuple[dict[str, Any], str | None]:
     """Return the judgment, downgraded to UNKNOWN if its grounding fails, and why."""
     j = dict(judgment)
-    state = MatchState(j.get("match_state", MatchState.UNKNOWN))
+    state = _parse_state(j.get("match_state"))
+    j["match_state"] = state.value
     if state == MatchState.UNKNOWN:
         return j, j.get("uncertainty_reason")
     fact = facts_by_id.get(str(j.get("fact_id", "")))
@@ -171,6 +188,8 @@ def _gate(
         reason = "the cited quote is not verbatim in any retrieved fact"
     elif state == MatchState.CONTRADICTED and not fact.is_negation:
         reason = "a contradiction needs a negation fact; silence is not absence"
+    elif state == MatchState.CONFIRMED and fact.is_negation:
+        reason = "a match cannot rest on a fact saying the candidate lacks it"
     elif (
         state == MatchState.CONFIRMED
         and entails is not None
@@ -302,6 +321,34 @@ _JUDGMENT_FIELDS = (
 )
 
 
+def _parse_json_object(content: str | None) -> dict[str, Any]:
+    """The JSON object in an LLM reply (code fences tolerated), else ``{}``.
+
+    An unparseable reply reads as "no answer", so the judgment stays UNKNOWN.
+
+    >>> _parse_json_object('```json {"a": 1} ```'), _parse_json_object('sorry')
+    ({'a': 1}, {})
+    """
+    text = (content or "").strip()
+    if text.startswith("```"):
+        text = text.strip("`").removeprefix("json").strip()
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _valid_requirement(item: Any, index: int) -> Requirement | None:
+    if not isinstance(item, Mapping) or not str(item.get("text") or "").strip():
+        return None
+    data = {**item, "id": item.get("id") or f"req-{index + 1}"}
+    try:
+        return Requirement.model_validate(data)
+    except ValidationError:  # an invalid enum: keep the text, default the rest
+        return Requirement(id=data["id"], text=str(data["text"]))
+
+
 def _facts_block(facts: Sequence[Fact]) -> str:
     return "\n".join(
         f"[{f.id}]{' (NEGATION)' if f.is_negation else ''} {f.statement}"
@@ -374,16 +421,15 @@ class LLMAlignmentAnalyzer:
             response_format={"type": "json_object"},
             **kwargs,
         )
-        return json.loads(response.choices[0].message.content)
+        return _parse_json_object(response.choices[0].message.content)
 
     # --- steps --------------------------------------------------------------
     def decompose(self, jd_text: str) -> list[Requirement]:
         """The JD's atomic requirements, as the LLM extracts them."""
         data = self._ask_json(_DECOMPOSE_PROMPT, f"JOB DESCRIPTION:\n{jd_text}")
-        return [
-            Requirement.model_validate({**r, "id": r.get("id") or f"req-{i + 1}"})
-            for i, r in enumerate(data.get("requirements", []))
-        ]
+        items = data.get("requirements")
+        reqs = (_valid_requirement(r, i) for i, r in enumerate(items or []))
+        return [r for r in reqs if r is not None]
 
     def llm_entails(self, premise: str, hypothesis: str) -> bool:
         """The LLM's yes/no on whether ``premise`` establishes ``hypothesis``."""
@@ -414,9 +460,14 @@ class LLMAlignmentAnalyzer:
             )
             for _ in range(self.n_samples)
         ]
-        states = [MatchState(j.get("match_state", "unknown")) for j, _ in gated]
-        majority = semantic_consistency(states).majority
-        judgment, reason = next(g for g, s in zip(gated, states) if s == majority)
+        states = [MatchState(j["match_state"]) for j, _ in gated]
+        c = semantic_consistency(states)
+        tied = sum(1 for n in c.counts.values() if n == c.counts[c.majority]) > 1
+        if tied:  # no majority: an open question, never the optimistic first sample
+            judgment = {"match_state": MatchState.UNKNOWN.value}
+            reason = "independent judgments split evenly"
+        else:
+            judgment, reason = next(g for g, s in zip(gated, states) if s == c.majority)
         record = _record_from(requirement, judgment, by_id, reason=reason)
         if self.n_samples > 1:
             apply_calibration(record, states, calibrator=self.calibrator)
@@ -441,6 +492,8 @@ class LLMAlignmentAnalyzer:
             classify(self.judge(r, self.retrieve(r, facts, k=self.top_k)))
             for r in reqs
         ]
+        if not records:
+            raise ValueError("no requirements to analyse: none were extracted")
         verdict, band = aggregate_verdict(records)
         return AlignmentReport(
             job_id=job_id,
@@ -460,9 +513,15 @@ def _record_from(
     reason: str | None,
 ) -> RequirementRecord:
     fields = {k: judgment[k] for k in _JUDGMENT_FIELDS if judgment.get(k) is not None}
+    for name in list(fields):  # drop what does not validate (a made-up enum, say)
+        try:
+            RequirementRecord.model_validate({"requirement": requirement, name: fields[name]})
+        except ValidationError:
+            del fields[name]
     fact = facts_by_id.get(str(judgment.get("fact_id", "")))
     evidence = None
-    if fact is not None and reason is None and judgment.get("quote"):
+    grounded = reason is None and judgment["match_state"] != MatchState.UNKNOWN.value
+    if fact is not None and grounded and judgment.get("quote"):
         evidence = Evidence(
             quote=str(judgment["quote"]),
             source_document_id=fact.id,
