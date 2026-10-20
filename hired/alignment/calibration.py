@@ -65,7 +65,7 @@ class Consistency:
 
     ``majority`` is the most common meaning (``None`` without samples),
     ``agreement`` its share, ``entropy`` the Shannon entropy of the meanings
-    normalised to ``[0, 1]`` (0: all agree; 1: all differ), ``counts`` the
+    normalised to ``[0, 1]`` (0: all agree; 1: spread evenly over the meanings found), ``counts`` the
     number of samples per meaning.
     """
 
@@ -268,7 +268,8 @@ def apply_calibration(
     :func:`confidence_level` of their agreement and its ``match_score``
     :func:`match_share`; with a ``calibrator``, ``calibrated_decision`` is its
     :meth:`~MatchCalibrator.decide`, which :func:`~hired.alignment.elicitation.should_ask`
-    honours. The match state stays the analyst's: an *ask* questions a claim, it
+    honours (without one it is cleared: new samples supersede an old decision, so
+    re-apply, or clear it, once an answer settles the requirement). The match state stays the analyst's: an *ask* questions a claim, it
     does not overturn it. Returns the record, changed in place.
 
     >>> from hired.alignment.base import Requirement
@@ -280,6 +281,7 @@ def apply_calibration(
     samples = list(samples)
     record.confidence = confidence_level(semantic_consistency(samples, meaning=meaning))
     record.match_score = match_share(samples, is_match=is_match)
-    if calibrator is not None:
-        record.calibrated_decision = calibrator.decide(record.match_score)
+    record.calibrated_decision = (
+        calibrator.decide(record.match_score) if calibrator is not None else None
+    )
     return record
