@@ -273,12 +273,18 @@ class SkillIndex:
 
         def usable(other: str) -> bool:  # a bridge only helps if the graph goes on
             n = self.nodes.get(other)
-            return n is not None and n.source != node.source and bool(self._edges.get(other))
+            return (
+                n is not None
+                and n.source != node.source
+                and bool(self._edges.get(other))
+            )
 
         found: dict[str, float] = {}
         if k > 0:
             for label in (node.label, *node.alt_labels):
-                for m in self._token_matches(normalize_label(label), k=k * 8, min_score=floor):
+                for m in self._token_matches(
+                    normalize_label(label), k=k * 8, min_score=floor
+                ):
                     if usable(m.node.id):
                         found[m.node.id] = max(found.get(m.node.id, 0.0), m.score)
             row = self._vector_row.get(node_id)
@@ -289,7 +295,9 @@ class SkillIndex:
                     if sims[i] < floor:
                         break
                     if usable(ids[i]):
-                        found[ids[i]] = max(found.get(ids[i], 0.0), round(float(sims[i]), 4))
+                        found[ids[i]] = max(
+                            found.get(ids[i], 0.0), round(float(sims[i]), 4)
+                        )
         top = dict(sorted(found.items(), key=lambda kv: -kv[1])[:k])
         self._bridge_cache[node_id] = top
         return top

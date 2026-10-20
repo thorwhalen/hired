@@ -124,7 +124,9 @@ def build_skill_index(
     if embed is not None:  # before any file is written: a failure leaves the old build
         if progress:
             progress(f"embedding {len(nodes)} labels")
-        vectors = require_numpy().asarray(embed([n.label for n in nodes]), dtype="float16")
+        vectors = require_numpy().asarray(
+            embed([n.label for n in nodes]), dtype="float16"
+        )
 
     path = taxonomy_dir(root=root)
     meta_path = os.path.join(path, META_FILE)

@@ -57,7 +57,9 @@ _ONET_CREDIT = """\
 
 
 def attribution(
-    sources: tuple[str, ...] | list[str] = ("esco", "onet"), *, onet_version: str = "30.0"
+    sources: tuple[str, ...] | list[str] = ("esco", "onet"),
+    *,
+    onet_version: str = "30.0",
 ) -> str:
     """The CC BY 4.0 notice for the sources a build used (written as ``NOTICE.md``)."""
     credits = ([_ESCO_CREDIT] if "esco" in sources else []) + (
