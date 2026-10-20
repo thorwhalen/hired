@@ -1,4 +1,4 @@
-> built 2026-10-20 14:36 UTC from 43f8f42 (main) · hired 0.0.35. Details: build_info.json
+> built 2026-10-20 16:43 UTC from dfe9219 (main) · hired 0.0.36. Details: build_info.json
 
 # index.html.md
 
@@ -8614,7 +8614,7 @@ The band `score` falls in (see [`transferability_band()`](_autosummary/hired.tax
 * **Return type:**
   [`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)
 
-### *class* hired.taxonomy.SkillIndex(nodes, edges, , vectors=None, vector_ids=None, embedder=None, meta=None, bridge_k=3, bridge_min_score=0.5, graph_trust=0.2)
+### *class* hired.taxonomy.SkillIndex(nodes, edges, , vectors=None, vector_ids=None, embedder=None, meta=None, bridge_k=3, bridge_min_score=0.5, graph_trust=0.2, kind_weights=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -8648,6 +8648,21 @@ Equivalent nodes count fully; cross-source bridges count with their weight.
 #### lookup(text, , k=5, min_score=0.5)
 
 Nodes best matching `text`: exact label, alt label, token overlap, embedding.
+
+Token and embedding matches are ranked by `kind_weights` times their
+similarity to `text`: the label embedding’s cosine when vectors exist
+(so a token overlap that is only a shared word ranks low), else the token
+score. `Match.score` stays the stage’s own score.
+
+```pycon
+>>> from hired.taxonomy.base import SkillNode
+>>> idx = SkillIndex([
+...     SkillNode(id='o:s', label='Sales software', source='o', kind='technology'),
+...     SkillNode(id='e:s', label='sales activities', source='e'),
+... ], {})
+>>> idx.resolve('sales').label
+'sales activities'
+```
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Match`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Match)]
@@ -8852,8 +8867,8 @@ the candidate’s skills against one requirement and proposes a
 
 ### Module Attributes
 
-| [`DFLT_TRANSFER_BANDS`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.DFLT_TRANSFER_BANDS)   | Score floors for each transferability band, strongest first; below the last, `LIMITED`.   |
-|------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| [`DFLT_KIND_WEIGHTS`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.DFLT_KIND_WEIGHTS)   | Score floors for each transferability band, strongest first; below the last, `LIMITED`.   |
+|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
 
 ### Functions
 
@@ -8867,7 +8882,7 @@ the candidate’s skills against one requirement and proposes a
 | [`Proximity`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Proximity)(a, b, score, graph, cosine, alpha) | How close two skills are, with the evidence behind the number.          |
 | [`SkillIndex`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.SkillIndex)(nodes, edges, \*[, vectors, ...]) | Lookup and adjacency over taxonomy nodes, edges and (optional) vectors. |
 
-### hired.taxonomy.index.DFLT_TRANSFER_BANDS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[float](https://docs.python.org/3/builtins/functions.html#float), [Transferability](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)], ...]* *= ((0.75, Transferability.DIRECT), (0.5, Transferability.CONTEXTUAL), (0.25, Transferability.FOUNDATIONAL))*
+### hired.taxonomy.index.DFLT_KIND_WEIGHTS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [float](https://docs.python.org/3/builtins/functions.html#float)]* *= {'technology': 0.8}*
 
 Score floors for each transferability band, strongest first; below the last,
 `LIMITED`. Keyword-overridable wherever bands are used. Calibrated on the real
@@ -8875,6 +8890,10 @@ ESCO + O\*NET build (MiniLM vectors, #10): clearly unrelated pairs (cooking~Pyth
 welding~accounting, carpentry~software testing) score 0.06-0.11 and loosely related
 ones 0.2; Python~machine learning 0.27, Excel~financial analysis 0.39,
 TensorFlow~deep learning 0.54, SQL~data analytics 0.63, Java~Python 0.66.
+Ranking weight of a node’s `kind` when free text resolves by token overlap or
+embedding (exact label matches are unaffected): a short query such as “sales” or
+“deep learning” names a skill more often than a product, so O\*NET technology nodes
+(“Sales software”, “NeuralWare”) rank behind skill/knowledge nodes (#58).
 
 ### *class* hired.taxonomy.index.Match(node, score, how)
 
@@ -8899,7 +8918,7 @@ The band `score` falls in (see [`transferability_band()`](_autosummary/hired.tax
 * **Return type:**
   [`Transferability`](_autosummary/hired.alignment.base.html.md#hired.alignment.base.Transferability)
 
-### *class* hired.taxonomy.index.SkillIndex(nodes, edges, , vectors=None, vector_ids=None, embedder=None, meta=None, bridge_k=3, bridge_min_score=0.5, graph_trust=0.2)
+### *class* hired.taxonomy.index.SkillIndex(nodes, edges, , vectors=None, vector_ids=None, embedder=None, meta=None, bridge_k=3, bridge_min_score=0.5, graph_trust=0.2, kind_weights=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -8933,6 +8952,21 @@ Equivalent nodes count fully; cross-source bridges count with their weight.
 #### lookup(text, , k=5, min_score=0.5)
 
 Nodes best matching `text`: exact label, alt label, token overlap, embedding.
+
+Token and embedding matches are ranked by `kind_weights` times their
+similarity to `text`: the label embedding’s cosine when vectors exist
+(so a token overlap that is only a shared word ranks low), else the token
+score. `Match.score` stays the stage’s own score.
+
+```pycon
+>>> from hired.taxonomy.base import SkillNode
+>>> idx = SkillIndex([
+...     SkillNode(id='o:s', label='Sales software', source='o', kind='technology'),
+...     SkillNode(id='e:s', label='sales activities', source='e'),
+... ], {})
+>>> idx.resolve('sales').label
+'sales activities'
+```
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Match`](_autosummary/hired.taxonomy.index.html.md#hired.taxonomy.index.Match)]
@@ -9424,16 +9458,18 @@ Validate resume content using ResumeSchemaExtended (which allows extra fields).
 
 # About this build
 
-This documentation was built on **2026-10-20 14:36 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/43f8f42d9d48ba5fbec8b59c781e134fd9306016"><code>43f8f42</code></a> on branch <code>main</code>, for **hired 0.0.35** (from <code>pyproject.toml</code>).
+This documentation was built on **2026-10-20 16:43 UTC** from commit <a href="https://github.com/thorwhalen/hired/commit/dfe92199f43aed11eb3cc2244b9260c4ca1afe16"><code>dfe9219</code></a> on branch <code>main</code>, for **hired 0.0.36** (from <code>pyproject.toml</code>).
 
-#### NOTE
-Nothing suggests a mismatch: the tree was clean at the commit above, and the documented version is the one on PyPI.
+#### WARNING
+The documentation and the package may be misaligned:
+
+- The documented version (0.0.36) is behind the latest release on PyPI (0.0.37): `pip install hired` gives newer code than these docs describe.
 
 ## Source
 
 |                     |                                                                                                                                                         |
 |---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Commit              | <a href="https://github.com/thorwhalen/hired/commit/43f8f42d9d48ba5fbec8b59c781e134fd9306016"><code>43f8f42d9d48ba5fbec8b59c781e134fd9306016</code></a> |
+| Commit              | <a href="https://github.com/thorwhalen/hired/commit/dfe92199f43aed11eb3cc2244b9260c4ca1afe16"><code>dfe92199f43aed11eb3cc2244b9260c4ca1afe16</code></a> |
 | Branch              | <code>main</code>                                                                                                                                       |
 | Tags at this commit | none                                                                                                                                                    |
 | Working tree        | clean                                                                                                                                                   |
@@ -9444,15 +9480,15 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 |              |                                                                                            |
 |--------------|--------------------------------------------------------------------------------------------|
 | Repository   | <code>thorwhalen/hired</code>                                                              |
-| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39440552600">39440552600</a>     |
+| Run          | <a href="https://github.com/thorwhalen/hired/actions/runs/39459774010">39459774010</a>     |
 | Ref          | <code>refs/heads/main</code>                                                               |
-| Event commit | <code>43f8f42d9d48ba5fbec8b59c781e134fd9306016</code> (in the history of the built commit) |
+| Event commit | <code>dfe92199f43aed11eb3cc2244b9260c4ca1afe16</code> (in the history of the built commit) |
 
 ## Tools
 
 |          |         |
 |----------|---------|
-| epythet  | 0.2.21  |
+| epythet  | 0.2.22  |
 | Sphinx   | 9.1.1   |
 | docutils | 0.22.4  |
 | Python   | 3.12.15 |
@@ -9471,14 +9507,14 @@ Nothing suggests a mismatch: the tree was clean at the commit above, and the doc
 
 ## Package on PyPI
 
-Latest release: <a href="https://pypi.org/project/hired/0.0.35/">0.0.35</a>, the same as the documented version.
+Latest release: <a href="https://pypi.org/project/hired/0.0.37/">0.0.37</a>, newer than the documented version (0.0.36).
 
 ## Reproduce
 
 ```bash
 git clone https://github.com/thorwhalen/hired && cd hired
-git checkout 43f8f42d9d48ba5fbec8b59c781e134fd9306016
-pip install "epythet==0.2.21"
+git checkout dfe92199f43aed11eb3cc2244b9260c4ca1afe16
+pip install "epythet==0.2.22"
 epythet quickstart . --ignore tests/ scrap/ examples/
 ```
 

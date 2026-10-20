@@ -34,8 +34,8 @@ the candidate’s skills against one requirement and proposes a
 
 ### Module Attributes
 
-| [`DFLT_TRANSFER_BANDS`](#hired.taxonomy.index.DFLT_TRANSFER_BANDS)   | Score floors for each transferability band, strongest first; below the last, `LIMITED`.   |
-|------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| [`DFLT_KIND_WEIGHTS`](#hired.taxonomy.index.DFLT_KIND_WEIGHTS)   | Score floors for each transferability band, strongest first; below the last, `LIMITED`.   |
+|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
 
 ### Functions
 
@@ -49,7 +49,7 @@ the candidate’s skills against one requirement and proposes a
 | [`Proximity`](#hired.taxonomy.index.Proximity)(a, b, score, graph, cosine, alpha) | How close two skills are, with the evidence behind the number.          |
 | [`SkillIndex`](#hired.taxonomy.index.SkillIndex)(nodes, edges, \*[, vectors, ...]) | Lookup and adjacency over taxonomy nodes, edges and (optional) vectors. |
 
-### hired.taxonomy.index.DFLT_TRANSFER_BANDS *: [tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[tuple](https://docs.python.org/3/builtins/stdtypes.html#tuple)[[float](https://docs.python.org/3/builtins/functions.html#float), [Transferability](hired.alignment.base.html.md#hired.alignment.base.Transferability)], ...]* *= ((0.75, Transferability.DIRECT), (0.5, Transferability.CONTEXTUAL), (0.25, Transferability.FOUNDATIONAL))*
+### hired.taxonomy.index.DFLT_KIND_WEIGHTS *: [dict](https://docs.python.org/3/builtins/stdtypes.html#dict)[[str](https://docs.python.org/3/builtins/stdtypes.html#str), [float](https://docs.python.org/3/builtins/functions.html#float)]* *= {'technology': 0.8}*
 
 Score floors for each transferability band, strongest first; below the last,
 `LIMITED`. Keyword-overridable wherever bands are used. Calibrated on the real
@@ -57,6 +57,10 @@ ESCO + O\*NET build (MiniLM vectors, #10): clearly unrelated pairs (cooking~Pyth
 welding~accounting, carpentry~software testing) score 0.06-0.11 and loosely related
 ones 0.2; Python~machine learning 0.27, Excel~financial analysis 0.39,
 TensorFlow~deep learning 0.54, SQL~data analytics 0.63, Java~Python 0.66.
+Ranking weight of a node’s `kind` when free text resolves by token overlap or
+embedding (exact label matches are unaffected): a short query such as “sales” or
+“deep learning” names a skill more often than a product, so O\*NET technology nodes
+(“Sales software”, “NeuralWare”) rank behind skill/knowledge nodes (#58).
 
 ### *class* hired.taxonomy.index.Match(node, score, how)
 
@@ -81,7 +85,7 @@ The band `score` falls in (see [`transferability_band()`](#hired.taxonomy.index.
 * **Return type:**
   [`Transferability`](hired.alignment.base.html.md#hired.alignment.base.Transferability)
 
-### *class* hired.taxonomy.index.SkillIndex(nodes, edges, , vectors=None, vector_ids=None, embedder=None, meta=None, bridge_k=3, bridge_min_score=0.5, graph_trust=0.2)
+### *class* hired.taxonomy.index.SkillIndex(nodes, edges, , vectors=None, vector_ids=None, embedder=None, meta=None, bridge_k=3, bridge_min_score=0.5, graph_trust=0.2, kind_weights=None)
 
 Bases: [`object`](https://docs.python.org/3/builtins/functions.html#object)
 
@@ -115,6 +119,21 @@ Equivalent nodes count fully; cross-source bridges count with their weight.
 #### lookup(text, , k=5, min_score=0.5)
 
 Nodes best matching `text`: exact label, alt label, token overlap, embedding.
+
+Token and embedding matches are ranked by `kind_weights` times their
+similarity to `text`: the label embedding’s cosine when vectors exist
+(so a token overlap that is only a shared word ranks low), else the token
+score. `Match.score` stays the stage’s own score.
+
+```pycon
+>>> from hired.taxonomy.base import SkillNode
+>>> idx = SkillIndex([
+...     SkillNode(id='o:s', label='Sales software', source='o', kind='technology'),
+...     SkillNode(id='e:s', label='sales activities', source='e'),
+... ], {})
+>>> idx.resolve('sales').label
+'sales activities'
+```
 
 * **Return type:**
   [`list`](https://docs.python.org/3/builtins/stdtypes.html#list)[[`Match`](#hired.taxonomy.index.Match)]

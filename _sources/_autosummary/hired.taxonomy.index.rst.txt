@@ -8,7 +8,7 @@ hired.taxonomy.index
 
    .. autosummary::
    
-      DFLT_TRANSFER_BANDS
+      DFLT_KIND_WEIGHTS
    
    .. rubric:: Functions
 
