@@ -93,10 +93,9 @@ class CalibrationLog:
         """Whether each class has enough pairs for its level."""
         pairs = self.pairs()
         n_match = sum(y for _, y in pairs)
-        return (
-            n_match >= min_pairs(self.miss_rate)
-            and len(pairs) - n_match >= min_pairs(self.false_accept_rate)
-        )
+        return n_match >= min_pairs(self.miss_rate) and len(
+            pairs
+        ) - n_match >= min_pairs(self.false_accept_rate)
 
     def fit(self, *, persist: bool = False) -> MatchCalibrator | None:
         """Fit on the logged pairs; ``None`` until :meth:`ready`. ``persist`` saves the result."""
@@ -104,7 +103,10 @@ class CalibrationLog:
             return None
         scores, labels = zip(*self.pairs(), strict=True)
         cal = calibrate_match(
-            scores, labels, false_accept_rate=self.false_accept_rate, miss_rate=self.miss_rate
+            scores,
+            labels,
+            false_accept_rate=self.false_accept_rate,
+            miss_rate=self.miss_rate,
         )
         if persist:
             write_json_file(self._path(CALIBRATOR_FILE), cal.to_dict())
