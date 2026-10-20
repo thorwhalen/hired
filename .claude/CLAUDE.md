@@ -37,6 +37,13 @@ tracking).
   re-derives a drafted report (`JDWorkspace.save_alignment` = finalize + archive + save, the one draft→persisted path); `render_report(report, fmt)` dispatches via
   `REPORT_RENDERERS` (`markdown`, `html`). `hired align <jd> <jd_text_file>` runs the injected-LLM `alignment.analyzer` (#11) on raw JD text.
 
+- **Skills taxonomy** (#10) — `taxonomy/`: ESCO (API) + O*NET (archive) fetched by
+  `build_skill_index()` into `<data root>/taxonomy/` (never vendored, see #42; raw
+  pages cached → resumable). Pure-Python co-occurrence relatedness (`graph.py`,
+  Neffke SR); `SkillIndex` (`lookup`/`proximity`/`suggest_adjacency`) blends
+  `α·cosine + (1−α)·graph`; embedder is a seam (`embeddings` extra). CC BY 4.0
+  attribution in `base.ATTRIBUTION` → `NOTICE.md`.
+
 The public API is `hired/__init__.py` (eager core + `__all__`; the agent surface,
 candidate KB, and alignment surface are lazy via `__getattr__`).
 
@@ -89,6 +96,7 @@ committed** — tests use a temp `HIRED_DATA_DIR`.
 | `ai` | openai |
 | `supervisor` | langchain, langchain-core, langchain-openai |
 | `cli` | cw (only `hired/__main__.py` imports it) |
+| `embeddings` | sentence-transformers, numpy (`hired.taxonomy` label vectors; graph needs no extra) |
 
 ## Tests / CI
 

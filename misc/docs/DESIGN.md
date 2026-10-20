@@ -211,8 +211,10 @@ bucket_counts, ats_readability?}`, `requirements[]`, `blocking_gaps[]`,
 For each requirement R vs candidate background B:
 
 - **Axis A — transfer distance:** direct match / adjacent / far. Sources: exact &
-  taxonomy (ESCO) skill match, keyword overlap (`matching.JobMatcher`), and — Phase 2 —
-  embedding/graph adjacency. Phase 1: Claude judges A grounded in KB facts + evidence quotes.
+  taxonomy (ESCO) skill match, keyword overlap (`matching.JobMatcher`), and
+  embedding/graph adjacency (`hired.taxonomy`, #10). Claude judges A grounded in KB facts + evidence quotes, with the taxonomy's suggestion as evidence.
+
+**Skills taxonomy (`hired.taxonomy`).** ESCO (all skills and occupations, from the public API) plus O*NET (technology examples and the Skills/Knowledge/Abilities descriptors an occupation rates important, from the database archive). Both are CC BY 4.0. `build_skill_index()` builds the data into `<data root>/taxonomy/` on demand; nothing is vendored into the wheel (that departs from the original plan in #10, and the decision is tracked in #42). Relatedness comes from co-occurrence: `SR = (RCA−1)/(RCA+1)` over occupation→skill links (Neffke & Henning), computed in pure Python, with direct links or a one-hop "via" skill. The `embeddings` extra (sentence-transformers MiniLM) adds label vectors, and `SkillIndex.proximity` blends `α·cosine + (1−α)·graph`, with α forced to 0 when there are no vectors. `suggest_adjacency` proposes a `Transferability` band and a readable basis; the analyst still decides the record.
 - **Axis B — trainability:** is the gap Knowledge/explicit/near-transfer (learnable) or
   Ability/tacit/far-transfer/expert-intuition (hard)?
 - **AI-leverage modifier:** when the gap is *breadth-of-knowledge* or *codified skill*

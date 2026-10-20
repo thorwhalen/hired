@@ -130,6 +130,11 @@ supersession. Always confirm proposed changes with the candidate before applying
    (CONFIRMED / CONTRADICTED / UNKNOWN), `match_type` (direct / adjacent / none),
    `candidate_level`, `evidence` (with a quote), `confidence`, and — for gaps —
    `closeability`, `time_to_close`, and `ai_leverage`.
+   When the skills taxonomy is built (`hired build-skill-index`, once), ground
+   Axis A in it before judging adjacency: `load_skill_index().suggest_adjacency(req.text, candidate_skills)`
+   ranks the candidate's skills by occupational co-occurrence (plus label similarity
+   with `hired[embeddings]`) and gives a readable `basis` for `adjacency_basis` and
+   a suggested `transferability()` band. It suggests; you still decide `match_type`.
 3. Run the deterministic rubric to assign buckets:
 
 ```python
