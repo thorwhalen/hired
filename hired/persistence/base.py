@@ -161,7 +161,9 @@ def _suffix_key_store(base_store: MutableMapping[Any, Any], suffix: str) -> Any:
     return wrap_kvs(
         base_store,
         key_encoder=lambda k: k.replace("/", os.sep) + suffix,
-        key_decoder=lambda p: (p[:-n] if p.endswith(suffix) else p).replace(os.sep, "/"),
+        key_decoder=lambda p: (p[:-n] if p.endswith(suffix) else p).replace(
+            os.sep, "/"
+        ),
     )
 
 
