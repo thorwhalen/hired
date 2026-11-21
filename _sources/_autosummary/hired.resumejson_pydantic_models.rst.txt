@@ -22,6 +22,7 @@ hired.resumejson\_pydantic\_models
       Publication
       Reference
       ResumeSchema
+      RootModel[Annotated[str, StringConstraints]]
       Skill
       VolunteerItem
       WorkItem
